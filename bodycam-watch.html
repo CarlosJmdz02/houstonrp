@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOUSTON RP — Bodycam</title>
+<meta name="theme-color" content="#0d1424">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-deep: #0a101d;
+    --bg-panel: #101a2c;
+    --bg-card: #14203a;
+    --accent-cyan: #38bdf8;
+    --accent-red: #ef4444;
+    --accent-green: #34d399;
+    --accent-amber: #fbbf24;
+    --text-primary: #e8ecf4;
+    --text-secondary: #94a3b8;
+    --text-dim: #5b6b84;
+    --border: #22314e;
+    --border-strong: #2f4266;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg-deep);
+    background-image:
+      radial-gradient(ellipse at 15% 0%, rgba(59,130,246,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 100%, rgba(239,68,68,0.06) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .bc-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 960px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .bc-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--accent-amber);
+    box-shadow: 0 0 8px rgba(251,191,36,0.7);
+    animation: bcblink 1.1s infinite;
+  }
+  .bc-dot.live { background: var(--accent-red); box-shadow: 0 0 8px rgba(239,68,68,0.8); }
+  .bc-dot.off { background: var(--text-dim); box-shadow: none; animation: none; }
+
+  @keyframes bcblink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .bc-stage {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    aspect-ratio: 16 / 9;
+    background: #05080f;
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .bc-stage video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #05080f;
+  }
+
+  .bc-stage.placing video { visibility: hidden; }
+
+  .bc-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .bc-overlay .big {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+  }
+  .bc-overlay .sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    max-width: 460px;
+    line-height: 1.5;
+  }
+  .bc-overlay .who { color: var(--accent-cyan); }
+
+  .bc-osd {
+    position: absolute;
+    left: 12px; top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #fff;
+    background: rgba(0,0,0,0.55);
+    padding: 6px 10px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .bc-stage.live .bc-osd { opacity: 1; }
+
+  .bc-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 9px; cursor: pointer;
+    font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.6px; text-transform: uppercase; text-decoration: none;
+    border: 1px solid var(--border-strong); background: var(--bg-panel);
+    color: var(--text-secondary); transition: all 0.2s ease;
+  }
+  .btn:hover { border-color: var(--accent-cyan); color: var(--text-primary); }
+  .btn.primary { background: linear-gradient(135deg, #10b981, #059669); color: #fff; border-color: transparent; }
+  .btn.primary:hover { box-shadow: 0 5px 22px rgba(16,185,129,0.4); }
+</style>
+</head>
+<body>
+
+  <div class="bc-top">
+    <span class="bc-dot" id="bc-dot"></span>
+    <span id="bc-status">Conectando…</span>
+  </div>
+
+  <div class="bc-stage" id="bc-stage">
+    <video id="bc-video" autoplay playsinline muted></video>
+    <div class="bc-overlay" id="bc-overlay">
+      <div class="big">📹 <span class="who" id="bc-officer">Oficial</span></div>
+      <div class="sub" id="bc-msg">Iniciando conexión segura con la bodycam…</div>
+    </div>
+    <div class="bc-osd" id="bc-osd">
+      <span id="osd-dot" style="width:7px;height:7px;border-radius:50%;background:var(--accent-red);display:inline-block;"></span>
+      LIVE · <span id="osd-name">BODYCAM</span>
+    </div>
+  </div>
+
+  <div class="bc-actions">
+    <button class="btn primary" id="btn-retry" style="display:none;" onclick="location.reload()">Reintentar</button>
+    <a class="btn" href="mdt.html">Ir al MDT</a>
+  </div>
+
+<script src="assets/auth.js"></script>
+<!-- supabase-js LOCAL (sin CDN): la librería de bodycam siempre carga -->
+<script src="assets/supabase-js.umd.js"></script>
+<script src="assets/bodycam-app.js"></script>
+<script>
+(function () {
+  function $id(id) { return document.getElementById(id); }
+
+  var params = new URLSearchParams(window.location.search);
+  var remoteId = (params.get('bc') || '').trim();
+  var officerName = (params.get('o') || 'Oficial').trim();
+  var stage = $id('bc-stage');
+  var video = $id('bc-video');
+  var overlay = $id('bc-overlay');
+  var osd = $id('bc-osd');
+  var dot = $id('bc-dot');
+  var msg = $id('bc-msg');
+  var retry = $id('btn-retry');
+  var viewer = null;
+
+  $id('bc-officer').textContent = officerName;
+  $id('osd-name').textContent = officerName.toUpperCase();
+
+  function setStatus(cls, text) {
+    dot.className = 'bc-dot' + (cls ? ' ' + cls : '');
+    $id('bc-status').textContent = text;
+  }
+  function setMsg(text) {
+    if (msg) msg.textContent = text;
+  }
+
+  if (!remoteId) {
+    setStatus('off', 'Sin enlace de bodycam');
+    setMsg('Este enlace no trae la identificación de la bodycam. Pedí el link correcto al oficial.');
+    return;
+  }
+
+  function block(msgText) {
+    setStatus('off', 'Acceso restringido');
+    setMsg(msgText || 'No tenés permisos para ver bodycams.');
+  }
+
+  // ── Control de acceso: solo el despacho (1502940318092366056) puede ver ──
+  function gate() {
+    if (typeof hrpGetSession !== 'function' || typeof HRPBC === 'undefined') {
+      block('No se pudo verificar tu acceso. Volvé a iniciar sesión y reintentá.');
+      return;
+    }
+    var session;
+    try { session = hrpGetSession(); } catch (_) { session = null; }
+    if (!session || !session.id) {
+      window.location.replace('index.html');
+      return;
+    }
+    var DISPATCH_ROLE = '1502940318092366056';
+    var check = (typeof hrpHasRole === 'function')
+      ? hrpHasRole(DISPATCH_ROLE, session.id)
+      : Promise.resolve(false);
+
+    check
+      .then(function (ok) {
+        if (ok) start();
+        else block('Solo el despacho tiene permiso para ver bodycams.');
+      })
+      .catch(function () {
+        start();
+      });
+  }
+
+  // ── Conexión WebRTC + Supabase Realtime ──
+  function start() {
+    if (typeof HRPBC === 'undefined') {
+      setStatus('off', 'Librería no cargada');
+      setMsg('No se pudo cargar la librería de transmisión. Revisá tu conexión y reintentá.');
+      retry.style.display = '';
+      return;
+    }
+
+    setStatus('', 'Conectando con la bodycam de ' + officerName + '…');
+    setMsg('Abriendo canal seguro…');
+
+    HRPBC.ready(15000).then(openViewer).catch(function () {
+      setStatus('off', 'Librería no cargada');
+      setMsg('No se pudo cargar la librería de transmisión. Revisá tu conexión y reintentá.');
+      retry.style.display = '';
+    });
+  }
+
+  function openViewer() {
+    setStatus('', 'Conectando con la bodycam de ' + officerName + '…');
+    setMsg('Conectando con el canal del oficial…');
+
+    var session;
+    try { session = hrpGetSession(); } catch (_) { session = null; }
+
+    viewer = HRPBC.startViewer({
+      peerId: remoteId,
+      officerName: officerName,
+      viewerId: (session && session.id) || '',
+      onStream: function (remoteStream) {
+        if (!remoteStream.getVideoTracks().length) return;
+        video.srcObject = remoteStream;
+        video.play().catch(function () {});
+        stage.classList.remove('placing');
+        stage.classList.add('live');
+        overlay.style.display = 'none';
+        setStatus('live', 'EN VIVO · ' + officerName);
+      },
+      onDone: function (r) {
+        releaseVideo();
+        if (!r.ok) {
+          setStatus('off', 'Bodycam no disponible');
+          setMsg(r.msg || 'No se pudo conectar con la bodycam.');
+          retry.style.display = (r.retry ? '' : 'none');
+          overlay.style.display = '';
+        }
+      }
+    });
+  }
+
+  function releaseVideo() {
+    try {
+      if (video.srcObject) video.srcObject.getTracks().forEach(function (t) { t.stop(); });
+    } catch (_) {}
+    video.srcObject = null;
+  }
+
+  function cleanup() {
+    try { if (viewer) viewer.stop(); } catch (_) {}
+    releaseVideo();
+  }
+
+  window.addEventListener('pagehide', cleanup);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', gate);
+  } else {
+    gate();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+[functions]
+  [functions.check-police-role]
+  verify_jwt = false

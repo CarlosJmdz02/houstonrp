@@ -1,0 +1,334 @@
+﻿/* =========================================================================
+   HOUSTON RP — WIZARD CSS FINAL FIX
+   ========================================================================= */
+
+:root{
+  --bg: #0d1424;
+  --bg-2: #131d2f;
+  --panel: #17223a;
+  --panel-2: #131722;
+  --border: #263552;
+  --border-soft: #314466;
+  --text: #e4e7ee;
+  --text-dim: #8a93a7;
+  --text-mute: #4c5a72;
+  --green: #4acf8f;
+  --green-text: #7ad4a4;
+  --red: #e54850;
+  --input-bg: #0d1424;
+}
+
+/* ============================= */
+/* BASE */
+/* ============================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system,"Segoe UI",Arial,Helvetica,sans-serif;
+  font-size:14px;
+}
+
+/* ============================= */
+/* APP LAYOUT */
+/* ============================= */
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* ============================= */
+/* SIDEBAR */
+/* ============================= */
+
+.sidebar{
+  width:248px;
+  background: var(--bg-2);
+  border-right:1px solid var(--border-soft);
+  padding:20px 16px;
+}
+
+/* ============================= */
+/* MAIN */
+/* ============================= */
+
+.main{
+  flex:1;
+  padding:26px 32px;
+}
+
+/* ============================= */
+/* CARD LICENSE FIX */
+/* ============================= */
+
+.card-body{
+  display:flex;
+  gap:4%;
+  margin-top:3%;
+  align-items:flex-start;
+}
+
+/* 🔥 FOTO CORRECTA */
+.photo-box{
+  position: relative;
+  width: 28%;
+  aspect-ratio: 3/4;
+  background: linear-gradient(160deg,#c7b2b2,#8a93a7);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+}
+
+/* imagen dentro */
+.photo-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* ============================= */
+/* TEXT LICENSE FIX */
+/* ============================= */
+
+.data{
+  flex:1;
+  min-width:0;
+}
+
+.dline{
+  font-size:12px;
+  line-height:1.4;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.name-line{
+  font-weight:800;
+  margin:6px 0;
+}
+
+/* ============================= */
+/* INPUTS */
+/* ============================= */
+
+input, select, textarea{
+  width:100%;
+  background: var(--input-bg);
+  border:1px solid var(--border);
+  color:#fff;
+  border-radius:8px;
+  padding:9px 11px;
+  outline:none;
+}
+
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+button{
+  cursor:pointer;
+}
+
+/* ============================= */
+/* STEP SYSTEM */
+/* ============================= */
+
+.step{
+  display:flex;
+  gap:10px;
+}
+
+/* ============================= */
+/* FIX FINAL CRÍTICO */
+/* ============================= */
+
+/* elimina conflictos viejos */
+/* =========================================================================
+   HOUSTON RP — LICENSE SYSTEM FIX CLEAN
+   ========================================================================= */
+
+/* ============================= */
+/* BASE LICENSE CARD */
+/* ============================= */
+
+.license-card{
+  position: relative;
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* fondo */
+.license-bg{
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  z-index: 0;
+}
+
+/* ============================= */
+/* FOTO (SOLO UNA - CONTROLADA) */
+/* ============================= */
+
+/* imagen dentro */
+.photo-box img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: none !important;
+}
+
+/* ============================= */
+/* TEXTO LICENCIA */
+/* ============================= */
+
+/* ============================= */
+/* PREVIEW FOTO EXTRA (SI EXISTE) */
+/* ============================= */
+
+.license-photo-preview {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.license-photo-preview img {
+  width: 900px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ============================= */
+/* FIX GLOBAL ANTI-BUGS */
+/* ============================= */
+
+/* evita overlays raros pero SIN romper layout */
+.photo-box *{
+  position: static;
+}
+
+/* evita que imágenes crezcan raro */
+.photo-box img,
+.license-photo-preview img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* seguridad extra contra escalado raro */
+img {
+  transform: none;
+}
+.license-data span:empty {
+  display: none;
+}
+.license-data{
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  width: 60%;
+  color: rgb(0, 0, 0);
+  font-size: 12px;
+  z-index: 5;
+}
+
+.lic-title{
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.lic-sub{
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.lic-row{
+  display: flex;
+  gap: 6px;
+}
+
+.label{
+  font-weight: bold;
+}
+/* ============================= */
+/* FIX FINAL LICENCIA */
+/* ============================= */
+
+.license-card{
+  position: relative;
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* FOTO dentro de la licencia */
+.photo-box{
+  position: absolute;
+  top: 25%;
+  left: 6%;
+  width: 28%;
+  height: 55%;
+  overflow: hidden;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.photo-box img{
+  width: 900%;
+  height: 900%;
+  object-fit: cover;
+}
+
+/* TEXTO dentro de la licencia */
+.license-data{
+  position: absolute;
+  top: 18%;
+  left: 36%;
+  width: 60%;
+  z-index: 5;
+  color: #000;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* preview extra */
+.license-photo-preview{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.license-photo-preview img{
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* anti bugs */
+.photo-box *{
+  position: static;
+}
+
+img{
+  transform: none !important;
+}
+

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOUSTON RP — Incident Report</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#3b6fb6">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-void:       #0d1424;
+    --bg-panel:      #131d2f;
+    --bg-card:       #17223a;
+    --bg-hover:      #1f304f;
+    --accent-blue:   #3b6fb6;
+    --accent-cyan:   #3b6fb6;
+    --accent-gold:   #e6a868;
+    --accent-red:    #e54850;
+    --accent-green:  #4acf8f;
+    --text-primary:  #e4e7ee;
+    --text-secondary:#8a93a7;
+    --text-dim:      #4c5a72;
+    --border:        #263552;
+    --border-glow:   #314466;
+    --glow-blue:     rgba(59,111,182,0.15);
+    --glow-cyan:     rgba(230,168,104,0.12);
+    --sidebar-w:     260px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-void);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(59,111,182,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(230,168,104,0.05) 0%, transparent 50%);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);
+    pointer-events: none; z-index: 9999;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+  .sidebar {
+    width: var(--sidebar-w); min-height: 100vh; background: var(--bg-panel);
+    border-right: 1px solid var(--border); display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; overflow: hidden;
+  }
+  .sidebar::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-blue), transparent 80%);
+    animation: scanDown 4s ease-in-out infinite;
+  }
+  @keyframes scanDown {
+    0%   { opacity: 0.4; transform: scaleY(1); }
+    50%  { opacity: 1; }
+    100% { opacity: 0.4; transform: scaleY(1); }
+  }
+  .sidebar-logo { padding: 28px 24px 20px; border-bottom: 1px solid var(--border); }
+  .logo-badge { display: flex; align-items: center; gap: 12px; }
+  .logo-shield { width: 40px; height: 44px; flex-shrink: 0; }
+  .logo-shield svg { width: 100%; height: 100%; filter: drop-shadow(0 0 8px var(--accent-cyan)); }
+  .logo-text { display: flex; flex-direction: column; }
+  .logo-title { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 3px; color: var(--text-primary); line-height: 1; text-transform: uppercase; }
+  .logo-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent-cyan); letter-spacing: 2px; margin-top: 3px; text-transform: uppercase; }
+  .sidebar-user { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .sidebar-user .user-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; color: white; flex-shrink: 0; position: relative; }
+  .sidebar-user .user-avatar::after { content: ''; position: absolute; bottom: 1px; right: 1px; width: 8px; height: 8px; background: #4acf8f; border-radius: 50%; border: 2px solid var(--bg-panel); }
+  .sidebar-user .user-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  .sidebar-user .user-info { min-width: 0; }
+  .sidebar-user .user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sidebar-user .user-rank { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-gold); letter-spacing: 1px; text-transform: uppercase; }
+  .sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+  .sidebar-nav::-webkit-scrollbar { width: 4px; }
+  .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  .nav-section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; padding: 12px 10px 6px; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; position: relative; margin-bottom: 2px; text-decoration: none; color: var(--text-secondary); border: 1px solid transparent; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 500; letter-spacing: 0.3px; background: transparent; text-align: left; width: 100%; }
+  .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-glow); }
+  .nav-item.active { background: linear-gradient(90deg, rgba(59,111,182,0.15), rgba(59,111,182,0.05)); color: var(--accent-cyan); border-color: rgba(59,111,182,0.3); }
+  .nav-item.active .nav-icon { color: var(--accent-cyan); }
+  .nav-item.active::before { content: ''; position: absolute; left: 0; top: 20%; bottom: 20%; width: 3px; background: var(--accent-cyan); border-radius: 0 3px 3px 0; box-shadow: 0 0 8px var(--accent-cyan); }
+  .nav-icon { width: 18px; height: 18px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .sidebar-footer { padding: 16px 12px; border-top: 1px solid var(--border); }
+
+  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; height: 100vh; overflow-y: auto; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 22px 32px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .topbar h1 { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 24px; color: var(--text-primary); letter-spacing: .5px; }
+  .topbar .sub { font-size: 12.5px; color: var(--text-dim); margin-top: 2px; }
+
+  .content { flex: 1; padding: 24px 32px; overflow-y: auto; min-height: 0; }
+  .content::-webkit-scrollbar { width: 5px; }
+  .content::-webkit-scrollbar-track { background: transparent; }
+  .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+  .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .panel h2 { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 18px; color: var(--text-primary); margin-bottom: 4px; }
+  .panel p.hint { font-size: 12.5px; color: var(--text-dim); margin-bottom: 20px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-secondary); letter-spacing: .3px; text-transform: uppercase; }
+  .field label .req { color: var(--accent-red); }
+  .field input, .field select, .field textarea { padding: 9px 12px; background: var(--bg-void); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; transition: border-color .2s; width: 100%; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59,111,182,0.12); }
+  .field textarea { resize: vertical; min-height: 60px; }
+  .field select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237a8ba8' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+  .field input[type="file"] { padding: 10px; }
+
+  .btn { padding: 10px 24px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: .5px; cursor: pointer; transition: all .2s; border: none; text-transform: uppercase; }
+  .btn-primary { background: linear-gradient(160deg, #3b6fb6, #2a528b); color: #fff; box-shadow: 0 0 12px rgba(59,111,182,0.2); }
+  .btn-primary:hover { box-shadow: 0 0 24px rgba(59,111,182,0.35); transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .btn-danger { background: linear-gradient(160deg, #e54850, #a82e38); color: #fff; box-shadow: 0 0 12px rgba(229,72,80,0.2); }
+  .btn-danger:hover { box-shadow: 0 0 24px rgba(229,72,80,0.35); transform: translateY(-1px); }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+  .btn-outline:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+  .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; background: var(--bg-card); border-radius: 10px; padding: 4px; }
+  .tab-btn { padding: 10px 22px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: .3px; text-transform: uppercase; cursor: pointer; transition: all .2s; border: none; background: transparent; color: var(--text-dim); }
+  .tab-btn.active { background: var(--accent-blue); color: #fff; box-shadow: 0 0 12px rgba(59,111,182,0.2); }
+  .tab-btn:hover:not(.active) { color: var(--text-primary); }
+
+  .toast { position: fixed; bottom: 32px; right: 32px; display: flex; align-items: center; gap: 10px; padding: 14px 22px; background: var(--bg-card); border: 1px solid var(--accent-green); border-radius: 10px; color: var(--text-primary); font-size: 13px; box-shadow: 0 8px 32px rgba(0,0,0,.5); transform: translateY(20px); opacity: 0; transition: all .25s; z-index: 1000; pointer-events: none; }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { border-color: var(--accent-red); }
+
+  .hidden { display: none !important; }
+
+  .btn-outline-red { background: transparent; border: 1px solid var(--accent-red); color: var(--accent-red); }
+  .btn-outline-red:hover { background: rgba(229,72,80,0.1); box-shadow: 0 0 16px rgba(229,72,80,0.2); transform: translateY(-1px); }
+
+  .section-title { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; color: var(--accent-cyan); letter-spacing: .5px; text-transform: uppercase; margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .section-title:first-of-type { margin-top: 0; }
+</style>
+<link rel="stylesheet" href="assets/responsive.css">
+<link rel="stylesheet" href="assets/hrp-dock.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="logo-shield">
+        <img src="images/logo.png" alt="Houston RP" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 8px var(--accent-cyan));">
+      </div>
+      <div class="logo-text">
+        <div class="logo-title">HOUSTON RP</div>
+        <div class="logo-sub">Police Department</div>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-avatar" id="user-avatar">?</div>
+    <div class="user-info">
+      <div class="user-name" id="user-name">Cargando…</div>
+      <div class="user-rank" id="user-sub">Discord</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">General</div>
+    <a class="nav-item" href="dashboard.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><span class="nav-label">Dashboard</span></a>
+    <a class="nav-item" href="app.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="nav-label">Characters</span></a>
+    <a class="nav-item" href="licencias.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">DMV/CCW</span></a>
+    <div class="nav-section-label">Economy</div>
+    <div class="nav-section-label">Gobierno</div>
+    <a class="nav-item" href="gobierno.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div><span class="nav-label">Portal Cívico</span><span class="nav-badge">NEW</span></a>
+    <div class="nav-section-label">Law Enforcement</div>
+    <a class="nav-item" href="mdt.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 8l10-5 10 5"/><path d="M12 8v13"/><path d="M4 12l8 5 8-5"/></svg></div><span class="nav-label">MDT</span></a>
+    <div class="nav-section-label">Developer</div>
+    <a class="nav-item" href="developer.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg></div><span class="nav-label">Developer</span></a>
+    <div class="nav-section-label">Foundation</div>
+    <a class="nav-item" href="foundation.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">Foundation</span></a>
+    <div class="nav-section-label">System</div>
+    <a class="nav-item" href="#" onclick="event.preventDefault();localStorage.clear();window.location.href='index.html';"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><span class="nav-label">Logout</span></a>
+  </nav>
+  <div class="sidebar-footer">
+    <div style="padding:2px 12px 10px;border-bottom:1px solid var(--border);margin-bottom:10px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">Balance</div>
+      <div id="sidebar-balance" style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--accent-gold);margin-top:2px;">$---</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <h1>📝 Reporte de Incidente Policial</h1>
+      <div class="sub">Formulario oficial de reporte — Houston Police Department</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="panel">
+      <h2>📋 Formulario de Reporte</h2>
+      <p class="hint">Complete todos los campos obligatorios marcados con <span class="req">*</span></p>
+
+      <div class="section-title">Información del incidente</div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Tipo de reporte <span class="req">*</span></label>
+          <select id="inc-type" required>
+            <option value="">— Seleccione —</option>
+            <option value="Incidente">Incidente</option>
+            <option value="Accidente de tránsito">Accidente de tránsito</option>
+            <option value="Arresto">Arresto</option>
+            <option value="Citación">Citación</option>
+            <option value="Investigación">Investigación</option>
+            <option value="Uso de fuerza">Uso de fuerza</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Fecha y hora <span class="req">*</span></label>
+          <input id="inc-datetime" type="datetime-local" required>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Empleado(s) involucrado(s) <span class="req">*</span></label>
+        <textarea id="inc-employees" placeholder="Ingresa nombres, números de placa, ID de ciudadano, departamento, rango y cualquier otro dato relevante." style="min-height:70px;" required></textarea>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Civil(es) involucrado(s) <span class="req">*</span></label>
+        <textarea id="inc-civils" placeholder="Ingresa nombres completos, ID de ciudadano y demás información relevante." style="min-height:70px;" required></textarea>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Vehículo(s) involucrado(s)</label>
+        <textarea id="inc-vehicles" placeholder="Ingresa placa, modelo, color, VIN, propietario o ID del vehículo." style="min-height:60px;"></textarea>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Ubicación del incidente <span class="req">*</span></label>
+        <input id="inc-location" type="text" placeholder="Ejemplo: Calle Principal, Zona Norte, Distrito Central, Código Postal." required>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Descripción detallada <span class="req">*</span></label>
+        <textarea id="inc-description" placeholder="Describe cronológicamente lo sucedido, incluyendo acciones realizadas, comportamiento de las personas involucradas, evidencia encontrada y cualquier otro detalle importante." style="min-height:120px;" required></textarea>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Evidencia adjunta</label>
+        <input id="inc-evidence" type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx">
+      </div>
+
+      <div class="section-title">Partes involucradas</div>
+
+      <div class="field">
+        <label>Testigos</label>
+        <textarea id="inc-witnesses" placeholder="Ingresa nombres, teléfonos, ID de ciudadano o cualquier dato de contacto de los testigos." style="min-height:60px;"></textarea>
+      </div>
+
+      <div class="grid2" style="margin-top:14px;">
+        <div class="field">
+          <label>Daños materiales</label>
+          <textarea id="inc-damages" placeholder="Describe daños a vehículos, propiedades públicas o privadas." style="min-height:60px;"></textarea>
+        </div>
+        <div class="field">
+          <label>Lesiones</label>
+          <textarea id="inc-injuries" placeholder="Describe lesiones sufridas por oficiales, civiles o sospechosos." style="min-height:60px;"></textarea>
+        </div>
+      </div>
+
+      <div class="section-title">Cargos y evidencia</div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Cargos aplicados</label>
+          <textarea id="inc-charges" placeholder="Selecciona o escribe los delitos aplicados según el Código Penal." style="min-height:60px;"></textarea>
+        </div>
+        <div class="field">
+          <label>Artículos del Código Penal</label>
+          <textarea id="inc-articles" placeholder="Ejemplo: Art. 2.1 — Resistencia al arresto." style="min-height:60px;"></textarea>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Objetos decomisados</label>
+        <textarea id="inc-seized" placeholder="Armas, drogas, dinero, dispositivos electrónicos u otros objetos." style="min-height:60px;"></textarea>
+      </div>
+
+      <div class="section-title">Oficial que redacta</div>
+
+      <div class="grid3">
+        <div class="field">
+          <label>Nombre <span class="req">*</span></label>
+          <input id="inc-officer-name" type="text" placeholder="Nombre completo" required>
+        </div>
+        <div class="field">
+          <label>Rango</label>
+          <input id="inc-officer-rank" type="text" placeholder="Rango">
+        </div>
+        <div class="field">
+          <label>Número de placa <span class="req">*</span></label>
+          <input id="inc-officer-badge" type="text" placeholder="Placa" required>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Departamento</label>
+        <input id="inc-officer-dept" type="text" placeholder="Departamento">
+      </div>
+
+      <div class="section-title">Supervisor</div>
+
+      <div class="grid3">
+        <div class="field">
+          <label>Nombre</label>
+          <input id="inc-supervisor-name" type="text" placeholder="Nombre del supervisor">
+        </div>
+        <div class="field">
+          <label>Rango</label>
+          <input id="inc-supervisor-rank" type="text" placeholder="Rango">
+        </div>
+        <div class="field">
+          <label>Firma</label>
+          <input id="inc-supervisor-sign" type="text" placeholder="Firma (opcional)">
+        </div>
+      </div>
+
+      <div class="section-title">Estado</div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Estado del reporte <span class="req">*</span></label>
+          <select id="inc-status">
+            <option value="Pendiente">Pendiente</option>
+            <option value="En revisión">En revisión</option>
+            <option value="Aprobado">Aprobado</option>
+            <option value="Rechazado">Rechazado</option>
+            <option value="Archivado">Archivado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Observaciones adicionales</label>
+        <textarea id="inc-notes" placeholder="Información adicional que no haya sido incluida anteriormente." style="min-height:60px;"></textarea>
+      </div>
+
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="saveDraft()">💾 Guardar borrador</button>
+        <button class="btn btn-primary" onclick="submitIncident()">📤 Enviar reporte</button>
+        <button class="btn btn-danger" onclick="clearIncidentForm()">🗑️ Limpiar formulario</button>
+        <button class="btn btn-outline-red" onclick="window.location.href='police.html'">Cancelar</button>
+      </div>
+      <div id="incident-msg" style="margin-top:12px;font-size:13px;color:var(--text-dim);"></div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"><span id="toast-text"></span></div>
+
+<script>
+  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1466065185088471273/l4G1ClfOUAi8uFEhxbMVkcgIjOhMSDpvpk8PMqCHeHay25gIMtWLWMzNhxrmh-DLYD4r';
+
+  const $ = id => document.getElementById(id);
+  let session = null;
+  let userId = null;
+  let userName = null;
+
+  async function init() {
+    if (typeof hrpRequireSession !== 'function') { window.location.href = 'index.html'; return; }
+    session = hrpRequireSession();
+    if (!session) return;
+    userId = session.id;
+    userName = session.username || 'User';
+
+    const avatarEl = $('user-avatar');
+    if (avatarEl) {
+      avatarEl.innerHTML = session.avatar
+        ? `<img src="https://cdn.discordapp.com/avatars/${session.id}/${session.avatar}.png">`
+        : (userName.charAt(0) || '?').toUpperCase();
+    }
+    $('user-name').textContent = userName;
+    $('user-sub').textContent = '@' + userName;
+
+    const draft = localStorage.getItem('incident_draft');
+    if (draft) {
+      try {
+        const data = JSON.parse(draft);
+        Object.entries(data).forEach(([key, val]) => {
+          const el = $('inc-' + key.replace(/_/g, '-'));
+          if (el && el.type !== 'file') el.value = val;
+        });
+        showToast('💾 Borrador restaurado');
+      } catch (_) {}
+    }
+
+    loadBalance();
+  }
+
+  async function loadBalance() {
+    const bal = await hrpGetBalance(userId);
+    const el = $('sidebar-balance');
+    if (el) el.textContent = hrpFormatBalance(bal);
+  }
+
+  function validateIncidentForm() {
+    const fields = [
+      { id: 'inc-type', name: 'Tipo de reporte' },
+      { id: 'inc-datetime', name: 'Fecha y hora' },
+      { id: 'inc-employees', name: 'Empleados involucrados' },
+      { id: 'inc-civils', name: 'Civiles involucrados' },
+      { id: 'inc-location', name: 'Ubicación' },
+      { id: 'inc-description', name: 'Descripción' },
+      { id: 'inc-officer-name', name: 'Nombre del oficial' },
+      { id: 'inc-officer-badge', name: 'Número de placa' },
+    ];
+    for (const f of fields) {
+      const el = $(f.id);
+      if (!el || !el.value.trim()) {
+        showToast('⚠️ Campo obligatorio: ' + f.name);
+        if (el) el.focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function getIncidentData() {
+    return {
+      type: $('inc-type').value,
+      datetime: $('inc-datetime').value,
+      employees: $('inc-employees').value.trim(),
+      civils: $('inc-civils').value.trim(),
+      vehicles: $('inc-vehicles').value.trim(),
+      location: $('inc-location').value.trim(),
+      description: $('inc-description').value.trim(),
+      evidence: $('inc-evidence').files.length > 0 ? Array.from($('inc-evidence').files).map(f => f.name).join(', ') : '',
+      witnesses: $('inc-witnesses').value.trim(),
+damages: $('inc-damages').value.trim(),
+      injuries: $('inc-injuries').value.trim(),
+      charges: $('inc-charges').value.trim(),
+      articles: $('inc-articles').value.trim(),
+      seized: $('inc-seized').value.trim(),
+      officer_name: $('inc-officer-name').value.trim(),
+      officer_rank: $('inc-officer-rank').value.trim(),
+      officer_badge: $('inc-officer-badge').value.trim(),
+      officer_dept: $('inc-officer-dept').value.trim(),
+      supervisor_name: $('inc-supervisor-name').value.trim(),
+      supervisor_rank: $('inc-supervisor-rank').value.trim(),
+      supervisor_sign: $('inc-supervisor-sign').value.trim(),
+      status: $('inc-status').value,
+      notes: $('inc-notes').value.trim(),
+    };
+  }
+
+  async function submitIncident() {
+    const msg = $('incident-msg');
+    if (!validateIncidentForm()) return;
+    const data = getIncidentData();
+
+try {
+      const caseId = (typeof hrpNextCaseId === 'function') ? await hrpNextCaseId('A').catch(()=>null) : null;
+      const reportParts = [
+        `Tipo: ${data.type || '—'}`,
+        `Ubicación: ${data.location || '—'}`,
+        `Fecha/Hora: ${data.datetime || '—'}`,
+        `Empleados: ${data.employees || '—'}`,
+        `Civiles: ${data.civils || '—'}`,
+        `Vehículos: ${data.vehicles || '—'}`,
+        `Daños: ${data.damages || '—'}`,
+        `Lesiones: ${data.injuries || '—'}`,
+        `Evidencia: ${data.evidence || '—'}`,
+        `Testigos: ${data.witnesses || '—'}`,
+        `Cargos: ${data.charges || '—'}`,
+        `Artículos CP: ${data.articles || '—'}`,
+        `Objetos decomisados: ${data.seized || '—'}`,
+        `Descripción: ${data.description || '—'}`,
+        `Observaciones: ${data.notes || '—'}`,
+        `Oficial: ${data.officer_name || '—'} (${data.officer_rank || ''} · ${data.officer_badge || ''} · ${data.officer_dept || ''})`,
+        `Supervisor: ${[data.supervisor_name, data.supervisor_rank, data.supervisor_sign].filter(Boolean).join(' · ') || '—'}`,
+        `Estado: ${data.status || '—'}`,
+      ];
+      const row = {
+        type: 'incident',
+        officer_discord: userId,
+        officer_name: data.officer_name || userName || '—',
+        target_discord: userId,
+        target_name: data.officer_name || userName || '—',
+        case_id: caseId || null,
+        case_status: (data.status === 'Aprobado' || data.status === 'Archivado' || data.status === 'Resuelto' || data.status === 'Cerrado') ? 'resuelta' : 'abierta',
+        incident_type: data.type || '',
+        officer_description: data.description || '',
+        reason: reportParts.join(' | '),
+        amount: 0,
+        created_at: new Date().toISOString(),
+      };
+
+      await hrpInsertPoliceRecord(row);
+
+      try {
+        await hrpSendDiscordWebhook(WEBHOOK_URL, {
+          embeds: [hrpCreateDiscordEmbed({
+            title: '📝 Nuevo Reporte de Incidente',
+            color: 0x1e6fff,
+            fields: [
+              { name: '📋 Tipo', value: data.type || '—', inline: true },
+              { name: '📍 Ubicación', value: data.location || '—', inline: true },
+              { name: '📅 Fecha/Hora', value: data.datetime || '—', inline: true },
+              { name: '👮 Oficial', value: `${data.officer_name || '—'} (${data.officer_badge || '—'})`, inline: true },
+              { name: '📄 Descripción', value: (data.description || 'Sin descripción').substring(0, 500), inline: false },
+              { name: '🔵 Estado', value: data.status || 'Pendiente', inline: true },
+            ],
+          })],
+        });
+      } catch (_) {}
+
+      showToast('✅ Reporte enviado exitosamente');
+      clearIncidentForm();
+      msg.textContent = '';
+    } catch (err) {
+      msg.textContent = '❌ Error al enviar: ' + (err.message || 'desconocido');
+    }
+  }
+
+  function saveDraft() {
+    const data = getIncidentData();
+    try {
+      localStorage.setItem('incident_draft', JSON.stringify(data));
+      showToast('💾 Borrador guardado');
+    } catch (_) {
+      showToast('❌ Error al guardar borrador');
+    }
+  }
+
+  function clearIncidentForm() {
+    ['inc-type','inc-datetime','inc-employees','inc-civils','inc-vehicles','inc-location','inc-description',
+     'inc-witnesses','inc-damages','inc-injuries','inc-charges','inc-articles','inc-seized',
+     'inc-officer-name','inc-officer-rank','inc-officer-badge','inc-officer-dept',
+     'inc-supervisor-name','inc-supervisor-rank','inc-supervisor-sign','inc-notes'].forEach(id => {
+      const el = $(id);
+      if (el) {
+        if (el.type === 'file') el.value = '';
+        else el.value = '';
+      }
+    });
+    $('inc-evidence').value = '';
+    $('inc-status').value = 'Pendiente';
+    showToast('🗑️ Formulario limpiado');
+  }
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const t = $('toast');
+    const txt = $('toast-text');
+    if (!t || !txt) return;
+    txt.textContent = msg;
+    t.classList.remove('error');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  (function(){
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-item').forEach(a => {
+      if (a.getAttribute('href') === page) a.classList.add('active');
+    });
+  })();
+</script>
+<script src="assets/auth.js"></script>
+<script>
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', init)
+    : init();
+</script>
+</body>
+</html>
+

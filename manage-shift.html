@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOUSTON RP — Manage Shifts</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#3b6fb6">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-void:       #0d1424;
+    --bg-panel:      #131d2f;
+    --bg-card:       #17223a;
+    --bg-hover:      #1f304f;
+    --accent-blue:   #3b6fb6;
+    --accent-cyan:   #3b6fb6;
+    --accent-gold:   #e6a868;
+    --accent-red:    #e54850;
+    --accent-green:  #4acf8f;
+    --text-primary:  #e4e7ee;
+    --text-secondary:#8a93a7;
+    --text-dim:      #4c5a72;
+    --border:        #263552;
+    --border-glow:   #314466;
+    --sidebar-w:     260px;
+    --glow-blue:     rgba(59,111,182,0.15);
+    --glow-cyan:     rgba(230,168,104,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-void);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(59,111,182,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(230,168,104,0.05) 0%, transparent 50%);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59,111,182,0); }
+    50%      { box-shadow: 0 0 20px 2px rgba(59,111,182,0.1); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--bg-panel) 0%, rgba(8,14,30,0.98) 100%);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  .sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-blue), transparent 80%);
+    animation: scanDown 4s ease-in-out infinite;
+  }
+
+  .sidebar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 200px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(59,111,182,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  @keyframes scanDown {
+    0%   { opacity: 0.4; transform: scaleY(1); }
+    50%  { opacity: 1; }
+    100% { opacity: 0.4; transform: scaleY(1); }
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-shield {
+    width: 40px; height: 44px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .logo-shield svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 8px var(--accent-cyan));
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--text-primary);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .logo-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent-cyan);
+    letter-spacing: 2px;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-user {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sidebar-user .user-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  .user-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .user-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 1px; right: 1px;
+    width: 8px; height: 8px;
+    background: #4acf8f;
+    border-radius: 50%;
+    border: 2px solid var(--bg-panel);
+  }
+
+  .user-info { min-width: 0; }
+
+  .user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-rank {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+  }
+
+  .nav-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 10px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-bottom: 2px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+  }
+
+  .nav-item:hover {
+    background: linear-gradient(90deg, rgba(59,111,182,0.08), transparent);
+    color: var(--text-primary);
+    border-color: var(--border-glow);
+    transform: translateX(3px);
+  }
+
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(59,111,182,0.18), rgba(59,111,182,0.04));
+    color: var(--accent-cyan);
+    border-color: rgba(59,111,182,0.35);
+    box-shadow: 0 0 12px rgba(59,111,182,0.08);
+  }
+
+  .nav-item.active .nav-icon { color: var(--accent-cyan); }
+
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 20%; bottom: 20%;
+    width: 3px;
+    background: var(--accent-cyan);
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 8px var(--accent-cyan);
+  }
+
+  .nav-icon {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .nav-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .nav-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: rgba(229,72,80,0.2);
+    color: var(--accent-red);
+    border: 1px solid rgba(229,72,80,0.4);
+    padding: 1px 7px;
+    border-radius: 20px;
+  }
+
+  .sidebar-footer {
+    padding: 16px 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 16px;
+    background: rgba(229,72,80,0.08);
+    border: 1px solid rgba(229,72,80,0.25);
+    border-radius: 8px;
+    color: #c7b2b2;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-logout:hover {
+    background: rgba(229,72,80,0.18);
+    border-color: rgba(229,72,80,0.6);
+    color: #e54850;
+    box-shadow: 0 0 16px rgba(229,72,80,0.2);
+    transform: translateX(2px);
+  }
+
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .topbar {
+    height: 64px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: rgba(8,12,24,0.8);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0;
+    z-index: 50;
+  }
+
+  .topbar-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #4acf8f;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    background: #4acf8f;
+    border-radius: 50%;
+    animation: pulse 1.8s ease-in-out infinite;
+    box-shadow: 0 0 6px #4acf8f;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .topbar-clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+  }
+
+  .content {
+    padding: 32px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .page-header {
+    margin-bottom: 32px;
+    animation: fadeSlideIn 0.5s ease both;
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .page-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .page-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+    letter-spacing: 1px;
+  }
+
+  .page-title span { color: var(--accent-cyan); }
+
+  .admin-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-gold);
+    background: linear-gradient(135deg, rgba(240,165,0,0.15), rgba(240,165,0,0.06));
+    border: 1px solid rgba(240,165,0,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-left: 16px;
+  }
+
+  .dept-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    animation: fadeSlideIn 0.5s ease both;
+    animation-delay: 0.05s;
+  }
+
+  .dept-btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .dept-btn:hover {
+    border-color: var(--border-glow);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+  }
+
+  .dept-btn.active {
+    background: linear-gradient(135deg, rgba(59,111,182,0.2), rgba(230,168,104,0.08));
+    border-color: var(--accent-blue);
+    color: var(--accent-cyan);
+    box-shadow: 0 0 16px rgba(59,111,182,0.12);
+  }
+
+  .search-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    animation: fadeSlideIn 0.5s ease both;
+    animation-delay: 0.1s;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .search-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(59,111,182,0.12);
+  }
+
+  .search-input::placeholder {
+    color: var(--text-dim);
+  }
+
+  .table-wrap {
+    background: linear-gradient(145deg, var(--bg-card), rgba(14,22,48,0.8));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeSlideIn 0.5s ease both;
+    animation-delay: 0.15s;
+  }
+
+  .admin-table tr:hover td { background: linear-gradient(90deg, rgba(59,111,182,0.04), transparent); }
+
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .admin-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-panel);
+  }
+
+  .admin-table td {
+    padding: 14px 20px;
+    font-size: 13px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .admin-table tr:last-child td { border-bottom: none; }
+  .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .user-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-avatar-sm {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .hours-cell {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-cyan);
+  }
+
+  .shifts-cell {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .actions-cell {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .action-btn:hover { border-color: var(--border-glow); color: var(--text-primary); background: var(--bg-hover); transform: translateY(-1px); }
+  .action-btn.add { background: linear-gradient(135deg, rgba(74,204,143,0.12), rgba(74,204,143,0.04)); border-color: rgba(74,204,143,0.25); color: #4acf8f; }
+  .action-btn.add:hover { background: linear-gradient(135deg, rgba(74,204,143,0.22), rgba(74,204,143,0.08)); }
+  .action-btn.remove { background: linear-gradient(135deg, rgba(240,165,0,0.12), rgba(240,165,0,0.04)); border-color: rgba(240,165,0,0.25); color: var(--accent-gold); }
+  .action-btn.remove:hover { background: linear-gradient(135deg, rgba(240,165,0,0.22), rgba(240,165,0,0.08)); }
+  .action-btn.reset { background: linear-gradient(135deg, rgba(229,72,80,0.12), rgba(229,72,80,0.04)); border-color: rgba(229,72,80,0.25); color: var(--accent-red); }
+  .action-btn.reset:hover { background: linear-gradient(135deg, rgba(229,72,80,0.22), rgba(229,72,80,0.08)); }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+  }
+
+  .empty-state .e-icon { font-size: 42px; margin-bottom: 14px; }
+  .empty-state .e-text { font-size: 14px; margin-bottom: 6px; }
+  .empty-state .e-sub { font-size: 12px; color: var(--text-dim); }
+
+  .access-overlay {
+    position: fixed; inset: 0; z-index: 99999;
+    background: var(--bg-void);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px; padding: 40px;
+  }
+  .access-overlay.hidden { display: none; }
+  .access-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .access-icon.denied { background: rgba(229,72,80,0.15); color: var(--accent-red); border: 2px solid rgba(229,72,80,0.3); }
+  .access-icon.loading { background: rgba(59,111,182,0.15); color: var(--accent-cyan); border: 2px solid rgba(59,111,182,0.3); animation: pulse 1.8s infinite; }
+  .access-icon.success { background: rgba(74,204,143,0.12); color: #4acf8f; border: 2px solid rgba(74,204,143,0.3); }
+  .access-title { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; }
+  .access-desc { font-size: 14px; color: var(--text-secondary); text-align: center; max-width: 400px; line-height: 1.5; }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    background: linear-gradient(145deg, var(--bg-card), rgba(14,22,48,0.95));
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 20px;
+    color: var(--text-primary); font-size: 13px;
+    display: flex; gap: 10px; align-items: center;
+    box-shadow: 0 14px 34px -12px rgba(0,0,0,0.6), 0 0 20px rgba(59,111,182,0.05);
+    transform: translateY(12px); opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: rgba(74,204,143,0.4); }
+  .toast.error { border-color: rgba(229,72,80,0.4); }
+
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 99998;
+    background: rgba(4,6,13,0.85);
+    backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: linear-gradient(145deg, var(--bg-card), rgba(14,22,48,0.95));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    width: 400px;
+    max-width: 90vw;
+    animation: fadeSlideIn 0.3s ease both;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .modal-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .modal-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  .modal-field {
+    margin-bottom: 16px;
+  }
+
+  .modal-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+
+  .modal-field input, .modal-field select {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .modal-field input:focus, .modal-field select:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(59,111,182,0.15);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  .modal-btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .modal-btn:hover { border-color: var(--border-glow); color: var(--text-primary); transform: translateY(-1px); }
+  .modal-btn.primary { background: linear-gradient(135deg, rgba(59,111,182,0.2), rgba(59,111,182,0.08)); border-color: var(--accent-blue); color: var(--accent-cyan); }
+  .modal-btn.primary:hover { background: linear-gradient(135deg, rgba(59,111,182,0.3), rgba(59,111,182,0.12)); box-shadow: 0 0 16px rgba(59,111,182,0.15); }
+  .modal-btn.danger { background: linear-gradient(135deg, rgba(229,72,80,0.15), rgba(229,72,80,0.06)); border-color: rgba(229,72,80,0.3); color: var(--accent-red); }
+  .modal-btn.danger:hover { background: linear-gradient(135deg, rgba(229,72,80,0.25), rgba(229,72,80,0.1)); }
+  .modal-btn.success { background: linear-gradient(135deg, rgba(74,204,143,0.15), rgba(74,204,143,0.06)); border-color: rgba(74,204,143,0.3); color: #4acf8f; }
+  .modal-btn.success:hover { background: linear-gradient(135deg, rgba(74,204,143,0.25), rgba(74,204,143,0.1)); }
+
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+    animation: fadeSlideIn 0.5s ease both;
+    animation-delay: 0.05s;
+  }
+
+  .stat-card {
+    background: linear-gradient(145deg, var(--bg-card), rgba(14,22,48,0.8));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: border-color 0.3s;
+  }
+
+  .stat-card:hover {
+    border-color: var(--border-glow);
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent-cyan);
+  }
+
+  .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; background: linear-gradient(145deg, var(--bg-card), rgba(14,22,48,0.8)); border-radius: 10px; padding: 4px; overflow-x: auto; border: 1px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border-radius: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: .3px; text-transform: uppercase; cursor: pointer; transition: all .25s cubic-bezier(0.4,0,0.2,1); border: none; background: transparent; color: var(--text-dim); white-space: nowrap; }
+  .tab-btn.active { background: linear-gradient(135deg, var(--accent-blue), rgba(59,111,182,0.8)); color: #fff; box-shadow: 0 0 16px rgba(59,111,182,0.25); }
+  .tab-btn:hover:not(.active) { color: var(--text-primary); background: rgba(59,111,182,0.06); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .request-card { background: linear-gradient(145deg, var(--bg-card), rgba(14,22,48,0.8)); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 10px; transition: border-color 0.3s; }
+  .request-card:hover { border-color: var(--border-glow); }
+  .request-card .req-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .request-card .req-user { font-weight: 600; color: var(--accent-cyan); font-size: 14px; }
+  .request-card .req-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
+  .request-card .req-detail { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+  .request-card .req-status { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 3px 8px; border-radius: 10px; letter-spacing: .5px; text-transform: uppercase; }
+  .request-card .req-status.pending { background: rgba(240,165,0,0.15); color: var(--accent-gold); border: 1px solid rgba(240,165,0,0.3); }
+  .request-card .req-status.approved { background: rgba(74,204,143,0.12); color: var(--accent-green); border: 1px solid rgba(74,204,143,0.3); }
+  .request-card .req-status.rejected { background: rgba(229,72,80,0.12); color: var(--accent-red); border: 1px solid rgba(229,72,80,0.3); }
+  .req-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(229,72,80,0.15); color: var(--accent-red); font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+</style>
+<link rel="stylesheet" href="assets/responsive.css">
+<link rel="stylesheet" href="assets/hrp-dock.css">
+</head>
+<body>
+
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="logo-shield">
+        <img src="images/logo.png" alt="Houston RP" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 8px var(--accent-cyan));">
+      </div>
+      <div class="logo-text">
+        <div class="logo-title">HOUSTON</div>
+        <div class="logo-sub">Command Center v3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar" id="user-avatar">AD</div>
+    <div class="user-info">
+      <div class="user-name" id="user-name">Admin</div>
+      <div class="user-rank" id="user-rank">★ Administrador</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">General</div>
+    <a class="nav-item" href="dashboard.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><span class="nav-label">Dashboard</span></a>
+    <a class="nav-item" href="app.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="nav-label">Characters</span></a>
+    <a class="nav-item" href="licencias.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">DMV/CCW</span></a>
+    <div class="nav-section-label">Economy</div>
+    <div class="nav-section-label">Gobierno</div>
+    <a class="nav-item" href="gobierno.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div><span class="nav-label">Portal Cívico</span><span class="nav-badge">NEW</span></a>
+    <div class="nav-section-label">Law Enforcement</div>
+    <a class="nav-item" href="mdt.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 8l10-5 10 5"/><path d="M12 8v13"/><path d="M4 12l8 5 8-5"/></svg></div><span class="nav-label">MDT</span></a>
+    <div class="nav-section-label">Developer</div>
+    <a class="nav-item" href="developer.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg></div><span class="nav-label">Developer</span><span class="nav-badge">Dev</span></a>
+    <div class="nav-section-label">Foundation</div>
+    <a class="nav-item" href="foundation.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">Foundation</span></a>
+    <div class="nav-section-label">System</div>
+    <a class="nav-item" href="#" onclick="event.preventDefault();localStorage.clear();window.location.href='index.html';"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><span class="nav-label">Logout</span></a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div style="padding:2px 12px 10px;border-bottom:1px solid var(--border);margin-bottom:10px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">Balance</div>
+      <div id="sidebar-balance" style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--accent-gold);margin-top:2px;">$---</div>
+    </div>
+    <a class="btn-logout" href="index.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Cerrar Sesión
+    </a>
+  </div>
+
+</aside>
+
+<main class="main">
+
+  <header class="topbar">
+    <div class="topbar-title">
+      Manage Shifts
+      <span class="admin-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Alto Mando</span>
+    </div>
+    <div class="topbar-right">
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        Sistema Activo
+      </div>
+      <div class="topbar-clock" id="clock">--:--:--</div>
+    </div>
+  </header>
+
+  <div class="content" id="main-content">
+
+    <div id="access-loading" class="access-overlay">
+      <div class="access-icon loading"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></div>
+      <div class="access-title">Verificando acceso...</div>
+      <div class="access-desc">Comprobando tus permisos de administración.</div>
+    </div>
+
+    <div id="access-denied" class="access-overlay hidden">
+      <div class="access-icon denied"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <div class="access-title" id="denied-title">Acceso Denegado</div>
+      <div class="access-desc" id="denied-desc">No tienes el rol de Alto Mando necesario para acceder a este panel.</div>
+      <div id="denied-sql" style="display:none;max-width:620px;width:100%;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-gold);margin-bottom:8px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> Agrega tu usuario a la tabla police_members con el role_id de administrador:</div>
+        <pre id="sql-code" style="background:var(--bg-panel);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:11px;color:var(--text-secondary);overflow-x:auto;text-align:left;white-space:pre-wrap;word-break:break-all;"></pre>
+      </div>
+      <button id="reauth-btn" class="hidden btn-logout" style="width:auto;padding:12px 32px;margin-top:12px;cursor:pointer;border:none;" onclick="hrpForceReauth()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M21.34 8A10 10 0 0 0 5.26 6.34"/><path d="M2.66 16a10 10 0 0 0 16.08 1.66"/></svg> Re-conectar con Discord</button>
+      <a href="dashboard.html" class="btn-logout" style="width:auto;padding:12px 32px;margin-top:12px;">Volver al Dashboard</a>
+    </div>
+
+    <div id="admin-content" style="display:none">
+
+      <div class="page-header">
+        <div class="page-eyebrow">// HOUSTON PD — Administración</div>
+        <div class="page-title">Panel de <span>Gestión</span></div>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchAdminTab('horas', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Horas</button>
+        <button class="tab-btn" onclick="switchAdminTab('rangos', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 11l2 2 4-4"/></svg> Rangos</button>
+        <button class="tab-btn" onclick="switchAdminTab('ascensos', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="var(--accent-gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Ascensos <span id="badge-ascensos" class="req-badge" style="display:none">0</span></button>
+        <button class="tab-btn" onclick="switchAdminTab('reportes', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Reportes <span id="badge-reportes" class="req-badge" style="display:none">0</span></button>
+        <button class="tab-btn" onclick="switchAdminTab('k9', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .024.256.103.508.232.745"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.024.256-.103.508-.232.745"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75z"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309m-9.243-6.082A8.801 8.801 0 0 1 12 5c.78 0 1.5.108 2.161.306"/></svg> K-9 <span id="badge-k9" class="req-badge" style="display:none">0</span></button>
+        <button class="tab-btn" onclick="switchAdminTab('active-shifts', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Turnos Activos <span id="badge-active-shifts" class="req-badge" style="display:none">0</span></button>
+        <button class="tab-btn" onclick="switchAdminTab('shift-history', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Historial Turnos</button>
+      </div>
+
+      <!-- TAB: HORAS -->
+      <div class="tab-panel active" id="tab-horas">
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-label">Total Oficiales</div>
+            <div class="stat-value" id="stat-total">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Horas</div>
+            <div class="stat-value" id="stat-hours">0h</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Turnos</div>
+            <div class="stat-value" id="stat-shifts">0</div>
+          </div>
+        </div>
+
+        <div class="dept-bar" id="dept-bar">
+          <div class="dept-btn active" data-dept="" onclick="selectDepartment('')">Todas</div>
+          <div class="dept-btn" data-dept="hpd" onclick="selectDepartment('hpd')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> HPD</div>
+          <div class="dept-btn" data-dept="hcso" onclick="selectDepartment('hcso')"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="var(--accent-gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> HCSO</div>
+          <div class="dept-btn" data-dept="ice" onclick="selectDepartment('ice')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg> ICE</div>
+<div class="dept-btn" data-dept="tph" onclick="selectDepartment('tph')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg> TPH</div>
+          <div class="dept-btn" data-dept="hfd" onclick="selectDepartment('hfd')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c3 3 3 5 3 7a3 3 0 0 1-6 0c0-2 0-4 3-7z"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> HFD</div>
+          <div class="dept-btn" data-dept="dot" onclick="selectDepartment('dot')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18v9H3z"/><path d="M6 18h12"/><path d="M8 6v3"/></svg> HDOT</div>
+          <div class="dept-btn" data-dept="ems" onclick="selectDepartment('ems')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg> EMS</div>
+        </div>
+
+<div class="search-bar">
+          <select class="search-input" id="rank-filter" onchange="filterUsers()" style="flex:0 0 240px;min-width:220px;cursor:pointer;">
+            <option value="">Todos los rangos</option>
+          </select>
+          <input class="search-input" id="search-input" type="text" placeholder="Buscar oficial por nombre..." oninput="filterUsers()">
+        </div>
+
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Oficial</th>
+                <th>Dept / Rango</th>
+                <th>Horas Totales</th>
+                <th>Turnos</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <tr>
+                <td colspan="5">
+                  <div class="empty-state">
+                    <div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+                    <div class="e-text">Cargando datos...</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: RANGOS -->
+      <div class="tab-panel" id="tab-rangos">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--text-primary);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2" style="vertical-align:-3px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 11l2 2 4-4"/></svg> Administrar Rangos</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">Solo Alto Mando</span>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end;">
+          <div style="flex:1;min-width:180px;">
+            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;">OFICIAL (Discord ID)</label>
+            <input class="search-input" id="rank-target-id" type="text" placeholder="Ej: 123456789012345678">
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;">NOMBRE</label>
+            <input class="search-input" id="rank-target-name" type="text" placeholder="Nombre del oficial">
+          </div>
+          <div style="min-width:140px;">
+            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;">DEPARTAMENTO</label>
+            <select class="search-input" id="rank-dept" onchange="onRankDeptChange()"></select>
+          </div>
+          <div style="min-width:180px;">
+            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px;">NUEVO RANGO</label>
+            <select class="search-input" id="rank-rank"></select>
+          </div>
+          <button class="action-btn add" id="rank-assign-btn" onclick="assignRank()" style="padding:11px 18px;height:auto;font-size:12px;">Asignar Rango</button>
+        </div>
+
+        <div id="rank-current" style="margin-bottom:16px;"></div>
+
+        <div class="search-bar">
+          <input class="search-input" id="rank-search" type="text" placeholder="Buscar oficial con rango asignado..." oninput="filterRankMembers()">
+        </div>
+
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Oficial</th>
+                <th>Dept</th>
+                <th>Rango</th>
+                <th>Sueldo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="rank-members-tbody">
+              <tr><td colspan="5"><div class="empty-state"><div class="e-text">Cargando rangos...</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:26px 0 12px;">
+          <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:var(--text-primary);">Historial de cambios de rango</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">Quién, a quién y cuándo</span>
+        </div>
+        <div id="rank-history-list"><div class="empty-state"><div class="e-text">Cargando historial...</div></div></div>
+      </div>
+
+      <!-- TAB: ASCENSOS -->
+      <div class="tab-panel" id="tab-ascensos">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--text-primary);"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="var(--accent-gold)" stroke-width="1" style="vertical-align:-3px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Solicitudes de Ascenso</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">Pendientes</span>
+        </div>
+        <div id="ascensos-list"><div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div><div class="e-text">Cargando solicitudes...</div></div></div>
+      </div>
+
+      <!-- TAB: REPORTES -->
+      <div class="tab-panel" id="tab-reportes">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--text-primary);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-3px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Reportes de Oficiales</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">Recibidos</span>
+        </div>
+        <div id="reportes-list"><div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div><div class="e-text">Cargando reportes...</div></div></div>
+      </div>
+
+      <!-- TAB: K-9 -->
+      <div class="tab-panel" id="tab-k9">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--text-primary);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .024.256.103.508.232.745"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.024.256-.103.508-.232.745"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75z"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309m-9.243-6.082A8.801 8.801 0 0 1 12 5c.78 0 1.5.108 2.161.306"/></svg> Solicitudes K-9</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">Pendientes</span>
+        </div>
+        <div id="k9-list"><div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div><div class="e-text">Cargando solicitudes...</div></div></div>
+      </div>
+
+      <!-- TAB: TURNOS ACTIVOS -->
+      <div class="tab-panel" id="tab-active-shifts">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--text-primary);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="2" style="vertical-align:-3px"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Turnos Activos</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">En servicio ahora</span>
+        </div>
+        <div id="active-shifts-list"><div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div><div class="e-text">Cargando turnos activos...</div></div></div>
+      </div>
+
+      <!-- TAB: HISTORIAL DE TURNOS -->
+      <div class="tab-panel" id="tab-shift-history">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--text-primary);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-3px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Historial de Turnos</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">Todos los turnos finalizados</span>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+          <input class="search-input" id="history-search" type="text" placeholder="Buscar por nombre..." oninput="loadShiftHistory()" style="flex:1;min-width:200px;">
+          <select id="history-dept" class="search-input" onchange="loadShiftHistory()" style="min-width:120px;">
+            <option value="">Todos</option>
+            <option value="hpd">HPD</option>
+            <option value="hcso">HCSO</option>
+            <option value="ice">ICE</option>
+            <option value="tph">TPH</option>
+          </select>
+        </div>
+        <div id="shift-history-list"><div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="e-text">Cargando historial...</div></div></div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<!-- Modal Add Hours -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal">
+    <div class="modal-title">Añadir Horas</div>
+    <div class="modal-sub" id="modal-add-sub">Añadir horas a <strong>Usuario</strong></div>
+    <div class="modal-field">
+      <label>Horas a añadir</label>
+      <input type="number" id="modal-add-hours" min="1" max="999999" placeholder="1" value="1">
+    </div>
+    <div class="modal-field">
+      <label>Razón</label>
+      <input type="text" id="modal-add-reason" placeholder="Ej: Ajuste administrativo">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeModal('modal-add')">Cancelar</button>
+      <button class="modal-btn success" id="btn-confirm-add" onclick="confirmAdd()">Añadir Horas</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Remove Hours -->
+<div class="modal-overlay" id="modal-remove">
+  <div class="modal">
+    <div class="modal-title">Remover Horas</div>
+    <div class="modal-sub" id="modal-remove-sub">Remover horas a <strong>Usuario</strong></div>
+    <div class="modal-field">
+      <label>Horas a remover</label>
+      <input type="number" id="modal-remove-hours" min="1" placeholder="1" value="1">
+    </div>
+    <div class="modal-field">
+      <label>Razón</label>
+      <input type="text" id="modal-remove-reason" placeholder="Ej: Ajuste administrativo">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeModal('modal-remove')">Cancelar</button>
+      <button class="modal-btn danger" id="btn-confirm-remove" onclick="confirmRemove()">Remover Horas</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Reset Hours -->
+<div class="modal-overlay" id="modal-reset">
+  <div class="modal">
+    <div class="modal-title">Resetear Horas</div>
+    <div class="modal-sub" id="modal-reset-sub">¿Estás seguro de resetear las horas de <strong>Usuario</strong>? Esta acción eliminará todos los turnos completados y ajustes de este oficial.</div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeModal('modal-reset')">Cancelar</button>
+      <button class="modal-btn danger" id="btn-confirm-reset" onclick="confirmReset()">Sí, Resetear Todo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+  <span id="toast-msg">Operación exitosa</span>
+</div>
+
+<script src="assets/auth.js"></script>
+<script>
+(function(){
+
+let userId = null;
+  let userName = null;
+  let allUsers = [];
+  let selectedUser = null;
+  let selectedDept = '';
+  let selectedRank = '';
+  let rankOptions = [];
+  let rankByUser = {};
+  let rankFilterReady = false;
+
+  function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+  const DEPT_NAMES = { hcso: 'HCSO', hpd: 'HPD', ice: 'ICE', tph: 'TPH' };
+  const TEN_CODES = [
+    { code: '10-6',   color: '#e6a868', label: 'Ocupado' },
+    { code: '10-7',   color: '#2d2d3d', label: 'Fuera de servicio' },
+    { code: '10-8',   color: '#4acf8f', label: 'En servicio' },
+    { code: '10-5',   color: '#4acf8f', label: 'Vigilancia' },
+    { code: '10-11',  color: '#4acf8f', label: 'Detención de tráfico' },
+    { code: '10-100', color: '#e54850', label: 'Oficial caído' },
+    { code: '10-99',  color: '#ff8c42', label: 'Oficial en apuros' },
+    { code: '10-97',  color: '#ff8c42', label: 'Funcionario de bienes' },
+    { code: '10-50',  color: '#4acf8f', label: 'Accidente grave' },
+    { code: '10-23',  color: '#4acf8f', label: 'Llegó a la escena' },
+    { code: '10-15',  color: '#4acf8f', label: 'Persona sospechosa' },
+  ];
+
+  function $(id) { return document.getElementById(id); }
+
+  function formatHours(seconds) {
+    if (!seconds || seconds <= 0) return '0h 0m';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    return `${h}h ${m}m`;
+  }
+
+  function showToast(msg, type) {
+    const toast = $('toast');
+    const icon = $('toast-icon');
+    const text = $('toast-msg');
+    toast.className = 'toast';
+    if (type === 'success') {
+      toast.classList.add('success');
+      icon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+    } else {
+      toast.classList.add('error');
+      icon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    }
+    text.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  function openModal(id, user) {
+    selectedUser = user;
+    $(id).classList.add('open');
+  }
+
+  function closeModal(id) {
+    $(id).classList.remove('open');
+    selectedUser = null;
+  }
+  window.closeModal = closeModal;
+
+  // ── ACCESS CHECK ──
+  async function checkAccess() {
+    const session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
+    if (!session || !session.id) {
+      const _p=window.location.pathname.split('/').pop()||'index.html'; if(_p!=='index.html')localStorage.setItem('hrp_redirect',_p);
+      window.location.href = 'index.html';
+      return false;
+    }
+
+    userId = session.id;
+    userName = session.username || 'Admin';
+
+    const avatarEl = $('user-avatar');
+    if (avatarEl) {
+      avatarEl.innerHTML = session.avatar
+        ? `<img src="https://cdn.discordapp.com/avatars/${session.id}/${session.avatar}.png">`
+        : (userName.charAt(0) || 'A').toUpperCase();
+    }
+    const nameEl = $('user-name');
+    if (nameEl) nameEl.textContent = userName;
+
+    if (typeof hrpCheckManageAccess !== 'function') {
+      $('access-loading').classList.add('hidden');
+      $('access-denied').classList.remove('hidden');
+      $('denied-title').textContent = 'Sistema no disponible';
+      $('denied-desc').textContent = 'Las funciones de administración no están disponibles.';
+      return false;
+    }
+
+    const allowed = await hrpCheckManageAccess(userId);
+
+    if (allowed) {
+      $('access-loading').classList.add('hidden');
+      $('admin-content').style.display = 'block';
+      return true;
+    }
+
+    $('access-loading').classList.add('hidden');
+    $('access-denied').classList.remove('hidden');
+
+    if (typeof hrpReauthNeeded !== 'undefined' && hrpReauthNeeded) {
+      $('denied-title').textContent = 'Re-autenticación necesaria';
+      $('denied-desc').textContent = 'Necesitás un permiso adicional para verificar tus roles. Hacé clic abajo para reconectarte con Discord.';
+      document.getElementById('reauth-btn').classList.remove('hidden');
+    } else {
+      const tablesOk = typeof hrpEnsureTables === 'function' ? await hrpEnsureTables() : false;
+      if (!tablesOk) {
+        $('denied-title').textContent = 'Base de datos no configurada';
+        $('denied-desc').textContent = 'Las tablas de Supabase no existen. Ejecuta este SQL en tu Supabase Dashboard (SQL Editor) para agregar tu usuario como administrador:';
+        $('denied-sql').style.display = 'block';
+        const sql = `INSERT INTO police_members (discord_id, username, role_id) \nVALUES ('${userId}', '${userName}', '1502940172348690482');`;
+        $('sql-code').textContent = sql;
+      }
+    }
+
+    return false;
+  }
+
+// ── DEPARTMENT ──
+  function selectDepartment(dept) {
+    selectedDept = dept;
+    document.querySelectorAll('.dept-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.dept === dept);
+    });
+    if (rankFilterReady) populateRankFilter();
+    loadUsers();
+  }
+  window.selectDepartment = selectDepartment;
+
+  // ── RANK FILTER (Horas) ──
+  function rankDeptLabel(k) {
+    return ALL_DEPT_NAMES[k] || (k || '').toUpperCase() || k;
+  }
+
+  async function loadRankFilterData() {
+    try {
+      const ranks = (typeof hrpGetRanks === 'function') ? await hrpGetRanks() : [];
+      const members = (typeof hrpGetRankMembers === 'function') ? await hrpGetRankMembers() : [];
+      rankOptions = ranks || [];
+      rankByUser = {};
+      (members || []).forEach(function (m) {
+        rankByUser[String(m.discord_id)] = m.rank_key;
+      });
+      rankFilterReady = true;
+      populateRankFilter();
+      filterUsers();
+    } catch (e) {
+      rankFilterReady = false;
+    }
+  }
+
+  function populateRankFilter() {
+    const sel = $('rank-filter');
+    if (!sel) return;
+    const dept = selectedDept;
+    let list = rankOptions;
+    if (dept) list = list.filter(r => r.department === dept);
+
+    if (selectedRank && !list.some(r => r.rank_key === selectedRank)) {
+      selectedRank = '';
+    }
+    sel.value = selectedRank;
+    let html = '<option value="">' + (dept ? 'Todos los rangos · ' + rankDeptLabel(dept) : 'Todos los rangos') + '</option>';
+    let lastDept = '';
+    list.forEach(function (r) {
+      if (!dept && r.department !== lastDept) {
+        lastDept = r.department;
+        html += '<option value="" disabled style="opacity:.6;font-style:italic;">— ' + esc(rankDeptLabel(r.department)) + ' —</option>';
+      }
+      html += '<option value="' + esc(r.rank_key) + '"' + (selectedRank === r.rank_key ? ' selected' : '') + '>' + esc(rankDeptLabel(r.department) + ' · ' + r.rank_label) + '</option>';
+    });
+    sel.innerHTML = html;
+  }
+
+  // ── LOAD USERS ──
+  let userAvatarMap = {};
+async function loadUsers() {
+    if (typeof hrpGetAllUsersWithHours !== 'function') return;
+    allUsers = await hrpGetAllUsersWithHours(selectedDept || undefined);
+    const discordIds = allUsers.map(u => u.discord_id).filter(Boolean);
+    userAvatarMap = (typeof hrpGetUserAvatars === 'function') ? await hrpGetUserAvatars(discordIds) : {};
+    const session = (typeof hrpGetSession === 'function') ? hrpGetSession() : null;
+    if (session && session.id && session.avatar && !userAvatarMap[session.id]) {
+      userAvatarMap[session.id] = session.avatar;
+    }
+    if (rankFilterReady && ($('rank-filter') || {}).value) filterUsers();
+    else renderUsers(allUsers);
+    updateStats();
+  }
+
+  function rankLabelOf(u) {
+    const rk = rankByUser[String(u.discord_id)];
+    if (!rk) return '';
+    const def = rankOptions.find(r => r.department === u.department && r.rank_key === rk);
+    return def ? def.rank_label : rk;
+  }
+
+  function renderUsers(users) {
+    const tbody = $('users-tbody');
+
+    if (!users || users.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6">
+        <div class="empty-state">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+          <div class="e-text">No hay oficiales con horas registradas</div>
+          <div class="e-sub">Las horas apareceran aqui cuando los oficiales completen sus turnos.</div>
+        </div>
+      </td></tr>`;
+      return;
+    }
+
+    let html = '';
+    users.forEach((u, i) => {
+      const avatarHash = userAvatarMap[u.discord_id];
+      const avatarHtml = avatarHash
+        ? `<img src="https://cdn.discordapp.com/avatars/${u.discord_id}/${avatarHash}.png" style="width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;">`
+        : `<div class="user-avatar-sm">${(u.username || 'U').charAt(0).toUpperCase()}</div>`;
+      const deptLabel = u.department ? (DEPT_NAMES[u.department] || u.department.toUpperCase()) : '—';
+      const rankLabel = rankLabelOf(u);
+      html += `<tr data-name="${(u.username || '').toLowerCase()}">
+        <td style="color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:12px;">#${i + 1}</td>
+        <td>
+          <div class="user-cell">
+            ${avatarHtml}
+            <span>${u.username || 'Desconocido'}</span>
+          </div>
+        </td>
+        <td>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cyan);">${deptLabel}</div>
+          ${rankLabel ? `<div style="font-size:10px;color:var(--text-dim);margin-top:2px;">${esc(rankLabel)}</div>` : ''}
+        </td>
+        <td><span class="hours-cell">${formatHours(u.total_seconds)}</span></td>
+        <td><span class="shifts-cell">${u.shifts || 0} turno(s)</span></td>
+        <td>
+          <div class="actions-cell">
+            <button class="action-btn add" onclick="window._addHours('${u.discord_id}', '${u.username}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Añadir</button>
+            <button class="action-btn remove" onclick="window._removeHours('${u.discord_id}', '${u.username}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg> Remover</button>
+            <button class="action-btn reset" onclick="window._resetHours('${u.discord_id}', '${u.username}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M21.34 8A10 10 0 0 0 5.26 6.34"/><path d="M2.66 16a10 10 0 0 0 16.08 1.66"/></svg> Reset</button>
+          </div>
+        </td>
+      </tr>`;
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  function filterUsers() {
+    const q = $('search-input').value.toLowerCase().trim();
+    const rk = ($('rank-filter') || {}).value || '';
+    selectedRank = rk;
+    let filtered = allUsers;
+    if (q) filtered = filtered.filter(u => (u.username || '').toLowerCase().includes(q));
+    if (rk) filtered = filtered.filter(u => rankByUser[String(u.discord_id)] === rk);
+    renderUsers(filtered);
+  }
+  window.filterUsers = filterUsers;
+
+  function updateStats() {
+    const total = allUsers.length;
+    const totalHours = allUsers.reduce((s, u) => s + (u.total_seconds || 0), 0);
+    const totalShifts = allUsers.reduce((s, u) => s + (u.shifts || 0), 0);
+
+    $('stat-total').textContent = total;
+    $('stat-hours').textContent = formatHours(totalHours);
+    $('stat-shifts').textContent = totalShifts;
+  }
+
+  // ── ACTIONS ──
+  window._addHours = function(discordId, username) {
+    selectedUser = { discord_id: discordId, username: username };
+    $('modal-add-sub').innerHTML = `Añadir horas a <strong>${username}</strong>`;
+    $('modal-add-hours').value = '1';
+    $('modal-add-reason').value = '';
+    openModal('modal-add', selectedUser);
+  };
+
+  window._removeHours = function(discordId, username) {
+    selectedUser = { discord_id: discordId, username: username };
+    $('modal-remove-sub').innerHTML = `Remover horas a <strong>${username}</strong>`;
+    $('modal-remove-hours').value = '1';
+    $('modal-remove-reason').value = '';
+    openModal('modal-remove', selectedUser);
+  };
+
+  window._resetHours = function(discordId, username) {
+    selectedUser = { discord_id: discordId, username: username };
+    $('modal-reset-sub').innerHTML = `¿Estás seguro de resetear las horas de <strong>${username}</strong>? Esta acción eliminará todos los turnos completados y ajustes de este oficial.`;
+    openModal('modal-reset', selectedUser);
+  };
+
+  async function confirmAdd() {
+    if (!selectedUser) return;
+    let hours = parseInt($('modal-add-hours').value);
+    const reason = $('modal-add-reason').value;
+
+    if (!hours || hours < 1) {
+      showToast('Ingresa una cantidad válida de horas', 'error');
+      return;
+    }
+    if (hours > 999999) {
+      showToast('Demasiadas horas (máx 999,999)', 'error');
+      return;
+    }
+
+    $('btn-confirm-add').disabled = true;
+    const ok = await hrpAddHours(selectedUser.discord_id, selectedUser.username, hours * 3600, reason, userId, selectedDept || undefined);
+    $('btn-confirm-add').disabled = false;
+
+    if (ok) {
+      showToast(`Añadidas ${hours}h a ${selectedUser.username}`, 'success');
+      closeModal('modal-add');
+      loadUsers();
+    } else {
+      showToast('Error al añadir horas', 'error');
+    }
+  }
+  window.confirmAdd = confirmAdd;
+
+  async function confirmRemove() {
+    if (!selectedUser) return;
+    let hours = parseInt($('modal-remove-hours').value);
+    const reason = $('modal-remove-reason').value;
+
+    if (!hours || hours < 1) {
+      showToast('Ingresa una cantidad válida de horas', 'error');
+      return;
+    }
+    if (hours > 999999) {
+      showToast('Demasiadas horas (máx 999,999)', 'error');
+      return;
+    }
+
+    $('btn-confirm-remove').disabled = true;
+    const ok = await hrpRemoveHours(selectedUser.discord_id, selectedUser.username, hours * 3600, reason, userId, selectedDept || undefined);
+    $('btn-confirm-remove').disabled = false;
+
+    if (ok) {
+      showToast(`Removidas ${hours}h de ${selectedUser.username}`, 'success');
+      closeModal('modal-remove');
+      loadUsers();
+    } else {
+      showToast('Error al remover horas', 'error');
+    }
+  }
+  window.confirmRemove = confirmRemove;
+
+  async function confirmReset() {
+    if (!selectedUser) return;
+
+    $('btn-confirm-reset').disabled = true;
+    const ok = await hrpResetUserHours(selectedUser.discord_id, selectedDept || undefined);
+    $('btn-confirm-reset').disabled = false;
+
+    if (ok) {
+      showToast(`Horas de ${selectedUser.username} reseteadas a 0`, 'success');
+      closeModal('modal-reset');
+      loadUsers();
+    } else {
+      showToast('Error al resetear horas', 'error');
+    }
+  }
+  window.confirmReset = confirmReset;
+
+  // ── ADMIN TABS ──
+  // ── RANGOS + ECONOMÍA (migración 019) ──
+  let ranksByDept = {};
+  let rankMembers = [];
+  let selectedRankUser = null;
+  const ALL_DEPT_NAMES = { hfd: 'HFD', ems: 'EMS', dot: 'HDOT', hpd: 'HPD', hcso: 'HCSO', ice: 'ICE', tph: 'TPH' };
+
+  function rankHourlyLabel(h) {
+    const n = Number(h) || 0;
+    return '$' + n.toLocaleString() + ' /h in-game · $' + (n * 6).toLocaleString() + ' /h real';
+  }
+
+  async function loadRangos() {
+    try {
+      const ranks = (typeof hrpGetRanks === 'function') ? await hrpGetRanks() : [];
+      const members = (typeof hrpGetRankMembers === 'function') ? await hrpGetRankMembers() : [];
+      const history = (typeof hrpGetRankHistory === 'function') ? await hrpGetRankHistory(100) : [];
+
+      ranksByDept = {};
+      (ranks || []).forEach(function (r) {
+        if (!ranksByDept[r.department]) ranksByDept[r.department] = [];
+        ranksByDept[r.department].push(r);
+      });
+      rankMembers = members || [];
+
+      const deptSel = $('rank-dept');
+      if (deptSel && !deptSel.options.length) {
+        deptSel.innerHTML = Object.keys(ALL_DEPT_NAMES).map(function (k) {
+          return '<option value="' + k + '">' + ALL_DEPT_NAMES[k] + '</option>';
+        }).join('');
+      }
+      onRankDeptChange();
+      renderRankMembers(rankMembers);
+      renderRankHistory(history || []);
+    } catch (e) {
+      showToast('Error al cargar rangos', 'error');
+    }
+  }
+
+  function onRankDeptChange() {
+    const dept = ($('rank-dept') || {}).value || 'hpd';
+    const list = ranksByDept[dept] || [];
+    const sel = $('rank-rank');
+    if (sel) {
+      sel.innerHTML = list.map(function (r) {
+        const hours = Number(r.min_hours) > 0 ? ' · desdé ' + r.min_hours + 'h' : '';
+        return '<option value="' + r.rank_key + '">' + esc(r.rank_label) + ' — $' + (Number(r.hourly) || 0) + '/h' + hours + '</option>';
+      }).join('');
+    }
+  }
+  window.onRankDeptChange = onRankDeptChange;
+
+  function renderRankMembers(list) {
+    const tbody = $('rank-members-tbody');
+    if (!tbody) return;
+    if (!list || !list.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="e-text">Aún no hay rangos asignados</div></div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(function (m) {
+      const info = (ranksByDept[m.department] || []).find(function (r) { return r.rank_key === m.rank_key; });
+      const rankLabel = info ? info.rank_label : m.rank_key;
+      return '<tr>' +
+        '<td style="font-weight:600;">' + esc(m.username || m.discord_id) +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--text-dim);">' + esc(m.discord_id) + '</div></td>' +
+        '<td>' + (ALL_DEPT_NAMES[m.department] || m.department) + '</td>' +
+        '<td>' + esc(rankLabel) + '</td>' +
+        '<td style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--accent-gold);">' + rankHourlyLabel(m.hourly) + '</td>' +
+        '<td><button class="action-btn add" onclick="selectRankUser(\'' + m.discord_id + '\')">Editar</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterRankMembers() {
+    const q = (($('rank-search') || {}).value || '').toLowerCase().trim();
+    if (!q) { renderRankMembers(rankMembers); return; }
+    renderRankMembers(rankMembers.filter(function (m) {
+      return (m.username || '').toLowerCase().includes(q) || String(m.discord_id).includes(q);
+    }));
+  }
+  window.filterRankMembers = filterRankMembers;
+
+  function selectRankUser(discordId) {
+    const m = rankMembers.find(function (x) { return String(x.discord_id) === String(discordId); });
+    if (!m) return;
+    selectedRankUser = m;
+    $('rank-target-id').value = m.discord_id;
+    $('rank-target-name').value = m.username || '';
+    const dept = ranksByDept[m.department] ? m.department : 'hpd';
+    $('rank-dept').value = dept;
+    onRankDeptChange();
+    $('rank-rank').value = m.rank_key;
+    const info = (ranksByDept[dept] || []).find(function (r) { return r.rank_key === m.rank_key; });
+    $('rank-current').innerHTML = '<div class="request-card"><div class="req-header">' +
+      '<span class="req-user">' + esc(m.username || m.discord_id) + '</span>' +
+      '<span class="req-date">' + (ALL_DEPT_NAMES[dept] || dept) + '</span></div>' +
+      '<div class="req-detail">Rango actual: <strong>' + esc(info ? info.rank_label : m.rank_key) + '</strong> · ' + rankHourlyLabel(m.hourly) + '</div></div>';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  window.selectRankUser = selectRankUser;
+
+  async function assignRank() {
+    const targetId = (($('rank-target-id') || {}).value || '').trim();
+    const targetName = (($('rank-target-name') || {}).value || '').trim();
+    const department = ($('rank-dept') || {}).value;
+    const rankKey = ($('rank-rank') || {}).value;
+    if (!targetId) { showToast('Ingresa el Discord ID del oficial', 'error'); return; }
+    if (!department || !rankKey) { showToast('Selecciona departamento y rango', 'error'); return; }
+    if (String(targetId) === String(userId)) { showToast('No puedes cambiar tu propio rango', 'error'); return; }
+
+    const info = (ranksByDept[department] || []).find(function (r) { return r.rank_key === rankKey; });
+    const rankLabel = info ? info.rank_label : rankKey;
+    const confirmMsg = info
+      ? '¿Asignar "' + rankLabel + ' — $' + (Number(info.hourly) || 0) + '/h in-game" a ' + (targetName || targetId) + '?'
+      : '¿Asignar "' + rankLabel + '" a ' + (targetName || targetId) + '?';
+    if (!confirm(confirmMsg)) return;
+
+    const btn = $('rank-assign-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Asignando...'; }
+    const res = await hrpSetUserRank(targetId, targetName, department, rankKey);
+    if (btn) { btn.disabled = false; btn.textContent = 'Asignar Rango'; }
+
+    if (res && res.status === 'ok') {
+      showToast('Rango actualizado: ' + (res.old_rank_label || '—') + ' → ' + (res.rank_label || rankLabel));
+      await loadRangos();
+      $('rank-current').innerHTML = '';
+    } else {
+      showToast((res && (res.error || res.message)) || 'No se pudo asignar el rango', 'error');
+    }
+  }
+  window.assignRank = assignRank;
+
+  function renderRankHistory(list) {
+    const el = $('rank-history-list');
+    if (!el) return;
+    if (!list || !list.length) {
+      el.innerHTML = '<div class="empty-state"><div class="e-text">Sin cambios registrados</div></div>';
+      return;
+    }
+    el.innerHTML = '<div class="table-wrap"><table class="admin-table"><thead><tr>' +
+      '<th>Fecha</th><th>Oficial</th><th>Dept</th><th>Cambio</th><th>Por</th>' +
+      '</tr></thead><tbody>' +
+      list.map(function (h) {
+        const dt = h.created_at ? new Date(h.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—';
+        return '<tr>' +
+          '<td style="font-size:12px;color:var(--text-dim);">' + dt + '</td>' +
+          '<td style="font-weight:600;">' + esc(h.username || h.discord_id) + '</td>' +
+          '<td>' + (ALL_DEPT_NAMES[h.department] || h.department || '—') + '</td>' +
+          '<td style="font-size:12px;">' + esc(h.old_rank_label || h.old_rank || '—') + ' → <strong style="color:var(--accent-gold);">' + esc(h.new_rank_label || h.new_rank || '—') + '</strong></td>' +
+          '<td style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text-dim);">' + esc(h.changed_by_name || h.changed_by || '—') + '</td>' +
+        '</tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  function switchAdminTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('tab-' + tab);
+    if (panel) panel.classList.add('active');
+    if (tab === 'rangos' && !window._rangosLoaded) { window._rangosLoaded = true; loadRangos(); }
+    if (tab === 'ascensos' && !window._ascensosLoaded) { window._ascensosLoaded = true; loadAscensos(); }
+    if (tab === 'reportes' && !window._reportesLoaded) { window._reportesLoaded = true; loadReportes(); }
+    if (tab === 'k9' && !window._k9Loaded) { window._k9Loaded = true; loadK9(); }
+    if (tab === 'active-shifts') loadActiveShifts();
+    if (tab === 'shift-history') loadShiftHistory();
+  }
+  window.switchAdminTab = switchAdminTab;
+
+  let _adminRequestsCache = [];
+
+  function hrpGetLocalRequests() {
+    try { return JSON.parse(localStorage.getItem('hrp_requests') || '[]'); } catch { return []; }
+  }
+
+  function hrpAllRequests() {
+    return _adminRequestsCache;
+  }
+
+  // Carga las solicitudes compartidas (Supabase) y las mezcla con las locales,
+  // sin duplicar. Se llama al iniciar y en un intervalo para que los reportes de
+  // apps-support aparezcan solos, sin botón.
+  async function refreshAdminRequests() {
+    try {
+      const db = await supaSelect('admin_requests', '*', { order: 'created_at.desc', limit: '200' });
+      const merged = [];
+      const seen = new Set();
+      if (Array.isArray(db)) {
+        for (const r of db) {
+          const key = r.req_id || ('db-' + r.id);
+          if (!seen.has(key)) { seen.add(key); merged.push(r); }
+        }
+      }
+      for (const r of hrpGetLocalRequests()) {
+        const key = r.id || r.req_id;
+        if (!seen.has(key)) { seen.add(key); merged.push(r); }
+      }
+      const ref = new Date().toISOString();
+      _adminRequestsCache = merged.sort((a, b) => (a.created_at || ref).localeCompare(b.created_at || ref));
+    } catch (_) {
+      _adminRequestsCache = hrpGetLocalRequests();
+    }
+  }
+
+  async function loadAscensos() {
+    try {
+      const data = hrpAllRequests().filter(r => r.type === 'promotion');
+      const list = document.getElementById('ascensos-list');
+      if (!data.length) {
+        list.innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="e-text">No hay solicitudes de ascenso pendientes</div></div>';
+        document.getElementById('badge-ascensos').style.display = 'none';
+        return;
+      }
+      document.getElementById('badge-ascensos').textContent = data.length;
+      document.getElementById('badge-ascensos').style.display = 'inline-flex';
+      list.innerHTML = data.map(r => `<div class="request-card">
+        <div class="req-header">
+          <span class="req-user"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="var(--accent-gold)" stroke-width="1" style="vertical-align:-2px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> ${r.officer_name}</span>
+          <span class="req-date">${r.department || '—'} · ${r.reason || 0}h</span>
+        </div>
+        <div class="req-detail">${r.target_name || '—'} → ${r.rank_requested || '—'}</div>
+        <div class="req-detail">Usuario: ${r.officer_name_label || r.target_name || '—'}</div>
+        <div><span class="req-status pending">Pendiente</span></div>
+      </div>`).join('');
+    } catch (e) {
+      document.getElementById('ascensos-list').innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div class="e-text">Error al cargar</div></div>';
+    }
+  }
+
+  async function loadReportes() {
+    try {
+      const data = hrpAllRequests().filter(r => r.type === 'report');
+      const list = document.getElementById('reportes-list');
+      if (!data.length) {
+        list.innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="e-text">No hay reportes de oficiales</div></div>';
+        document.getElementById('badge-reportes').style.display = 'none';
+        return;
+      }
+      document.getElementById('badge-reportes').textContent = data.length;
+      document.getElementById('badge-reportes').style.display = 'inline-flex';
+      list.innerHTML = data.map(r => `<div class="request-card">
+        <div class="req-header">
+          <span class="req-user"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> ${r.officer_name}</span>
+          <span class="req-date">${r.reason || 'Sin motivo'}</span>
+        </div>
+        <div class="req-detail">Reportado por: ${r.target_name || r.officer_name_label || '—'}</div>
+      </div>`).join('');
+    } catch (e) {
+      document.getElementById('reportes-list').innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div class="e-text">Error al cargar</div></div>';
+    }
+  }
+
+  async function loadK9() {
+    try {
+      const data = hrpAllRequests().filter(r => r.type === 'k9');
+      const list = document.getElementById('k9-list');
+      if (!data.length) {
+        list.innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="e-text">No hay solicitudes K-9</div></div>';
+        document.getElementById('badge-k9').style.display = 'none';
+        return;
+      }
+      document.getElementById('badge-k9').textContent = data.length;
+      document.getElementById('badge-k9').style.display = 'inline-flex';
+      list.innerHTML = data.map(r => `<div class="request-card">
+        <div class="req-header">
+          <span class="req-user"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .024.256.103.508.232.745"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.024.256-.103.508-.232.745"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75z"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309m-9.243-6.082A8.801 8.801 0 0 1 12 5c.78 0 1.5.108 2.161.306"/></svg> ${r.officer_name}</span>
+          <span class="req-date">${r.target_name || '—'}</span>
+        </div>
+        <div class="req-detail">Motivo: ${r.reason || 'No especificado'}</div>
+      </div>`).join('');
+    } catch (e) {
+      document.getElementById('k9-list').innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div class="e-text">Error al cargar</div></div>';
+    }
+  }
+
+  // ── ACTIVE SHIFTS ──
+  let activeShiftsInterval = null;
+
+  async function loadActiveShifts() {
+    try {
+      const data = await supaSelect('police_shift_sessions', 'id, discord_id, username, department, status, start_time, break_duration, status_code', {
+        status: 'in.(active,break)',
+        order: 'start_time.desc',
+        limit: '50'
+      });
+      const list = document.getElementById('active-shifts-list');
+      const badge = document.getElementById('badge-active-shifts');
+      if (!data || !data.length) {
+        list.innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="e-text">No hay turnos activos en este momento</div></div>';
+        badge.style.display = 'none';
+        return;
+      }
+      badge.textContent = data.length;
+      badge.style.display = 'inline-flex';
+      list.innerHTML = data.map(s => {
+        const startMs = new Date(s.start_time).getTime();
+        const elapsed = Math.max(0, Math.floor((Date.now() - startMs) / 1000) - (s.break_duration || 0));
+        const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+        const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+        const sec = String(elapsed % 60).padStart(2, '0');
+        const isActive = s.status === 'active';
+        const statusColor = isActive ? '#4acf8f' : '#e6a868';
+        const statusLabel = isActive ? 'Activo' : 'Break';
+        const deptLabel = DEPT_NAMES[s.department] || s.department || '—';
+        let codeBadge = '';
+        if (s.status_code) {
+          const codeDef = TEN_CODES.find(c => c.code === s.status_code);
+          const cColor = codeDef ? codeDef.color : '#8a93a7';
+          codeBadge = `<span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:10px;background:${cColor}18;color:${cColor};border:1px solid ${cColor}40;margin-left:8px;letter-spacing:0.5px;">${s.status_code}</span>`;
+        }
+        return `<div class="request-card" style="border-left:3px solid ${statusColor};">
+          <div class="req-header">
+            <span class="req-user">${isActive ? '<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#4acf8f\" stroke-width=\"2\" style=\"vertical-align:-3px\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg>' : '<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--accent-gold)\" stroke-width=\"2\" style=\"vertical-align:-3px\"><rect x=\"6\" y=\"4\" width=\"4\" height=\"16\"/><rect x=\"14\" y=\"4\" width=\"4\" height=\"16\"/></svg>'} ${s.username || '—'}${codeBadge}</span>
+            <span class="req-date" style="font-family:'JetBrains Mono',monospace;color:${statusColor};">${h}:${m}:${sec}</span>
+          </div>
+          <div class="req-detail">${deptLabel} · ${statusLabel} · Desde ${new Date(s.start_time).toLocaleTimeString('es-ES', {hour:'2-digit',minute:'2-digit'})}</div>
+          <div style="margin-top:8px;">
+            <button class="action-btn reset" onclick="endOtherShift(${s.id}, '${s.start_time}', ${s.break_duration || 0}, '${(s.username || '').replace(/'/g, "\\'")}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Finalizar Turno</button>
+          </div>
+        </div>`;
+      }).join('');
+    } catch (e) {
+      document.getElementById('active-shifts-list').innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div class="e-text">Error al cargar turnos activos</div></div>';
+    }
+  }
+
+  window.endOtherShift = async function(shiftId, startTime, breakDuration, username) {
+    if (!confirm(`¿Seguro que deseas finalizar el turno de ${username}?`)) return;
+    const ok = await hrpEndShift(shiftId, startTime, breakDuration);
+    if (ok) {
+      showToast(`Turno de ${username} finalizado correctamente`);
+      loadActiveShifts();
+    } else {
+      showToast('Error al finalizar el turno', 'error');
+    }
+  };
+
+  // ── SHIFT HISTORY ──
+  async function loadShiftHistory() {
+    const list = document.getElementById('shift-history-list');
+    try {
+      const filters = {
+        status: 'in.(completed,inactive)',
+        order: 'start_time.desc',
+        limit: '100'
+      };
+      const searchVal = (document.getElementById('history-search') || {}).value || '';
+      const deptVal = (document.getElementById('history-dept') || {}).value || '';
+      if (searchVal.trim()) filters.username = `ilike.*${searchVal.trim()}*`;
+      if (deptVal) filters.department = `eq.${deptVal}`;
+
+      const data = await supaSelect('police_shift_sessions', 'id, discord_id, username, department, status, start_time, end_time, total_seconds, break_duration', filters);
+
+      if (!data || !data.length) {
+        list.innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="e-text">No hay turnos en el historial</div></div>';
+        return;
+      }
+
+      let totalSecondsAll = 0;
+      list.innerHTML = '<div class="table-wrap"><table class="admin-table"><thead><tr><th>Oficial</th><th>Dept</th><th>Inicio</th><th>Fin</th><th>Duracion</th><th>Acciones</th></tr></thead><tbody>' +
+        data.map(s => {
+          const secs = s.total_seconds || 0;
+          totalSecondsAll += secs;
+          const h = Math.floor(secs / 3600);
+          const m = Math.floor((secs % 3600) / 60);
+          const duration = h > 0 ? `${h}h ${m}m` : `${m}m`;
+          const deptLabel = DEPT_NAMES[s.department] || s.department || '—';
+          const startStr = new Date(s.start_time).toLocaleString('es-ES', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' });
+          const endStr = s.end_time ? new Date(s.end_time).toLocaleString('es-ES', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' }) : '—';
+          return `<tr>
+            <td style="font-weight:600;">${esc(s.username || '—')}</td>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 8px;border-radius:4px;background:rgba(59,111,182,0.1);color:var(--accent-blue);">${deptLabel}</span></td>
+            <td style="font-size:12px;color:var(--text-dim);">${startStr}</td>
+            <td style="font-size:12px;color:var(--text-dim);">${endStr}</td>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-cyan);font-weight:600;">${duration}</span></td>
+            <td><button class="action-btn reset" onclick="deleteShift(${s.id}, '${(s.username || '').replace(/'/g, "\\'")}')" style="font-size:11px;padding:4px 10px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Eliminar</button></td>
+          </tr>`;
+        }).join('') +
+        '</tbody></table></div>' +
+        `<div style="margin-top:12px;font-size:12px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;">Total: ${data.length} turnos · ${Math.floor(totalSecondsAll/3600)}h ${Math.floor((totalSecondsAll%3600)/60)}m acumulados</div>`;
+    } catch (e) {
+      list.innerHTML = '<div class="empty-state"><div class="e-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div class="e-text">Error al cargar historial</div></div>';
+    }
+  }
+  window.loadShiftHistory = loadShiftHistory;
+
+  window.deleteShift = async function(shiftId, username) {
+    if (!confirm(`¿Eliminar el turno de ${username} del historial? Esta accion no se puede deshacer.`)) return;
+    try {
+      await supaDelete('police_shift_sessions', { id: `eq.${shiftId}` });
+      showToast(`Turno de ${username} eliminado`);
+      loadShiftHistory();
+    } catch (e) {
+      showToast('Error al eliminar turno', 'error');
+    }
+  };
+
+  async function loadBadgeCounts() {
+    try {
+      const reqs = hrpAllRequests();
+      const asc = reqs.filter(r => r.type === 'promotion');
+      const rep = reqs.filter(r => r.type === 'report');
+      const k9 = reqs.filter(r => r.type === 'k9');
+      if (asc.length) { document.getElementById('badge-ascensos').textContent = asc.length; document.getElementById('badge-ascensos').style.display = 'inline-flex'; }
+      if (rep.length) { document.getElementById('badge-reportes').textContent = rep.length; document.getElementById('badge-reportes').style.display = 'inline-flex'; }
+      if (k9.length) { document.getElementById('badge-k9').textContent = k9.length; document.getElementById('badge-k9').style.display = 'inline-flex'; }
+    } catch (_) {}
+  }
+
+  // ── CLOCK ──
+  function tick() {
+    const now = new Date();
+    $('clock').textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+
+  // ── INIT ──
+  async function init() {
+    const hasAccess = await checkAccess();
+    if (!hasAccess) return;
+
+    // La pestaña "Rangos" es solo para el rol de Alto Mando autorizado.
+    if (typeof hrpRankWhoAmI === 'function') {
+      hrpRankWhoAmI().then(function (w) {
+        if (w && w.canManageRanks === false) {
+          const btn = document.querySelector('.tab-btn[onclick*="rangos"]');
+          if (btn) btn.style.display = 'none';
+        }
+      }).catch(function () {});
+    }
+
+    tick();
+    setInterval(tick, 1000);
+
+loadUsers();
+    loadRankFilterData();
+    loadBalance();
+    loadBadgeCounts();
+
+    // ── Solicitudes compartidas (apps-support → manage-shift) ──
+    // Carga inicial y refresco automático: los reportes/ascensos/K-9 aparecen
+    // solos para quien tiene acceso, sin ningún botón.
+    function renderAdminRequests() {
+      loadBadgeCounts();
+      loadAscensos();
+      loadReportes();
+      loadK9();
+    }
+    refreshAdminRequests().then(renderAdminRequests);
+    setInterval(function () {
+      refreshAdminRequests().then(renderAdminRequests);
+    }, 8000);
+
+    async function loadBalance() {
+      const s = hrpGetSession();
+      if (!s) return;
+      const bal = await hrpGetBalance(s.id);
+      const el = document.getElementById('sidebar-balance');
+      if (el) el.textContent = hrpFormatBalance(bal);
+    }
+
+    // Close modals on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(el => {
+      el.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('open');
+          selectedUser = null;
+        }
+      });
+    });
+
+    // Nav click handler
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (!this.getAttribute('href') || this.getAttribute('href') === '#') {
+          e.preventDefault();
+          document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+          this.classList.add('active');
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+
+</body>
+</html>
+

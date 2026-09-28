@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calibración de Licencia</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #10131c;
+    color: #e8eaf2;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  h1 { font-size: 18px; margin-bottom: 4px; color: #4acf8f; }
+  p.hint { font-size: 12px; color: #8a93a7; margin-bottom: 14px; line-height: 1.5; }
+  #canvas-wrap {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #2a3040;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 100%;
+  }
+  canvas { display: block; width: 100%; max-width: 1024px; height: auto; touch-action: none; cursor: move; }
+  .bar {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  button {
+    background: #1c2233;
+    color: #e8eaf2;
+    border: 1px solid #2a3040;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  button:hover { background: #232b42; }
+  button.primary { background: #12523c; border-color: #1d7a58; }
+  button.primary:hover { background: #166b4c; }
+  button.danger { background: #5c2020; border-color: #8a2f2f; }
+  #status { font-size: 12px; color: #4acf8f; font-family: monospace; }
+  #json-out {
+    width: 100%;
+    max-width: 1024px;
+    min-height: 60px;
+    margin-top: 10px;
+    background: #0c0e15;
+    color: #9fd7c0;
+    border: 1px solid #2a3040;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 11px;
+    font-family: monospace;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+  <h1>🖱️ Calibración de la licencia</h1>
+  <p class="hint">
+    Arrastrá cada caja a su lugar sobre el nuevo diseño. La <b style="color:#e54880">foto</b> y la <b style="color:#e5a34f">firma</b>
+    se redimensionan desde la esquina inferior derecha. Los <b style="color:#4acf8f">campos de texto</b> muestran valores de ejemplo.
+    Cuando todo quede alineado, tocá <b>Guardar</b> y abrí app.html — la licencia usará estas posiciones.
+  </p>
+
+  <div id="canvas-wrap">
+    <canvas id="cv" width="1024" height="652"></canvas>
+  </div>
+
+  <div class="bar">
+    <button class="primary" onclick="saveLayout()">💾 Guardar</button>
+    <button onclick="copyJson()">📋 Copiar JSON</button>
+    <button class="danger" onclick="resetLayout()">↩️ Restaurar diseño original</button>
+    <span id="status"></span>
+  </div>
+  <textarea id="json-out" readonly placeholder="Acá aparece el JSON del layout guardado (copialo si te lo pido)." style="display:none"></textarea>
+
+<script>
+(function(){
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const status = document.getElementById('status');
+  const W = cv.width, H = cv.height;
+
+  const FIELDS_DEF = [
+    { id: 'f-apellidos', sample: 'GONZALEZ', upper: true },
+    { id: 'f-nombres',   sample: 'JUAN CARLOS', upper: true },
+    { id: 'f-dob',       sample: '01/15/2000', upper: false },
+    { id: 'f-direccion', sample: '123 HOUSTON ST', upper: true },
+    { id: 'f-peso',      sample: '170', upper: false },
+    { id: 'f-altura',    sample: "5'-10", upper: false },
+    { id: 'f-sexo',      sample: 'M', upper: false },
+    { id: 'f-ojos',      sample: 'BRO', upper: false },
+  ];
+
+  const FIXED_DEF = [
+    { id: '4d DL',   sample: 'TX12345678' },
+    { id: '4b EXP',  sample: '01/15/2030' },
+    { id: '4a ISS',  sample: '01/15/2026' },
+    { id: '9 CLASS', sample: 'C' },
+  ];
+
+  function loadDefaultLayout(){
+    return {
+      v: 3,
+      photo: { x: 48, y: 228, w: 226, h: 321 },
+      sig: { x: 24, y: 570, w: 380, h: 80 },
+      fields: [
+        { x: 318, y: 249, maxW: 280 },
+        { x: 317, y: 219, maxW: 280 },
+        { x: 379, y: 281, maxW: 210 },
+        { x: 432, y: 412, maxW: 540 },
+        { x: 377, y: 483, maxW: 60 },
+        { x: 377, y: 523, maxW: 60 },
+        { x: 553, y: 520, maxW: 40 },
+        { x: 676, y: 431, maxW: 130 },
+      ],
+      fixed: [
+        { x: 108, y: 182, maxW: 210 },
+        { x: 707, y: 251, maxW: 160 },
+        { x: 698, y: 281, maxW: 160 },
+        { x: 710, y: 219, maxW: 60 },
+      ]
+    };
+  }
+
+  let layout = loadDefaultLayout();
+  try {
+    const saved = JSON.parse(localStorage.getItem('hrp_license_layout') || 'null');
+    if (saved && saved.v === 3) layout = saved;
+  } catch(e) {}
+
+  let img = new Image();
+  img.onload = draw;
+  img.onerror = function(){
+    ctx.fillStyle = '#1a1d28';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#e54880';
+    ctx.font = '700 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('No se pudo cargar images/image.jpg', W / 2, H / 2);
+    ctx.textAlign = 'left';
+  };
+  img.src = 'images/image.jpg';
+
+  const COL_PHOTO = 'rgba(229,72,128,0.9)';
+  const COL_SIG   = 'rgba(229,163,79,0.9)';
+  const COL_TXT   = 'rgba(74,207,143,0.95)';
+  const COL_FIX   = 'rgba(88,150,255,0.95)';
+
+  let sel = null;
+  let drag = null;
+
+  function fontFor(size){ return '700 ' + size + 'px Arial'; }
+
+  function fieldText(f, idx){
+    let t = FIELDS_DEF[idx].sample;
+    if (f.upper) t = t.toUpperCase();
+    if (f.initial) t = t.charAt(0).toUpperCase();
+    return t;
+  }
+
+  function fixedText(f){
+    const t = FIXED_DEF[f].sample;
+    return t;
+  }
+
+  function fieldSize(f, idx){
+    let size = 22;
+    ctx.font = fontFor(size);
+    while (ctx.measureText(fieldText(f, idx)).width > f.maxW && size > 9) {
+      size--;
+      ctx.font = fontFor(size);
+    }
+    return { w: ctx.measureText(fieldText(f, idx)).width, h: size + 6 };
+  }
+
+  function fixedSize(f){
+    let size = 22;
+    ctx.font = fontFor(size);
+    while (ctx.measureText(fixedText(f)).width > f.maxW && size > 9) {
+      size--;
+      ctx.font = fontFor(size);
+    }
+    return { w: ctx.measureText(fixedText(f)).width, h: size + 6 };
+  }
+
+  function drawBox(x, y, w, h, color, label){
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, w, h);
+    ctx.fillStyle = 'rgba(16,19,28,0.55)';
+    ctx.fillRect(x + 4, y + 4, ctx.measureText(label).width + 8, 16);
+    ctx.fillStyle = color;
+    ctx.font = '700 12px Arial';
+    ctx.fillText(label, x + 8, y + 15);
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    if (img.complete && img.naturalWidth) {
+      ctx.drawImage(img, 0, 0, W, H);
+    }
+
+    const p = layout.photo;
+    drawBox(p.x, p.y, p.w, p.h, COL_PHOTO, 'FOTO');
+    ctx.fillStyle = 'rgba(229,72,128,0.85)';
+    ctx.fillRect(p.x + p.w - 8, p.y + p.h - 8, 8, 8);
+
+    const s = layout.sig;
+    drawBox(s.x, s.y, s.w, s.h, COL_SIG, 'FIRMA');
+    ctx.fillStyle = 'rgba(229,163,79,0.85)';
+    ctx.fillRect(s.x + s.w - 8, s.y + s.h - 8, 8, 8);
+
+    layout.fields.forEach(function(f, i){
+      const sz = fieldSize(f, i);
+      drawBox(f.x, f.y - 6, Math.max(sz.w + 10, 24), sz.h, COL_TXT, FIELDS_DEF[i].id);
+      ctx.fillStyle = COL_TXT;
+      ctx.font = fontFor(14);
+      ctx.fillText(fieldText(f, i), f.x + 4, f.y + (f.initial ? 18 : 20) - 6);
+    });
+
+    layout.fixed.forEach(function(f, i){
+      const sz = fixedSize(i);
+      drawBox(f.x, f.y - 6, Math.max(sz.w + 10, 24), sz.h, COL_FIX, FIXED_DEF[i].id);
+      ctx.fillStyle = COL_FIX;
+      ctx.font = fontFor(14);
+      ctx.fillText(fixedText(i), f.x + 4, f.y + 14);
+    });
+  }
+
+  function canvasPos(ev){
+    const r = cv.getBoundingClientRect();
+    return {
+      x: (ev.clientX - r.left) * (W / r.width),
+      y: (ev.clientY - r.top) * (H / r.height)
+    };
+  }
+
+  function hitTest(pos){
+    const p = layout.photo;
+    if (pos.x >= p.x - 6 && pos.x <= p.x + p.w + 6 && pos.y >= p.y - 6 && pos.y <= p.y + p.h + 6) {
+      return { type: 'photo', resize: pos.x > p.x + p.w - 10 && pos.y > p.y + p.h - 10 };
+    }
+    const s = layout.sig;
+    if (pos.x >= s.x - 6 && pos.x <= s.x + s.w + 6 && pos.y >= s.y - 6 && pos.y <= s.y + s.h + 6) {
+      return { type: 'sig', resize: pos.x > s.x + s.w - 10 && pos.y > s.y + s.h - 10 };
+    }
+    for (let i = 0; i < layout.fixed.length; i++) {
+      const f = layout.fixed[i];
+      const sz = fixedSize(i);
+      if (pos.x >= f.x - 8 && pos.x <= f.x + sz.w + 18 && pos.y >= f.y - 14 && pos.y <= f.y + sz.h + 4) {
+        return { type: 'fixed', idx: i };
+      }
+    }
+    for (let i = 0; i < layout.fields.length; i++) {
+      const f = layout.fields[i];
+      const sz = fieldSize(f, i);
+      if (pos.x >= f.x - 8 && pos.x <= f.x + sz.w + 18 && pos.y >= f.y - 14 && pos.y <= f.y + sz.h + 4) {
+        return { type: 'field', idx: i };
+      }
+    }
+    return null;
+  }
+
+  cv.addEventListener('pointerdown', function(ev){
+    ev.preventDefault();
+    const pos = canvasPos(ev);
+    const hit = hitTest(pos);
+    if (!hit) return;
+    sel = hit;
+    cv.setPointerCapture(ev.pointerId);
+    drag = { pos: pos, start: pos, rect: null, resize: !!hit.resize };
+    if (hit.type === 'photo') drag.rect = { x: layout.photo.x, y: layout.photo.y, w: layout.photo.w, h: layout.photo.h };
+    if (hit.type === 'sig') drag.rect = { x: layout.sig.x, y: layout.sig.y, w: layout.sig.w, h: layout.sig.h };
+    if (hit.type === 'field') drag.rect = { x: layout.fields[hit.idx].x, y: layout.fields[hit.idx].y };
+    if (hit.type === 'fixed') drag.rect = { x: layout.fixed[hit.idx].x, y: layout.fixed[hit.idx].y };
+    updateStatus();
+  });
+
+  cv.addEventListener('pointermove', function(ev){
+    if (!drag) return;
+    ev.preventDefault();
+    const pos = canvasPos(ev);
+    const dx = pos.x - drag.pos.x;
+    const dy = pos.y - drag.pos.y;
+    drag.pos = pos;
+
+    if (drag.resize) {
+      drag.rect.w = Math.max(30, drag.rect.w + dx);
+      drag.rect.h = Math.max(30, drag.rect.h + dy);
+    } else {
+      drag.rect.x = Math.max(-100, Math.min(W - 10, drag.rect.x + dx));
+      drag.rect.y = Math.max(-100, Math.min(H - 10, drag.rect.y + dy));
+    }
+
+    if (sel.type === 'photo') layout.photo = { x: Math.round(drag.rect.x), y: Math.round(drag.rect.y), w: Math.round(drag.rect.w), h: Math.round(drag.rect.h) };
+    if (sel.type === 'sig') layout.sig = { x: Math.round(drag.rect.x), y: Math.round(drag.rect.y), w: Math.round(drag.rect.w), h: Math.round(drag.rect.h) };
+    if (sel.type === 'field') layout.fields[sel.idx] = { ...layout.fields[sel.idx], x: Math.round(drag.rect.x), y: Math.round(drag.rect.y) };
+    if (sel.type === 'fixed') layout.fixed[sel.idx] = { ...layout.fixed[sel.idx], x: Math.round(drag.rect.x), y: Math.round(drag.rect.y) };
+
+    draw();
+    updateStatus();
+  });
+
+  function endDrag(){
+    if (drag) {
+      drag = null;
+      draw();
+    }
+  }
+  cv.addEventListener('pointerup', endDrag);
+  cv.addEventListener('pointercancel', endDrag);
+
+  function updateStatus(){
+    if (!sel) { status.textContent = ''; return; }
+    if (sel.type === 'photo') {
+      const p = layout.photo;
+      status.textContent = 'FOTO  x=' + p.x + ' y=' + p.y + '  w=' + p.w + ' h=' + p.h + '   (arrastrá, redimensioná desde la esquina)';
+    } else if (sel.type === 'sig') {
+      const s = layout.sig;
+      status.textContent = 'FIRMA  x=' + s.x + ' y=' + s.y + '  w=' + s.w + ' h=' + s.h;
+    } else if (sel.type === 'fixed') {
+      const f = layout.fixed[sel.idx];
+      status.textContent = FIXED_DEF[sel.idx].id + '  x=' + f.x + ' y=' + f.y + '  maxW=' + f.maxW;
+    } else {
+      const f = layout.fields[sel.idx];
+      status.textContent = FIELDS_DEF[sel.idx].id + '  x=' + f.x + ' y=' + f.y + '  maxW=' + f.maxW;
+    }
+  }
+
+  window.saveLayout = function(){
+    try {
+      localStorage.setItem('hrp_license_layout', JSON.stringify(layout));
+      status.textContent = '💾 Guardado. Abrí app.html para ver la licencia con las nuevas posiciones.';
+      document.getElementById('json-out').style.display = 'block';
+      document.getElementById('json-out').value = JSON.stringify(layout, null, 2);
+    } catch(e) {
+      status.textContent = 'Error al guardar: ' + e.message;
+    }
+  };
+
+  window.copyJson = function(){
+    const t = document.getElementById('json-out');
+    t.style.display = 'block';
+    t.value = JSON.stringify(layout, null, 2);
+    t.select();
+    try { document.execCommand('copy'); status.textContent = '📋 JSON copiado al portapapeles.'; } catch(e) {}
+  };
+
+  window.resetLayout = function(){
+    localStorage.removeItem('hrp_license_layout');
+    layout = loadDefaultLayout();
+    sel = null; drag = null;
+    document.getElementById('json-out').style.display = 'none';
+    draw();
+    status.textContent = '↩️ Layout restaurado al original.';
+  };
+
+})();
+</script>
+</body>
+</html>
