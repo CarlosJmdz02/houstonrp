@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mantenimiento — Houston RP</title>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0d1424;color:#e4e7ee;font-family:Inter,sans-serif;text-align:center;"><div><div style="font-size:48px;margin-bottom:16px;">🔧</div><h1 style="font-family:Rajdhani,sans-serif;font-size:28px;font-weight:700;margin-bottom:8px;">Economía en Mantenimiento</h1><p style="color:#8a93a7;font-size:14px;">Esta sección está temporalmente fuera de servicio.</p><a href="dashboard.html" style="display:inline-block;margin-top:20px;padding:10px 24px;background:#3b6fb6;color:#fff;border-radius:8px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:600;">Volver al Dashboard</a></div></div>';
+});
+</script>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#0a1628">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #050810; color: #e0e8f0;
+    font-family: 'Inter', sans-serif;
+    height: 100vh; display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  /* ============================
+     SPLASH CINEMATIC (FULL SCREEN)
+     ============================ */
+  #splash {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #050810;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.8s ease;
+  }
+  #splash.hide { opacity: 0; pointer-events: none; }
+  .splash-icon { font-size: 48px; margin-bottom: 12px; animation: coinFloat 2s ease-in-out infinite; }
+  @keyframes coinFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .splash-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 52px; font-weight: 700;
+    letter-spacing: 6px; color: #d4a843;
+    text-shadow: 0 0 40px rgba(212,168,67,0.3), 0 0 80px rgba(212,168,67,0.1);
+    animation: logoGlow 2s ease-in-out infinite;
+  }
+  @keyframes logoGlow { 0%,100% { text-shadow: 0 0 40px rgba(212,168,67,0.3); } 50% { text-shadow: 0 0 60px rgba(212,168,67,0.6); } }
+  .splash-sub { font-size: 11px; letter-spacing: 8px; color: rgba(255,255,255,0.15); margin-top: 16px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+  .splash-bar { width: 160px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-top: 32px; overflow: hidden; }
+  .splash-bar-inner { height: 100%; width: 0%; background: linear-gradient(90deg, #d4a843, #f7d97e); animation: loadBar 2.2s ease forwards; }
+  @keyframes loadBar { 0% { width: 0%; } 70% { width: 75%; } 100% { width: 100%; } }
+
+  /* ============================
+     PHONE FRAME
+     ============================ */
+  .phone-wrap {
+    position: relative;
+    width: 340px; height: 680px;
+    opacity: 0; transform: scale(0.7) translateY(60px);
+    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .phone-wrap.show { opacity: 1; transform: scale(1) translateY(0); }
+
+  .phone {
+    position: relative; width: 100%; height: 100%;
+    background: linear-gradient(180deg, #0d0d1a 0%, #050810 100%);
+    border-radius: 44px; padding: 12px;
+    border: 2px solid rgba(255,255,255,0.06);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.03),
+      0 30px 80px rgba(0,0,0,0.8),
+      0 0 60px rgba(212,168,67,0.03);
+    overflow: hidden;
+  }
+
+  .phone-notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 28px;
+    background: #050810;
+    border-radius: 0 0 16px 16px;
+    z-index: 10;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .phone-notch .cam {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: radial-gradient(circle, #1a1a2e, #050810);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .phone-notch .speaker {
+    width: 40px; height: 4px; border-radius: 4px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .phone-screen {
+    width: 100%; height: 100%;
+    border-radius: 34px;
+    background: #0b0e1a;
+    overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+  }
+
+  .phone-time {
+    position: absolute; top: 10px; left: 0; right: 0;
+    text-align: center; font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.2);
+    z-index: 5;
+    padding-top: 30px;
+  }
+
+  .phone-status {
+    position: absolute; top: 30px; left: 20px; right: 20px;
+    display: flex; justify-content: space-between;
+    font-size: 8px; font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.15); z-index: 5;
+  }
+
+  /* ============================
+     APP SCREENS
+     ============================ */
+  .app-screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    padding: 56px 20px 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translateY(10px);
+    overflow-y: auto;
+  }
+  .app-screen::-webkit-scrollbar { width: 3px; }
+  .app-screen::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
+  .app-screen.active {
+    opacity: 1; pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  /* ── APP LAUNCHER ── */
+  #screen-launcher {
+    justify-content: center; align-items: center;
+    background: #0b0e1a;
+  }
+  .launcher-icon {
+    font-size: 64px; margin-bottom: 16px;
+    filter: drop-shadow(0 0 20px rgba(212,168,67,0.2));
+  }
+  .launcher-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: #d4a843; letter-spacing: 2px;
+  }
+  .launcher-sub {
+    font-size: 10px; color: rgba(255,255,255,0.15);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .launcher-tap {
+    margin-top: 32px; padding: 12px 36px;
+    border-radius: 12px;
+    background: rgba(212,168,67,0.1);
+    border: 1px solid rgba(212,168,67,0.2);
+    color: #d4a843;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .launcher-tap:hover { background: rgba(212,168,67,0.2); }
+
+  /* ── LOADING SCREEN ── */
+  #screen-loading {
+    justify-content: center; align-items: center;
+    background: #0b0e1a;
+  }
+  .load-spinner {
+    width: 40px; height: 40px;
+    border: 2px solid rgba(212,168,67,0.1);
+    border-top-color: #d4a843;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .load-text { margin-top: 16px; font-size: 12px; color: rgba(255,255,255,0.3); font-family: 'Rajdhani', sans-serif; letter-spacing: 2px; }
+
+  /* ── LOGIN SCREEN ── */
+  #screen-login { justify-content: center; }
+  .login-header { text-align: center; margin-bottom: 32px; }
+  .login-header .icon { font-size: 40px; }
+  .login-header h2 { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: #d4a843; letter-spacing: 1px; }
+  .login-header p { font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 4px; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
+
+  .inp {
+    width: 100%; padding: 14px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px; color: #e0e8f0;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    outline: none; transition: all 0.2s;
+    margin-bottom: 12px;
+  }
+  .inp:focus { border-color: rgba(212,168,67,0.3); background: rgba(212,168,67,0.03); }
+  .inp::placeholder { color: rgba(255,255,255,0.15); }
+
+  .pin-dots {
+    display: flex; gap: 12px; justify-content: center;
+    margin: 20px 0 24px;
+  }
+  .pin-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .pin-dot.filled { border-color: #d4a843; background: #d4a843; box-shadow: 0 0 12px rgba(212,168,67,0.2); }
+
+  .pin-pad {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; max-width: 240px; margin: 0 auto;
+  }
+  .pin-key {
+    padding: 18px; text-align: center;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px; color: #e0e8f0;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    user-select: none;
+  }
+  .pin-key:active { transform: scale(0.92); background: rgba(212,168,67,0.1); border-color: rgba(212,168,67,0.2); }
+  .pin-key.empty { background: transparent; border-color: transparent; cursor: default; pointer-events: none; }
+  .pin-key.back { font-size: 14px; color: rgba(255,255,255,0.3); }
+
+  .login-error {
+    text-align: center; font-size: 11px; color: #e54850;
+    margin-top: 12px; min-height: 18px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .login-footer {
+    text-align: center; margin-top: 20px;
+  }
+  .login-footer a {
+    color: rgba(255,255,255,0.2); font-size: 11px;
+    cursor: pointer; transition: color 0.2s;
+    text-decoration: none; font-family: 'JetBrains Mono', monospace;
+  }
+  .login-footer a:hover { color: rgba(212,168,67,0.5); }
+
+  /* ── REGISTER SCREEN ── */
+  #screen-register { justify-content: center; }
+  .register-title { text-align: center; margin-bottom: 24px; }
+  .register-title .icon { font-size: 36px; }
+  .register-title h2 { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; color: #d4a843; }
+
+  .btn-gold {
+    width: 100%; padding: 14px; border: none; border-radius: 12px;
+    background: linear-gradient(160deg, #d4a843, #b8922e);
+    color: #fff; font-family: 'Rajdhani', sans-serif;
+    font-size: 15px; font-weight: 700; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-gold:hover { box-shadow: 0 0 24px rgba(212,168,67,0.3); transform: translateY(-1px); }
+  .btn-gold:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-ghost {
+    width: 100%; padding: 12px; border-radius: 12px;
+    background: transparent; border: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.3); font-family: 'Rajdhani', sans-serif;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
+    margin-top: 8px;
+  }
+  .btn-ghost:hover { border-color: rgba(212,168,67,0.2); color: rgba(212,168,67,0.5); }
+
+  /* ── MAIN DASHBOARD ── */
+  #screen-main { padding: 56px 16px 16px; }
+
+  .main-header {
+    display: flex; align-items: center; gap: 12px;
+    padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    margin-bottom: 16px;
+  }
+  .main-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid rgba(212,168,67,0.3);
+    background: linear-gradient(135deg, #3b6fb6, #3b6fb6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+    flex-shrink: 0; overflow: hidden;
+  }
+  .main-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .main-user { flex: 1; min-width: 0; }
+  .main-user .name { font-size: 13px; font-weight: 600; color: #e0e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .main-user .sub { font-size: 9px; font-family: 'JetBrains Mono', monospace; color: #d4a843; letter-spacing: 1px; text-transform: uppercase; }
+  .main-balance {
+    text-align: right;
+  }
+  .main-balance .label { font-size: 8px; font-family: 'JetBrains Mono', monospace; color: rgba(255,255,255,0.2); letter-spacing: 1px; text-transform: uppercase; }
+  .main-balance .amount { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: #d4a843; line-height: 1; }
+
+  /* APP MENU GRID */
+  .app-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; margin: 16px 0;
+  }
+  .app-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 14px; padding: 18px 8px;
+    text-align: center; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .app-item:active { transform: scale(0.92); background: rgba(212,168,67,0.05); border-color: rgba(212,168,67,0.1); }
+  .app-item .icon { font-size: 26px; display: block; margin-bottom: 4px; }
+  .app-item .name { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
+
+  /* INSIDE APP PAGES */
+  .app-page {
+    display: none; flex-direction: column;
+    height: 100%;
+  }
+  .app-page.active { display: flex; animation: pageIn 0.3s ease; }
+  @keyframes pageIn { 0% { opacity: 0; transform: translateX(20px); } 100% { opacity: 1; transform: translateX(0); } }
+
+  .page-top {
+    display: flex; align-items: center; gap: 12px;
+    padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    margin-bottom: 16px;
+  }
+  .page-top .back {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: rgba(255,255,255,0.03); border: none;
+    color: rgba(255,255,255,0.4); cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .page-top .back:active { background: rgba(212,168,67,0.1); color: #d4a843; }
+  .page-top h3 { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: #e0e8f0; flex: 1; }
+  .page-top h3 .gold { color: #d4a843; }
+
+  .page-body { flex: 1; overflow-y: auto; padding-bottom: 10px; }
+  .page-body::-webkit-scrollbar { width: 3px; }
+  .page-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
+
+  .field { margin-bottom: 12px; }
+  .field label { font-size: 9px; font-family: 'JetBrains Mono', monospace; color: rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 4px; }
+  .field input {
+    width: 100%; padding: 12px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px; color: #e0e8f0;
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    outline: none; transition: all 0.2s;
+  }
+  .field input:focus { border-color: rgba(212,168,67,0.3); }
+
+  .msg { font-size: 11px; margin-top: 10px; padding: 10px 12px; border-radius: 8px; display: none; animation: msgIn 0.3s ease; }
+  @keyframes msgIn { 0% { opacity: 0; transform: translateY(-6px); } 100% { opacity: 1; transform: translateY(0); } }
+  .msg.success { display: block; background: rgba(74,204,143,0.08); border: 1px solid rgba(74,204,143,0.15); color: #2dd4a0; }
+  .msg.error { display: block; background: rgba(229,72,80,0.08); border: 1px solid rgba(229,72,80,0.15); color: #c7b2b2; }
+  .msg.info { display: block; background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.15); color: #d4a843; }
+
+  .cooldown-box { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.2); margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); text-align: center; }
+  .cooldown-box span { color: #d4a843; }
+
+  /* HORSES */
+  .horses { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .h-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 10px; padding: 12px; text-align: center; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .h-card.selected { border-color: rgba(212,168,67,0.4); background: rgba(212,168,67,0.04); }
+  .h-card:active { transform: scale(0.95); }
+  .h-card .icon { font-size: 24px; }
+  .h-card .name { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); margin-top: 2px; font-family: 'Rajdhani', sans-serif; }
+
+  .race-track {
+    background: rgba(255,255,255,0.02); border-radius: 10px;
+    padding: 6px 10px; min-height: 130px;
+    margin: 12px 0; position: relative;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .r-lane { height: 24px; position: relative; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.02); }
+  .r-lane:last-child { border: none; }
+  .r-lane .l { width: 36px; font-size: 9px; color: rgba(255,255,255,0.15); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+  .r-lane .h { position: absolute; left: 36px; font-size: 14px; transition: left 0.2s ease; }
+  .r-finish { position: absolute; right: 10px; top: 6px; bottom: 6px; width: 2px; background: repeating-linear-gradient(0deg, #d4a843, #d4a843 3px, transparent 3px, transparent 6px); opacity: 0.3; }
+
+  .result-box { text-align: center; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 10px; margin: 12px 0; display: none; }
+  .result-box.show { display: block; }
+  .result-box .r-icon { font-size: 28px; }
+  .result-box .r-label { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; }
+  .result-box .r-label.win { color: #2dd4a0; }
+  .result-box .r-label.lose { color: #c7b2b2; }
+  .result-box .r-payout { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; color: #d4a843; }
+
+  .dice-area { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px 0; }
+  .dice-box { width: 64px; height: 64px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 32px; transition: all 0.15s; }
+  .dice-box.rolling { animation: diceRoll 0.15s ease 8; }
+  @keyframes diceRoll { 0% { transform: rotate(0deg); } 25% { transform: rotate(90deg); } 50% { transform: rotate(180deg); } 75% { transform: rotate(270deg); } 100% { transform: rotate(360deg); } }
+  .dice-box.win { border-color: rgba(74,204,143,0.4); box-shadow: 0 0 16px rgba(74,204,143,0.15); }
+  .dice-box.lose { border-color: rgba(229,72,80,0.4); box-shadow: 0 0 16px rgba(229,72,80,0.15); }
+
+  .slot-row { display: flex; gap: 6px; justify-content: center; padding: 16px 0; }
+  .slot-r { width: 56px; height: 64px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .slot-r.spinning { animation: slotSpin 0.08s linear 12; }
+  @keyframes slotSpin { 0% { transform: translateY(0); } 50% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
+  .slot-r.win { border-color: rgba(212,168,67,0.4); box-shadow: 0 0 16px rgba(212,168,67,0.15); }
+
+  .game-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .g-tab {
+    padding: 6px 14px; border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 600;
+    cursor: pointer; border: 1px solid rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.2); background: transparent; text-transform: uppercase; letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .g-tab.active { background: rgba(212,168,67,0.08); border-color: rgba(212,168,67,0.2); color: #d4a843; }
+  .g-content { display: none; }
+  .g-content.active { display: block; }
+
+  .btn-action {
+    width: 100%; padding: 12px;
+    border: none; border-radius: 10px;
+    background: linear-gradient(160deg, #d4a843, #b8922e);
+    color: #fff; font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+  }
+  .btn-action:hover { box-shadow: 0 0 20px rgba(212,168,67,0.2); transform: translateY(-1px); }
+  .btn-action:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-action-sm {
+    padding: 8px 16px; border: none; border-radius: 8px;
+    background: linear-gradient(160deg, #d4a843, #b8922e);
+    color: #fff; font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .btn-action-sm:hover { box-shadow: 0 0 16px rgba(212,168,67,0.2); transform: translateY(-1px); }
+  .btn-action-sm:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .logout-btn {
+    width: 100%; padding: 12px;
+    border: 1px solid rgba(229,72,80,0.15); border-radius: 10px;
+    background: rgba(229,72,80,0.04); color: #c7b2b2;
+    font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
+    margin-top: 16px;
+  }
+  .logout-btn:active { background: rgba(229,72,80,0.1); }
+
+  /* ============================
+     SAFE AREA / NOTCH PADDING
+     ============================ */
+  .safe-top { height: 28px; }
+
+  /* ============================
+     NOTIFICATION TOAST
+     ============================ */
+  .notif {
+    position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: rgba(11,14,26,0.95); border: 1px solid rgba(212,168,67,0.2);
+    border-radius: 12px; padding: 12px 24px;
+    color: #e0e8f0; font-size: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    opacity: 0; transition: all 0.3s ease; pointer-events: none;
+    z-index: 9999; backdrop-filter: blur(10px);
+    font-family: 'Inter', sans-serif; white-space: nowrap;
+  }
+  .notif.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .notif.error { border-color: rgba(229,72,80,0.3); }
+
+  /* ============================
+     RESPONSIVE
+     ============================ */
+  @media (max-width: 400px) {
+    .phone-wrap { width: 300px; height: 600px; }
+    .app-grid { gap: 6px; }
+    .app-item { padding: 14px 6px; }
+  }
+  @media (max-width: 360px) {
+    .phone-wrap { width: 280px; height: 560px; }
+  }
+  @media (min-width: 768px) {
+    body { background: radial-gradient(ellipse at center, #0a0f1a 0%, #04060d 100%); }
+  }
+
+  /* ============================
+     LOCK SCREEN
+     ============================ */
+  #screen-lock {
+    justify-content: center; align-items: center;
+    background: linear-gradient(180deg, #050810 0%, #0b0e1a 100%);
+  }
+  .lock-time {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 48px; font-weight: 700; color: #e0e8f0;
+    letter-spacing: 2px;
+  }
+  .lock-date {
+    font-size: 10px; color: rgba(255,255,255,0.15);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 2px; margin-bottom: 40px;
+  }
+  .lock-icon {
+    font-size: 28px; margin-bottom: 8px;
+    opacity: 0.3;
+  }
+  .lock-hint {
+    font-size: 10px; color: rgba(255,255,255,0.1);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+
+  .logout-global {
+    position: fixed; top: 20px; right: 20px; z-index: 9999;
+    padding: 10px 24px;
+    border: 1px solid rgba(229,72,80,0.2);
+    border-radius: 10px;
+    background: rgba(229,72,80,0.08);
+    color: #c7b2b2;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .logout-global:hover {
+    background: rgba(229,72,80,0.15);
+    box-shadow: 0 0 20px rgba(229,72,80,0.1);
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH CINEMATIC -->
+<div id="splash">
+  <div class="splash-icon">🏦</div>
+  <div class="splash-logo">BANK OF AMERICA</div>
+  <div class="splash-sub">Houston Roleplay</div>
+  <div class="splash-bar"><div class="splash-bar-inner"></div></div>
+</div>
+
+<a class="logout-global" href="#" onclick="event.preventDefault();hrpClearSession();window.location.href='index.html';">✕ Cerrar Sesión</a>
+
+<!-- PHONE -->
+<div style="display:flex;align-items:center;justify-content:center;">
+    <div class="phone-wrap" id="phone-wrap">
+      <div class="phone">
+        <div class="phone-notch"><div class="speaker"></div><div class="cam"></div></div>
+        <div class="phone-screen">
+          <div class="phone-time" id="phone-time">9:41</div>
+          <div class="phone-status"><span>${'\u200B'}</span><span>${'\u200B'}</span></div>
+
+          <!-- LOCK SCREEN -->
+          <div class="app-screen active" id="screen-lock">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-time" id="lock-time">9:41</div>
+            <div class="lock-date" id="lock-date">lunes, 1 de enero</div>
+            <div style="flex:1;"></div>
+            <div class="lock-hint">Toca para desbloquear</div>
+            <div style="margin-top:8px;width:120px;height:4px;background:rgba(255,255,255,0.1);border-radius:4px;cursor:pointer;" onclick="unlockPhone()"></div>
+          </div>
+
+          <!-- APP LAUNCHER -->
+          <div class="app-screen" id="screen-launcher">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+              <div class="launcher-icon">🏦</div>
+              <div class="launcher-name">Bank of America</div>
+              <div class="launcher-sub">Houston RP</div>
+              <button class="launcher-tap" onclick="openApp()">Abrir App</button>
+              <a href="dashboard.html" style="margin-top:20px;font-size:11px;color:rgba(255,255,255,0.2);text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:.5px;transition:color .2s;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.2)'">← Volver al Dashboard</a>
+            </div>
+          </div>
+
+          <!-- LOADING -->
+          <div class="app-screen" id="screen-loading">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+              <div class="load-spinner"></div>
+              <div class="load-text">Conectando con el banco...</div>
+            </div>
+          </div>
+
+          <!-- LOGIN (USER + PIN) -->
+          <div class="app-screen" id="screen-login">
+            <div class="login-header">
+              <div class="icon">🏦</div>
+              <h2>Bank of America</h2>
+              <p>Ingresa tus datos</p>
+            </div>
+            <div class="field" style="margin-bottom:16px;">
+              <label>Usuario</label>
+              <input class="inp" id="login-user" placeholder="Tu nombre de usuario" maxlength="20" autocomplete="off">
+            </div>
+            <div class="pin-dots" id="pin-dots">
+              <div class="pin-dot"></div><div class="pin-dot"></div>
+              <div class="pin-dot"></div><div class="pin-dot"></div>
+            </div>
+            <div class="login-error" id="login-error"></div>
+            <div class="pin-pad" id="pin-pad">
+              <div class="pin-key" data-key="1">1</div>
+              <div class="pin-key" data-key="2">2</div>
+              <div class="pin-key" data-key="3">3</div>
+              <div class="pin-key" data-key="4">4</div>
+              <div class="pin-key" data-key="5">5</div>
+              <div class="pin-key" data-key="6">6</div>
+              <div class="pin-key" data-key="7">7</div>
+              <div class="pin-key" data-key="8">8</div>
+              <div class="pin-key" data-key="9">9</div>
+              <div class="pin-key empty"></div>
+              <div class="pin-key" data-key="0">0</div>
+              <div class="pin-key back" data-key="back">⌫</div>
+            </div>
+            <div class="login-footer">
+              <a onclick="showRegister()" id="register-link">¿Primera vez? Crea tu cuenta</a>
+              <br><br>
+              <a onclick="forgotPin()" id="forgot-link" style="color:#ff6464;font-weight:600;">🔑 Olvide mi contraseña</a>
+            </div>
+          </div>
+
+          <!-- REGISTER -->
+          <div class="app-screen" id="screen-register">
+            <div class="register-title">
+              <div class="icon">🏦</div>
+              <h2>Crear Cuenta</h2>
+            </div>
+            <div class="field">
+              <label>Crea tu nombre de usuario</label>
+              <input class="inp" id="reg-name" placeholder="Elige tu nombre" maxlength="20" autocomplete="off">
+            </div>
+            <div class="field">
+              <label>Crea tu PIN de 4 dígitos</label>
+              <input class="inp" id="reg-pin" type="password" placeholder="••••" maxlength="4" inputmode="numeric" pattern="[0-9]*" style="letter-spacing:4px;font-size:18px;">
+            </div>
+            <div class="field">
+              <label>Confirma tu PIN</label>
+              <input class="inp" id="reg-pin2" type="password" placeholder="••••" maxlength="4" inputmode="numeric" pattern="[0-9]*" style="letter-spacing:4px;font-size:18px;">
+            </div>
+            <div id="reg-error" class="login-error" style="margin-bottom:12px;"></div>
+            <button class="btn-gold" onclick="registerAccount()">Crear Cuenta</button>
+            <button class="btn-ghost" onclick="showLogin()">Ya tengo cuenta</button>
+          </div>
+
+          <!-- MAIN DASHBOARD -->
+            <div class="app-screen" id="screen-main">
+            <div class="main-header">
+              <div class="main-avatar" id="main-avatar">?</div>
+              <div class="main-user">
+                <div class="name" id="main-name">Usuario</div>
+                <div class="sub">Bank of America</div>
+              </div>
+              <div class="main-balance">
+                <div class="label">Balance</div>
+                <div class="amount" id="main-balance">$0</div>
+              </div>
+            </div>
+
+            <!-- APP MENU -->
+            <div class="app-grid" id="main-menu">
+              <div class="app-item" onclick="goToPage('salary')"><span class="icon">💰</span><span class="name">Cobrar</span></div>
+              <div class="app-item" onclick="goToPage('transfer')"><span class="icon">📤</span><span class="name">Transferir</span></div>
+              <div class="app-item" onclick="goToPage('bank')"><span class="icon">🏦</span><span class="name">Banco</span></div>
+              <div class="app-item" onclick="goToPage('casino')"><span class="icon">🎰</span><span class="name">Casino</span></div>
+              <div class="app-item" onclick="goToPage('history')"><span class="icon">📊</span><span class="name">Movimientos</span></div>
+              <div class="app-item" onclick="lockApp()"><span class="icon">🔒</span><span class="name">Cerrar</span></div>
+              <a href="dashboard.html" class="app-item" style="text-decoration:none;color:inherit;"><span class="icon">🏛️</span><span class="name">Dashboard</span></a>
+            </div>
+
+            <!-- PAGES -->
+            <div class="app-page" id="page-salary">
+              <div class="page-top"><button class="back" onclick="backToMenu()">←</button><h3>💰 <span class="gold">Cobrar</span></h3></div>
+              <div class="page-body" style="text-align:center;">
+                <div style="font-size:10px;color:rgba(255,255,255,0.2);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px;">Tu Salario</div>
+                <div style="font-family:'Rajdhani',sans-serif;font-size:48px;font-weight:700;color:#d4a843;line-height:1;margin:8px 0;">$500</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.15);margin-bottom:16px;">cada 24 horas</div>
+                <button class="btn-action" id="btn-claim" onclick="claimSalary()">💰 Cobrar Salario</button>
+                <div class="cooldown-box" id="cd-box" style="display:none;">⏳ Próximo: <span id="cd-timer">--:--:--</span></div>
+                <div id="salary-msg" class="msg"></div>
+              </div>
+            </div>
+
+            <div class="app-page" id="page-transfer">
+              <div class="page-top"><button class="back" onclick="backToMenu()">←</button><h3>📤 <span class="gold">Transferir</span></h3></div>
+              <div class="page-body">
+                <div class="field"><label>ID de Discord</label><input id="tr-target" placeholder="Ej: 80351110224678912"></div>
+                <div class="field"><label>Cantidad</label><input id="tr-amount" type="number" placeholder="1000" min="1"></div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.15);margin-bottom:12px;">Disponible: <strong id="tr-bal" style="color:#d4a843;">$---</strong></div>
+                <button class="btn-action" onclick="transferMoney()">Enviar</button>
+                <div id="tr-msg" class="msg"></div>
+              </div>
+            </div>
+
+            <div class="app-page" id="page-bank">
+              <div class="page-top"><button class="back" onclick="backToMenu()">←</button><h3>🏦 <span class="gold">Banco</span></h3></div>
+              <div class="page-body">
+                <div class="msg info" style="display:block;">💡 Usa <strong>/depositar</strong> o <strong>/retirar</strong> en Discord.</div>
+                <div class="field"><label>Depositar</label><input id="dep-amount" type="number" placeholder="0" min="1"></div>
+                <button class="btn-action" style="margin-bottom:8px;" onclick="depositBank()">Depositar</button>
+                <div class="field"><label>Retirar</label><input id="wit-amount" type="number" placeholder="0" min="1"></div>
+                <button class="btn-action" onclick="withdrawBank()">Retirar</button>
+                <div id="bank-msg" class="msg"></div>
+              </div>
+            </div>
+
+            <div class="app-page" id="page-casino">
+              <div class="page-top"><button class="back" onclick="backToMenu()">←</button><h3>🎰 <span class="gold">Casino</span></h3></div>
+              <div class="page-body">
+                <div class="game-tabs">
+                  <button class="g-tab active" onclick="switchG('horses')">🏇</button>
+                  <button class="g-tab" onclick="switchG('dice')">🎲</button>
+                  <button class="g-tab" onclick="switchG('slots')">🎰</button>
+                </div>
+                <div class="g-content active" id="g-horses">
+                  <div class="horses" id="horses"></div>
+                  <div class="field"><label>Tu apuesta</label><input id="h-bet" type="number" placeholder="Monto..." min="1"></div>
+                  <button class="btn-action" onclick="startRace()">🏇 Apostar</button>
+                  <div class="race-track" id="race-track" style="display:none;">
+                    <div class="r-finish"></div>
+                    <div class="r-lane"><span class="l" id="rl-0">🌪️</span><span class="h" id="rh-0" style="left:36px;">🦄</span></div>
+                    <div class="r-lane"><span class="l" id="rl-1">⚡</span><span class="h" id="rh-1" style="left:36px;">🐎</span></div>
+                    <div class="r-lane"><span class="l" id="rl-2">🌬️</span><span class="h" id="rh-2" style="left:36px;">🐴</span></div>
+                    <div class="r-lane"><span class="l" id="rl-3">🌑</span><span class="h" id="rh-3" style="left:36px;">🦄</span></div>
+                  </div>
+                  <div class="result-box" id="race-result"></div>
+                </div>
+                <div class="g-content" id="g-dice">
+                  <div class="dice-area"><div class="dice-box" id="dice-box">🎲</div></div>
+                  <div class="field"><label>Apuesta</label><input id="d-bet" type="number" placeholder="Monto..." min="1"></div>
+                  <div style="display:flex;gap:8px;">
+                    <button class="btn-action" style="flex:1;" onclick="playDice('over')">Mayor (2x)</button>
+                    <button class="btn-action" style="flex:1;" onclick="playDice('under')">Menor (2x)</button>
+                  </div>
+                  <div id="d-msg" class="msg"></div>
+                </div>
+                <div class="g-content" id="g-slots">
+                  <div class="slot-row"><div class="slot-r" id="s0">🍒</div><div class="slot-r" id="s1">🍒</div><div class="slot-r" id="s2">🍒</div></div>
+                  <div class="field"><label>Apuesta</label><input id="s-bet" type="number" placeholder="Monto..." min="1"></div>
+                  <button class="btn-action" onclick="playSlots()">🎰 Spin!</button>
+                  <div id="s-msg" class="msg"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-page" id="page-history">
+              <div class="page-top"><button class="back" onclick="backToMenu()">←</button><h3>📊 <span class="gold">Movimientos</span></h3></div>
+              <div class="page-body">
+                <div style="text-align:center;padding:20px 0;color:rgba(255,255,255,0.15);font-size:11px;">Tu historial se sincroniza con Discord.</div>
+              </div>
+            </div>
+
+            <button class="logout-btn" onclick="lockApp()">🔒 Cerrar sesión</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let userId = null, userName = null, userAvatar = null;
+let currentBalance = 0, cooldownInterval = null, casinoWinnings = 0;
+const CLAIM_CD = 24*60*60*1000;
+const HORSES = ['Tormenta Negra','Rayo Dorado','Viento Plateado','Sombra Carmesí'];
+const HWEIGHTS = [30,28,24,18];
+let selectedHorse = null, racing = false;
+
+// ── TIMER ──
+function updateClock() {
+  const d = new Date();
+  const h = d.getHours().toString().padStart(2,'0');
+  const m = d.getMinutes().toString().padStart(2,'0');
+  const t = `${h}:${m}`;
+  const el = $('phone-time');
+  if (el) el.textContent = t;
+  const lt = $('lock-time');
+  if (lt) lt.textContent = t;
+  const ld = $('lock-date');
+  if (ld) {
+    const days = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+    const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    ld.textContent = `${days[d.getDay()]}, ${d.getDate()} de ${months[d.getMonth()]}`;
+  }
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ── SPLASH → PHONE ──
+setTimeout(() => {
+  $('splash').classList.add('hide');
+  setTimeout(() => {
+    $('splash').style.display = 'none';
+    $('phone-wrap').classList.add('show');
+  }, 800);
+}, 2800);
+
+// ── SESSION ──
+async function init() {
+  const s = hrpGetSession();
+  if (!s || !s.id) { const _p=window.location.pathname.split('/').pop()||'index.html'; if(_p!=='index.html')localStorage.setItem('hrp_redirect',_p); window.location.href = 'index.html'; return; }
+  userId = s.id; userName = s.global_name || s.username || 'Usuario'; userAvatar = s.avatar;
+  updateClock();
+}
+
+function unlockPhone() {
+  $('screen-lock').classList.remove('active');
+  $('screen-launcher').classList.add('active');
+}
+
+function openApp() {
+  $('screen-launcher').classList.remove('active');
+  $('screen-loading').classList.add('active');
+  setTimeout(() => {
+    $('screen-loading').classList.remove('active');
+    const pin = getStoredPin();
+    if (pin) {
+      $('screen-login').classList.add('active');
+      updateLoginScreen();
+    } else {
+      showRegister();
+    }
+  }, 1200);
+}
+
+// ── ACCOUNT STORAGE (user + pin) ──
+function getStoredPin() { try { return localStorage.getItem('hrp_bank_pin_' + userId); } catch { return null; } }
+function setStoredPin(pin) { localStorage.setItem('hrp_bank_pin_' + userId, pin); }
+function getStoredUser() { try { return localStorage.getItem('hrp_bank_user_' + userId); } catch { return null; } }
+function setStoredUser(name) { localStorage.setItem('hrp_bank_user_' + userId, name); }
+
+// Reset all bank accounts on version change
+(function resetBankAccounts(){
+  const BANK_VERSION = '2';
+  const saved = localStorage.getItem('hrp_bank_version');
+  if (saved !== BANK_VERSION) {
+    const keys = Object.keys(localStorage);
+    keys.forEach(k => {
+      if (k.startsWith('hrp_bank_pin_') || k.startsWith('hrp_bank_user_')) {
+        localStorage.removeItem(k);
+      }
+    });
+    localStorage.setItem('hrp_bank_version', BANK_VERSION);
+  }
+})();
+
+// ── PIN PAD LOGIN ──
+let pinInput = '';
+document.querySelectorAll('.pin-key').forEach(k => {
+  k.addEventListener('click', () => {
+    const key = k.dataset.key;
+    if (!key) return;
+    if (key === 'back') { pinInput = pinInput.slice(0,-1); }
+    else if (pinInput.length < 4) { pinInput += key; }
+    updatePinDots();
+    if (pinInput.length === 4) {
+      const user = $('login-user').value.trim();
+      const storedUser = getStoredUser();
+      const storedPin = getStoredPin();
+      if (!user) {
+        $('login-error').textContent = '❌ Ingresa tu usuario primero';
+        setTimeout(() => { pinInput = ''; updatePinDots(); }, 800);
+      } else if (storedUser && storedPin && user === storedUser && pinInput === storedPin) {
+        setTimeout(() => { enterApp(); }, 200);
+      } else {
+        $('login-error').textContent = '❌ Usuario o PIN incorrectos';
+        setTimeout(() => { pinInput = ''; updatePinDots(); $('login-error').textContent = ''; }, 800);
+      }
+    }
+  });
+});
+function updatePinDots() {
+  document.querySelectorAll('.pin-dot').forEach((d, i) => d.classList.toggle('filled', i < pinInput.length));
+}
+
+function showRegister() {
+  if (getStoredPin()) {
+    showToast('❌ Ya tienes una cuenta. Usa el login.');
+    return;
+  }
+  document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+  $('screen-register').classList.add('active');
+  $('reg-name').value = '';
+  $('reg-pin').value = '';
+  $('reg-pin2').value = '';
+  $('reg-error').textContent = '';
+}
+
+// Hide register link on login if user already has account
+function updateLoginScreen() {
+  const link = $('register-link');
+  if (link) link.style.display = getStoredPin() ? 'none' : '';
+  const flink = $('forgot-link');
+  if (flink) flink.style.display = getStoredPin() ? '' : 'none';
+}
+
+function showLogin() {
+  document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+  $('screen-login').classList.add('active');
+  updateLoginScreen();
+  $('login-user').value = '';
+  pinInput = ''; updatePinDots();
+  $('login-error').textContent = '';
+}
+
+function forgotPin() {
+  if (!userId) {
+    showToast('❌ No se detectó tu Discord ID.');
+    return;
+  }
+  showToast('🔑 Dirígete a Foundation con tu Discord ID para restablecer tu contraseña.');
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;';
+  overlay.innerHTML = `
+    <div style="background:#0d1a2e;border:1px solid rgba(212,168,67,0.3);border-radius:16px;padding:32px;max-width:400px;width:100%;text-align:center;">
+      <div style="font-size:48px;margin-bottom:16px;">🔑</div>
+      <h2 style="font-family:'Rajdhani',sans-serif;color:#d4a843;margin-bottom:12px;">Olvidaste tu contraseña</h2>
+      <p style="color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:16px;">Andá a la sección <strong style="color:#e6a868;">Foundation</strong> y decile a un administrador que necesita restablecer tu PIN bancario.</p>
+      <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:12px;">
+        <div style="color:rgba(255,255,255,0.4);margin-bottom:4px;">Tu Discord ID</div>
+        <div style="color:#d4a843;font-size:18px;font-weight:600;">${userId}</div>
+      </div>
+      <p style="color:rgba(255,255,255,0.4);font-size:12px;">El administrador va a pedirte este ID para cambiar tu PIN.</p>
+      <button onclick="this.closest('div[style]').remove()" style="margin-top:20px;padding:10px 32px;border:1px solid rgba(255,255,255,0.2);border-radius:8px;background:transparent;color:#fff;cursor:pointer;font-size:14px;">Entendido</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function registerAccount() {
+  if (getStoredPin()) {
+    showToast('❌ Ya tienes una cuenta. Usa el login.');
+    return;
+  }
+  const name = $('reg-name').value.trim();
+  const pin = $('reg-pin').value.trim();
+  const pin2 = $('reg-pin2').value.trim();
+  const err = $('reg-error');
+  if (!name || name.length < 2) { err.textContent = '❌ Ingresa un nombre de usuario'; return; }
+  if (!pin || pin.length !== 4 || !/^\d{4}$/.test(pin)) { err.textContent = '❌ El PIN debe ser de 4 números'; return; }
+  if (pin !== pin2) { err.textContent = '❌ Los PIN no coinciden'; return; }
+  setStoredPin(pin);
+  setStoredUser(name);
+  err.textContent = '';
+  showToast('✅ Cuenta creada con éxito');
+  setTimeout(() => {
+    document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+    $('screen-login').classList.add('active');
+    updateLoginScreen();
+    $('login-user').value = name;
+    pinInput = ''; updatePinDots();
+  }, 400);
+}
+
+// ── ENTER APP ──
+async function enterApp() {
+  pinInput = ''; updatePinDots();
+  document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+  $('screen-main').classList.add('active');
+  const bankUser = getStoredUser() || userName;
+  const nm = $('main-name');
+  if (nm) nm.textContent = bankUser;
+  renderMainUser();
+  await loadBalance();
+  checkCooldown();
+  renderHorses();
+}
+
+function lockApp() {
+  document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+  pinInput = ''; updatePinDots();
+  $('screen-lock').classList.add('active');
+}
+
+function renderMainUser() {
+  const av = $('main-avatar');
+  const nm = $('main-name');
+  if (userAvatar) {
+    av.innerHTML = `<img src="https://cdn.discordapp.com/avatars/${userId}/${userAvatar}.png" alt="">`;
+  } else {
+    av.textContent = (userName||'?')[0].toUpperCase();
+  }
+  const bankUser = getStoredUser();
+  if (nm) nm.textContent = bankUser || userName;
+}
+
+async function loadBalance() {
+  let b = await hrpGetBalance(userId);
+  if (b === null) {
+    try { await supaInsert('economy', { discord_id: userId, balance: 0 }); b = 0; } catch {}
+  }
+  currentBalance = b ?? 0;
+  const mb = $('main-balance');
+  if (mb) mb.textContent = '$' + currentBalance.toLocaleString();
+}
+
+// ── MENU NAV ──
+function goToPage(name) {
+  $('main-menu').style.display = 'none';
+  $('page-' + name).classList.add('active');
+  const tr = $('tr-bal');
+  if (tr) tr.textContent = '$' + currentBalance.toLocaleString();
+}
+function backToMenu() {
+  document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+  $('main-menu').style.display = 'grid';
+}
+
+// ── SALARY ──
+function getCdKey() { return 'hrp_salary_cooldown_' + userId; }
+function checkCooldown() {
+  const saved = localStorage.getItem(getCdKey());
+  const btn = $('btn-claim');
+  const cd = $('cd-box');
+  if (saved && Date.now() < parseInt(saved,10)) {
+    btn.disabled = true; cd.style.display = 'block';
+    startCdTimer(parseInt(saved,10)); return;
+  }
+  localStorage.removeItem(getCdKey());
+  btn.disabled = false; cd.style.display = 'none';
+  if (cooldownInterval) { clearInterval(cooldownInterval); cooldownInterval = null; }
+}
+function startCdTimer(next) {
+  if (cooldownInterval) clearInterval(cooldownInterval);
+  cooldownInterval = setInterval(() => {
+    const diff = next - Date.now();
+    if (diff <= 0) {
+      clearInterval(cooldownInterval); cooldownInterval = null;
+      $('btn-claim').disabled = false; $('cd-box').style.display = 'none';
+      localStorage.removeItem(getCdKey()); return;
+    }
+    const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+    $('cd-timer').textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  }, 1000);
+}
+async function claimSalary() {
+  const btn = $('btn-claim'); const msg = $('salary-msg');
+  if (btn.disabled) return;
+  const saved = localStorage.getItem(getCdKey());
+  if (saved && Date.now() < parseInt(saved,10)) { msg.className='msg error'; msg.textContent='❌ Ya cobraste hoy'; return; }
+  btn.disabled=true; btn.textContent='Reclamando...'; msg.className=''; msg.textContent='';
+  try {
+    const ok = await hrpAddBalance(userId, 500);
+    if (!ok) throw new Error('Error');
+    const n = Date.now()+CLAIM_CD; localStorage.setItem(getCdKey(),String(n));
+    await loadBalance();
+    msg.className='msg success'; msg.textContent='✅ Cobraste $500';
+    showToast('💰 +$500 salario');
+    startCdTimer(n);
+  } catch(e) { msg.className='msg error'; msg.textContent='❌ Error: '+(e.message||'desconocido'); btn.disabled=false; }
+  finally { btn.textContent='💰 Cobrar Salario'; }
+}
+
+// ── TRANSFER ──
+async function transferMoney() {
+  const t = $('tr-target').value.trim();
+  const a = parseInt($('tr-amount').value,10);
+  const msg = $('tr-msg'); const btn = $('tr-amount').parentElement.nextElementSibling;
+  msg.className='';
+  if (!t) { msg.className='msg error'; msg.textContent='❌ ID requerido'; return; }
+  if (!a||a<1) { msg.className='msg error'; msg.textContent='❌ Cantidad inválida'; return; }
+  if (a>currentBalance) { msg.className='msg error'; msg.textContent='❌ Saldo insuficiente'; return; }
+  if (t===userId) { msg.className='msg error'; msg.textContent='❌ No a ti mismo'; return; }
+  try {
+    const d = await hrpDeductBalance(userId,a);
+    if (!d) throw new Error('No se pudo debitar');
+    const ad = await hrpAddBalance(t,a);
+    if (!ad) { await hrpAddBalance(userId,a); throw new Error('Destinatario no existe'); }
+    await loadBalance();
+    msg.className='msg success'; msg.textContent='✅ Transferiste $'+a.toLocaleString();
+    showToast('📤 -$'+a.toLocaleString());
+    $('tr-target').value=''; $('tr-amount').value='';
+  } catch(e) { msg.className='msg error'; msg.textContent='❌ '+e.message; }
+}
+
+// ── BANK ──
+async function depositBank() {
+  const a = parseInt($('dep-amount').value,10);
+  if (!a||a<1||a>currentBalance) { showToast('❌ Cantidad inválida'); return; }
+  showToast('🏦 Usa /depositar '+a+' en Discord');
+  $('dep-amount').value='';
+}
+async function withdrawBank() {
+  const a = parseInt($('wit-amount').value,10);
+  if (!a||a<1) { showToast('❌ Cantidad inválida'); return; }
+  showToast('💸 Usa /retirar '+a+' en Discord');
+  $('wit-amount').value='';
+}
+
+// ── CASINO ──
+function switchG(g) {
+  document.querySelectorAll('.g-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.g-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.g-tab[onclick*="${g}"]`).classList.add('active');
+  $('g-'+g).classList.add('active');
+}
+
+function renderHorses() {
+  const g = $('horses'); g.innerHTML = '';
+  HORSES.forEach((n,i) => {
+    const c = document.createElement('div');
+    c.className = 'h-card' + (i===selectedHorse?' selected':'');
+    c.innerHTML = `<div class="icon">${['🦄','🐎','🐴','🦄'][i]}</div><div class="name">${n}</div>`;
+    c.onclick = () => { selectedHorse=i; renderHorses(); };
+    g.appendChild(c);
+  });
+}
+
+async function startRace() {
+  const bet = parseInt($('h-bet').value,10);
+  if (selectedHorse===null) { showToast('⚠️ Selecciona un caballo'); return; }
+  if (!bet||bet<1) { showToast('⚠️ Apuesta inválida'); return; }
+  if (bet>currentBalance) { showToast('❌ Saldo insuficiente'); return; }
+  if (racing) return;
+  const ok = await hrpDeductBalance(userId,bet);
+  if (!ok) { showToast('❌ Error'); return; }
+  await loadBalance();
+  racing = true;
+  const track = $('race-track'); track.style.display='block';
+  const res = $('race-result'); res.classList.remove('show'); res.innerHTML='';
+  for(let i=0;i<4;i++) $(`rh-${i}`).style.left='36px';
+
+  let r = Math.random()*100, winner=0, acc=0;
+  for(let i=0;i<HWEIGHTS.length;i++){ acc+=HWEIGHTS[i]; if(r<=acc){winner=i;break;} }
+
+  const tw = track.offsetWidth-80;
+  const ps = [];
+  for(let i=0;i<4;i++){
+    const p = i===winner?0.92:0.2+Math.random()*0.5;
+    const f = 36+tw*p;
+    ps.push(new Promise(r=>{
+      let cur=36, st=0;
+      const iv=setInterval(()=>{st++; cur=36+(f-36)*(st/12); $(`rh-${i}`).style.left=cur+'px'; if(st>=12){clearInterval(iv);r();}},80+Math.random()*40);
+    }));
+  }
+  await Promise.all(ps);
+  $(`rh-${winner}`).style.left=(36+tw)+'px';
+
+  const won = selectedHorse===winner;
+  const mult = won ? Math.round(100/HWEIGHTS[selectedHorse]) : 0;
+  const payout = won ? bet*mult : 0;
+  if(won){ await hrpAddBalance(userId,payout); casinoWinnings+=payout-bet; await loadBalance(); }
+  res.innerHTML=`<div class="r-icon">${won?'🏆':'😢'}</div><div class="r-label ${won?'win':'lose'}">${won?'¡'+HORSES[winner]+' ganó!':HORSES[winner]+' ganó...'}</div><div class="r-payout">${won?'+$'+payout.toLocaleString():'-$'+bet.toLocaleString()}</div>`;
+  res.classList.add('show');
+  showToast(won?'🏇 +$'+payout.toLocaleString():'😢 -$'+bet.toLocaleString());
+  $('h-bet').value=''; racing=false;
+}
+
+async function playDice(t) {
+  const b = parseInt($('d-bet').value,10);
+  if(!b||b<1||b>currentBalance){showToast('❌ Apuesta inválida');return;}
+  const box=$('dice-box'); box.className='dice-box rolling';
+  const ok=await hrpDeductBalance(userId,b); if(!ok)return;
+  await new Promise(r=>setTimeout(r,1200));
+  const r=Math.floor(Math.random()*6)+1;
+  box.textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][r-1];
+  box.className='dice-box';
+  const won=(t==='over'&&r>=4)||(t==='under'&&r<=3);
+  if(won){ await hrpAddBalance(userId,b*2); casinoWinnings+=b; box.classList.add('win'); }
+  else box.classList.add('lose');
+  await loadBalance();
+  const m=$('d-msg'); m.className='msg '+(won?'success':'error');
+  m.textContent=won?'🎲 '+r+'! Ganaste $'+(b*2).toLocaleString():'🎲 '+r+' — Perdiste $'+b.toLocaleString();
+  $('d-bet').value='';
+}
+
+async function playSlots() {
+  const b=parseInt($('s-bet').value,10);
+  if(!b||b<1||b>currentBalance){showToast('❌ Apuesta inválida');return;}
+  const ok=await hrpDeductBalance(userId,b); if(!ok)return;
+  const sym=['🍒','🍋','🍊','🍇','💎','7️⃣'];
+  [0,1,2].forEach(i=>$(('s'+i)).className='slot-r spinning');
+  await new Promise(r=>setTimeout(r,1000));
+  const res=[0,1,2].map(()=>Math.floor(Math.random()*sym.length));
+  [0,1,2].forEach(i=>{$(('s'+i)).textContent=sym[res[i]];$(('s'+i)).className='slot-r';});
+  const won=res[0]===res[1]&&res[1]===res[2];
+  const mult=won?(res[0]===5?10:res[0]===4?7:5):0;
+  const payout=won?b*mult:0;
+  if(won){await hrpAddBalance(userId,payout);casinoWinnings+=payout-b;[0,1,2].forEach(i=>$(('s'+i)).classList.add('win'));}
+  await loadBalance();
+  const m=$('s-msg'); m.className='msg '+(won?'success':'error');
+  m.textContent=won?'🎰 '+sym[res[0]]+sym[res[1]]+sym[res[2]]+' Ganaste $'+payout.toLocaleString()+' (x'+mult+')':'🎰 '+sym[res[0]]+sym[res[1]]+sym[res[2]]+' Perdiste $'+b.toLocaleString();
+  $('s-bet').value='';
+}
+
+// ── TOAST ──
+let nt;
+function showToast(m){
+  const n=$('notif'); if(!n)return;
+  clearTimeout(nt); n.textContent=m; n.classList.add('show');
+  nt=setTimeout(()=>n.classList.remove('show'),2500);
+}
+
+</script>
+<script src="assets/auth.js"></script>
+<script>
+// ── INIT ──
+init();
+</script>
+</body>
+</html>
+
