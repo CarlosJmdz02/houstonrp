@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HOUSTON RP — Dispatch</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#3b6fb6">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ── PANTALLA DE CARGA ── -->
+  <div id="loading-screen">
+    <div class="loader-container">
+      <div class="loader-ring"></div>
+      <div class="loader-text">DISPATCH</div>
+      <div class="loader-sub">Central de Despacho · Houston RP</div>
+    </div>
+  </div>
+
+  <!-- ── CONTENIDO PRINCIPAL ── -->
+  <div id="main-content" class="hidden">
+
+    <!-- ── BARRA SUPERIOR / SERVIDOR ── -->
+    <div id="dashboard">
+      <div class="dashboard-header">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#3b6fb6" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4" fill="#3b6fb6" stroke="none"/></svg>
+          </div>
+          <div class="brand-text">
+            <h1>HOUSTON RP — DISPATCH</h1>
+            <div class="brand-sub"><span class="live-dot"></span> Central de Despacho · En Vivo</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="stat-card" data-stat="status">
+            <span class="stat-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <div class="stat-info">
+              <div class="stat-label">Servidor</div>
+              <div class="stat-value" id="stat-status">--</div>
+            </div>
+            <span class="stat-badge" id="badge-status"></span>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <div class="stat-info">
+              <div class="stat-label">Jugadores</div>
+              <div class="stat-value" id="stat-players">--</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>
+            </span>
+            <div class="stat-info">
+              <div class="stat-label">Máximo</div>
+              <div class="stat-value" id="stat-max">--</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg>
+            </span>
+            <div class="stat-info">
+              <div class="stat-label">Cola</div>
+              <div class="stat-value" id="stat-queue">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </span>
+            <div class="stat-info">
+              <div class="stat-label">Panel</div>
+              <div class="stat-value" id="stat-fps">—</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <div class="stat-info">
+              <div class="stat-label">Uptime</div>
+              <div class="stat-value" id="stat-uptime">—</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 7 12 12 15 14"/></svg>
+            </span>
+            <div class="stat-info">
+              <div class="stat-label">Actualizado</div>
+              <div class="stat-value" id="stat-updated">--</div>
+            </div>
+          </div>
+
+          <div class="stat-card stat-card-audio" id="audio-indicator">
+            <span class="stat-icon" id="audio-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </span>
+            <div class="stat-info">
+              <div class="stat-label">Sonido</div>
+              <div class="stat-value" id="audio-status">…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CONTENEDOR PRINCIPAL ── -->
+    <div id="main-container">
+
+      <!-- ── PANEL LATERAL (llamadas + unidades) ── -->
+      <div id="side-panel">
+        <div class="panel-section">
+          <div class="panel-header">
+            <h3>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e54850" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M22 14l-6 6"/><path d="M20 16l2 2-2 2"/></svg>
+              Llamadas 911
+            </h3>
+            <span class="panel-count" id="calls-count">0</span>
+          </div>
+          <div id="calls-list" class="calls-list">
+            <div class="empty-state">Conectando…</div>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-header">
+            <h3>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#3b6fb6" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Unidades en servicio
+            </h3>
+            <span class="panel-count" id="players-count">0</span>
+          </div>
+          <div id="players-list" class="players-list">
+            <div class="empty-state">Conectando…</div>
+          </div>
+        </div>
+
+        <!-- ── BODYCAMS EN VIVO (solo Central / Dispatch) ── -->
+        <div class="panel-section bc-roster-section">
+          <div class="panel-header">
+            <h3>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e54850" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              Bodycams en vivo
+            </h3>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="panel-count" id="bc-live-count">0</span>
+              <button class="toggle-status-btn" id="bc-open-all" title="Abrir TODAS las bodycams activas en el panel" style="display:none;">Todas</button>
+              <button class="toggle-status-btn" id="bc-panel-open" title="Abrir el panel de bodycams">Panel</button>
+            </div>
+          </div>
+          <div id="bc-roster" class="bc-roster">
+            <div class="empty-state">Ninguna bodycam activa</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAPA ── -->
+      <div id="map-container">
+        <div id="map-canvas-container">
+          <canvas id="map-canvas"></canvas>
+        </div>
+
+        <div id="map-controls">
+          <button class="map-btn" id="btn-zoom-in" title="Acercar (+)">+</button>
+          <button class="map-btn" id="btn-zoom-out" title="Alejar (−)">−</button>
+          <button class="map-btn" id="btn-reset" title="Restablecer vista (0 / R)">⟲</button>
+          <div class="map-btn-sep"></div>
+          <button class="map-btn" id="btn-grid-toggle" title="Mostrar rejilla del mundo">▦</button>
+          <button class="map-btn" id="btn-crop-toggle" title="Recortar bordes vacíos del mapa">⛶</button>
+          <button class="map-btn" id="btn-calibrate" title="Calibrar mapa">◎</button>
+          <button class="map-btn" id="btn-clear-calibration" title="Restablecer calibración">↺</button>
+        </div>
+
+        <div class="map-follow hidden" id="map-follow">Siguiendo a <span id="map-follow-name"></span> <span style="opacity:.6">(F = detener)</span></div>
+        <div class="map-cal-info hidden" id="map-cal-info"></div>
+        <div class="map-coords" id="map-coords">X: -- Z: --</div>
+
+        <div class="map-legend">
+          <span class="lg"><span class="dot" style="background:#3b6fb6;"></span> Policía</span>
+          <span class="lg"><span class="dot" style="background:#d4a017;"></span> Sheriff</span>
+          <span class="lg"><span class="dot" style="background:#e54850;"></span> Bomberos</span>
+          <span class="lg"><span class="dot" style="background:#9b72cf;"></span> EMS</span>
+          <span class="lg"><span class="dot" style="background:#ffb020;"></span> Grúa</span>
+          <span class="lg"><span class="dot call-dot"></span> Llamada 911</span>
+        </div>
+
+        <div class="map-tooltip hidden" id="map-tooltip"></div>
+      </div>
+
+      <!-- ── PANEL DERECHO (estado + registro) ── -->
+      <div id="right-panel">
+        <div class="panel-section">
+          <div class="panel-header">
+            <h3>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#4acf8f" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+              Estado de unidades
+            </h3>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="panel-count" id="status-count">0</span>
+              <button class="toggle-status-btn" id="toggle-status-btn" title="Ocultar / mostrar panel">Ocultar</button>
+            </div>
+          </div>
+          <div id="status-list">
+            <div class="empty-state">No hay unidades en servicio</div>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-header">
+            <h3>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e6a868" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>
+              Registro de despacho
+            </h3>
+            <span class="panel-count" id="log-count">0</span>
+          </div>
+          <div id="dispatch-log" class="dispatch-log" style="padding:8px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL DE UNIDAD ── -->
+  <div id="call-modal" class="modal-overlay hidden">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 id="modal-title">Detalle</h2>
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="modal-center">Centrar en mapa</button>
+        <button class="btn btn-secondary" id="modal-close">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANEL DE BODYCAMS (varias abiertas al mismo tiempo) ── -->
+  <div id="bc-panel" class="bc-panel hidden" aria-label="Panel de bodycams">
+    <div class="bc-panel-head" id="bc-panel-head" title="Arrastrá para mover el panel">
+      <span class="bc-panel-title"><span class="bc-panel-grip">⠿</span><span class="bc-dot"></span> Bodycams en vivo</span>
+      <div class="bc-panel-actions">
+        <span class="panel-count" id="bc-panel-count">0</span>
+        <button class="toggle-status-btn" id="bc-panel-full" title="Ampliar a toda la pantalla">⤢</button>
+        <button class="toggle-status-btn" id="bc-panel-min" title="Minimizar">—</button>
+        <button class="toggle-status-btn" id="bc-panel-close" title="Cerrar panel">✕</button>
+      </div>
+    </div>
+    <div class="bc-panel-grid" id="bc-panel-grid">
+      <div class="bc-empty" id="bc-panel-empty">Elegí una unidad en la lista lateral y tocá “Ver bodycam”. Podés abrir varias a la vez: no se cierran entre sí.</div>
+    </div>
+  </div>
+</div>
+
+<div id="panic-flash"></div>
+
+<!-- ── AUTH + HELPERS ── -->
+<script src="assets/auth.js"></script>
+<!-- supabase-js LOCAL (sin CDN): la librería de bodycam siempre carga -->
+<script src="assets/supabase-js.umd.js"></script>
+<script src="assets/bodycam-app.js"></script>
+
+<script>
+/* ── Control de acceso: solo rol Dispatch (1502940318092366056) ── */
+(function () {
+  function gate() {
+    const session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
+    if (!session || !session.id) {
+      window.location.replace('index.html');
+      return;
+    }
+    const DISPATCH_ROLE = (typeof discordDispatchRoleId !== 'undefined')
+      ? discordDispatchRoleId
+      : '1502940318092366056';
+    const check = (typeof hrpHasRole === 'function')
+      ? hrpHasRole(DISPATCH_ROLE, session.id)
+      : Promise.resolve(false);
+    check
+      .then(function (ok) {
+        if (!ok) window.location.replace('mdt.html');
+        else window.HRP_IS_DISPATCHER = true;
+      })
+      .catch(function () { /* sin base no bloqueamos la vista */ });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', gate);
+  } else {
+    gate();
+  }
+})();
+
+/* ── Alternar panel de estado de unidades ── */
+document.addEventListener('DOMContentLoaded', function () {
+  const btn = document.getElementById('toggle-status-btn');
+  const list = document.getElementById('status-list');
+  if (btn && list) {
+    btn.addEventListener('click', function () {
+      list.classList.toggle('collapsed');
+      btn.textContent = list.classList.contains('collapsed') ? 'Mostrar' : 'Ocultar';
+    });
+  }
+});
+
+/* ── Asignación de llamadas (usadas por ui.js) ── */
+function hrpEscapeHtml(t) {
+  if (t === null || t === undefined) return '';
+  const d = document.createElement('div');
+  d.textContent = String(t);
+  return d.innerHTML;
+}
+
+window.assignCallToUnit = async function (selectEl) {
+  const callId = selectEl.getAttribute('data-call-id');
+  const shiftId = selectEl.value;
+  if (!shiftId) return;
+  const row = selectEl.options[selectEl.selectedIndex];
+  const unitName = row ? row.textContent.trim() : ('Unidad #' + shiftId);
+  try {
+    await supaInsert('call_assignments', {
+      call_id: String(callId),
+      shift_id: Number(shiftId),
+      unit_name: unitName,
+      assigned_by: (typeof hrpGetSession === 'function' && hrpGetSession()) ? hrpGetSession().id : null,
+    });
+    const wrap = selectEl.closest('.call-card-assign');
+    if (wrap) {
+      wrap.innerHTML =
+        '<span style="font-size:11px;color:#4acf8f;font-weight:600;">✅ Asignada a ' + hrpEscapeHtml(unitName) + '</span>' +
+        '<button class="call-assign-release" data-call-id="' + hrpEscapeHtml(callId) + '" onclick="releaseCallAssignment(this.dataset.callId)">Liberar</button>';
+    }
+  } catch (e) {
+    alert('Error al asignar la unidad: ' + e.message);
+  }
+};
+
+window.releaseCallAssignment = async function (callId) {
+  if (!callId) return;
+  try {
+    await supaDelete('call_assignments', { call_id: `eq.${callId}` });
+    const btn = document.querySelector('.call-assign-release[data-call-id="' + callId + '"]');
+    const wrap = btn ? btn.closest('.call-card-assign') : null;
+    if (wrap) {
+      wrap.innerHTML =
+        '<select class="call-assign-select" data-call-id="' + hrpEscapeHtml(callId) + '" onchange="assignCallToUnit(this)">' +
+        '<option value="">— Asignar a —</option></select>';
+    }
+  } catch (e) {
+    alert('Error al liberar la unidad: ' + e.message);
+  }
+};
+</script>
+
+<!-- ── MÓDULOS DEL CAD (mapa, paneles, estado) ── -->
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

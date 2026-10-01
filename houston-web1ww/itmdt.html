@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOUSTON RP — ITMDT · Incidentes y Turnos</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#0d1424">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-deep:       #0a101d;
+    --bg-panel:      #101a2c;
+    --bg-card:       #14203a;
+    --bg-card-2:     #182646;
+    --bg-hover:      #1a2a4a;
+    --accent-fire:   #f97316;
+    --accent-amber:  #fbbf24;
+    --accent-red:    #ef4444;
+    --accent-green:  #34d399;
+    --accent-blue:   #3b82f6;
+    --text-primary:  #e8ecf4;
+    --text-secondary:#94a3b8;
+    --text-dim:      #5b6b84;
+    --border:        #22314e;
+    --border-strong: #2f4266;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-deep);
+    background-image:
+      radial-gradient(ellipse at 15% 0%, rgba(249,115,22,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 100%, rgba(251,191,36,0.06) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+  .hidden { display: none !important; }
+
+  /* ═══ FIXED TOP BAR ═══ */
+  .tablet-top {
+    position: sticky; top: 0; z-index: 60;
+    background: linear-gradient(180deg, rgba(16,26,44,0.98), rgba(10,16,29,0.98));
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
+  .top-main { display: flex; align-items: center; gap: 14px; padding: 10px 18px; flex-wrap: wrap; }
+  .top-brand { display: flex; align-items: center; gap: 10px; }
+  .brand-shield { width: 36px; height: 38px; flex-shrink: 0; }
+  .brand-shield img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 6px rgba(249,115,22,0.6)); }
+  .brand-name { font-family: 'Rajdhani', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1; }
+  .brand-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent-fire); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+
+  .top-user { display: flex; align-items: center; gap: 10px; margin-left: 4px; }
+  .user-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-fire), #c2410c);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; color: #fff;
+    overflow: hidden; flex-shrink: 0; border: 2px solid var(--border-strong);
+  }
+  .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .user-info { min-width: 0; line-height: 1.2; }
+  .user-name { font-size: 12.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+  .user-role { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent-amber); text-transform: uppercase; letter-spacing: 1px; }
+  .user-role.idle { color: var(--text-dim); }
+
+  .top-meta { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+  .balance-box { text-align: right; line-height: 1.1; }
+  .balance-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; }
+  .balance-value { font-family: 'Rajdhani', sans-serif; font-size: 19px; font-weight: 700; color: var(--accent-amber); }
+  .hours-box .balance-label { color: var(--text-dim); }
+  .hours-value { color: #4acf8f !important; font-family: 'JetBrains Mono', monospace !important; font-size: 15px !important; }
+  .hours-value.hours-max { color: #ffb020 !important; }
+  .top-clock { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-secondary); letter-spacing: 1px; }
+  .live-indicator { display: flex; align-items: center; gap: 7px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-green); text-transform: uppercase; letter-spacing: 1px; }
+  .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); animation: pulse 1.8s ease-in-out infinite; }
+
+  .btn-dash {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent-fire), #b45309);
+    color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700;
+    letter-spacing: 0.8px; text-decoration: none; text-transform: uppercase;
+    border: none; cursor: pointer;
+    box-shadow: 0 4px 18px rgba(249,115,22,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    transition: all 0.2s ease;
+  }
+  .btn-dash:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(249,115,22,0.5); }
+
+  /* ═══ CONTROL DOCK ═══ */
+  .control-dock { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 8px 18px 12px; border-top: 1px solid rgba(34,49,78,0.55); }
+
+  .cs-row { display: flex; align-items: center; gap: 8px; }
+  .cs-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
+  .cs-dot.active { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); animation: pulse 1.8s infinite; }
+  .cs-dot.break { background: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber); animation: pulse 1.2s infinite; }
+  .cs-status { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-dim); }
+  .cs-status.active { color: var(--accent-green); }
+  .cs-status.break { color: var(--accent-amber); }
+
+  .cs-timer-wrap { margin-left: auto; text-align: right; }
+  .cs-timer-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; }
+  .cs-timer { font-family: 'JetBrains Mono', monospace; font-size: 21px; font-weight: 500; color: var(--accent-amber); line-height: 1; margin-top: 2px; }
+  .cs-accum { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--text-dim); margin-top: 3px; }
+
+  .shift-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sbtn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer;
+    border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary);
+    transition: all 0.2s ease;
+  }
+  .sbtn:hover:not(:disabled) { border-color: var(--border-strong); color: var(--text-primary); }
+  .sbtn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .sbtn.start { background: linear-gradient(135deg, #10b981, #059669); color: #fff; border-color: transparent; box-shadow: 0 3px 14px rgba(16,185,129,0.3); }
+  .sbtn.start:hover:not(:disabled) { box-shadow: 0 5px 22px rgba(16,185,129,0.45); transform: translateY(-1px); }
+  .sbtn.break { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border-color: transparent; }
+  .sbtn.break:hover:not(:disabled) { box-shadow: 0 5px 22px rgba(245,158,11,0.4); transform: translateY(-1px); }
+  .sbtn.resume { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; border-color: transparent; }
+  .sbtn.resume:hover:not(:disabled) { box-shadow: 0 5px 22px rgba(59,130,246,0.4); transform: translateY(-1px); }
+  .sbtn.end { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; border-color: transparent; }
+  .sbtn.end:hover:not(:disabled) { box-shadow: 0 5px 22px rgba(239,68,68,0.4); transform: translateY(-1px); }
+
+  .dept-bar { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dept-chip {
+    padding: 6px 12px; border-radius: 8px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text-secondary); font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.4px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .dept-chip:hover { border-color: var(--border-strong); color: var(--text-primary); }
+  .dept-chip.active { background: rgba(251,191,36,0.12); border-color: rgba(251,191,36,0.45); color: var(--accent-amber); }
+
+  /* ═══ UNIDADES EN SERVICIO ═══ */
+  .on-duty-panel { background: var(--bg-card); border: 1px solid rgba(249,115,22,0.28); border-radius: 14px; padding: 12px 16px 14px; margin-bottom: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+  .on-duty-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .on-duty-title { display: flex; align-items: center; gap: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.04em; color: var(--text-primary); }
+  .on-duty-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); animation: pulse 1.8s infinite; }
+  .on-duty-pill { background: rgba(52,211,153,0.15); color: var(--accent-green); border: 1px solid rgba(52,211,153,0.35); border-radius: 999px; padding: 2px 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .on-duty-sub { font-size: 10px; color: var(--text-dim); }
+  .on-duty-list { display: flex; flex-wrap: wrap; gap: 8px; max-height: 152px; overflow-y: auto; }
+  .on-duty-empty { width: 100%; text-align: center; padding: 10px; font-size: 12px; color: var(--text-dim); }
+  .on-duty-chip { display: flex; align-items: center; gap: 10px; padding: 7px 12px 7px 7px; background: rgba(15,23,42,0.6); border: 1px solid rgba(148,163,184,0.16); border-radius: 10px; min-width: 210px; flex: 1 1 210px; }
+  .on-duty-ava { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; color: var(--text-primary); flex-shrink: 0; }
+  .on-duty-info { flex: 1; min-width: 0; }
+  .on-duty-name { display: flex; align-items: center; gap: 6px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 13px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .on-duty-break { font-size: 9px; letter-spacing: 0.05em; color: var(--accent-amber); border: 1px solid rgba(251,191,36,0.4); border-radius: 4px; padding: 1px 5px; background: rgba(251,191,36,0.1); }
+  .on-duty-meta { font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .on-duty-dept { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; }
+  .on-duty-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .on-duty-status.live { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+  .on-duty-status.break { background: var(--accent-amber); }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+  /* ═══ MAIN ═══ */
+  .main-wrap { max-width: 1040px; margin: 0 auto; padding: 24px 18px 40px; }
+
+  .page-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-fire); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  .page-title { font-family: 'Rajdhani', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: 1px; color: var(--text-primary); }
+  .page-title span { color: var(--accent-amber); }
+  .page-head { margin-bottom: 18px; }
+
+  .tab-bar { display: flex; gap: 4px; background: var(--bg-card); border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--border); }
+  .tab-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 20px; border-radius: 9px; border: none; cursor: pointer;
+    font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.4px; text-transform: uppercase;
+    background: transparent; color: var(--text-dim); transition: all 0.2s ease;
+  }
+  .tab-btn:hover:not(.active) { color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+  .tab-btn.active { background: linear-gradient(135deg, var(--accent-fire), #c2410c); color: #fff; box-shadow: 0 4px 16px rgba(249,115,22,0.3); }
+
+  .panel {
+    background: linear-gradient(180deg, rgba(20,32,58,0.75), rgba(13,21,38,0.9));
+    border: 1px solid var(--border-strong); border-radius: 16px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 20px 50px rgba(0,0,0,0.45);
+    padding: 22px; margin-bottom: 24px;
+  }
+  .panel-title { font-family: 'Rajdhani', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.5px; color: var(--text-primary); margin-bottom: 4px; }
+  .panel-sub { font-size: 12px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.25s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ═══ ACCESS OVERLAY ═══ */
+  .access-overlay { position: fixed; inset: 0; z-index: 99999; background: var(--bg-deep); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 40px; text-align: center; }
+  .access-overlay.hidden { display: none; }
+  .access-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .access-icon.denied { background: rgba(239,68,68,0.12); color: var(--accent-red); border: 2px solid rgba(239,68,68,0.3); }
+  .access-icon.loading { background: rgba(249,115,22,0.12); color: var(--accent-fire); border: 2px solid rgba(249,115,22,0.3); animation: pulse 1.6s infinite; }
+  .access-title { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; }
+  .access-desc { font-size: 14px; color: var(--text-secondary); text-align: center; max-width: 420px; line-height: 1.5; }
+  .access-overlay .btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 10px; cursor: pointer; font-family: 'Rajdhani', sans-serif; font-weight: 700; text-transform: uppercase; transition: all 0.2s ease; border: none; padding: 13px 30px; font-size: 14px; letter-spacing: 0.6px; }
+  .btn-primary { background: linear-gradient(135deg, var(--accent-fire), #c2410c); color: #fff; box-shadow: 0 4px 18px rgba(249,115,22,0.3); text-decoration: none; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 26px rgba(249,115,22,0.45); }
+
+  /* ═══ TOAST ═══ */
+  .toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(20px); display: flex; align-items: center; gap: 10px; padding: 13px 22px; background: var(--bg-card); border: 1px solid var(--accent-green); border-radius: 10px; color: var(--text-primary); font-size: 13px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); opacity: 0; transition: all 0.25s; z-index: 1000; pointer-events: none; max-width: 92vw; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.error { border-color: var(--accent-red); }
+  .toast.warn { border-color: var(--accent-amber); }
+
+  /* ═══ INCIDENT FORM ═══ */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-secondary); letter-spacing: .3px; text-transform: uppercase; }
+  .field label .req { color: var(--accent-red); }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 10px 12px; background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 13px;
+    outline: none; transition: border-color .2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent-fire); box-shadow: 0 0 0 3px rgba(249,115,22,0.12); }
+  .field textarea { resize: vertical; min-height: 70px; }
+  .field select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+
+  .form-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+  .act-btn { padding: 12px 26px; border-radius: 10px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s; border: none; text-transform: uppercase; }
+  .act-btn-main { background: linear-gradient(135deg, var(--accent-fire), #c2410c); color: #fff; box-shadow: 0 4px 18px rgba(249,115,22,0.3); }
+  .act-btn-main:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 26px rgba(249,115,22,0.45); }
+  .act-btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
+  .act-btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+  .act-btn-ghost:hover { border-color: var(--accent-fire); color: var(--accent-fire); }
+
+  .msg-line { margin-top: 12px; font-size: 13px; color: var(--text-dim); min-height: 18px; }
+
+  /* ═══ INCIDENT LIST ═══ */
+  .incidents-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 26px 0 12px; }
+  .incidents-head h3 { font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.4px; color: var(--text-primary); }
+  .incidents-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; color: var(--text-secondary); }
+  .incident-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+  .incident-item:hover { border-color: var(--border-strong); }
+  .incident-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .incident-info { flex: 1; min-width: 0; }
+  .incident-title { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .incident-sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .incident-case { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-fire); background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.25); padding: 1px 7px; border-radius: 4px; }
+  .incident-date { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-dim); text-align: right; flex-shrink: 0; }
+  .empty-state { text-align: center; padding: 40px 16px; color: var(--text-dim); font-size: 13px; }
+
+  /* ═══ HOURS CALLOUT ═══ */
+  .pay-note { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.3); border-radius: 12px; margin-top: 14px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+  .pay-note b { color: var(--accent-amber); }
+  .pay-note .pay-icon { font-size: 22px; flex-shrink: 0; }
+
+  @media (max-width: 640px) {
+    .top-clock, .live-indicator { display: none; }
+    .brand-name { font-size: 15px; }
+    .cs-status { font-size: 12px; }
+    .cs-timer { font-size: 17px; }
+    .btn-dash { padding: 9px 14px; font-size: 13px; }
+    .sbtn { padding: 7px 11px; font-size: 12px; }
+    .top-meta { margin-left: 0; width: 100%; justify-content: space-between; }
+    .tab-btn { font-size: 12px; padding: 11px 10px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .page-title { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ FIXED TOP BAR ═══ -->
+<header class="tablet-top">
+  <div class="top-main">
+    <div class="top-brand">
+      <div class="brand-shield"><img src="images/logo.png" alt="Houston RP"></div>
+      <div>
+        <div class="brand-name">ITMDT · Incidentes y Turnos</div>
+        <div class="brand-sub">HFD · HDOT — Mobile Data Terminal</div>
+      </div>
+    </div>
+
+    <div class="top-user">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <div class="user-info">
+        <div class="user-name" id="user-name">Cargando…</div>
+        <div class="user-role idle" id="user-role">Off Duty</div>
+      </div>
+    </div>
+
+    <div class="top-meta">
+      <div class="balance-box">
+        <div class="balance-label">Saldo</div>
+        <div class="balance-value" id="user-balance">$---</div>
+      </div>
+      <div class="balance-box hours-box" title="Tus horas totales acumuladas">
+        <div class="balance-label">Tus horas</div>
+        <div class="balance-value hours-value" id="user-hours">--h --m</div>
+      </div>
+      <div class="live-indicator"><div class="live-dot"></div>Activo</div>
+      <div class="top-clock" id="clock">--:--:--</div>
+      <a class="btn-dash" href="dashboard.html">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- CONTROL DOCK: shift -->
+  <div class="control-dock">
+    <div class="cs-row">
+      <span class="cs-dot idle" id="shift-dot"></span>
+      <span class="cs-status idle" id="shift-status">Sin turno activo</span>
+    </div>
+
+    <div class="dept-bar" id="dept-bar"></div>
+
+    <div class="cs-timer-wrap">
+      <div class="cs-timer-label">Horas de servicio</div>
+      <div class="cs-timer" id="shift-timer">00:00:00</div>
+      <div class="cs-accum" id="shift-accum">Total acumulado: --</div>
+    </div>
+
+    <div class="shift-btns">
+      <button id="btn-start" class="sbtn start" onclick="handleStartShift()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Iniciar turno
+      </button>
+      <button id="btn-break" class="sbtn break" disabled onclick="handleStartBreak()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        Descanso
+      </button>
+      <button id="btn-resume" class="sbtn resume" disabled onclick="handleEndBreak()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Reanudar
+      </button>
+      <button id="btn-end" class="sbtn end" disabled onclick="handleEndShift()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14"/></svg>
+        Terminar turno
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ ACCESS OVERLAYS ═══ -->
+<div id="access-loading" class="access-overlay">
+  <div class="access-icon loading"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+  <div class="access-title">Verificando acceso...</div>
+  <div class="access-desc">Comprobando tu rol de HFD / HDOT en el servidor de Discord.</div>
+</div>
+
+<div id="access-denied" class="access-overlay hidden">
+  <div class="access-icon denied"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+  <div class="access-title">Acceso Denegado</div>
+  <div class="access-desc">Este canal es exclusivo de <strong>HFD</strong> (Houston Fire Department) y <strong>HDOT</strong> (Houston DOT). Si crees que es un error, contactá con el staff.</div>
+  <a href="dashboard.html" class="btn btn-primary">Volver al Dashboard</a>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div id="itmdt-content" class="hidden">
+  <div class="main-wrap">
+
+    <div class="page-head">
+      <div class="page-eyebrow">// Houston RP — HFD · HDOT</div>
+      <div class="page-title">Iniciar <span>turno</span> y <span>reportar</span> incidentes</div>
+    </div>
+
+    <!-- ═══ UNIDADES ITMDT EN SERVICIO (tiempo real) ═══ -->
+    <div class="on-duty-panel" id="on-duty-panel">
+      <div class="on-duty-head">
+        <div class="on-duty-title">
+          <span class="on-duty-dot"></span>
+          Unidades en servicio
+          <span class="on-duty-pill" id="on-duty-count">0</span>
+        </div>
+        <span class="on-duty-sub" id="on-duty-last">Actualizando...</span>
+      </div>
+      <div class="on-duty-list" id="on-duty-list">
+        <div class="on-duty-empty">Cargando unidades...</div>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-hours" onclick="switchTab('hours')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Registro de Horas
+      </button>
+      <button class="tab-btn" id="tab-incidents" onclick="switchTab('incidents')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        Incidentes
+      </button>
+    </div>
+
+    <!-- ── TAB: HORAS ── -->
+    <div class="section active" id="sec-hours">
+      <div class="panel">
+        <div class="panel-title">🕐 Turno de servicio</div>
+        <div class="panel-sub">Seleccioná tu departamento e iniciá el turno para registrar tus horas. El sueldo se acumula por hora según tu rango.</div>
+
+        <div class="dept-bar" id="dept-bar-inner"></div>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;">
+          <button id="sec-btn-start" class="sbtn start" onclick="handleStartShift()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Iniciar turno
+          </button>
+          <button id="sec-btn-end" class="sbtn end" disabled onclick="handleEndShift()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14"/></svg>
+            Terminar turno
+          </button>
+        </div>
+        <div id="sec-shift-status" style="margin-top:12px;font-size:12.5px;color:var(--text-dim);line-height:1.6;"></div>
+
+        <div class="pay-note">
+          <div class="pay-icon">💰</div>
+          <div>Tu salario se calcula <b>por hora trabajada</b> según el rango que te asignó el Alto Mando (tabla de rangos en <b>manage-shift</b>). Al iniciar el turno arranca la acumulación y al terminarlo se cierra el tramo. El dinero acumulado lo <b>cobrás desde el Dashboard</b> con el botón de pago del turno.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: INCIDENTES ── -->
+    <div class="section" id="sec-incidents">
+      <div class="panel">
+        <div class="panel-title">🚨 Reporte de Incidente</div>
+        <div class="panel-sub">Completá los campos obligatorios marcados con <span style="color:var(--accent-red);">*</span>. El reporte se guarda en el sistema y se notifica al canal de incidentes de Discord.</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Tipo de incidente <span class="req">*</span></label>
+            <select id="inc-type" required>
+              <option value="">— Seleccione —</option>
+              <option value="Incidente">Incidente</option>
+              <option value="Incendio">Incendio</option>
+              <option value="Emergencia médica">Emergencia médica</option>
+              <option value="Accidente de tránsito">Accidente de tránsito</option>
+              <option value="Rescate">Rescate</option>
+              <option value="Peligro en la vía">Peligro en la vía</option>
+              <option value="Material peligroso">Material peligroso</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Fecha y hora <span class="req">*</span></label>
+            <input id="inc-datetime" type="datetime-local" required>
+          </div>
+          <div class="field full">
+            <label>Empleado(s) involucrado(s) <span class="req">*</span></label>
+            <textarea id="inc-employees" placeholder="Ingresa nombres, número de placa, ID de ciudadano, departamento y rango." required></textarea>
+          </div>
+          <div class="field full">
+            <label>Civil(es) involucrado(s) <span class="req">*</span></label>
+            <textarea id="inc-civils" placeholder="Ingresa nombres completos, ID de ciudadano y demás información." required></textarea>
+          </div>
+          <div class="field full">
+            <label>Vehículo(s) involucrado(s)</label>
+            <textarea id="inc-vehicles" placeholder="Placa, modelo, color, VIN, propietario o ID del vehículo."></textarea>
+          </div>
+          <div class="field full">
+            <label>Ubicación del incidente <span class="req">*</span></label>
+            <input id="inc-location" type="text" placeholder="Ejemplo: Calle Principal, Zona Norte, Código Postal." required>
+          </div>
+          <div class="field full">
+            <label>Descripción detallada <span class="req">*</span></label>
+            <textarea id="inc-description" placeholder="Describe cronológicamente lo sucedido, acciones tomadas, evidencia encontrada y cualquier detalle." style="min-height:110px;" required></textarea>
+          </div>
+          <div class="field">
+            <label>Testigos</label>
+            <textarea id="inc-witnesses" placeholder="Nombres, teléfonos o ID de ciudadano de los testigos."></textarea>
+          </div>
+          <div class="field">
+            <label>Lesiones / Daños</label>
+            <textarea id="inc-damages" placeholder="Lesiones sufridas y daños materiales a vehículos o propiedades."></textarea>
+          </div>
+          <div class="field">
+            <label>Nombre del oficial <span class="req">*</span></label>
+            <input id="inc-officer-name" type="text" placeholder="Nombre completo" required>
+          </div>
+          <div class="field">
+            <label>Número de placa <span class="req">*</span></label>
+            <input id="inc-officer-badge" type="text" placeholder="Placa" required>
+          </div>
+          <div class="field full">
+            <label>Departamento</label>
+            <input id="inc-dept" type="text" placeholder="HFD / HDOT" readonly>
+          </div>
+          <div class="field full">
+            <label>Observaciones adicionales</label>
+            <textarea id="inc-notes" placeholder="Información adicional."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="act-btn act-btn-main" id="btn-submit-incident" onclick="submitIncident()">📤 Enviar reporte</button>
+          <button class="act-btn act-btn-ghost" onclick="clearIncidentForm()">🗑️ Limpiar formulario</button>
+        </div>
+        <div class="msg-line" id="incident-msg"></div>
+      </div>
+
+      <div class="incidents-head">
+        <h3>📁 Mis incidentes registrados</h3>
+        <span class="incidents-count" id="incidents-count">0</span>
+      </div>
+      <div id="incidents-list">
+        <div class="empty-state">Cargando tus incidentes...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toast-text"></span></div>
+
+<script src="assets/auth.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const MAX_SHIFT_SECONDS = 10 * 60 * 60;
+  const PRESENCE_FAIL_THRESHOLD = 3;
+
+  const HFD_ROLE = '1414695837258485780';
+  const HDOT_ROLE = '1414695846552801421';
+
+  const DEPT_NAMES = {
+    hfd: '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> HFD',
+    dot: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;"><path d="M4 19 6 5"/><path d="M20 19 18 5"/><path d="M12 5v2"/><path d="M12 11v2"/><path d="M12 17v2"/></svg> HDOT'
+  };
+  const DEPT_LABEL = { hfd: 'HFD', dot: 'HDOT' };
+
+  const API_BASE = window.location.port === '3001' ? 'http://localhost:3001' : '';
+
+  let session = null;
+  let userId = null;
+  let userName = null;
+  let robloxId = null;
+
+  let currentShift = null;
+  let shiftStartTime = null;
+  let breakAccumulated = 0;
+  let breakStartTime = null;
+  let currentStatusCode = null;
+  let timerInterval = null;
+  let presenceInterval = null;
+  let presenceFailCount = 0;
+  let _over10hTriggered = false;
+  let _autoEndRunning = false;
+  let startShiftInProgress = false;
+  let allowedDepts = [];
+
+  function $(id) { return document.getElementById(id); }
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  let toastTimer = null;
+  function showToast(msg, type) {
+    const t = $('toast');
+    const txt = $('toast-text');
+    if (!t || !txt) return;
+    txt.textContent = msg;
+    t.className = 'toast' + (type ? ' ' + type : '');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); }, 3200);
+  }
+
+  function formatTime(seconds) {
+    if (seconds < 0) seconds = 0;
+    const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    return h + ':' + m + ':' + s;
+  }
+
+  // ── ACCESS: SOLO HFD / HDOT ──
+  async function getRoleSet() {
+    const roles = new Set();
+    try {
+      if (typeof hrpFetchGuildMember === 'function') {
+        const member = await hrpFetchGuildMember();
+        ((member && member.roles) || []).forEach(function (r) { roles.add(r); });
+      }
+    } catch (e) {}
+    try {
+      if (typeof supaSelect === 'function') {
+        const members = await supaSelect('police_members', 'role_id', { discord_id: 'eq.' + session.id });
+        (members || []).forEach(function (m) { if (m.role_id) roles.add(String(m.role_id)); });
+      }
+    } catch (e) {}
+    return roles;
+  }
+
+  async function resolveAccess() {
+    if (!session || !session.id) return [];
+    const depts = [];
+
+    // 1) Edge function (bot de Discord, autoritativo) — devuelve TODOS los departamentos permitidos.
+    try {
+      if (typeof hrpCallCheckPoliceRole === 'function') {
+        const result = await hrpCallCheckPoliceRole({
+          discord_id: session.id,
+          username: session.username || 'Unknown',
+        });
+        if (result) {
+          const dd = result.departments;
+          if (dd && typeof dd === 'object') {
+            if (dd.hfd) depts.push('hfd');
+            if (dd.dot || dd.hdot) depts.push('dot');
+          }
+          if (result.allowed === true && depts.length === 0) {
+            depts.push('hfd', 'dot');
+          }
+        }
+      }
+    } catch (e) {}
+
+    // 2) Miembro del servidor OAuth + 3) police_members — complementan el resultado.
+    const roles = await getRoleSet();
+    if (roles.has(HFD_ROLE) && depts.indexOf('hfd') === -1) depts.push('hfd');
+    if (roles.has(HDOT_ROLE) && depts.indexOf('dot') === -1) depts.push('dot');
+
+    return depts.filter(function (v, i) { return depts.indexOf(v) === i; });
+  }
+
+  async function checkAccess() {
+    session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
+    if (!session || !session.id) {
+      const _p = window.location.pathname.split('/').pop() || 'index.html';
+      if (_p !== 'index.html') { try { localStorage.setItem('hrp_redirect', _p); } catch (e) {} }
+      window.location.href = 'index.html';
+      return false;
+    }
+    userId = session.id;
+    userName = session.username || 'Oficial';
+
+    allowedDepts = await resolveAccess();
+    $('access-loading').classList.add('hidden');
+    if (allowedDepts.length === 0) {
+      $('access-denied').classList.remove('hidden');
+      return false;
+    }
+    if (typeof hrpSetCachedDepartments === 'function') hrpSetCachedDepartments(allowedDepts);
+    $('itmdt-content').classList.remove('hidden');
+    buildDeptBar();
+    return true;
+  }
+
+  // ── USER / BALANCE / CLOCK ──
+  function loadUser() {
+    session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
+    if (session) {
+      userId = session.id;
+      userName = session.username || 'Oficial';
+      const avatarEl = $('user-avatar');
+      if (avatarEl) {
+        avatarEl.innerHTML = session.avatar
+          ? '<img src="https://cdn.discordapp.com/avatars/' + session.id + '/' + session.avatar + '.png">'
+          : (userName.charAt(0) || '?').toUpperCase();
+      }
+      $('user-name').textContent = userName;
+    }
+  }
+
+  async function loadBalance() {
+    if (typeof hrpGetBalance !== 'function') return;
+    const bal = await hrpGetBalance(userId);
+    const el = $('user-balance');
+    if (el) el.textContent = hrpFormatBalance(bal);
+  }
+
+  let selectedDept = null;
+
+  function selectDepartment(dept) {
+    selectedDept = dept;
+    document.querySelectorAll('.dept-chip').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.dept === dept);
+    });
+    const deptInput = $('inc-dept');
+    if (deptInput) deptInput.value = DEPT_LABEL[dept] || dept.toUpperCase();
+    try { localStorage.setItem('hrp_selected_dept', dept); } catch (e) {}
+  }
+  window.selectDepartment = selectDepartment;
+
+  function buildDeptBar() {
+    const bars = [$('dept-bar'), $('dept-bar-inner')];
+    const emChips = [];
+    bars.forEach(function (bar) {
+      if (!bar) return;
+      bar.innerHTML = '';
+      allowedDepts.forEach(function (dept) {
+        const chip = document.createElement('div');
+        chip.className = 'dept-chip';
+        chip.dataset.dept = dept;
+        chip.innerHTML = DEPT_NAMES[dept] || dept.toUpperCase();
+        chip.onclick = function () { selectDepartment(dept); };
+        bar.appendChild(chip);
+        emChips.push(chip);
+      });
+      if (allowedDepts.length === 0) {
+        bar.innerHTML = '<span style="font-size:10.5px;color:var(--text-dim);font-family:JetBrains Mono,monospace;">Sin departamentos asignados</span>';
+      }
+    });
+    let saved = null;
+    try { saved = localStorage.getItem('hrp_selected_dept'); } catch (e) {}
+    if (currentShift && currentShift.department) selectDepartment(currentShift.department);
+    else if (saved && allowedDepts.indexOf(saved) !== -1) selectDepartment(saved);
+    else selectDepartment(allowedDepts[0] || '');
+  }
+
+  function updateRoleLabel() {
+    const el = $('user-role');
+    if (!el) return;
+    if (currentShift) {
+      el.className = 'user-role';
+      el.textContent = 'On Duty · ' + (DEPT_LABEL[currentShift.department] || (currentShift.department || '').toUpperCase());
+    } else {
+      el.className = 'user-role idle';
+      el.textContent = 'Off Duty';
+    }
+  }
+
+  // ── ROBLOX PRESENCE (ER:LC) ──
+  async function getRobloxId() {
+    try {
+      const data = await supaSelect('characters', 'roblox_id', { user_discord: 'eq.' + userId });
+      if (data && data[0] && data[0].roblox_id) {
+        robloxId = String(data[0].roblox_id);
+        return robloxId;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  async function checkRobloxPresence() {
+    if (!robloxId) return { inServer: false, team: null };
+    try {
+      const res = await fetch(API_BASE + '/api/erlc/check/' + robloxId);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      return { inServer: data.inServer === true, team: data.team || null };
+    } catch (e) {
+      try {
+        const res = await fetch('/.netlify/functions/erlc-check/' + robloxId);
+        if (res.status === 503) return { inServer: null, team: null };
+        if (!res.ok) return { inServer: null, team: null };
+        const data = await res.json();
+        return { inServer: data.inServer === true, team: data.team || null };
+      } catch (err) {
+        return { inServer: null, team: null };
+      }
+    }
+  }
+
+  async function requireRobloxPresence() {
+    if (!robloxId) {
+      const id = await getRobloxId();
+      if (!id) {
+        showToast('No tenés una cuenta de Roblox vinculada. Creá un personaje en Characters.', 'error');
+        return false;
+      }
+    }
+    const result = await checkRobloxPresence();
+    if (result.inServer === null) return true;
+    if (result.inServer !== true) {
+      showToast('⛔ No estás en el servidor de ER:LC. Conectate al servidor para iniciar tu turno.', 'error');
+      return false;
+    }
+    return true;
+  }
+
+  // ── SHIFT LOCAL STATE ──
+  function saveLocalState() {
+    const state = { shiftId: currentShift ? currentShift.id : null, startTime: shiftStartTime, breakAccumulated: breakAccumulated, breakStartTime: breakStartTime };
+    localStorage.setItem('hrp_shift_state', JSON.stringify(state));
+  }
+  function clearLocalState() {
+    localStorage.removeItem('hrp_shift_state');
+  }
+
+  async function loadAccumulatedHours() {
+    const el = $('shift-accum');
+    const hoursEl = $('user-hours');
+    if (!userId) return;
+    try {
+      const [shifts, adjustments] = await Promise.all([
+        supaSelect('police_shift_sessions', 'total_seconds', { discord_id: 'eq.' + userId, status: 'eq.completed' }).catch(function () { return []; }),
+        supaSelect('police_hours_adjustments', 'adjustment_seconds', { discord_id: 'eq.' + userId }).catch(function () { return []; })
+      ]);
+      let total = 0;
+      (shifts || []).forEach(function (s) { total += (s.total_seconds || 0); });
+      (adjustments || []).forEach(function (a) { total += (a.adjustment_seconds || 0); });
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const txt = 'Total acumulado: ' + h + 'h ' + m + 'm';
+      if (el) el.textContent = txt;
+      if (hoursEl) {
+        hoursEl.textContent = h + 'h ' + m + 'm';
+        hoursEl.title = txt + (total >= 36000 ? ' · alcanzaste las 10h' : '');
+        if (total >= 36000) hoursEl.classList.add('hours-max');
+      }
+    } catch (e) {
+      if (el) el.textContent = 'Total acumulado: --';
+      if (hoursEl) hoursEl.textContent = '--h --m';
+    }
+  }
+
+  // ── PRESENCE POLLING ──
+  function startPresencePolling() {
+    stopPresencePolling();
+    presenceFailCount = 0;
+    presenceInterval = setInterval(async function () {
+      if (!currentShift) { stopPresencePolling(); return; }
+      if (!robloxId) {
+        try { await getRobloxId(); } catch (e) {}
+        if (!robloxId) return;
+      }
+      const result = await checkRobloxPresence();
+      if (result.inServer === null) {
+        presenceFailCount = 0;
+      } else if (result.inServer === false) {
+        presenceFailCount++;
+        if (presenceFailCount >= PRESENCE_FAIL_THRESHOLD) {
+          _autoEndShift('completed', '🚪 Saliste de ER:LC (o cambiaste de dispositivo). El turno se cerró automáticamente.');
+        }
+      } else {
+        presenceFailCount = 0;
+      }
+    }, 5000);
+  }
+
+  function stopPresencePolling() {
+    if (presenceInterval) {
+      clearInterval(presenceInterval);
+      presenceInterval = null;
+    }
+  }
+
+  // ── AUTO-FIN ──
+  async function _autoEndShift(finalStatus, reason) {
+    if (_autoEndRunning || !currentShift) return;
+    _autoEndRunning = true;
+    const shift = currentShift;
+    const startMs = new Date(shift.start_time).getTime();
+    let elapsed = Math.max(0, Math.floor((Date.now() - startMs) / 1000) - (breakAccumulated || 0));
+    if (breakStartTime) elapsed -= Math.floor((Date.now() - breakStartTime) / 1000);
+    if (elapsed < 0) elapsed = 0;
+    const totalSeconds = finalStatus === 'completed' ? Math.min(elapsed, MAX_SHIFT_SECONDS) : 0;
+
+    stopPresencePolling();
+    stopTimer();
+    try {
+      await supaUpdate('police_shift_sessions', {
+        status: finalStatus,
+        end_time: new Date().toISOString(),
+        total_seconds: totalSeconds
+      }, { id: 'eq.' + shift.id });
+    } catch (e) {}
+
+    currentShift = null;
+    shiftStartTime = null;
+    breakStartTime = null;
+    breakAccumulated = 0;
+    _over10hTriggered = false;
+    clearLocalState();
+    renderState();
+    loadAccumulatedHours();
+    if (typeof hrpPayEnd === 'function') hrpPayEnd(userId).catch(function () {});
+    loadBalance();
+    showToast(reason, 'error');
+    _autoEndRunning = false;
+  }
+
+  // ── UI STATES ──
+  function renderState() {
+    const dot = $('shift-dot');
+    const status = $('shift-status');
+    const timer = $('shift-timer');
+    const secStart = $('sec-btn-start');
+    const secEnd = $('sec-btn-end');
+    const secStatus = $('sec-shift-status');
+    if (!currentShift) {
+      dot.className = 'cs-dot idle';
+      status.className = 'cs-status idle';
+      status.textContent = 'Sin turno activo';
+      timer.textContent = '00:00:00';
+      $('btn-start').disabled = false;
+      $('btn-break').disabled = true;
+      $('btn-resume').disabled = true;
+      $('btn-end').disabled = true;
+      if (secStart) secStart.disabled = false;
+      if (secEnd) secEnd.disabled = true;
+      if (secStatus) secStatus.textContent = 'Sin turno activo. Elegí tu departamento e iniciá el turno para registrar horas.';
+      currentStatusCode = null;
+      updateRoleLabel();
+      return;
+    }
+    if (currentShift.status === 'break') {
+      dot.className = 'cs-dot break';
+      status.className = 'cs-status break';
+      status.textContent = 'En descanso';
+    } else {
+      dot.className = 'cs-dot active';
+      status.className = 'cs-status active';
+      status.textContent = 'En servicio';
+    }
+    $('btn-start').disabled = true;
+    $('btn-break').disabled = currentShift.status === 'break';
+    $('btn-resume').disabled = currentShift.status !== 'break';
+    $('btn-end').disabled = false;
+    if (secStart) secStart.disabled = true;
+    if (secEnd) secEnd.disabled = false;
+    if (secStatus) secStatus.textContent = 'Turno activo · ' + (DEPT_LABEL[currentShift.department] || currentShift.department) + ' · ' + (currentShift.status === 'break' ? 'En descanso' : 'En servicio');
+    currentStatusCode = currentShift.status_code || null;
+    updateRoleLabel();
+  }
+
+  // ── TIMER ──
+  function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+  }
+  function stopTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    $('shift-timer').textContent = '00:00:00';
+  }
+  function updateTimer() {
+    if (!shiftStartTime) { $('shift-timer').textContent = '00:00:00'; return; }
+    let elapsed = Math.floor((Date.now() - shiftStartTime) / 1000) - breakAccumulated;
+    if (breakStartTime) elapsed -= Math.floor((Date.now() - breakStartTime) / 1000);
+    if (elapsed < 0) elapsed = 0;
+    $('shift-timer').textContent = formatTime(elapsed);
+    if (elapsed >= MAX_SHIFT_SECONDS && !_over10hTriggered) {
+      _over10hTriggered = true;
+      _autoEndShift('completed', '⏱️ Límite de 10 horas alcanzado. El turno se cortó y se registraron solo 10 horas.');
+    }
+  }
+
+  function setLoading(btnId, loading, text) {
+    const btn = $(btnId);
+    if (!btn) return;
+    if (loading) {
+      btn._orig = btn.innerHTML;
+      btn.innerHTML = text || 'Procesando...';
+      btn.disabled = true;
+    } else {
+      btn.innerHTML = btn._orig || btn.innerHTML;
+    }
+  }
+
+  // ── SHIFT HANDLERS ──
+  async function _handleStartShift() {
+    if (startShiftInProgress) return;
+    if (typeof hrpStartShift !== 'function') {
+      showToast('La sesión aún no cargó. Recargá la página e intentá de nuevo.', 'error');
+      return;
+    }
+    if (currentShift) { showToast('Ya tenés un turno activo. Finalizalo antes de iniciar uno nuevo.', 'warn'); return; }
+    if (!selectedDept) { showToast('Seleccioná un departamento primero', 'error'); return; }
+    if (!userId) { showToast('No hay sesión activa. Iniciá sesión con Discord de nuevo.', 'error'); return; }
+    startShiftInProgress = true;
+    setLoading('btn-start', true, 'Iniciando...');
+    try {
+      const canStart = await requireRobloxPresence();
+      if (!canStart) return;
+      const result = await hrpStartShift(userId, userName, selectedDept);
+      if (result) {
+        currentShift = result;
+        shiftStartTime = new Date(result.start_time).getTime();
+        breakAccumulated = result.break_duration || 0;
+        breakStartTime = (result.status === 'break' && result.break_start) ? new Date(result.break_start).getTime() : null;
+        renderState();
+        startTimer();
+        startPresencePolling();
+        saveLocalState();
+        loadOnlineUnits();
+        if (typeof hrpPayStart === 'function') {
+          hrpPayStart(userId, userName, result.department).catch(function () {});
+        }
+        if (result.start_time && new Date(result.start_time).getTime() < Date.now() - 60 * 1000) {
+          showToast('🔁 Ya tenías un turno iniciado; se reanudó.', 'warn');
+        } else {
+          showToast('Servicio iniciado correctamente');
+        }
+      } else {
+        showToast('Error al iniciar servicio. Revisá la consola (F12).', 'error');
+      }
+    } catch (err) {
+      console.error('Start shift error:', err);
+      showToast('Error al iniciar servicio: ' + (err && err.message ? err.message : 'intenta de nuevo'), 'error');
+    } finally {
+      setLoading('btn-start', false);
+      startShiftInProgress = false;
+    }
+  }
+
+  async function _handleStartBreak() {
+    if (typeof hrpStartBreak !== 'function' || !currentShift) return;
+    setLoading('btn-break', true, 'Cargando...');
+    const ok = await hrpStartBreak(currentShift.id);
+    setLoading('btn-break', false);
+    if (ok) {
+      breakStartTime = Date.now();
+      currentShift.status = 'break';
+      renderState();
+      saveLocalState();
+      loadOnlineUnits();
+      showToast('Descanso iniciado');
+    } else {
+      showToast('Error al iniciar descanso', 'error');
+    }
+  }
+
+  async function _handleEndBreak() {
+    if (typeof hrpEndBreak !== 'function' || !currentShift || !breakStartTime) return;
+    setLoading('btn-resume', true, 'Cargando...');
+    const ok = await hrpEndBreak(currentShift.id, new Date(breakStartTime).toISOString());
+    setLoading('btn-resume', false);
+    if (ok) {
+      const breakSec = Math.floor((Date.now() - breakStartTime) / 1000);
+      breakAccumulated += breakSec;
+      breakStartTime = null;
+      currentShift.status = 'active';
+      renderState();
+      saveLocalState();
+      loadOnlineUnits();
+      showToast('Descanso terminado');
+    } else {
+      showToast('Error al terminar descanso', 'error');
+    }
+  }
+
+  async function _handleEndShift() {
+    if (typeof hrpEndShift !== 'function' || !currentShift) return;
+    stopPresencePolling();
+    setLoading('btn-end', true, 'Finalizando...');
+    const ok = await hrpEndShift(currentShift.id, currentShift.start_time, breakAccumulated);
+    setLoading('btn-end', false);
+    if (ok) {
+      stopTimer();
+      currentShift = null;
+      shiftStartTime = null;
+      breakStartTime = null;
+      breakAccumulated = 0;
+      clearLocalState();
+      renderState();
+      loadAccumulatedHours();
+      loadOnlineUnits();
+      if (typeof hrpPayEnd === 'function') hrpPayEnd(userId).catch(function () {});
+      loadBalance();
+      showToast('Servicio finalizado. Horas guardadas.');
+    } else {
+      showToast('Error al finalizar servicio', 'error');
+    }
+  }
+
+  window.handleStartShift = async function () { await _handleStartShift(); };
+  window.handleStartBreak = async function () { await _handleStartBreak(); };
+  window.handleEndBreak = async function () { await _handleEndBreak(); };
+  window.handleEndShift = async function () { await _handleEndShift(); };
+
+  async function loadActiveShift() {
+    if (typeof hrpGetActiveShift !== 'function') return;
+    currentShift = await hrpGetActiveShift(userId);
+    if (currentShift) {
+      const startMs = new Date(currentShift.start_time).getTime();
+      let accrued = Math.max(0, Math.floor((Date.now() - startMs) / 1000) - (currentShift.break_duration || 0));
+      if (currentShift.status === 'break' && currentShift.break_start) {
+        accrued -= Math.floor((Date.now() - new Date(currentShift.break_start).getTime()) / 1000);
+      }
+      if (accrued < 0) accrued = 0;
+      if (accrued >= MAX_SHIFT_SECONDS) {
+        _autoEndShift('completed', '⏱️ Límite de 10 horas alcanzado. El turno se cortó y se registraron solo 10 horas.');
+        return;
+      }
+      shiftStartTime = startMs;
+      breakAccumulated = currentShift.break_duration || 0;
+      if (currentShift.status === 'break' && currentShift.break_start) {
+        breakStartTime = new Date(currentShift.break_start).getTime();
+      }
+      renderState();
+      startTimer();
+      startPresencePolling();
+      saveLocalState();
+    } else {
+      clearLocalState();
+      renderState();
+    }
+  }
+
+  // ── TABS ──
+  function switchTab(name) {
+    $('tab-hours').classList.toggle('active', name === 'hours');
+    $('tab-incidents').classList.toggle('active', name === 'incidents');
+    $('sec-hours').classList.toggle('active', name === 'hours');
+    $('sec-incidents').classList.toggle('active', name === 'incidents');
+    if (name === 'incidents') loadMyIncidents();
+    if (name === 'hours') buildDeptBar();
+  }
+  window.switchTab = switchTab;
+
+  // ── INCIDENT FORM ──
+  function getIncidentData() {
+    return {
+      type: $('inc-type').value,
+      datetime: $('inc-datetime').value,
+      employees: $('inc-employees').value.trim(),
+      civils: $('inc-civils').value.trim(),
+      vehicles: $('inc-vehicles').value.trim(),
+      location: $('inc-location').value.trim(),
+      description: $('inc-description').value.trim(),
+      witnesses: $('inc-witnesses').value.trim(),
+      damages: $('inc-damages').value.trim(),
+      officer_name: $('inc-officer-name').value.trim(),
+      officer_badge: $('inc-officer-badge').value.trim(),
+      officer_dept: $('inc-dept').value.trim(),
+      notes: $('inc-notes').value.trim()
+    };
+  }
+
+  function validateIncidentForm() {
+    const fields = [
+      { id: 'inc-type', name: 'Tipo de incidente' },
+      { id: 'inc-datetime', name: 'Fecha y hora' },
+      { id: 'inc-employees', name: 'Empleados involucrados' },
+      { id: 'inc-civils', name: 'Civiles involucrados' },
+      { id: 'inc-location', name: 'Ubicación' },
+      { id: 'inc-description', name: 'Descripción' },
+      { id: 'inc-officer-name', name: 'Nombre del oficial' },
+      { id: 'inc-officer-badge', name: 'Número de placa' }
+    ];
+    for (const f of fields) {
+      const el = $(f.id);
+      if (!el || !el.value.trim()) {
+        showToast('⚠️ Campo obligatorio: ' + f.name, 'error');
+        if (el) el.focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  async function submitIncident() {
+    const msg = $('incident-msg');
+    const btn = $('btn-submit-incident');
+    if (msg) msg.textContent = '';
+    if (!validateIncidentForm()) return;
+
+    const data = getIncidentData();
+    if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+
+    try {
+      let caseId = null;
+      if (typeof hrpNextCaseId === 'function') {
+        try { caseId = await hrpNextCaseId('I'); } catch (e) {}
+      }
+
+      const row = {
+        type: 'incident',
+        officer_discord: userId,
+        officer_name: data.officer_name || userName || '—',
+        target_discord: userId,
+        target_name: data.officer_name || userName || '—',
+        case_id: caseId || null,
+        case_status: 'abierta',
+        incident_type: data.type || '',
+        officer_description: data.description || '',
+        reason: [
+          'Tipo: ' + (data.type || '—'),
+          'Ubicación: ' + (data.location || '—'),
+          'Fecha/Hora: ' + (data.datetime || '—'),
+          'Empleados: ' + (data.employees || '—'),
+          'Civiles: ' + (data.civils || '—'),
+          'Departamento: ' + (data.officer_dept || '—'),
+          'Descripción: ' + (data.description || '—'),
+          'Observaciones: ' + (data.notes || '—')
+        ].join(' | '),
+        amount: 0,
+        created_at: new Date().toISOString()
+      };
+
+      if (typeof hrpInsertPoliceRecord === 'function') {
+        await hrpInsertPoliceRecord(row);
+      }
+
+      try {
+        if (typeof hrpSendDiscordWebhook === 'function' && typeof HRP_DISCORD_WEBHOOKS === 'object' && HRP_DISCORD_WEBHOOKS.incident) {
+          await hrpSendDiscordWebhook(HRP_DISCORD_WEBHOOKS.incident, {
+            embeds: [hrpCreateDiscordEmbed({
+              title: '🚨 Nuevo Reporte de Incidente',
+              color: 0xf97316,
+              fields: [
+                { name: '📋 Tipo', value: data.type || '—', inline: true },
+                { name: '🏷️ Departamento', value: data.officer_dept || '—', inline: true },
+                { name: '📍 Ubicación', value: data.location || '—', inline: true },
+                { name: '📅 Fecha/Hora', value: data.datetime || '—', inline: true },
+                { name: '👮 Oficial', value: (data.officer_name || '—') + ' (' + (data.officer_badge || '—') + ')', inline: true },
+                { name: '📄 Descripción', value: (data.description || 'Sin descripción').substring(0, 500), inline: false }
+              ],
+              footer: 'ITMDT — HFD · HDOT',
+              timestamp: new Date().toISOString()
+            })]
+          });
+        }
+      } catch (e) {}
+
+      if (msg) msg.textContent = '✅ Reporte enviado exitosamente';
+      showToast('✅ Reporte enviado exitosamente');
+      clearIncidentForm();
+      loadMyIncidents();
+    } catch (err) {
+      if (msg) msg.textContent = '❌ Error al enviar: ' + (err.message || 'desconocido');
+      showToast('❌ Error al enviar el reporte', 'error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '📤 Enviar reporte'; }
+    }
+  }
+  window.submitIncident = submitIncident;
+
+  function clearIncidentForm() {
+    ['inc-type','inc-datetime','inc-employees','inc-civils','inc-vehicles','inc-location','inc-description',
+     'inc-witnesses','inc-damages','inc-officer-name','inc-officer-badge','inc-notes'].forEach(function (id) {
+      const el = $(id);
+      if (el) el.value = '';
+    });
+    const deptInput = $('inc-dept');
+    if (deptInput) deptInput.value = selectedDept ? (DEPT_LABEL[selectedDept] || selectedDept.toUpperCase()) : '';
+    showToast('🗑️ Formulario limpiado');
+  }
+  window.clearIncidentForm = clearIncidentForm;
+
+  // ── MIS INCIDENTES ──
+  async function loadMyIncidents() {
+    const list = $('incidents-list');
+    const countEl = $('incidents-count');
+    if (!list) return;
+    try {
+      const rows = await supaSelect('police_records', '*', { officer_discord: 'eq.' + userId, order: 'created_at.desc', limit: '20' }).catch(function () { return []; });
+      const myIncidents = (rows || []).filter(function (r) { return r.incident_type && String(r.incident_type).trim() !== ''; });
+      if (countEl) countEl.textContent = myIncidents.length;
+      if (myIncidents.length === 0) {
+        list.innerHTML = '<div class="empty-state">Aún no registraste incidentes. Cuando envíes un reporte, aparecerá acá.</div>';
+        return;
+      }
+      list.innerHTML = myIncidents.map(function (r) {
+        const type = r.incident_type || '—';
+        const loc = (r.reason || '').split(' | ').filter(function (p) { return p.indexOf('Ubicación:') === 0; })[0] || '';
+        const location = loc.replace('Ubicación: ', '') || '—';
+        const d = new Date(r.created_at);
+        const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+        const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        return '<div class="incident-item">' +
+          '<div class="incident-icon">🚨</div>' +
+          '<div class="incident-info">' +
+            '<div class="incident-title">' + esc(type) +
+              (r.case_id ? ' <span class="incident-case">' + esc(r.case_id) + '</span>' : '') + '</div>' +
+            '<div class="incident-sub">📍 ' + esc(location) + '</div>' +
+          '</div>' +
+          '<div class="incident-date">' + dateStr + '<br>' + timeStr + '</div>' +
+        '</div>';
+      }).join('');
+    } catch (e) {
+      list.innerHTML = '<div class="empty-state">Error al cargar tus incidentes.</div>';
+    }
+  }
+
+  // ── UNIDADES EN SERVICIO (HFD / HDOT, real-time) ──
+  const UNIT_DEPT_COLORS = { hfd: '#f97316', dot: '#3b82f6' };
+
+  async function loadOnlineUnits() {
+    const list = $('on-duty-list');
+    const countEl = $('on-duty-count');
+    const lastEl = $('on-duty-last');
+    if (!list) return;
+    try {
+      const rows = await supaSelect('police_shift_sessions', 'id,discord_id,username,department,status,start_time', { or: '(status.eq.active,status.eq.break)', order: 'start_time.asc', limit: '100' }).catch(function () { return []; });
+      const units = (rows || []).filter(function (o) { return o.department === 'hfd' || o.department === 'dot'; });
+      if (units.length === 0) {
+        list.innerHTML = '<div class="on-duty-empty">Sin unidades en servicio</div>';
+        if (countEl) countEl.textContent = '0';
+        if (lastEl) lastEl.textContent = 'Sin servicio activo';
+        return;
+      }
+      list.innerHTML = units.map(function (o) {
+        const initial = (o.username || '—').charAt(0).toUpperCase();
+        const isBreak = o.status === 'break';
+        const col = UNIT_DEPT_COLORS[o.department] || '#94a3b8';
+        const dept = DEPT_LABEL[o.department] || String(o.department || 'S/D').toUpperCase();
+        const since = o.start_time ? new Date(o.start_time).toLocaleTimeString() : '—';
+        return '<div class="on-duty-chip">' +
+          '<div class="on-duty-ava" style="background:' + col + '1f;border:1px solid ' + col + '55;">' + initial + '</div>' +
+          '<div class="on-duty-info">' +
+            '<div class="on-duty-name">' + esc(o.username || '—') + (isBreak ? ' <span class="on-duty-break">EN PAUSA</span>' : '') + '</div>' +
+            '<div class="on-duty-meta"><span class="on-duty-dept" style="color:' + col + '">' + dept + '</span> · ' + (isBreak ? 'Pausa' : 'En servicio') + ' desde ' + since + '</div>' +
+          '</div>' +
+          '<span class="on-duty-status ' + (isBreak ? 'break' : 'live') + '"></span>' +
+        '</div>';
+      }).join('');
+      if (countEl) countEl.textContent = units.length;
+      if (lastEl) lastEl.textContent = 'Actualizado ' + new Date().toLocaleTimeString();
+    } catch (_) {
+      if (countEl) countEl.textContent = '0';
+      if (lastEl) lastEl.textContent = 'Sin conexión';
+    }
+  }
+
+  function tick() {
+    const now = new Date();
+    const el = $('clock');
+    if (el) el.textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+
+  // ── INIT ──
+  async function init() {
+    loadUser();
+    session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
+    if (session) {
+      userId = session.id;
+      userName = session.username || 'Oficial';
+    }
+    const hasAccess = await checkAccess();
+    if (!hasAccess) return;
+
+    tick();
+    setInterval(tick, 1000);
+
+    loadBalance();
+    renderState();
+
+    getRobloxId();
+    await loadActiveShift();
+    loadAccumulatedHours();
+    loadMyIncidents();
+    loadOnlineUnits();
+    setInterval(loadOnlineUnits, 5000);
+
+    document.querySelectorAll('a[href]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        if (currentShift) saveLocalState();
+      });
+    });
+    window.addEventListener('pagehide', function () {
+      if (currentShift) saveLocalState();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

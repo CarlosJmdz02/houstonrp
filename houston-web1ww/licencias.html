@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOUSTON RP — DMV/CCW</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#3b6fb6">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-void:       #0d1424;
+    --bg-panel:      #131d2f;
+    --bg-card:       #17223a;
+    --bg-hover:      #1f304f;
+    --accent-blue:   #3b6fb6;
+    --accent-cyan:   #3b6fb6;
+    --accent-gold:   #e6a868;
+    --accent-red:    #e54850;
+    --accent-green:  #4acf8f;
+    --text-primary:  #e4e7ee;
+    --text-secondary:#8a93a7;
+    --text-dim:      #4c5a72;
+    --border:        #263552;
+    --border-glow:   #314466;
+    --glow-blue:     rgba(59,111,182,0.15);
+    --glow-cyan:     rgba(59,111,182,0.12);
+    --sidebar-w:     260px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-void);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(59,111,182,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(59,111,182,0.05) 0%, transparent 50%);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none; z-index: 9999;
+  }
+
+  /* ── AMBIENT BACKGROUND ── */
+  .ambient-bg {
+    position: fixed; inset: 0;
+    overflow: hidden; pointer-events: none; z-index: 0;
+  }
+  .ambient-bg span {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatUp 8s infinite;
+  }
+  .ambient-bg span:nth-child(1) { left: 10%; animation-delay: 0s; }
+  .ambient-bg span:nth-child(2) { left: 30%; animation-delay: 2s; width: 6px; height: 6px; }
+  .ambient-bg span:nth-child(3) { left: 50%; animation-delay: 4s; }
+  .ambient-bg span:nth-child(4) { left: 70%; animation-delay: 1s; width: 3px; height: 3px; }
+  .ambient-bg span:nth-child(5) { left: 85%; animation-delay: 3s; width: 5px; height: 5px; background: var(--accent-gold); }
+  .ambient-bg span:nth-child(6) { left: 20%; animation-delay: 5s; background: var(--accent-blue); }
+  .ambient-bg span:nth-child(7) { left: 65%; animation-delay: 2.5s; width: 3px; height: 3px; background: var(--accent-gold); }
+  .ambient-bg span:nth-child(8) { left: 40%; animation-delay: 6s; width: 5px; height: 5px; }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    20%  { opacity: 0.8; }
+    80%  { opacity: 0.4; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* ═══════════════════════════════════════
+     SIDEBAR
+  ═══════════════════════════════════════ */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  .sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-blue), transparent 80%);
+    animation: scanDown 4s ease-in-out infinite;
+  }
+
+  @keyframes scanDown {
+    0%   { opacity: 0.4; transform: scaleY(1); }
+    50%  { opacity: 1; }
+    100% { opacity: 0.4; transform: scaleY(1); }
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-shield {
+    width: 40px; height: 44px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .logo-shield svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 8px var(--accent-cyan));
+  }
+
+  .logo-text { display: flex; flex-direction: column; }
+
+  .logo-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+    Cuano: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .user-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--bg-hover);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 600;
+    color: var(--accent-cyan);
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 2px solid var(--border-glow);
+    box-shadow: 0 0 12px rgba(59,111,182,0.1);
+  }
+
+  .user-avatar img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  .user-info { min-width: 0; }
+  .user-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-rank { font-size: 10px; color: var(--text-dim); }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0;
+  }
+
+  .sidebar-nav::-webkit-scrollbar { width: 3px; }
+  .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .nav-section-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 16px 20px 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all .2s;
+    border-left: 2px solid transparent;
+    position: relative;
+  }
+
+  .nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  .nav-item.active {
+    color: var(--accent-cyan);
+    background: rgba(59,111,182,0.06);
+    border-left-color: var(--accent-cyan);
+  }
+
+  .nav-icon {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-icon svg { width: 100%; height: 100%; }
+
+  .nav-label { flex: 1; }
+
+  .nav-badge {
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--accent-blue);
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+
+  .sidebar-footer {
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+  }
+
+  .sidebar-footer > div:first-child {
+    margin-bottom: 10px;
+  }
+
+  .btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 12px;
+    border-radius: 6px;
+    transition: all .2s;
+  }
+
+  .btn-logout:hover {
+    background: rgba(229,72,80,0.1);
+    color: var(--accent-red);
+  }
+
+  /* ═══════════════════════════════════════
+     MAIN
+  ═══════════════════════════════════════ */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    background: rgba(8,12,24,0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--accent-green);
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    animation: pulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--accent-green);
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .topbar-clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  .content {
+    padding: 28px 32px;
+    flex: 1;
+  }
+
+  /* ═══════════════════════════════════════
+     TABS
+  ═══════════════════════════════════════ */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    background: var(--bg-panel);
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .tab {
+    flex: 1;
+    padding: 12px 20px;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all .3s;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  .tab:hover {
+    color: var(--text-secondary);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .tab.active {
+    color: var(--accent-cyan);
+    background: rgba(59,111,182,0.08);
+    box-shadow: 0 0 20px rgba(59,111,182,0.05);
+  }
+
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%; transform: translateX(-50%);
+    width: 30px; height: 2px;
+    background: var(--accent-cyan);
+    border-radius: 2px;
+  }
+
+  .tab-section { display: none; animation: fadeSlideIn .4s ease; }
+  .tab-section.active { display: block; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ═══════════════════════════════════════
+     PANELS
+  ═══════════════════════════════════════ */
+  .panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 24px;
+    transition: all .3s;
+  }
+
+  .panel:hover {
+    border-color: var(--border-glow);
+    box-shadow: 0 0 30px rgba(59,111,182,0.03);
+  }
+
+  .panel h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .panel .hint {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .search-bar-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-bar-row input {
+    background: var(--bg-void);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text-primary);
+    font-size: 13px;
+    outline: none;
+    transition: all .25s;
+  }
+
+  .search-bar-row input:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 16px rgba(59,111,182,0.08);
+  }
+
+  .search-bar-row input::placeholder { color: var(--text-dim); }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all .25s;
+    text-transform: uppercase;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent-blue), #1550c0);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(59,111,182,0.3);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, var(--accent-green), #00b85c);
+    color: #fff;
+  }
+
+  .btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0,230,118,0.3);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, var(--accent-red), #cc2e4a);
+    color: #fff;
+  }
+
+  .btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(229,72,80,0.3);
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--accent-gold), #c48800);
+    color: #fff;
+  }
+
+  .btn-gold:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(240,165,0,0.3);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .badge-success {
+    background: rgba(0,230,118,0.12);
+    color: var(--accent-green);
+    border: 1px solid rgba(0,230,118,0.25);
+  }
+
+  .badge-danger {
+    background: rgba(229,72,80,0.12);
+    color: var(--accent-red);
+    border: 1px solid rgba(229,72,80,0.25);
+  }
+
+  .badge-gold {
+    background: rgba(240,165,0,0.12);
+    color: var(--accent-gold);
+    border: 1px solid rgba(240,165,0,0.25);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+
+  /* ═══════════════════════════════════════
+     LICENSE CARDS
+  ═══════════════════════════════════════ */
+  .license-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .license-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: all .3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .license-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    animation: shimmer 3s infinite;
+  }
+
+  .license-card.drivers::before { background: linear-gradient(90deg, transparent, var(--accent-blue), transparent); }
+  .license-card.weapons::before { background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); }
+  .license-card.insurance::before { background: linear-gradient(90deg, transparent, var(--accent-green), transparent); }
+
+  @keyframes shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .license-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .license-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .license-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .license-icon.drivers {
+    background: rgba(59,111,182,0.12);
+    border: 1px solid rgba(59,111,182,0.2);
+  }
+
+  .license-icon.weapons {
+    background: rgba(240,165,0,0.12);
+    border: 1px solid rgba(240,165,0,0.2);
+  }
+
+  .license-icon.insurance {
+    background: rgba(34,211,110,0.12);
+    border: 1px solid rgba(34,211,110,0.2);
+  }
+
+  .license-card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .license-card .field {
+    margin-bottom: 14px;
+  }
+
+  .license-card .field label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .license-card .field input {
+    width: 100%;
+    background: var(--bg-void);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text-primary);
+    font-size: 13px;
+    outline: none;
+    transition: all .25s;
+  }
+
+  .license-card .field input:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 16px rgba(59,111,182,0.08);
+  }
+
+  .license-card .field input::placeholder { color: var(--text-dim); }
+
+  /* ═══════════════════════════════════════
+     MY LICENSES DISPLAY
+  ═══════════════════════════════════════ */
+  .my-license-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--bg-void);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: all .25s;
+  }
+
+  .my-license-row:hover {
+    border-color: var(--border-glow);
+  }
+
+  .my-license-row .lic-type-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .my-license-row .lic-info { flex: 1; }
+  .my-license-row .lic-info .lic-name { font-size: 14px; font-weight: 600; }
+  .my-license-row .lic-info .lic-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  .license-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .detail-item {
+    background: var(--bg-void);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .detail-item .label {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .detail-item .value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 2px;
+  }
+
+  /* ═══════════════════════════════════════
+     SEARCH RESULT
+  ═══════════════════════════════════════ */
+  .result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+    animation: fadeSlideIn .3s ease;
+  }
+
+  .result-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .result-card-header .discord-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  /* ═══════════════════════════════════════
+     TOAST
+  ═══════════════════════════════════════ */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    background: var(--bg-card);
+    border: 1px solid var(--accent-green);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 13px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.5);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all .25s;
+    z-index: 1000;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { border-color: var(--accent-red); }
+
+  /* ── STATUS PULSE ── */
+  .status-pulse {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  .status-pulse.active { background: var(--accent-green); box-shadow: 0 0 6px var(--accent-green); }
+  .status-pulse.revoked { background: var(--accent-red); box-shadow: 0 0 6px var(--accent-red); }
+  .status-pulse.expired { background: var(--text-dim); box-shadow: 0 0 6px var(--text-dim); }
+
+  /* ── LOADING SPINNER ── */
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent-cyan);
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar { width: 200px; }
+    .main { margin-left: 200px; }
+    .content { padding: 20px 16px; }
+    .topbar { padding: 12px 16px; }
+    .topbar-title { font-size: 18px; }
+    .license-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .tabs { flex-direction: column; }
+    .topbar-clock { display: none; }
+  }
+/* ═══════════════════════════════════════
+     SIDEBAR
+  ═══════════════════════════════════════ */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow: hidden;
+  }
+/* animated corner accent */
+  .sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-blue), transparent 80%);
+    animation: scanDown 4s ease-in-out infinite;
+  }
+.sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+.logo-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+.logo-shield {
+    width: 40px; height: 44px;
+    position: relative;
+    flex-shrink: 0;
+  }
+.logo-shield svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 8px var(--accent-cyan));
+  }
+.logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+.logo-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--text-primary);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+.logo-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent-cyan);
+    letter-spacing: 2px;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+/* user card */
+  .sidebar-user {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+.user-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+.user-avatar img {
+    width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+  }
+.user-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 1px; right: 1px;
+    width: 8px; height: 8px;
+    background: #4acf8f;
+    border-radius: 50%;
+    border: 2px solid var(--bg-panel);
+  }
+.user-info { min-width: 0; }
+.user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+.user-rank {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+/* NAV */
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+  }
+.nav-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 10px 6px;
+  }
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-bottom: 2px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+  }
+.nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--border-glow);
+  }
+.nav-item.active {
+    background: linear-gradient(90deg, rgba(59,111,182,0.15), rgba(59,111,182,0.05));
+    color: var(--accent-cyan);
+    border-color: rgba(59,111,182,0.3);
+  }
+.nav-item.active .nav-icon { color: var(--accent-cyan); }
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 20%; bottom: 20%;
+    width: 3px;
+    background: var(--accent-cyan);
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 8px var(--accent-cyan);
+  }
+.nav-icon {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+.nav-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+/* LOGOUT */
+  .sidebar-footer {
+    padding: 16px 12px;
+    border-top: 1px solid var(--border);
+  }
+.btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 16px;
+    background: rgba(229,72,80,0.08);
+    border: 1px solid rgba(229,72,80,0.25);
+    border-radius: 8px;
+    color: #c7b2b2;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+.btn-logout:hover {
+    background: rgba(229,72,80,0.18);
+    border-color: rgba(229,72,80,0.6);
+    color: #e54850;
+    box-shadow: 0 0 16px rgba(229,72,80,0.2);
+    transform: translateX(2px);
+  }
+.panel-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+</style>
+<link rel="stylesheet" href="assets/responsive.css">
+<link rel="stylesheet" href="assets/hrp-dock.css">
+</head>
+<body>
+
+  <!-- AMBIENT BACKGROUND -->
+  <div class="ambient-bg">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+  <aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="logo-shield">
+        <img src="images/logo.png" alt="Houston RP" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 8px var(--accent-cyan));">
+      </div>
+      <div class="logo-text">
+        <div class="logo-title">HOUSTON RP</div>
+        <div class="logo-sub">Dashboard</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar" id="user-avatar">?</div>
+    <div class="user-info">
+      <div class="user-name" id="user-name">Cargando…</div>
+      <div class="user-rank" id="user-sub">Discord</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">General</div>
+    <a class="nav-item active" href="dashboard.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><span class="nav-label">Dashboard</span></a>
+    <a class="nav-item" href="app.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="nav-label">Characters</span></a>
+    <a class="nav-item" href="licencias.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">DMV/CCW</span></a>
+    <div class="nav-section-label">Economy</div>
+    
+    <a class="nav-item" href="marketplace.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div><span class="nav-label">Marketplace</span><span class="nav-badge">NEW</span></a>
+    <div class="nav-section-label">Gobierno</div>
+    <a class="nav-item" href="gobierno.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div><span class="nav-label">Portal Cívico</span><span class="nav-badge">NEW</span></a>
+    <div class="nav-section-label">Law Enforcement</div>
+    <a class="nav-item" href="mdt.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 8l10-5 10 5"/><path d="M12 8v13"/><path d="M4 12l8 5 8-5"/></svg></div><span class="nav-label">MDT</span></a>
+    <div class="nav-section-label">Developer</div>
+    <a class="nav-item" href="developer.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg></div><span class="nav-label">Developer</span><span class="nav-badge">Dev</span></a>
+    <div class="nav-section-label">Foundation</div>
+    <a class="nav-item" href="foundation.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">Foundation</span></a>
+    <div class="nav-section-label">System</div>
+    <a class="nav-item" href="#" onclick="event.preventDefault();localStorage.clear();window.location.href='index.html';"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><span class="nav-label">Logout</span></a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div style="padding:2px 12px 10px;border-bottom:1px solid var(--border);margin-bottom:10px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">Balance</div>
+      <div id="sidebar-balance" style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--accent-gold);margin-top:2px;">$---</div>
+    </div>
+    <a class="btn-logout" href="#" onclick="event.preventDefault(); localStorage.clear(); window.location.href='index.html';">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Cerrar Sesión
+    </a>
+  </div>
+
+</aside>
+
+  <!-- ═══════════════════════ MAIN ═══════════════════════ -->
+  <main class="main">
+
+    <header class="topbar">
+      <div class="topbar-title">DMV/CCW</div>
+      <div class="topbar-right">
+        <div class="live-indicator">
+          <div class="live-dot"></div>
+          Sistema Activo
+        </div>
+        <div class="topbar-clock" id="clock">--:--:--</div>
+      </div>
+    </header>
+
+<div class="content">
+
+      <!-- TABS -->
+      <div class="tabs">
+        <div class="tab active" data-tab="apply" onclick="switchTab('apply')">📋 Registrar</div>
+      </div>
+
+      <!-- TAB: APPLY -->
+      <div id="section-apply" class="tab-section active">
+
+        <div class="panel" id="my-licenses-panel" style="display:none;">
+          <h2>🎫 Mis Licencias</h2>
+          <p class="hint">Estas son tus licencias activas en el sistema.</p>
+          <div id="my-licenses-list"></div>
+        </div>
+
+        <div class="license-grid">
+          <!-- DRIVER'S LICENSE -->
+          <div class="license-card drivers">
+            <div class="license-card-header">
+              <div class="license-icon drivers">🚗</div>
+              <div class="license-card-title">Licencia de Conducir</div>
+            </div>
+            <p class="hint" style="margin-bottom:18px;font-size:12px;color:var(--text-dim);">Registra tu licencia para conducir vehículos en Houston RP. Tiene una validez de 1 semana.</p>
+            <div class="field">
+              <label>Nombre Completo</label>
+              <input id="dl-name" type="text" placeholder="ej. Juan Pérez" maxlength="60">
+            </div>
+            <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn-success" id="btn-apply-dl" onclick="applyLicense('drivers')">Registrar Licencia</button>
+              <button class="btn btn-gold" id="btn-renew-dl" onclick="renewLicense('drivers')">Renovar Licencia</button>
+              <span id="dl-result" style="font-size:12px;color:var(--text-dim);"></span>
+            </div>
+          </div>
+
+          <!-- WEAPONS LICENSE -->
+          <div class="license-card weapons">
+            <div class="license-card-header">
+              <div class="license-icon weapons">🔫</div>
+              <div class="license-card-title">Permiso de Armas</div>
+            </div>
+            <p class="hint" style="margin-bottom:18px;font-size:12px;color:var(--text-dim);">Registra tu permiso para portar armas en Houston RP. Tiene una validez de 1 semana.</p>
+            <div class="field">
+              <label>Nombre Completo</label>
+              <input id="wl-name" type="text" placeholder="ej. Juan Pérez" maxlength="60">
+            </div>
+            <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn-success" id="btn-apply-wl" onclick="applyLicense('weapons')">Registrar Permiso</button>
+              <button class="btn btn-gold" id="btn-renew-wl" onclick="renewLicense('weapons')">Renovar Permiso</button>
+              <span id="wl-result" style="font-size:12px;color:var(--text-dim);"></span>
+            </div>
+          </div>
+
+          <!-- VEHICLE INSURANCE (SEGURANZA) -->
+          <div class="license-card insurance">
+            <div class="license-card-header">
+              <div class="license-icon insurance">🛡️</div>
+              <div class="license-card-title">Seguranza de Vehículo</div>
+            </div>
+            <p class="hint" style="margin-bottom:18px;font-size:12px;color:var(--text-dim);">Asegura tu vehículo en Houston RP. Tiene una validez de 1 mes y cuesta <strong style="color:var(--accent-green);">$299</strong>.</p>
+            <div class="field">
+              <label>Nombre Completo</label>
+              <input id="ins-name" type="text" placeholder="ej. Juan Pérez" maxlength="60">
+            </div>
+            <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn-success" id="btn-apply-ins" onclick="applyLicense('insurance')">Contratar Seguranza</button>
+              <button class="btn btn-gold" id="btn-renew-ins" onclick="renewLicense('insurance')">Renovar Seguranza</button>
+              <span id="ins-result" style="font-size:12px;color:var(--text-dim);"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div class="toast" id="toast"><span id="toast-text"></span></div>
+
+  <script>
+    (function(){
+      const page = window.location.pathname.split('/').pop() || 'index.html';
+      document.querySelectorAll('.nav-item').forEach(a => {
+        const href = a.getAttribute('href');
+        if (href === page) a.classList.add('active');
+      });
+    })();
+  </script>
+  <script src="assets/auth.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const LICENSE_WEBHOOK_URL = 'https://discord.com/api/webhooks/1466065185088471273/l4G1ClfOUAi8uFEhxbMVkcgIjOhMSDpvpk8PMqCHeHay25gIMtWLWMzNhxrmh-DLYD4r';
+    let session = null;
+    let userId = null;
+    let userName = null;
+
+    let toastTimer = null;
+    function showToast(msg, isError) {
+      const t = $('toast');
+      const txt = $('toast-text');
+      if (!t || !txt) return;
+      txt.textContent = msg;
+      t.classList.remove('error');
+      if (isError) t.classList.add('error');
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    // ── CLOCK ──
+    function tick() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2,'0');
+      const m = String(now.getMinutes()).padStart(2,'0');
+      const s = String(now.getSeconds()).padStart(2,'0');
+      const el = $('clock');
+      if (el) el.textContent = `${h}:${m}:${s}`;
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // ── TABS ──
+    function switchTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+      document.querySelectorAll('.tab-section').forEach(s => s.classList.toggle('active', s.id === 'section-' + name));
+    }
+
+    // ── INIT ──
+    async function init() {
+      if (typeof hrpRequireSession !== 'function') { window.location.href = 'index.html'; return; }
+      session = hrpRequireSession();
+      if (!session) return;
+      userId = session.id;
+      userName = session.username || 'Usuario';
+
+      const avatarEl = $('user-avatar');
+      if (avatarEl) {
+        avatarEl.innerHTML = session.avatar
+          ? `<img src="https://cdn.discordapp.com/avatars/${session.id}/${session.avatar}.png">`
+          : (userName.charAt(0) || '?').toUpperCase();
+      }
+      $('user-name').textContent = userName;
+      $('user-sub').textContent = '@' + userName;
+
+      loadBalance();
+      loadMyLicenses();
+    }
+
+    async function loadBalance() {
+      try {
+        const b = await hrpGetBalance(userId);
+        const el = $('sidebar-balance');
+        if (el) el.textContent = hrpFormatBalance(b);
+      } catch {}
+    }
+
+    const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+    const MONTH_MS = 30 * 24 * 60 * 60 * 1000;
+
+    // ── Definiciones de cada licencia ──
+    const INSURANCE_PRICE = 299;
+    const LICENSE_META = {
+      drivers:   { name: 'Licencia de Conducir', icon: '🚗', rgb: '59,111,182',  period: WEEK_MS,  price: 0,             applyLabel: 'Registrar Licencia',  renewLabel: 'Renovar Licencia' },
+      weapons:   { name: 'Permiso de Armas',     icon: '🔫', rgb: '240,165,0',   period: WEEK_MS,  price: 0,             applyLabel: 'Registrar Permiso',   renewLabel: 'Renovar Permiso' },
+      insurance: { name: 'Seguranza de Vehículo', icon: '🛡️', rgb: '34,211,110', period: MONTH_MS, price: INSURANCE_PRICE, applyLabel: 'Contratar Seguranza', renewLabel: 'Renovar Seguranza' },
+    };
+    const LICENSE_ELEMENTS = {
+      drivers:   { input: 'dl-name',  result: 'dl-result',  applyBtn: 'btn-apply-dl', renewBtn: 'btn-renew-dl' },
+      weapons:   { input: 'wl-name',  result: 'wl-result',  applyBtn: 'btn-apply-wl', renewBtn: 'btn-renew-wl' },
+      insurance: { input: 'ins-name', result: 'ins-result', applyBtn: 'btn-apply-ins', renewBtn: 'btn-renew-ins' },
+    };
+    function licMeta(type) { return LICENSE_META[type] || LICENSE_META.drivers; }
+
+    // ── AUTO EXPIRE: marca como 'expired' las licencias activas vencidas ──
+    async function expireOldLicenses() {
+      try {
+        const data = await supaSelect('licenses', 'id,expires_at,status', { discord_id: `eq.${userId}`, status: 'eq.active' });
+        const now = Date.now();
+        for (const l of (data || [])) {
+          if (l.expires_at && new Date(l.expires_at).getTime() < now) {
+            try { await supaUpdate('licenses', { status: 'expired' }, { id: `eq.${l.id}` }); } catch (_) {}
+          }
+        }
+      } catch (_) {}
+    }
+
+    // ── LOAD MY LICENSES ──
+    async function loadMyLicenses() {
+      const panel = $('my-licenses-panel');
+      const list = $('my-licenses-list');
+      try {
+        await expireOldLicenses();
+        const data = await supaSelect('licenses', 'id,type,full_name,status,issued_at,expires_at', { discord_id: `eq.${userId}` });
+        if (!data || !data.length) { panel.style.display = 'none'; return; }
+        panel.style.display = '';
+        const now = Date.now();
+        list.innerHTML = data.map(l => {
+          const meta = licMeta(l.type);
+          const expired = l.expires_at && new Date(l.expires_at).getTime() < now;
+          const status = expired ? 'expired' : l.status;
+          const statusClass = status === 'active' ? 'badge-success' : status === 'revoked' ? 'badge-danger' : 'badge-gold';
+          const issued = new Date(l.issued_at).toLocaleDateString();
+          const expires = l.expires_at ? new Date(l.expires_at).toLocaleDateString() : '—';
+          return `<div class="my-license-row">
+            <div class="lic-type-icon" style="background:rgba(${meta.rgb},0.12);border:1px solid rgba(${meta.rgb},0.2)">${meta.icon}</div>
+            <div class="lic-info">
+              <div class="lic-name">${escHtml(meta.name)}</div>
+              <div class="lic-meta">${escHtml(l.full_name)} — Emitida: ${issued} — Vence: ${expires}</div>
+            </div>
+            <span class="badge ${statusClass}"><span class="status-pulse ${status}"></span>${status}</span>
+          </div>`;
+        }).join('');
+      } catch { panel.style.display = 'none'; }
+    }
+
+    function escHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s || '';
+      return d.innerHTML;
+    }
+
+    // ── APPLY LICENSE ──
+    async function applyLicense(type) {
+      const meta = licMeta(type);
+      const els = LICENSE_ELEMENTS[type];
+      const nameInput = els ? $(els.input) : null;
+      const resultEl = els ? $(els.result) : null;
+      const btn = els ? $(els.applyBtn) : null;
+      if (!nameInput || !resultEl || !btn) return;
+
+      const fullName = nameInput.value.trim();
+      if (!fullName || fullName.length < 2) {
+        resultEl.textContent = 'Ingresa un nombre valido';
+        resultEl.style.color = 'var(--accent-red)';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Procesando...';
+      resultEl.textContent = '';
+
+      try {
+        await expireOldLicenses();
+        const existing = await supaSelect('licenses', 'id,status,expires_at', { discord_id: `eq.${userId}`, type: `eq.${type}` });
+        const activeLicense = (existing || []).find(l => l.status === 'active' && (!l.expires_at || new Date(l.expires_at).getTime() > Date.now()));
+        if (activeLicense) {
+          resultEl.textContent = 'Ya tenes una licencia activa de este tipo';
+          resultEl.style.color = 'var(--accent-red)';
+          btn.disabled = false;
+          btn.textContent = meta.applyLabel;
+          return;
+        }
+
+        if (meta.price > 0) {
+          const bal = parseInt(await hrpGetBalance(userId)) || 0;
+          if (bal < meta.price) {
+            resultEl.textContent = `Necesitas $${meta.price} para contratarla (tienes $${bal})`;
+            resultEl.style.color = 'var(--accent-red)';
+            btn.disabled = false;
+            btn.textContent = meta.applyLabel;
+            return;
+          }
+          const paid = await hrpDeductBalance(userId, meta.price);
+          if (!paid) {
+            resultEl.textContent = 'No se pudo procesar el pago, intenta de nuevo';
+            resultEl.style.color = 'var(--accent-red)';
+            btn.disabled = false;
+            btn.textContent = meta.applyLabel;
+            return;
+          }
+        }
+
+        await supaInsert('licenses', {
+          discord_id: userId,
+          type: type,
+          full_name: fullName,
+          status: 'active',
+          issued_at: new Date().toISOString(),
+          expires_at: new Date(Date.now() + meta.period).toISOString()
+        });
+
+        try {
+          await hrpSendDiscordWebhook(LICENSE_WEBHOOK_URL, {
+            embeds: [hrpCreateDiscordEmbed({
+              title: `Nueva ${meta.name} registrada`,
+              color: type === 'weapons' ? 0xf0a500 : 0x22d36e,
+              fields: [
+                { name: 'Discord', value: userId || '—', inline: true },
+                { name: 'Nombre', value: fullName, inline: true },
+                { name: 'Tipo', value: meta.name, inline: true },
+                { name: 'Estado', value: 'active', inline: true },
+                ...(meta.price > 0 ? [{ name: 'Costo', value: `$${meta.price}`, inline: true }] : []),
+              ],
+            })],
+          });
+        } catch (_) {}
+
+        resultEl.textContent = meta.price > 0
+          ? `${meta.name} contratada correctamente ($${meta.price})`
+          : 'Licencia registrada correctamente';
+        resultEl.style.color = 'var(--accent-green)';
+        showToast(meta.price > 0 ? `${meta.name} contratada` : 'Licencia registrada correctamente');
+        nameInput.value = '';
+        loadBalance();
+        loadMyLicenses();
+      } catch (err) {
+        resultEl.textContent = 'Error: ' + (err.message || 'desconocido');
+        resultEl.style.color = 'var(--accent-red)';
+      }
+      btn.disabled = false;
+      btn.textContent = meta.applyLabel;
+    }
+
+    // ── RENEW LICENSE (extiende 1 semana / 1 mes) ──
+    async function renewLicense(type) {
+      const meta = licMeta(type);
+      const els = LICENSE_ELEMENTS[type];
+      const renewLabel = meta.renewLabel;
+      const btn = els ? $(els.renewBtn) : null;
+      const resultEl = els ? $(els.result) : null;
+      if (!btn || !resultEl) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Procesando...';
+      resultEl.textContent = '';
+
+      try {
+        await expireOldLicenses();
+        const existing = await supaSelect('licenses', 'id,status,expires_at', { discord_id: `eq.${userId}`, type: `eq.${type}` });
+        if (!existing || !existing.length) {
+          const noun = type === 'drivers' ? 'licencia' : type === 'weapons' ? 'permiso' : 'seguranza';
+          resultEl.textContent = `Primero registra tu ${noun} para poder renovarla`;
+          resultEl.style.color = 'var(--accent-red)';
+          btn.disabled = false;
+          btn.textContent = renewLabel;
+          return;
+        }
+
+        const now = Date.now();
+        const active = existing.find(l => l.status === 'active' && (!l.expires_at || new Date(l.expires_at).getTime() > now));
+        const target = active || existing.filter(l => l.status !== 'revoked').sort((a, b) => new Date(b.expires_at || 0) - new Date(a.expires_at || 0))[0];
+        if (!target) {
+          resultEl.textContent = 'Tu licencia fue revocada. Debes registrarla de nuevo.';
+          resultEl.style.color = 'var(--accent-red)';
+          btn.disabled = false;
+          btn.textContent = renewLabel;
+          return;
+        }
+
+        if (meta.price > 0) {
+          const bal = parseInt(await hrpGetBalance(userId)) || 0;
+          if (bal < meta.price) {
+            resultEl.textContent = `Necesitas $${meta.price} para renovarla (tienes $${bal})`;
+            resultEl.style.color = 'var(--accent-red)';
+            btn.disabled = false;
+            btn.textContent = renewLabel;
+            return;
+          }
+          const paid = await hrpDeductBalance(userId, meta.price);
+          if (!paid) {
+            resultEl.textContent = 'No se pudo procesar el pago, intenta de nuevo';
+            resultEl.style.color = 'var(--accent-red)';
+            btn.disabled = false;
+            btn.textContent = renewLabel;
+            return;
+          }
+        }
+
+        const base = (target.expires_at && new Date(target.expires_at).getTime() > now) ? new Date(target.expires_at).getTime() : now;
+        const newExp = new Date(base + meta.period).toISOString();
+        await supaUpdate('licenses', { expires_at: newExp, status: 'active' }, { id: `eq.${target.id}` });
+
+        try {
+          await hrpSendDiscordWebhook(LICENSE_WEBHOOK_URL, {
+            embeds: [hrpCreateDiscordEmbed({
+              title: `${meta.name} renovada`,
+              color: type === 'weapons' ? 0xf0a500 : 0x22d36e,
+              fields: [
+                { name: 'Discord', value: userId || '—', inline: true },
+                { name: 'Tipo', value: meta.name, inline: true },
+                { name: 'Nueva expiracion', value: new Date(newExp).toISOString(), inline: true },
+                ...(meta.price > 0 ? [{ name: 'Costo', value: `$${meta.price}`, inline: true }] : []),
+              ],
+            })],
+          });
+        } catch (_) {}
+
+        const periodLabel = type === 'insurance' ? '1 mes' : '1 semana';
+        resultEl.textContent = `Se renovo por ${periodLabel}, vence el ` + new Date(newExp).toLocaleDateString();
+        resultEl.style.color = 'var(--accent-green)';
+        showToast(renewLabel + ' correctamente');
+        loadBalance();
+        loadMyLicenses();
+      } catch (err) {
+        resultEl.textContent = 'Error: ' + (err.message || 'desconocido');
+        resultEl.style.color = 'var(--accent-red)';
+      }
+      btn.disabled = false;
+      btn.textContent = renewLabel;
+    }
+
+init();
+  </script>
+
+</body>
+</html>
+

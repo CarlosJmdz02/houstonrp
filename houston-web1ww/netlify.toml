@@ -1,0 +1,118 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Serve clean URLs (without .html) for the SPA
+[[redirects]]
+  from = "/index"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/economy"
+  to = "/economia.html"
+  status = 200
+
+[[redirects]]
+  from = "/economia"
+  to = "/economia.html"
+  status = 200
+
+[[redirects]]~
+  from = "/app"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/police"
+  to = "/police.html"
+  status = 200
+
+[[redirects]]
+  from = "/manage-shift"
+  to = "/manage-shift.html"
+  status = 200
+
+[[redirects]]
+  from = "/developer"
+  to = "/developer.html"
+  status = 200
+
+[[redirects]]
+  from = "/foundation"
+  to = "/foundation.html"
+  status = 200
+
+[[redirects]]
+  from = "/gobierno"
+  to = "/gobierno.html"
+  status = 200
+
+[[redirects]]
+  from = "/arrests"
+  to = "/arrests.html"
+  status = 200
+
+[[redirects]]
+  from = "/fines"
+  to = "/fines.html"
+  status = 200
+
+[[redirects]]
+  from = "/incident-report"
+  to = "/incident-report.html"
+  status = 200
+
+[[redirects]]
+  from = "/central-panel"
+  to = "/central-panel.html"
+  status = 200
+
+[[redirects]]
+  from = "/database-search"
+  to = "/database-search.html"
+  status = 200
+
+[[redirects]]
+  from = "/radio-communications"
+  to = "/radio-communications.html"
+  status = 200
+
+[[redirects]]
+  from = "/dispatch"
+  to = "/dispatch.html"
+  status = 200
+
+[[redirects]]
+  from = "/itmdt"
+  to = "/itmdt.html"
+  status = 200
+
+[[redirects]]
+  from = "/apps-support"
+  to = "/apps-support.html"
+  status = 200
+
+[[redirects]]
+  from = "/radio-communications"
+  to = "/radio-communications.html"
+  status = 200
+
+# Proxy API calls to Netlify Functions
+[[redirects]]
+  from = "/api/erlc/check/*"
+  to = "/.netlify/functions/erlc-check/:splat"
+  status = 200
+
+# Catch-all 404
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404
+
+

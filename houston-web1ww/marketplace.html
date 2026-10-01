@@ -1,0 +1,2877 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MarketPlace — Houston RP</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#3b6fb6">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-void:       #0d1424;
+    --bg-panel:      #131d2f;
+    --bg-card:       #17223a;
+    --bg-hover:      #1f304f;
+    --accent-blue:   #3b6fb6;
+    --accent-cyan:   #3b6fb6;
+    --accent-gold:   #e6a868;
+    --accent-orange: #f59e0b;
+    --accent-red:    #e54850;
+    --text-primary:  #e4e7ee;
+    --text-secondary:#8a93a7;
+    --text-dim:      #4c5a72;
+    --border:        #263552;
+    --border-glow:   #314466;
+    --sidebar-w:     260px;
+    --glow-blue:     rgba(59,111,182,0.15);
+    --glow-orange:   rgba(245,158,11,0.14);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-void);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(59,111,182,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(245,158,11,0.05) 0%, transparent 50%);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ═══════════════════════════════════════
+     SIDEBAR
+  ═══════════════════════════════════════ */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  .sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-blue), transparent 80%);
+    animation: scanDown 4s ease-in-out infinite;
+  }
+
+  @keyframes scanDown {
+    0%   { opacity: 0.4; transform: scaleY(1); }
+    50%  { opacity: 1; }
+    100% { opacity: 0.4; transform: scaleY(1); }
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-shield {
+    width: 40px; height: 44px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .logo-shield svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 8px var(--accent-cyan));
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--text-primary);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .logo-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent-cyan);
+    letter-spacing: 2px;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-user {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .user-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .user-avatar img {
+    width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+  }
+
+  .user-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 1px; right: 1px;
+    width: 8px; height: 8px;
+    background: #4acf8f;
+    border-radius: 50%;
+    border: 2px solid var(--bg-panel);
+  }
+
+  .user-info { min-width: 0; }
+
+  .user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-rank {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+  }
+
+  .nav-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 10px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-bottom: 2px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+  }
+
+  .nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--border-glow);
+  }
+
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(59,111,182,0.15), rgba(59,111,182,0.05));
+    color: var(--accent-cyan);
+    border-color: rgba(59,111,182,0.3);
+  }
+
+  .nav-item.active .nav-icon { color: var(--accent-cyan); }
+
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 20%; bottom: 20%;
+    width: 3px;
+    background: var(--accent-cyan);
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 8px var(--accent-cyan);
+  }
+
+  .nav-icon {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .nav-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .nav-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: rgba(245,158,11,0.15);
+    color: var(--accent-orange);
+    border: 1px solid rgba(245,158,11,0.35);
+    padding: 1px 7px;
+    border-radius: 20px;
+  }
+
+  .sidebar-footer {
+    padding: 16px 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 16px;
+    background: rgba(229,72,80,0.08);
+    border: 1px solid rgba(229,72,80,0.25);
+    border-radius: 8px;
+    color: #c7b2b2;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-logout:hover {
+    background: rgba(229,72,80,0.18);
+    border-color: rgba(229,72,80,0.6);
+    color: #e54850;
+    box-shadow: 0 0 16px rgba(229,72,80,0.2);
+    transform: translateX(2px);
+  }
+
+  /* ═══════════════════════════════════════
+     MAIN CONTENT
+  ═══════════════════════════════════════ */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .topbar {
+    height: 64px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: rgba(8,12,24,0.8);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0;
+    z-index: 50;
+  }
+
+  .topbar-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #4acf8f;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    background: #4acf8f;
+    border-radius: 50%;
+    animation: pulse 1.8s ease-in-out infinite;
+    box-shadow: 0 0 6px #4acf8f;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .topbar-clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+  }
+
+  .content {
+    padding: 32px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ═══════════════════════════════════════
+     PAGE HEADER
+  ═══════════════════════════════════════ */
+  .page-header {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeSlideIn 0.5s ease both;
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .page-heading { min-width: 0; }
+
+  .page-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-orange);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .page-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+    letter-spacing: 1px;
+  }
+
+  .page-title span { color: var(--accent-orange); }
+
+  .page-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* SORT BUTTON */
+  .btn-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: transparent;
+    border: 1px solid var(--border-glow);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .btn-sort:hover {
+    border-color: var(--accent-orange);
+    color: var(--text-primary);
+    background: var(--glow-orange);
+    box-shadow: 0 0 14px rgba(245,158,11,0.15);
+  }
+
+  .btn-sort .sort-arrow {
+    display: inline-flex;
+    transition: transform 0.3s ease;
+    color: var(--accent-orange);
+  }
+
+  .btn-sort.asc .sort-arrow { transform: rotate(180deg); }
+
+  /* FILTER BAR */
+  .market-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    animation: fadeSlideIn 0.5s ease both;
+    animation-delay: 0.1s;
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 7px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--border-glow);
+    color: var(--text-primary);
+    background: var(--bg-hover);
+  }
+
+  .filter-btn.active {
+    background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(59,111,182,0.12));
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    box-shadow: 0 0 12px rgba(245,158,11,0.15);
+  }
+
+.market-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    color: var(--text-dim);
+    pointer-events: none;
+    transition: color 0.2s ease;
+  }
+
+  .search-wrap:focus-within svg { color: var(--accent-orange); }
+
+  .search-wrap input {
+    width: 220px;
+    padding: 10px 14px 10px 36px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .search-wrap input::placeholder { color: var(--text-dim); }
+
+  .search-wrap input:focus {
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 14px rgba(245,158,11,0.15);
+    background: rgba(245,158,11,0.05);
+  }
+
+  /* PAGINATION */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 28px;
+    animation: fadeSlideIn 0.5s ease both;
+  }
+
+  /* El sidebar ahora es un dock inferior flotante (hrp-dock.css).
+     Como .main/.content tienen altura fija (flex:1), su padding-bottom queda
+     por encima del contenido desbordado y no alcanza: reservamos el espacio
+     aquí para que el dock nunca tape los botones "Anterior/Siguiente". */
+  .content::after {
+    content: '';
+    display: block;
+    height: 130px;
+  }
+
+  .page-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .page-btn:hover:not(:disabled) {
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    background: var(--glow-orange);
+    box-shadow: 0 0 14px rgba(245,158,11,0.15);
+  }
+
+  .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .page-info {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+  }
+
+  /* ═══════════════════════════════════════
+     MARKETPLACE GRID
+  ═══════════════════════════════════════ */
+  .market-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 20px;
+  }
+
+  .prop-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    animation: fadeSlideIn 0.5s ease both;
+    position: relative;
+  }
+
+  .prop-card:nth-child(1) { animation-delay: 0.05s; }
+  .prop-card:nth-child(2) { animation-delay: 0.1s;  }
+  .prop-card:nth-child(3) { animation-delay: 0.15s; }
+  .prop-card:nth-child(4) { animation-delay: 0.2s;  }
+  .prop-card:nth-child(5) { animation-delay: 0.25s; }
+  .prop-card:nth-child(6) { animation-delay: 0.3s;  }
+
+  .prop-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245,158,11,0.45);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.45), 0 0 24px var(--glow-orange);
+  }
+
+.prop-image {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    background: var(--bg-panel);
+  }
+
+  .prop-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(23,34,58,0.9) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* CAROUSEL */
+  .carousel {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .carousel .track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.35, 1);
+  }
+
+  .carousel .track img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .carousel .no-photo {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg-panel), #0f1a35);
+    font-size: 42px;
+    opacity: 0.55;
+  }
+
+  .car-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(8,12,24,0.65);
+    border: 1px solid var(--border-glow);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 4;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .car-arrow:hover {
+    background: rgba(245,158,11,0.25);
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    box-shadow: 0 0 10px rgba(245,158,11,0.25);
+  }
+
+  .car-arrow.prev { left: 10px; }
+  .car-arrow.next { right: 10px; }
+
+  .car-dots {
+    position: absolute;
+    bottom: 8px; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+    z-index: 4;
+  }
+
+  .car-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    transition: all 0.25s ease;
+  }
+
+  .car-dot.active {
+    background: var(--accent-orange);
+    box-shadow: 0 0 6px var(--accent-orange);
+  }
+
+  .car-dot:hover { background: rgba(255,255,255,0.7); }
+
+.prop-status {
+    position: absolute;
+    top: 12px; left: 12px;
+    z-index: 5;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+  }
+
+  .prop-status.available {
+    background: rgba(74,204,143,0.2);
+    color: #4acf8f;
+    border: 1px solid rgba(74,204,143,0.4);
+  }
+
+.prop-status.sold {
+    background: rgba(229,72,80,0.2);
+    color: var(--accent-red);
+    border: 1px solid rgba(229,72,80,0.4);
+  }
+
+  .prop-status.business {
+    top: 12px; right: 12px;
+    left: auto;
+    background: rgba(245,158,11,0.2);
+    color: var(--accent-orange);
+    border: 1px solid rgba(245,158,11,0.45);
+    box-shadow: 0 0 10px rgba(245,158,11,0.2);
+  }
+
+  .prop-status.unavailable {
+    background: rgba(229,72,80,0.22);
+    color: #ff8f95;
+    border: 1px solid rgba(229,72,80,0.55);
+    box-shadow: 0 0 10px rgba(229,72,80,0.25);
+  }
+
+  /* Aviso de mantenimiento del marketplace (ventas cerradas) */
+  .market-notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 11px 16px;
+    border-radius: 10px;
+    background: rgba(229,72,80,0.10);
+    border: 1px solid rgba(229,72,80,0.4);
+    color: #ffb0b4;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    line-height: 1.45;
+  }
+
+  .market-notice .notice-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent-red, #e54850);
+    box-shadow: 0 0 10px rgba(229,72,80,0.9);
+    flex-shrink: 0;
+    animation: noticePulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes noticePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .prop-card.sales-closed .prop-image img {
+    filter: grayscale(0.7) brightness(0.72);
+  }
+
+
+  .prop-body {
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .prop-price {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--accent-orange);
+    line-height: 1;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 18px rgba(245,158,11,0.25);
+  }
+
+  .prop-address {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 6px;
+  }
+
+  .prop-zone {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .prop-zone .pin {
+    color: var(--accent-orange);
+    display: inline-flex;
+  }
+
+  .btn-view {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 16px;
+    background: transparent;
+    border: 1px solid var(--border-glow);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-view svg { transition: transform 0.2s ease; }
+
+  .btn-view:hover {
+    background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(59,111,182,0.15));
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    box-shadow: 0 0 16px rgba(245,158,11,0.2);
+  }
+
+  .btn-view:hover svg { transform: translateX(3px); }
+
+.btn-view.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .btn-view.btn-sell {
+    border-color: rgba(244,63,94,0.6);
+    color: #fb7185;
+  }
+
+  .btn-view.btn-sell:hover {
+    background: linear-gradient(135deg, rgba(244,63,94,0.15), rgba(190,18,60,0.15));
+    border-color: var(--accent-red);
+    color: #fda4af;
+    box-shadow: 0 0 16px rgba(244,63,94,0.25);
+  }
+
+  .prop-owner {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* EMPTY / LOADING */
+  .market-loading, .market-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 70px 20px;
+    color: var(--text-secondary);
+  }
+
+  .market-loading .spinner {
+    width: 34px; height: 34px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent-orange);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .market-empty .big-icon { font-size: 48px; margin-bottom: 14px; }
+  .market-empty h3 { font-size: 18px; color: var(--text-primary); margin-bottom: 8px; }
+  .market-empty p { font-size: 13px; }
+
+  /* ═══════════════════════════════════════
+     MODAL
+  ═══════════════════════════════════════ */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(5,8,16,0.75);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; animation: fadeIn 0.25s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glow);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 40px var(--glow-orange);
+    animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes modalPop {
+    from { opacity: 0; transform: scale(0.92) translateY(16px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 18px 18px 0 0;
+    background: var(--bg-panel);
+  }
+
+  .modal-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+
+  .modal-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(23,34,58,0.95) 100%);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    z-index: 2;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(8,12,24,0.7);
+    border: 1px solid var(--border-glow);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    backdrop-filter: blur(6px);
+  }
+
+  .modal-close:hover {
+    background: var(--accent-red);
+    border-color: var(--accent-red);
+  }
+
+  .modal-body { padding: 22px 24px 24px; }
+
+  .modal-price {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent-orange);
+    line-height: 1;
+  }
+
+  .modal-address {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 6px;
+  }
+
+  .modal-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .modal-detail-item {
+    padding: 10px 14px;
+    background: rgba(8,12,24,0.6);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .modal-detail-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .modal-detail-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .modal-balance-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: rgba(8,12,24,0.6);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .modal-balance-row .amount {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-gold);
+  }
+
+  .modal-balance-row .amount.insufficient { color: var(--accent-red); }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .modal-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+
+  .modal-btn.secondary {
+    background: transparent;
+    border-color: var(--border-glow);
+    color: var(--text-secondary);
+  }
+
+  .modal-btn.secondary:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+  }
+
+  .modal-btn.buy {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #0d1424;
+  }
+
+  .modal-btn.buy:hover {
+    box-shadow: 0 0 24px rgba(245,158,11,0.45);
+    transform: translateY(-2px);
+  }
+
+.modal-btn.buy:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .modal-btn.sell {
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+    color: #fff;
+  }
+
+  .modal-btn.sell:hover {
+    box-shadow: 0 0 24px rgba(244,63,94,0.45);
+    transform: translateY(-2px);
+  }
+
+  .modal-btn.sell.confirming {
+    background: #be123c;
+    box-shadow: 0 0 24px rgba(244,63,94,0.6);
+    animation: pulseRed 1s ease infinite;
+  }
+
+  @keyframes pulseRed {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+
+  .sell-note {
+    margin-top: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .sell-note strong { color: var(--accent-orange); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 2000;
+    background: var(--bg-card);
+    border: 1px solid var(--border-glow);
+    border-left: 3px solid #4acf8f;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--text-primary);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(16px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    max-width: 340px;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .toast.error { border-left-color: var(--accent-red); }
+  .toast.error .toast-icon { color: var(--accent-red); }
+  .toast.success .toast-icon { color: #4acf8f; }
+  .toast-icon { font-size: 16px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════ */
+  @media (max-width: 1200px) {
+    .market-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .content { padding: 16px; }
+    .topbar { padding: 0 16px; }
+    .market-grid { grid-template-columns: 1fr; gap: 16px; }
+    .page-title { font-size: 28px; }
+    .page-header { flex-direction: column; align-items: flex-start; }
+    .btn-sort { width: 100%; justify-content: center; }
+    .toolbar-right { width: 100%; }
+    .search-wrap { flex: 1; }
+    .search-wrap input { width: 100%; }
+    .pagination { flex-wrap: wrap; }
+    .modal-details { grid-template-columns: 1fr; }
+    .modal-actions { flex-direction: column; }
+    .toast { left: 16px; right: 16px; max-width: none; }
+    .topbar-right .live-indicator { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .content { padding: 12px; }
+    .page-title { font-size: 24px; }
+    .prop-image { height: 150px; }
+    .topbar { padding: 10px 12px; flex-direction: column; align-items: flex-start; gap: 6px; height: auto; }
+    .topbar-right { width: 100%; justify-content: space-between; }
+  }
+</style>
+<link rel="stylesheet" href="assets/responsive.css">
+<link rel="stylesheet" href="assets/hrp-dock.css">
+</head>
+<body>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="logo-shield">
+        <img src="images/logo.png" alt="Houston RP" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 8px var(--accent-cyan));">
+      </div>
+      <div class="logo-text">
+        <div class="logo-title">HOUSTON RP</div>
+        <div class="logo-sub">MarketPlace</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar" id="user-avatar">?</div>
+    <div class="user-info">
+      <div class="user-name" id="user-name">Cargando…</div>
+      <div class="user-rank" id="user-sub">Discord</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">General</div>
+    <a class="nav-item" href="dashboard.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><span class="nav-label">Dashboard</span></a>
+    <a class="nav-item" href="app.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="nav-label">Characters</span></a>
+    <a class="nav-item" href="licencias.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">DMV/CCW</span></a>
+    <div class="nav-section-label">Economy</div>
+    <a class="nav-item active" href="marketplace.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div><span class="nav-label">Marketplace</span><span class="nav-badge">NEW</span></a>
+    <div class="nav-section-label">Gobierno</div>
+    <a class="nav-item" href="gobierno.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div><span class="nav-label">Portal Cívico</span><span class="nav-badge">NEW</span></a>
+    <div class="nav-section-label">Law Enforcement</div>
+    <a class="nav-item" href="mdt.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 8l10-5 10 5"/><path d="M12 8v13"/><path d="M4 12l8 5 8-5"/></svg></div><span class="nav-label">MDT</span></a>
+    <div class="nav-section-label">System</div>
+    <a class="nav-item" href="#" onclick="event.preventDefault();localStorage.clear();window.location.href='index.html';"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><span class="nav-label">Logout</span></a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div style="padding:2px 12px 10px;border-bottom:1px solid var(--border);margin-bottom:10px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">Balance</div>
+      <div id="sidebar-balance" style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--accent-gold);margin-top:2px;">$---</div>
+    </div>
+    <a class="btn-logout" href="#" onclick="event.preventDefault(); localStorage.clear(); window.location.href='index.html';">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Cerrar Sesión
+    </a>
+  </div>
+
+</aside>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main class="main">
+
+  <header class="topbar">
+    <div class="topbar-title">MarketPlace</div>
+    <div class="topbar-right">
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        Sistema Activo
+      </div>
+      <div class="topbar-clock" id="clock">--:--:--</div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <div class="market-notice" id="market-notice">
+      <span class="notice-dot"></span>
+      <span>⚠️ Las casas del update de ERLC no están actualizadas en este momento. Por favor, regresa luego.</span>
+    </div>
+
+    <div class="page-header">
+      <div class="page-heading">
+        <div class="page-eyebrow">// HOUSTON RP Bienes Raíces</div>
+        <div class="page-title">Market<span>Place</span></div>
+        <div class="page-subtitle">Explora propiedades disponibles para compra.</div>
+      </div>
+      <button class="btn-sort asc" id="btn-sort" title="Ordenar por precio">
+        <span class="sort-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></span>
+        Ordenar por: Precio (Menor a Mayor)
+      </button>
+    </div>
+
+<div class="market-toolbar">
+      <div class="filter-bar" id="filter-bar">
+        <button class="filter-btn active" data-filter="todos">Todos</button>
+        <button class="filter-btn" data-filter="vivienda">Viviendas</button>
+        <button class="filter-btn" data-filter="negocio">Negocios</button>
+      </div>
+      <div class="toolbar-right">
+        <div class="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search-input" placeholder="Buscar propiedad..." autocomplete="off">
+        </div>
+        <span class="market-count" id="market-count"></span>
+      </div>
+    </div>
+
+    <div class="market-grid" id="market-grid">
+      <div class="market-loading">
+        <div class="spinner"></div>
+        Cargando propiedades...
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button class="page-btn" id="page-prev" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
+        Anterior
+      </button>
+      <span class="page-info" id="page-info">Página 1 de 1</span>
+      <button class="page-btn" id="page-next">
+        Siguiente
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
+      </button>
+    </div>
+
+  </div>
+</main>
+
+<!-- ═══════════════════ MODAL ═══════════════════ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+<div class="modal-image">
+      <div class="carousel">
+        <div class="track" id="modal-track"></div>
+        <button class="car-arrow prev" id="modal-prev" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg></button>
+        <button class="car-arrow next" id="modal-next" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></button>
+        <div class="car-dots" id="modal-dots"></div>
+      </div>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+<div class="modal-body">
+      <div class="modal-price" id="modal-price">$0</div>
+      <div class="modal-address" id="modal-address">—</div>
+      <div class="modal-details">
+        <div class="modal-detail-item">
+          <div class="modal-detail-label">Tipo</div>
+          <div class="modal-detail-value" id="modal-type">—</div>
+        </div>
+        <div class="modal-detail-item">
+          <div class="modal-detail-label">Referencia</div>
+          <div class="modal-detail-value" id="modal-bedrooms">—</div>
+        </div>
+        <div class="modal-detail-item">
+          <div class="modal-detail-label">Estado</div>
+          <div class="modal-detail-value" id="modal-state">—</div>
+        </div>
+      </div>
+<div class="modal-balance-row">
+        <span>Tu balance actual:</span>
+        <span class="amount" id="modal-balance">$---</span>
+      </div>
+      <div class="sell-note" id="modal-sell-note"></div>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" id="modal-cancel">Cancelar</button>
+        <button class="modal-btn buy" id="modal-buy">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11h14"/><path d="M12 4v14"/></svg>
+          Comprar Propiedad
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">✓</span>
+  <span id="toast-msg">Listo</span>
+</div>
+
+<script src="assets/auth.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+
+  // ── VENTAS CERRADAS (update de ERLC pendiente de actualizar fotos/casas) ──
+  // Cambiá a false para reactivar las compras.
+  const MARKET_SALES_CLOSED = true;
+  const SALES_CLOSED_MSG = 'Las casas del update de ERLC no están actualizadas en este momento. Por favor, regresa luego.';
+  (function () {
+    const notice = $('market-notice');
+    if (!MARKET_SALES_CLOSED && notice) notice.remove();
+    if (MARKET_SALES_CLOSED) {
+      const sub = document.querySelector('.page-subtitle');
+      if (sub) sub.textContent = 'Propiedades no disponibles para compra en este momento.';
+    }
+  })();
+
+
+  // ── Live clock ──
+  function tick() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    const el = $('clock');
+    if (el) el.textContent = `${h}:${m}:${s}`;
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // ── Session guard ──
+  const now = Date.now();
+  const lastRedirect = parseInt(sessionStorage.getItem('hrp_last_index_redirect') || '0');
+  const session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
+  if (!session && now - lastRedirect >= 2000) {
+    sessionStorage.setItem('hrp_last_index_redirect', String(now));
+    const _p = window.location.pathname.split('/').pop() || 'index.html';
+    if (_p !== 'index.html') { try { localStorage.setItem('hrp_redirect', _p); } catch {} }
+    window.location.href = 'index.html';
+  } else if (!session) {
+    window.location.href = 'index.html';
+  }
+
+  const userId = session?.id;
+  const userName = session?.username || 'Usuario';
+
+  const avatarEl = $('user-avatar');
+  if (avatarEl && session) {
+    avatarEl.innerHTML = session.avatar
+      ? `<img src="https://cdn.discordapp.com/avatars/${session.id}/${session.avatar}.png">`
+      : (userName.charAt(0) || '?').toUpperCase();
+  }
+  const nameEl = $('user-name');
+  if (nameEl) nameEl.textContent = userName;
+  const subEl = $('user-sub');
+  if (subEl) subEl.textContent = '@' + (userName || 'Discord');
+
+  // ── Balance ──
+  let myBalance = null;
+  async function loadBalance() {
+    if (!userId) return;
+    myBalance = await hrpGetBalance(userId);
+    const el = $('sidebar-balance');
+    if (el) el.textContent = hrpFormatBalance(myBalance);
+  }
+  loadBalance();
+
+  // ═══════════════════════════════════════
+  //  PROPIEDADES (datos del servidor RP)
+  // ═══════════════════════════════════════
+// ======================================================
+  //  PROPIEDADES - 92 entradas (negocios con type: "negocio")
+  //  Rellena por cada una: name (ej. "Colonial Drive 6001"),
+  //  type ("vivienda" o "negocio") y price (precio).
+  //  Fotos: una carpeta por propiedad con sus fotos:
+  //  images/propiedades/1/01.png, /02.png ... (todas las
+  //  de la carpeta salen en el carrusel siguiente/atras).
+  //  Las propiedades sin carpeta muestran placeholder.
+  //  No toques id ni owner.
+  // ======================================================
+  const PROPERTIES = [
+    {
+      id: 1,
+      name: "Colonial Drive 6001",
+      type: 'vivienda',
+      price: 260000,
+      images: [
+        'images/propiedades/1/01.png',
+      ],
+      owner: null
+    },
+    {
+      id: 2,
+      name: "Colonial Drive 6055",
+      type: 'vivienda',
+      price: 164000,
+      images: [
+        'images/propiedades/1/02.png',
+      ],
+      owner: null
+    },
+    {
+      id: 3,
+      name: "Vine Street 5063",
+      type: 'vivienda',
+      price: 36000,
+      images: [
+        'images/propiedades/1/03.png',
+      ],
+      owner: null
+    },
+    {
+      id: 4,
+      name: "Franklin Court 7061",
+      type: 'vivienda',
+      price: 114000,
+      images: [
+        'images/propiedades/1/04.png',
+      ],
+      owner: null
+    },
+    {
+      id: 5,
+      name: "Vine Street 5052",
+      type: 'vivienda',
+      price: 32000,
+      images: [
+        'images/propiedades/1/05.png',
+      ],
+      owner: null
+    },
+    {
+      id: 6,
+      name: "Vine Street 5053",
+      type: 'vivienda',
+      price: 32000,
+      images: [
+        'images/propiedades/1/06.png',
+      ],
+      owner: null
+    },
+    {
+      id: 7,
+      name: "Vine Street 5062",
+      type: 'vivienda',
+      price: 34000,
+      images: [
+        'images/propiedades/1/07.png',
+      ],
+      owner: null
+    },
+    {
+      id: 8,
+      name: "Vine Street 5061",
+      type: 'vivienda',
+      price: 30000,
+      images: [
+        'images/propiedades/1/08.png',
+      ],
+      owner: null
+    },
+    {
+      id: 9,
+      name: "Terrace Drive 1109",
+      type: 'vivienda',
+      price: 214000,
+      images: [
+        'images/propiedades/1/09.png',
+      ],
+      owner: null
+    },
+    {
+      id: 10,
+      name: "Vine Street 5044",
+      type: 'vivienda',
+      price: 37000,
+      images: [
+        'images/propiedades/1/10.png',
+      ],
+      owner: null
+    },
+    {
+      id: 11,
+      name: "Vine Street 5043",
+      type: 'vivienda',
+      price: 27000,
+      images: [
+        'images/propiedades/2/11.png',
+      ],
+      owner: null
+    },
+    {
+      id: 12,
+      name: "Franklin Court 7053",
+      type: 'vivienda',
+      price: 154000,
+      images: [
+        'images/propiedades/2/12.png',
+      ],
+      owner: null
+    },
+    {
+      id: 13,
+      name: "Terrace Drive 11092",
+      type: 'vivienda',
+      price: 115000,
+      images: [
+        'images/propiedades/2/13.png',
+      ],
+      owner: null
+    },
+    {
+      id: 14,
+      name: "Lee Street 5042",
+      type: 'vivienda',
+      price: 23000,
+      images: [
+        'images/propiedades/2/14.png',
+      ],
+      owner: null
+    },
+    {
+      id: 15,
+      name: "Franklin Court 7095",
+      type: 'vivienda',
+      price: 15000,
+      images: [
+        'images/propiedades/2/15.png',
+      ],
+      owner: null
+    },
+    {
+      id: 16,
+      name: "Lee Street 5041",
+      type: 'vivienda',
+      price: 26000,
+      images: [
+        'images/propiedades/2/16.png',
+      ],
+      owner: null
+    },
+    {
+      id: 17,
+      name: "Lee Street 5053",
+      type: 'vivienda',
+      price: 12000,
+      images: [
+        'images/propiedades/2/17.png',
+      ],
+      owner: null
+    },
+    {
+      id: 18,
+      name: "Terrace Drive 11031",
+      type: 'vivienda',
+      price: 160000,
+      images: [
+        'images/propiedades/2/18.png',
+      ],
+      owner: null
+    },
+    {
+      id: 19,
+      name: "Franklin Court 7052",
+      type: 'vivienda',
+      price: 16000,
+      images: [
+        'images/propiedades/2/19.png',
+      ],
+      owner: null
+    },
+    {
+      id: 20,
+      name: "Terrace Drive 11032",
+      type: 'vivienda',
+      price: 80000,
+      images: [
+        'images/propiedades/2/20.png',
+      ],
+      owner: null
+    },
+    {
+      id: 21,
+      name: "Gibson Lane 5022",
+      type: 'vivienda',
+      price: 34000,
+      images: [
+        'images/propiedades/3/21.png',
+      ],
+      owner: null
+    },
+    {
+      id: 22,
+      name: "Gilson Lane 5054",
+      type: 'vivienda',
+      price: 29999,
+      images: [
+        'images/propiedades/3/22.png',
+      ],
+      owner: null
+    },
+    {
+      id: 23,
+      name: "Franklin Court 7094",
+      type: 'vivienda',
+      price: 156000,
+      images: [
+        'images/propiedades/3/23.png',
+      ],
+      owner: null
+    },
+    {
+      id: 24,
+      name: "Franklin Court 7051",
+      type: 'vivienda',
+      price: 29000,
+      images: [
+        'images/propiedades/3/24.png',
+      ],
+      owner: null
+    },
+    {
+      id: 25,
+      name: "Franklin Court 7041",
+      type: 'vivienda',
+      price: 25000,
+      images: [
+        'images/propiedades/3/25.png',
+      ],
+      owner: null
+    },
+    {
+      id: 26,
+      name: "Maple Street - Rick John's",
+      type: 'negocio',
+      price: 342000,
+      images: [
+        'images/propiedades/2/26.png',
+      ],
+      owner: null
+    },
+    {
+      id: 27,
+      name: "Academy Place 7002",
+      type: 'vivienda',
+      price: 168000,
+      images: [
+        'images/propiedades/3/27.png',
+      ],
+      owner: null
+    },
+    {
+      id: 28,
+      name: "Academy Place 7001",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/3/28.png',
+      ],
+      owner: null
+    },
+    {
+      id: 29,
+      name: "Maple Street - Spring Bakery",
+      type: 'negocio',
+      price: 190000,
+      images: [
+        'images/propiedades/3/29.png',
+      ],
+      owner: null
+    },
+    {
+      id: 30,
+      name: "Franklin Court 2403",
+      type: 'vivienda',
+      price: 138000,
+      images: [
+        'images/propiedades/3/30.png',
+      ],
+      owner: null
+    },
+    {
+      id: 31,
+      name: "Franklin Court 2430",
+      type: 'vivienda',
+      price: 40000,
+      images: [
+        'images/propiedades/4/31.png',
+      ],
+      owner: null
+    },
+    {
+      id: 32,
+      name: "Maple Street - Liberty Apparel",
+      type: 'negocio',
+      price: 240000,
+      images: [
+        'images/propiedades/4/32.png',
+      ],
+      owner: null
+    },
+    {
+      id: 33,
+      name: "High Rock Park 12051",
+      type: 'vivienda',
+      price: 32000,
+      images: [
+        'images/propiedades/4/33.png',
+      ],
+      owner: null
+    },
+    {
+      id: 34,
+      name: "High Rock Park 12052",
+      type: 'vivienda',
+      price: 34000,
+      images: [
+        'images/propiedades/4/34.png',
+      ],
+      owner: null
+    },
+    {
+      id: 35,
+      name: "Franklin Court 2433",
+      type: 'vivienda',
+      price: 35000,
+      images: [
+        'images/propiedades/4/35.png',
+      ],
+      owner: null
+    },
+    {
+      id: 36,
+      name: "High Rock Park 12053",
+      type: 'vivienda',
+      price: 23000,
+      images: [
+        'images/propiedades/4/36.png',
+      ],
+      owner: null
+    },
+    {
+      id: 37,
+      name: "Maple Street - BARBERIA",
+      type: 'negocio',
+      price: 140000,
+      images: [
+        'images/propiedades/4/37.png',
+      ],
+      owner: null
+    },
+    {
+      id: 38,
+      name: "High Rock Park 12054",
+      type: 'vivienda',
+      price: 30000,
+      images: [
+        'images/propiedades/4/38.png',
+      ],
+      owner: null
+    },
+    {
+      id: 39,
+      name: "Franklin Court 2602",
+      type: 'vivienda',
+      price: 35000,
+      images: [
+        'images/propiedades/4/39.png',
+      ],
+      owner: null
+    },
+    {
+      id: 40,
+      name: "High Rock Park 12056",
+      type: 'vivienda',
+      price: 35000,
+      images: [
+        'images/propiedades/4/40.png',
+      ],
+      owner: null
+    },
+    {
+      id: 41,
+      name: "High Rock Park 12055",
+      type: 'vivienda',
+      price: 39000,
+      images: [
+        'images/propiedades/5/41.png',
+      ],
+      owner: null
+    },
+    {
+      id: 42,
+      name: "Maple Street - LIBERTY GUNS & AMMO",
+      type: 'negocio',
+      price: 320000,
+      images: [
+        'images/propiedades/5/42.png',
+      ],
+      owner: null
+    },
+    {
+      id: 43,
+      name: "High Rock Park 12021",
+      type: 'vivienda',
+      price: 28500,
+      images: [
+        'images/propiedades/5/43.png',
+      ],
+      owner: null
+    },
+    {
+      id: 44,
+      name: "High Rock Park 12022",
+      type: 'vivienda',
+      price: 25500,
+      images: [
+        'images/propiedades/5/44.png',
+      ],
+      owner: null
+    },
+    {
+      id: 45,
+      name: "Franklin Court 2512",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/5/45.png',
+      ],
+      owner: null
+    },
+    {
+      id: 46,
+      name: "Franklin Court 2232",
+      type: 'vivienda',
+      price: 149000,
+      images: [
+        'images/propiedades/5/46.png',
+      ],
+      owner: null
+    },
+    {
+      id: 47,
+      name: "Oak Valley Drive 1201",
+      type: 'vivienda',
+      price: 1700000,
+      images: [
+        'images/propiedades/5/47.png',
+      ],
+      owner: null
+    },
+    {
+      id: 48,
+      name: "Colonial Drive 6021",
+      type: 'vivienda',
+      price: 241000,
+      images: [
+        'images/propiedades/5/48.png',
+      ],
+      owner: null
+    },
+    {
+      id: 49,
+      name: "Franklin Court 2602",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/5/49.png',
+      ],
+      owner: null
+    },
+    {
+      id: 50,
+      name: "Gran St. 11121",
+      type: 'vivienda',
+      price: 16200,
+      images: [
+        'images/propiedades/5/50.png',
+      ],
+      owner: null
+    },
+    {
+      id: 51,
+      name: "Franklin Court 3146",
+      type: 'vivienda',
+      price: 30000,
+      images: [
+        'images/propiedades/6/51.png',
+      ],
+      owner: null
+    },
+    {
+      id: 52,
+      name: "Franklin Court 4130",
+      type: 'vivienda',
+      price: 34000,
+      images: [
+        'images/propiedades/6/52.png',
+      ],
+      owner: null
+    },
+    {
+      id: 53,
+      name: "Gran St. 11123",
+      type: 'vivienda',
+      price: 12000,
+      images: [
+        'images/propiedades/6/53.png',
+      ],
+      owner: null
+    },
+    {
+      id: 54,
+      name: "Franklin Court 4130",
+      type: 'vivienda',
+      price: 35000,
+      images: [
+        'images/propiedades/6/54.png',
+      ],
+      owner: null
+    },
+    {
+      id: 55,
+      name: "Franklin Court 4104",
+      type: 'vivienda',
+      price: 135000,
+      images: [
+        'images/propiedades/6/55.png',
+      ],
+      owner: null
+    },
+    {
+      id: 56,
+      name: "Gran St. 11122",
+      type: 'vivienda',
+      price: 15000,
+      images: [
+        'images/propiedades/6/56.png',
+      ],
+      owner: null
+    },
+    {
+      id: 57,
+      name: "Franklin Court 4102",
+      type: 'vivienda',
+      price: 200000,
+      images: [
+        'images/propiedades/6/57.png',
+      ],
+      owner: null
+    },
+    {
+      id: 58,
+      name: "Franklin Court 4122",
+      type: 'vivienda',
+      price: 35000,
+      images: [
+        'images/propiedades/6/58.png',
+      ],
+      owner: null
+    },
+    {
+      id: 59,
+      name: "Emerson Drive 6519",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/6/59.png',
+      ],
+      owner: null
+    },
+    {
+      id: 60,
+      name: "Gran St. 1110 - GAS N. GO",
+      type: 'negocio',
+      price: 260000,
+      images: [
+        'images/propiedades/6/60.png',
+      ],
+      owner: null
+    },
+    {
+      id: 61,
+      name: "Peniview Circle 7801",
+      type: 'vivienda',
+      price: 30000,
+      images: [
+        'images/propiedades/7/61.png',
+      ],
+      owner: null
+    },
+    {
+      id: 62,
+      name: "Peniview Circle 7821",
+      type: 'vivienda',
+      price: 32000,
+      images: [
+        'images/propiedades/7/62.png',
+      ],
+      owner: null
+    },
+    {
+      id: 63,
+      name: "Peniview Circle 7911",
+      type: 'vivienda',
+      price: 130000,
+      images: [
+        'images/propiedades/7/63.png',
+      ],
+      owner: null
+    },
+    {
+      id: 64,
+      name: "OAK VALLEY DR. 1108 - REPARACIONES Y CARROCERIA DE JOE",
+      type: 'negocio',
+      price: 360000,
+      images: [
+        'images/propiedades/7/64.png',
+      ],
+      owner: null
+    },
+    {
+      id: 65,
+      name: "Southern Avenue La Mesa Taqueria",
+      type: 'negocio',
+      price: 279000,
+      images: [
+        'images/propiedades/7/65.png',
+      ],
+      owner: null
+    },
+    {
+      id: 66,
+      name: "Freedom Avenue 3011",
+      type: 'negocio',
+      price: 431000,
+      images: [
+        'images/propiedades/7/66.png',
+      ],
+      owner: null
+    },
+    {
+      id: 67,
+      name: "Freedom Avenue 2001",
+      type: 'negocio',
+      price: 267000,
+      images: [
+        'images/propiedades/7/67.png',
+      ],
+      owner: null
+    },
+    {
+      id: 68,
+      name: "Grand Avenue Centro de reparaciones",
+      type: 'negocio',
+      price: 340000,
+      images: [
+        'images/propiedades/7/68.png',
+      ],
+      owner: null
+    },
+    {
+      id: 69,
+      name: "LAKEVIEW COURT 9062",
+      type: 'vivienda',
+      price: 379000,
+      images: [
+        'images/propiedades/7/69.png',
+      ],
+      owner: null
+    },
+    {
+      id: 70,
+      name: "Freedom Avenue 2063",
+      type: 'negocio',
+      price: 82000,
+      images: [
+        'images/propiedades/7/70.png',
+      ],
+      owner: null
+    },
+    {
+      id: 71,
+      name: "Sandstone Road 2062",
+      type: 'negocio',
+      price: 51000,
+      images: [
+        'images/propiedades/8/71.png',
+      ],
+      owner: null
+    },
+    {
+      id: 72,
+      name: "LAKEVIEW COURT 9044",
+      type: 'vivienda',
+      price: 80000,
+      images: [
+        'images/propiedades/8/72.png',
+      ],
+      owner: null
+    },
+    {
+      id: 73,
+      name: "LAKEVIEW COURT 9043",
+      type: 'vivienda',
+      price: 290000,
+      images: [
+        'images/propiedades/8/73.png',
+      ],
+      owner: null
+    },
+    {
+      id: 74,
+      name: "Main Street 2087",
+      type: 'negocio',
+      price: 67000,
+      images: [
+        'images/propiedades/8/74.png',
+      ],
+      owner: null
+    },
+    {
+      id: 75,
+      name: "LAKEVIEW COURT 9061",
+      type: 'vivienda',
+      price: 98000,
+      images: [
+        'images/propiedades/8/75.png',
+      ],
+      owner: null
+    },
+    {
+      id: 76,
+      name: "LAKEVIEW COURT 9042",
+      type: 'vivienda',
+      price: 69000,
+      images: [
+        'images/propiedades/8/76.png',
+      ],
+      owner: null
+    },
+    {
+      id: 77,
+      name: "FairFax Road 4011",
+      type: 'negocio',
+      price: 92000,
+      images: [
+        'images/propiedades/8/77.png',
+      ],
+      owner: null
+    },
+    {
+      id: 78,
+      name: "LAKEVIEW COURT 9072",
+      type: 'vivienda',
+      price: 96000,
+      images: [
+        'images/propiedades/8/78.png',
+      ],
+      owner: null
+    },
+    {
+      id: 79,
+      name: "LAKEVIEW COURT 9041",
+      type: 'vivienda',
+      price: 90000,
+      images: [
+        'images/propiedades/8/79.png',
+      ],
+      owner: null
+    },
+    {
+      id: 80,
+      name: "LAKEVIEW COURT 9073",
+      type: 'vivienda',
+      price: 95000,
+      images: [
+        'images/propiedades/8/80.png',
+      ],
+      owner: null
+    },
+    {
+      id: 81,
+      name: "LAKEVIEW COURT 9071",
+      type: 'vivienda',
+      price: 250000,
+      images: [
+        'images/propiedades/9/81.png',
+      ],
+      owner: null
+    },
+    {
+      id: 82,
+      name: "LAKEVIEW COURT 9082",
+      type: 'vivienda',
+      price: 82000,
+      images: [
+        'images/propiedades/9/82.png',
+      ],
+      owner: null
+    },
+    {
+      id: 83,
+      name: "Fairfax Road 4061",
+      type: 'negocio',
+      price: 414000,
+      images: [
+        'images/propiedades/9/83.png',
+      ],
+      owner: null
+    },
+    {
+      id: 84,
+      name: "Orchard Boulevard 3071",
+      type: 'negocio',
+      price: 137000,
+      images: [
+        'images/propiedades/9/84.png',
+      ],
+      owner: null
+    },
+    {
+      id: 85,
+      name: "Indepencide Parkway Tienda de Tecnologia",
+      type: 'negocio',
+      price: 389000,
+      images: [
+        'images/propiedades/8/85.png',
+      ],
+      owner: null
+    },
+    {
+      id: 86,
+      name: "Indepencide Parkway Joyeria",
+      type: 'negocio',
+      price: 487000,
+      images: [
+        'images/propiedades/9/86.png',
+      ],
+      owner: null
+    },
+    {
+      id: 87,
+      name: "Fairfax Road 13140",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/9/87.png',
+      ],
+      owner: null
+    },
+    {
+      id: 88,
+      name: "Fairfax Road 13141",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/9/88.png',
+      ],
+      owner: null
+    },
+    {
+      id: 89,
+      name: "Fairfax Road 13142",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/9/89.png',
+      ],
+      owner: null
+    },
+    {
+      id: 90,
+      name: "Fairfax Road 13144",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/9/90.png',
+      ],
+      owner: null
+    },
+    {
+      id: 91,
+      name: "Fairfax Road 13147",
+      type: 'vivienda',
+      price: 38000,
+      images: [
+        'images/propiedades/10/91.png',
+      ],
+      owner: null
+    },
+    {
+      id: 92,
+      name: "Valley Drive Tienda de Acampar",
+      type: 'negocio',
+      price: 379000,
+      images: [
+        'images/propiedades/10/92.png',
+      ],
+      owner: null
+    },
+  ];
+
+// Propiedades compradas por el usuario (se guardan en Supabase)
+  const RESALE_RATE = 0.75;
+  const myProps = {};
+
+  function resaleValue(prop) {
+    return Math.floor((myProps[prop.id]?.price_paid || prop.price) * RESALE_RATE);
+  }
+
+  async function loadOwned() {
+    if (!userId) return;
+    try {
+      const rows = await supaSelect('properties', 'id,owner,price_paid', { owner: `eq.${userId}` });
+      for (const r of rows || []) myProps[r.id] = { price_paid: parseInt(r.price_paid) || 0 };
+    } catch (e) {
+      console.error('loadOwned error:', e);
+    }
+    // Migrar compras guardadas en localStorage (versiones anteriores)
+    try {
+      const legacy = JSON.parse(localStorage.getItem('hrp_marketplace_owned') || '[]');
+      for (const id of legacy) {
+        if (myProps[id]) continue;
+        const p = PROPERTIES.find(x => x.id === id);
+        if (!p) continue;
+        myProps[id] = { price_paid: p.price };
+        supaUpsert('properties', { id, owner: userId, price_paid: p.price }, 'id').catch(() => {});
+      }
+    } catch {}
+    try { localStorage.removeItem('hrp_marketplace_owned'); } catch {}
+  }
+
+let sortAsc = true;
+  let activeFilter = 'todos';
+
+  function getCardId(id) { return 'prop-' + id; }
+
+const PER_PAGE = 10;
+  let currentPage = 1;
+  let searchQuery = '';
+
+  function renderProperties() {
+    const grid = $('market-grid');
+
+    // Solo propiedades completadas por el admin (con nombre o precio)
+    const all = [...PROPERTIES]
+      .filter(p => p.name || p.price > 0)
+      .filter(p => activeFilter === 'todos' || p.type === activeFilter)
+      .filter(p => !searchQuery || (p.name || '').toLowerCase().includes(searchQuery))
+      .sort((a, b) => sortAsc ? a.price - b.price : b.price - a.price);
+
+    const totalPages = Math.max(1, Math.ceil(all.length / PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    const list = all.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+
+    const countEl = $('market-count');
+    if (countEl) countEl.textContent = all.length + ' de ' + PROPERTIES.filter(p => p.name || p.price > 0).length + ' propiedades';
+
+    const prevBtn = $('page-prev');
+    const nextBtn = $('page-next');
+    const infoEl = $('page-info');
+    if (prevBtn) prevBtn.disabled = currentPage <= 1;
+    if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+    if (infoEl) infoEl.textContent = 'Página ' + currentPage + ' de ' + totalPages;
+
+    grid.innerHTML = '';
+
+    if (!list.length) {
+      grid.innerHTML = `
+        <div class="market-empty">
+          <div class="big-icon">🔍</div>
+          <h3>${searchQuery ? 'No se encontraron propiedades' : 'No hay propiedades disponibles'}</h3>
+          <p>${searchQuery ? 'Prueba con otro nombre.' : 'Vuelve más tarde.'}</p>
+        </div>`;
+      return;
+    }
+
+list.forEach(prop => {
+      const isMine = !!myProps[prop.id];
+      const title = prop.name || ('Propiedad #' + prop.id);
+      const isBusiness = prop.type === 'negocio';
+      const images = carImages(prop);
+      if (!(prop.id in carState)) carState[prop.id] = 0;
+      const card = document.createElement('div');
+      card.className = 'prop-card';
+      card.id = getCardId(prop.id);
+      const statusBadge = MARKET_SALES_CLOSED && !isMine
+        ? '<span class="prop-status unavailable">No disponible</span>'
+        : `<span class="prop-status ${isMine ? 'sold' : 'available'}">${isMine ? 'Comprada' : 'Disponible'}</span>`;
+      if (MARKET_SALES_CLOSED && !isMine) card.classList.add('sales-closed');
+      card.innerHTML = `
+        <div class="prop-image">
+          <div class="carousel">
+            <div class="track" id="car-track-${prop.id}">
+              ${images.length
+                ? images.map(src => `<img src="${src}" alt="${title}" loading="lazy" onerror="this.style.display='none';syncCarousel(${prop.id})">`).join('')
+                : '<div class="no-photo">🏠</div>'}
+            </div>
+            <button class="car-arrow prev" type="button" data-car="${prop.id}" data-dir="-1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg></button>
+            <button class="car-arrow next" type="button" data-car="${prop.id}" data-dir="1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></button>
+            <div class="car-dots" id="car-dots-${prop.id}"></div>
+          </div>
+          ${statusBadge}
+          ${isBusiness ? '<span class="prop-status business">Negocio</span>' : ''}
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">$${prop.price.toLocaleString()}</div>
+          <div class="prop-address">${title}</div>
+          <button class="btn-view ${isMine ? 'btn-sell' : ''}" data-id="${prop.id}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            ${isMine ? 'Vender por $' + resaleValue(prop).toLocaleString() : 'Ver Propiedad'}
+          </button>
+          ${isMine ? '<div class="prop-owner">✔ Dueño: ' + userName + '</div>' : ''}
+        </div>`;
+      grid.appendChild(card);
+      syncCarousel(prop.id);
+    });
+  }
+
+// ── Sort toggle ──
+  $('btn-sort').addEventListener('click', () => {
+    sortAsc = !sortAsc;
+    const btn = $('btn-sort');
+    btn.classList.toggle('asc', sortAsc);
+    const label = btn.querySelector('span:not(.sort-arrow)');
+    label.textContent = sortAsc ? 'Ordenar por: Precio (Menor a Mayor)' : 'Ordenar por: Precio (Mayor a Menor)';
+    currentPage = 1;
+    renderProperties();
+  });
+
+  // ── Filter ──
+  $('filter-bar').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    currentPage = 1;
+    renderProperties();
+  });
+
+  // ── Search ──
+  $('search-input').addEventListener('input', e => {
+    searchQuery = e.target.value.trim().toLowerCase();
+    currentPage = 1;
+    renderProperties();
+  });
+
+  // ── Pagination ──
+  $('page-prev').addEventListener('click', () => {
+    if (currentPage <= 1) return;
+    currentPage--;
+    renderProperties();
+    const mainEl = document.querySelector('.main');
+    if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  $('page-next').addEventListener('click', () => {
+    if (currentPage >= Math.ceil([...PROPERTIES].length / PER_PAGE)) return;
+    currentPage++;
+    renderProperties();
+    const mainEl = document.querySelector('.main');
+    if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+// ── Carousel state ──
+  const carState = {};
+  let modalIndex = 0;
+
+  function carImages(prop) {
+    return (prop.images && prop.images.length ? prop.images : [prop.image].filter(Boolean));
+  }
+
+  function visibleCount(track) {
+    if (!track) return 0;
+    return [...track.querySelectorAll('img')].filter(i => i.style.display !== 'none').length;
+  }
+
+  // Sincroniza flechas/puntos según las fotos que realmente cargaron
+  function syncCarousel(id) {
+    const track = $('car-track-' + id);
+    if (!track) return;
+    const carousel = track.closest('.carousel');
+    const arrows = carousel ? carousel.querySelectorAll('.car-arrow') : [];
+    const dots = $('car-dots-' + id);
+    const n = visibleCount(track);
+    if (n < 2) {
+      arrows.forEach(a => { a.style.display = 'none'; });
+      if (dots) dots.style.display = 'none';
+      carState[id] = 0;
+      track.style.transform = 'translateX(0)';
+      return;
+    }
+    arrows.forEach(a => { a.style.display = ''; });
+    if (dots) {
+      dots.style.display = '';
+      dots.innerHTML = track.querySelectorAll('img').length
+        ? [...track.querySelectorAll('img')].filter(i => i.style.display !== 'none')
+            .map((_, i) => `<span class="car-dot${i === 0 ? ' active' : ''}"></span>`).join('')
+        : '';
+    }
+    if (carState[id] >= n) carState[id] = n - 1;
+    track.style.transform = `translateX(-${carState[id] * 100}%)`;
+  }
+
+  function syncModalCarousel() {
+    const track = $('modal-track');
+    if (!track) return;
+    const arrows = [$('modal-prev'), $('modal-next')];
+    const dots = $('modal-dots');
+    const n = visibleCount(track);
+    if (n < 2) {
+      arrows.forEach(a => { if (a) a.style.display = 'none'; });
+      if (dots) dots.style.display = 'none';
+      modalIndex = 0;
+      track.style.transform = 'translateX(0)';
+      return;
+    }
+    arrows.forEach(a => { if (a) a.style.display = ''; });
+    if (dots) {
+      dots.style.display = '';
+      dots.innerHTML = [...track.querySelectorAll('img')].filter(i => i.style.display !== 'none')
+        .map((_, i) => `<span class="car-dot${i === 0 ? ' active' : ''}"></span>`).join('');
+    }
+    if (modalIndex >= n) modalIndex = n - 1;
+    track.style.transform = `translateX(-${modalIndex * 100}%)`;
+  }
+
+  function setCarIndex(id, idx) {
+    const track = $('car-track-' + id);
+    const n = visibleCount(track);
+    if (n < 2) return;
+    carState[id] = ((idx % n) + n) % n;
+    track.style.transform = `translateX(-${carState[id] * 100}%)`;
+    const dots = $('car-dots-' + id);
+    if (dots) {
+      const d = dots.children;
+      for (let i = 0; i < d.length; i++) d[i].classList.toggle('active', i === carState[id]);
+    }
+  }
+
+  function setModalIndex(idx) {
+    const track = $('modal-track');
+    const n = visibleCount(track);
+    if (n < 2) return;
+    modalIndex = ((idx % n) + n) % n;
+    track.style.transform = `translateX(-${modalIndex * 100}%)`;
+    const dots = $('modal-dots');
+    if (dots) {
+      const d = dots.children;
+      for (let i = 0; i < d.length; i++) d[i].classList.toggle('active', i === modalIndex);
+    }
+  }
+
+// ── Modal ──
+  let currentProp = null;
+  let sellConfirm = false;
+
+  function openModal(id) {
+    const prop = PROPERTIES.find(p => p.id === id);
+    if (!prop) return;
+    currentProp = prop;
+    sellConfirm = false;
+const title = prop.name || ('Propiedad #' + prop.id);
+    const images = carImages(prop);
+    modalIndex = 0;
+    $('modal-track').innerHTML = images.length
+      ? images.map(src => `<img src="${src}" alt="${title}" onerror="this.style.display='none';syncModalCarousel()">`).join('')
+      : '<div class="no-photo">🏠</div>';
+    $('modal-dots').innerHTML = '';
+    $('modal-price').textContent = '$' + prop.price.toLocaleString();
+    $('modal-address').textContent = title;
+    $('modal-type').textContent = prop.type === 'negocio' ? 'Negocio' : 'Vivienda';
+    $('modal-bedrooms').textContent = 'N.º ' + prop.id;
+    const isMine = !!myProps[prop.id];
+    $('modal-state').textContent = isMine ? 'Comprada' : (MARKET_SALES_CLOSED ? 'No disponible' : 'Disponible');
+    syncModalCarousel();
+
+    const balEl = $('modal-balance');
+    const buyBtn = $('modal-buy');
+    const sellNote = $('modal-sell-note');
+    if (isMine) {
+      buyBtn.classList.add('sell');
+      buyBtn.classList.remove('buy');
+      buyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Vender por $${resaleValue(prop).toLocaleString()}`;
+      buyBtn.disabled = false;
+      if (balEl) {
+        balEl.textContent = hrpFormatBalance(myBalance);
+        balEl.classList.remove('insufficient');
+      }
+      if (sellNote) sellNote.innerHTML = `Al vender recibes <strong>$${resaleValue(prop).toLocaleString()}</strong> (75% de los <strong>$${(myProps[prop.id]?.price_paid || prop.price).toLocaleString()}</strong> que pagaste).`;
+    } else if (MARKET_SALES_CLOSED) {
+      buyBtn.classList.remove('sell', 'confirming');
+      buyBtn.classList.add('buy');
+      buyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> No disponible`;
+      buyBtn.disabled = true;
+      if (balEl) {
+        balEl.textContent = myBalance === null ? '$---' : hrpFormatBalance(myBalance);
+        balEl.classList.remove('insufficient');
+      }
+      if (sellNote) sellNote.innerHTML = `⚠️ ${SALES_CLOSED_MSG}`;
+    } else {
+      buyBtn.classList.remove('sell', 'confirming');
+      buyBtn.classList.add('buy');
+      buyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11h14"/><path d="M12 4v14"/></svg> Comprar Propiedad`;
+      if (sellNote) sellNote.innerHTML = '';
+      if (myBalance === null) {
+        if (balEl) {
+          balEl.textContent = '$---';
+          balEl.classList.remove('insufficient');
+        }
+        buyBtn.disabled = true;
+      } else {
+        const enough = myBalance >= prop.price;
+        if (balEl) {
+          balEl.textContent = hrpFormatBalance(myBalance);
+          balEl.classList.toggle('insufficient', !enough);
+        }
+        buyBtn.disabled = !enough;
+      }
+    }
+    $('modal-overlay').classList.add('open');
+  }
+
+  function closeModal() {
+    $('modal-overlay').classList.remove('open');
+    currentProp = null;
+  }
+
+  $('modal-close').addEventListener('click', closeModal);
+  $('modal-cancel').addEventListener('click', closeModal);
+  $('modal-overlay').addEventListener('click', e => {
+    if (e.target === $('modal-overlay')) closeModal();
+  });
+
+// ── Compra / Venta ──
+  $('modal-buy').addEventListener('click', async () => {
+    if (!currentProp || !userId) return;
+    const prop = currentProp;
+
+    // Ventas cerradas (update de ERLC): no se puede comprar ninguna propiedad.
+    if (MARKET_SALES_CLOSED && !myProps[prop.id]) {
+      showToast('Compra no disponible: ' + SALES_CLOSED_MSG, 'error');
+      return;
+    }
+
+    // Venta: primero confirmación, luego se ejecuta
+    if (myProps[prop.id]) {
+      if (!sellConfirm) {
+        sellConfirm = true;
+        const btn = $('modal-buy');
+        btn.classList.add('confirming');
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Confirmar venta por $${resaleValue(prop).toLocaleString()}`;
+        return;
+      }
+      const amount = resaleValue(prop);
+      try {
+        await supaDelete('properties', { id: `eq.${prop.id}` });
+        const credited = await hrpAddBalance(userId, amount);
+        if (!credited) {
+          showToast('Error al acreditar el dinero. Intenta de nuevo.', 'error');
+          return;
+        }
+        delete myProps[prop.id];
+        myBalance = myBalance === null ? null : myBalance + amount;
+        closeModal();
+        renderProperties();
+        loadBalance();
+        showToast(`¡Vendiste ${prop.name}! Recibiste $${amount.toLocaleString()} (75% de lo que pagaste).`, 'success');
+      } catch (e) {
+        console.error('Sell error:', e);
+        showToast('Error al procesar la venta. Intenta de nuevo.', 'error');
+      }
+      return;
+    }
+
+    // Re-chequeo de fondos
+    const balance = await hrpGetBalance(userId);
+    if (balance === null || balance < prop.price) {
+      myBalance = balance;
+      showToast('Fondos insuficientes para comprar esta propiedad.', 'error');
+      closeModal();
+      loadBalance();
+      return;
+    }
+
+    // Descontar de la economía
+    const ok = await hrpDeductBalance(userId, prop.price);
+    if (!ok) {
+      showToast('Error al procesar el pago. Intenta de nuevo.', 'error');
+      return;
+    }
+
+    // Guardar el propietario en Supabase
+    try {
+      await supaUpsert('properties', { id: prop.id, owner: userId, price_paid: prop.price }, 'id');
+    } catch (e) {
+      console.error('Persist owner error:', e);
+      await hrpAddBalance(userId, prop.price);
+      showToast('Error al guardar la compra. Tu dinero fue devuelto.', 'error');
+      loadBalance();
+      return;
+    }
+
+    myProps[prop.id] = { price_paid: prop.price };
+
+    myBalance = balance - prop.price;
+    closeModal();
+    renderProperties();
+    loadBalance();
+    showToast(`¡Propiedad adquirida! Se descontaron $${prop.price.toLocaleString()} de tu balance.`, 'success');
+  });
+
+// ── Click en "Ver Propiedad" + flechas carrusel (event delegation) ──
+  $('market-grid').addEventListener('click', e => {
+    const arrow = e.target.closest('.car-arrow');
+    if (arrow) {
+      const id = parseInt(arrow.dataset.car);
+      setCarIndex(id, carState[id] + parseInt(arrow.dataset.dir));
+      return;
+    }
+    const btn = e.target.closest('.btn-view');
+    if (btn && !btn.classList.contains('disabled')) {
+      openModal(parseInt(btn.dataset.id));
+    }
+  });
+
+  $('modal-prev').addEventListener('click', () => {
+    if (currentProp) setModalIndex(modalIndex - 1);
+  });
+  $('modal-next').addEventListener('click', () => {
+    if (currentProp) setModalIndex(modalIndex + 1);
+  });
+
+  // ── Toast ──
+  let toastTimer = null;
+  function showToast(msg, type = 'success') {
+    const toast = $('toast');
+    $('toast-msg').textContent = msg;
+    $('toast-icon').textContent = type === 'error' ? '✕' : '✓';
+    toast.classList.toggle('error', type === 'error');
+    toast.classList.toggle('success', type !== 'error');
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+  }
+
+// ── Init ──
+  loadOwned().then(renderProperties);
+</script>
+</body>
+</html>

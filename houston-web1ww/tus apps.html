@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mantenimiento — Houston RP</title>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0d1424;color:#e4e7ee;font-family:Inter,sans-serif;text-align:center;"><div><div style="font-size:48px;margin-bottom:16px;">🔧</div><h1 style="font-family:Rajdhani,sans-serif;font-size:28px;font-weight:700;margin-bottom:8px;">Tus Apps en Mantenimiento</h1><p style="color:#8a93a7;font-size:14px;">Esta sección está temporalmente fuera de servicio.</p><a href="dashboard.html" style="display:inline-block;margin-top:20px;padding:10px 24px;background:#3b6fb6;color:#fff;border-radius:8px;text-decoration:none;font-family:Rajdhani,sans-serif;font-weight:600;">Volver al Dashboard</a></div></div>';
+});
+</script>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#0a1628">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #050810; color: #e4e7ee;
+    font-family: 'Inter', sans-serif;
+    height: 100vh; display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  /* SPLASH */
+  #splash {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #050810;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.8s ease;
+  }
+  #splash.hide { opacity: 0; pointer-events: none; }
+  .splash-icon { font-size: 48px; margin-bottom: 12px; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.1); opacity: 1; } }
+  .splash-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 42px; font-weight: 700;
+    letter-spacing: 4px; color: #e4e7ee;
+    text-shadow: 0 0 40px rgba(255,255,255,0.1);
+  }
+  .splash-sub { font-size: 10px; letter-spacing: 6px; color: rgba(255,255,255,0.1); margin-top: 12px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+  .splash-bar { width: 140px; height: 2px; background: rgba(255,255,255,0.04); border-radius: 2px; margin-top: 28px; overflow: hidden; }
+  .splash-bar-inner { height: 100%; width: 0%; background: linear-gradient(90deg, transparent, #e4e7ee, transparent); animation: loadBar 2s ease forwards; }
+  @keyframes loadBar { 0% { width: 0%; } 100% { width: 100%; } }
+
+  .turn-on { animation: turnOn 0.6s ease forwards; }
+  @keyframes turnOn {
+    0% { filter: brightness(0) saturate(0); }
+    50% { filter: brightness(3) saturate(0.5); }
+    100% { filter: brightness(1) saturate(1); }
+  }
+
+  /* PHONE FRAME */
+  .phone-wrap {
+    position: relative;
+    width: 340px; height: 680px;
+    opacity: 0; transform: scale(0.7) translateY(60px);
+    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .phone-wrap.show { opacity: 1; transform: scale(1) translateY(0); }
+
+  .phone {
+    position: relative; width: 100%; height: 100%;
+    background: linear-gradient(180deg, #0d0d1a 0%, #050810 100%);
+    border-radius: 44px; padding: 12px;
+    border: 2px solid rgba(255,255,255,0.06);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.03),
+      0 30px 80px rgba(0,0,0,0.8);
+    overflow: hidden;
+  }
+
+  .phone-notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 28px;
+    background: #050810;
+    border-radius: 0 0 16px 16px;
+    z-index: 10;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .phone-notch .cam {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: radial-gradient(circle, #1a1a2e, #050810);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .phone-notch .speaker {
+    width: 40px; height: 4px; border-radius: 4px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .phone-screen {
+    width: 100%; height: 100%;
+    border-radius: 34px;
+    background: #0b0e1a;
+    overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+  }
+
+  .phone-time {
+    position: absolute; top: 10px; left: 0; right: 0;
+    text-align: center; font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.2);
+    z-index: 5;
+    padding-top: 30px;
+  }
+
+  /* APP SCREENS */
+  .app-screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: translateY(10px);
+    overflow-y: auto;
+  }
+  .app-screen::-webkit-scrollbar { width: 3px; }
+  .app-screen::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
+  .app-screen.active {
+    opacity: 1; pointer-events: auto;
+    transform: translateY(0);
+    z-index: 2;
+  }
+
+  /* LOCK SCREEN */
+  #screen-lock {
+    justify-content: center; align-items: center;
+    background: linear-gradient(180deg, #0a0f1a 0%, #050810 100%);
+    z-index: 3;
+    padding: 60px 20px 40px;
+    position: absolute; inset: 0;
+  }
+  .lock-wallpaper {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(100,60,200,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, rgba(200,100,60,0.1) 0%, transparent 50%);
+  }
+  .lock-content { position: relative; z-index: 1; text-align: center; width: 100%; }
+  .lock-time-big {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 56px; font-weight: 700; color: #e4e7ee;
+    letter-spacing: 2px; line-height: 1;
+  }
+  .lock-date {
+    font-size: 10px; color: rgba(255,255,255,0.2);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 2px; margin-top: 4px; margin-bottom: 40px;
+  }
+  .lock-icon-top { font-size: 40px; margin-bottom: 8px; }
+
+  .swipe-bar {
+    position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+    width: 160px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    touch-action: none;
+    z-index: 5;
+  }
+  .swipe-track {
+    width: 160px; height: 40px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .swipe-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.12));
+    border-radius: 20px;
+    transition: width 0.05s linear;
+  }
+  .swipe-thumb {
+    position: absolute;
+    left: 2px; top: 2px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: left 0.05s linear;
+    pointer-events: none;
+  }
+  .swipe-label {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+    pointer-events: none;
+    text-transform: uppercase;
+  }
+
+  /* HOME SCREEN */
+  #screen-home {
+    background: #0b0e1a;
+    padding: 56px 16px 20px;
+    position: absolute; inset: 0;
+  }
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 20px 0;
+  }
+  .home-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .home-app:active { transform: scale(0.88); }
+  .home-app .icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .home-app .name {
+    font-size: 9px;
+    font-family: 'Rajdhani', sans-serif;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .icon-inagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+  .icon-frin { background: linear-gradient(135deg, #3b6fb6, #3b6fb6); }
+  .icon-gallery { background: linear-gradient(135deg, #ff6b35, #f7c948); }
+  .icon-music { background: linear-gradient(135deg, #ff2d55, #c7b2b2); }
+  .icon-settings { background: linear-gradient(135deg, #2c3e50, #4a6fa5); }
+  .icon-phone { background: linear-gradient(135deg, #2dd4a0, #1a9c7a); }
+
+  .home-dock {
+    position: absolute;
+    bottom: 16px; left: 16px; right: 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 20px;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-around;
+    backdrop-filter: blur(10px);
+  }
+  .home-dock .home-app .icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    font-size: 22px;
+  }
+
+  /* INAGRAM */
+  #screen-inagram {
+    background: #0b0e1a;
+    padding: 0;
+    position: absolute; inset: 0;
+  }
+  .inagram-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px 12px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    flex-shrink: 0;
+    background: #0b0e1a;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+  }
+  .inagram-header h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .inagram-header .back-btn {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: rgba(255,255,255,0.03); border: none;
+    color: rgba(255,255,255,0.4); cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .inagram-header .back-btn:active { background: rgba(255,255,255,0.06); color: #fff; }
+  .inagram-header .header-actions { display: flex; gap: 8px; }
+  .inagram-header .header-actions button {
+    width: 32px; height: 32px; border-radius: 10px;
+    border: none; background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.4); cursor: pointer;
+    font-size: 16px; transition: all 0.2s;
+  }
+  .inagram-header .header-actions button:active { background: rgba(255,255,255,0.06); }
+
+  .inagram-feed {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+  .inagram-feed::-webkit-scrollbar { width: 3px; }
+  .inagram-feed::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
+
+  .post {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding: 12px 16px;
+    animation: postIn 0.3s ease;
+  }
+  @keyframes postIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .post-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.06);
+  }
+  .post-user {
+    font-size: 12px; font-weight: 600;
+    color: #e4e7ee;
+    flex: 1;
+  }
+  .post-user span { font-size: 10px; color: rgba(255,255,255,0.2); font-weight: 400; margin-left: 4px; }
+  .post-more { color: rgba(255,255,255,0.15); font-size: 14px; cursor: pointer; }
+
+  .post-image {
+    width: calc(100% + 32px);
+    margin: 0 -16px 10px;
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+    background: rgba(255,255,255,0.02);
+    position: relative;
+    overflow: hidden;
+  }
+  .post-image .img-bg {
+    position: absolute; inset: 0;
+    opacity: 0.3;
+  }
+
+  .post-actions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+  .post-actions button {
+    background: none; border: none;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+  .post-actions button:active { transform: scale(0.85); }
+  .post-actions .like-btn.liked { color: #e54850; }
+  .post-actions .like-btn.liked i { animation: likePop 0.3s ease; }
+  @keyframes likePop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+  .post-actions .save-btn { margin-left: auto; }
+
+  .post-likes {
+    font-size: 11px;
+    font-weight: 600;
+    color: #e4e7ee;
+    margin-bottom: 4px;
+  }
+  .post-caption {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .post-caption strong { color: #e4e7ee; font-weight: 600; }
+  .post-comments-toggle {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    cursor: pointer;
+    margin-bottom: 4px;
+  }
+  .post-comments {
+    display: none;
+    margin-top: 6px;
+  }
+  .post-comments.show { display: block; }
+  .comment {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    padding: 3px 0;
+    display: flex;
+    gap: 6px;
+  }
+  .comment strong { color: #e4e7ee; font-weight: 600; flex-shrink: 0; }
+  .comment-input-wrap {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+  }
+  .comment-input-wrap input {
+    flex: 1;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    color: #e4e7ee;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    outline: none;
+  }
+  .comment-input-wrap input:focus { border-color: rgba(255,255,255,0.12); }
+  .comment-input-wrap button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f58529, #dd2a7b);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .comment-input-wrap button:active { transform: scale(0.95); }
+
+  .load-more {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255,255,255,0.1);
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* PROFILE */
+  #screen-profile {
+    background: #0b0e1a;
+    padding: 0;
+    position: absolute; inset: 0;
+  }
+  .profile-header {
+    padding: 50px 16px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .profile-header .back-btn {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: rgba(255,255,255,0.03); border: none;
+    color: rgba(255,255,255,0.4); cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+  }
+  .profile-info { flex: 1; display: flex; align-items: center; gap: 12px; }
+  .profile-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    border: 2px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .profile-stats { display: flex; gap: 16px; }
+  .profile-stats div { text-align: center; }
+  .profile-stats .num { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: #e4e7ee; }
+  .profile-stats .lbl { font-size: 9px; color: rgba(255,255,255,0.2); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.5px; }
+  .profile-bio {
+    padding: 12px 16px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    padding: 2px;
+  }
+  .profile-grid-item {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 2px;
+  }
+
+  /* FRIN FRAIREN */
+  #screen-frin {
+    background: linear-gradient(180deg, #0a0f2a 0%, #1a0a3a 100%);
+    padding: 0;
+    position: absolute; inset: 0;
+    overflow: hidden;
+  }
+  .frin-header {
+    padding: 50px 16px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+  .frin-header .back-btn {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: rgba(255,255,255,0.06); border: none;
+    color: rgba(255,255,255,0.4); cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+  }
+  .frin-header h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: #e4e7ee;
+    letter-spacing: 1px;
+  }
+  .frin-header .score {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: #f7c948;
+  }
+
+  .frin-game-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  .frin-player {
+    position: absolute;
+    bottom: 60px;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #3b6fb6, #3b6fb6);
+    box-shadow: 0 0 20px rgba(230,168,104,0.3);
+    z-index: 2;
+    transition: bottom 0.15s ease;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .frin-player.jump { bottom: 150px; }
+
+  .frin-obstacle {
+    position: absolute;
+    bottom: 60px;
+    width: 20px; height: 30px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #e54850, #c7b2b2);
+    box-shadow: 0 0 16px rgba(229,72,80,0.2);
+    z-index: 1;
+  }
+  .frin-ground {
+    position: absolute;
+    bottom: 50px;
+    left: 0; right: 0;
+    height: 2px;
+    background: rgba(255,255,255,0.06);
+  }
+  .frin-stars {
+    position: absolute; inset: 0;
+    overflow: hidden;
+  }
+  .frin-star {
+    position: absolute;
+    width: 2px; height: 2px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    animation: twinkle 2s ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%,100% { opacity: 0.2; } 50% { opacity: 0.8; } }
+
+  .frin-start-screen {
+    position: absolute; inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(4px);
+  }
+  .frin-start-screen h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 32px; font-weight: 700;
+    background: linear-gradient(135deg, #3b6fb6, #3b6fb6, #8134af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+  }
+  .frin-start-screen p {
+    font-size: 11px; color: rgba(255,255,255,0.2);
+    margin: 8px 0 20px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .frin-start-screen button {
+    padding: 12px 36px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3b6fb6, #3b6fb6);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 0 30px rgba(230,168,104,0.2);
+  }
+  .frin-start-screen button:active { transform: scale(0.95); }
+  .frin-start-screen .hs {
+    margin-top: 12px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .frin-start-screen .hs span { color: #f7c948; }
+
+  .frin-game-over {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(4px);
+  }
+  .frin-game-over.show { display: flex; }
+  .frin-game-over h2 { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; color: #c7b2b2; letter-spacing: 1px; }
+  .frin-game-over .final-score { font-family: 'Rajdhani', sans-serif; font-size: 40px; font-weight: 700; color: #f7c948; margin: 8px 0; }
+  .frin-game-over p { font-size: 10px; color: rgba(255,255,255,0.2); }
+  .frin-game-over button {
+    margin-top: 16px;
+    padding: 12px 36px;
+    border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #3b6fb6, #3b6fb6);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .frin-game-over button:active { transform: scale(0.95); }
+
+  .phone-wrap.landscape {
+    transform: rotate(-90deg) scale(0.52);
+  }
+
+  /* CREATE POST */
+  .create-post-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    flex-shrink: 0;
+    background: #0b0e1a;
+  }
+  .create-post-bar input {
+    flex: 1;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    color: #e4e7ee;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .create-post-bar input:focus { border-color: rgba(255,255,255,0.12); }
+  .create-post-bar input::placeholder { color: rgba(255,255,255,0.15); }
+  .create-post-bar button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f58529, #dd2a7b);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .create-post-bar button:active { transform: scale(0.95); }
+
+  .btn-dashboard {
+    position: fixed; top: 20px; left: 20px; z-index: 9999;
+    padding: 10px 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.4);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+  }
+  .btn-dashboard:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+  }
+
+  @media (max-width: 400px) {
+    .phone-wrap { width: 300px; height: 600px; }
+    .phone-wrap.landscape { transform: rotate(-90deg) scale(0.46); }
+  }
+  @media (max-width: 360px) {
+    .phone-wrap { width: 280px; height: 560px; }
+    .phone-wrap.landscape { transform: rotate(-90deg) scale(0.43); }
+  }
+  @media (min-width: 768px) {
+    body { background: radial-gradient(ellipse at center, #0a0f1a 0%, #04060d 100%); }
+  }
+</style>
+</head>
+<body>
+
+<a class="btn-dashboard" href="dashboard.html">← Dashboard</a>
+
+<div id="splash">
+  <div class="splash-icon">📱</div>
+  <div class="splash-logo">TUS APPS</div>
+  <div class="splash-sub">Houston Roleplay</div>
+  <div class="splash-bar"><div class="splash-bar-inner"></div></div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:center;">
+  <div class="phone-wrap" id="phone-wrap">
+    <div class="phone turn-on" id="phone">
+      <div class="phone-notch"><div class="speaker"></div><div class="cam"></div></div>
+      <div class="phone-screen">
+        <div class="phone-time" id="phone-time">9:41</div>
+
+        <!-- LOCK SCREEN -->
+        <div class="app-screen active" id="screen-lock">
+          <div class="lock-wallpaper"></div>
+          <div class="lock-content">
+            <div class="lock-icon-top">🔒</div>
+            <div class="lock-time-big" id="lock-time">9:41</div>
+            <div class="lock-date" id="lock-date">lunes, 1 de enero</div>
+          </div>
+          <div class="swipe-bar" id="swipe-bar">
+            <div class="swipe-track" id="swipe-track">
+              <div class="swipe-fill" id="swipe-fill"></div>
+              <div class="swipe-label">Desliza para abrir</div>
+              <div class="swipe-thumb" id="swipe-thumb">▶</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HOME SCREEN -->
+        <div class="app-screen" id="screen-home">
+          <div class="home-grid">
+            <div class="home-app" onclick="openInagram()">
+              <div class="icon icon-inagram">📷</div>
+              <div class="name">Inagram</div>
+            </div>
+            <div class="home-app" onclick="openFrin()">
+              <div class="icon icon-frin">🎮</div>
+              <div class="name">Frin Frairen</div>
+            </div>
+            <div class="home-app">
+              <div class="icon icon-gallery">🖼️</div>
+              <div class="name">Galería</div>
+            </div>
+            <div class="home-app">
+              <div class="icon icon-music">🎵</div>
+              <div class="name">Música</div>
+            </div>
+            <div class="home-app">
+              <div class="icon icon-settings">⚙️</div>
+              <div class="name">Ajustes</div>
+            </div>
+            <div class="home-app">
+              <div class="icon icon-phone">📞</div>
+              <div class="name">Teléfono</div>
+            </div>
+          </div>
+          <div class="home-dock">
+            <div class="home-app" onclick="openInagram()">
+              <div class="icon icon-inagram">📷</div>
+              <div class="name">Inagram</div>
+            </div>
+            <div class="home-app" onclick="openFrin()">
+              <div class="icon icon-frin">🎮</div>
+              <div class="name">Frin</div>
+            </div>
+            <div class="home-app">
+              <div class="icon icon-gallery">🖼️</div>
+              <div class="name">Galería</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INAGRAM -->
+        <div class="app-screen" id="screen-inagram">
+          <div class="inagram-header">
+            <button class="back-btn" onclick="closeInagram()">←</button>
+            <h2>Inagram</h2>
+            <div class="header-actions">
+              <button onclick="openProfile()">👤</button>
+            </div>
+          </div>
+          <div class="create-post-bar">
+            <input id="post-input" placeholder="¿Qué estás pensando?" maxlength="100">
+            <button onclick="publishPost()">Publicar</button>
+          </div>
+          <div class="inagram-feed" id="inagram-feed"></div>
+          <div class="load-more" id="load-more">↓ desliza para más</div>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="app-screen" id="screen-profile">
+          <div class="profile-header">
+            <button class="back-btn" onclick="closeProfile()">←</button>
+            <div class="profile-info">
+              <div class="profile-avatar" id="profile-avatar">👤</div>
+              <div class="profile-stats">
+                <div><div class="num" id="profile-posts">0</div><div class="lbl">Posts</div></div>
+                <div><div class="num" id="profile-likes">0</div><div class="lbl">Likes</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="profile-bio" id="profile-bio">📖 No hay bio aún...</div>
+          <div class="profile-grid" id="profile-grid"></div>
+        </div>
+
+        <!-- FRIN FRAIREN -->
+        <div class="app-screen" id="screen-frin">
+          <div class="frin-header">
+            <button class="back-btn" onclick="closeFrin()">←</button>
+            <h2>✦ Frin Frairen</h2>
+            <div class="score">🏆 <span id="frin-score">0</span></div>
+          </div>
+          <div class="frin-game-area" id="frin-game-area">
+            <div class="frin-stars" id="frin-stars"></div>
+            <div class="frin-ground"></div>
+            <div class="frin-player" id="frin-player">🧑</div>
+
+            <div class="frin-start-screen" id="frin-start">
+              <h2>✦ Frin Frairen</h2>
+              <p>Salta los obstáculos</p>
+              <button onclick="startFrin()">Jugar</button>
+              <div class="hs">Récord: <span id="frin-hs">0</span></div>
+            </div>
+
+            <div class="frin-game-over" id="frin-gameover">
+              <h2>Game Over</h2>
+              <div class="final-score" id="frin-final">0</div>
+              <p>Puntuación</p>
+              <button onclick="startFrin()">Reintentar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let userId = 'user_' + Math.random().toString(36).slice(2, 8);
+let userName = 'Usuario';
+
+// ── SESSION ──
+async function init() {
+  if (typeof hrpGetSession === 'function') {
+    const s = hrpGetSession();
+    if (!s || !s.id) { const _p=window.location.pathname.split('/').pop()||'index.html'; if(_p!=='index.html')localStorage.setItem('hrp_redirect',_p); window.location.href = 'index.html'; return; }
+    userId = s.id;
+    userName = s.global_name || s.username || 'Usuario';
+  }
+  updateClock();
+  setTimeout(() => {
+    $('splash').classList.add('hide');
+    setTimeout(() => {
+      $('splash').style.display = 'none';
+      $('phone-wrap').classList.add('show');
+    }, 800);
+  }, 2500);
+}
+
+// ── CLOCK ──
+function updateClock() {
+  const d = new Date();
+  const h = d.getHours().toString().padStart(2,'0');
+  const m = d.getMinutes().toString().padStart(2,'0');
+  const t = `${h}:${m}`;
+  const el = $('phone-time');
+  if (el) el.textContent = t;
+  const lt = $('lock-time');
+  if (lt) lt.textContent = t;
+  const ld = $('lock-date');
+  if (ld) {
+    const days = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+    const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    ld.textContent = `${days[d.getDay()]}, ${d.getDate()} de ${months[d.getMonth()]}`;
+  }
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ── SWIPE TO UNLOCK ──
+(function initSwipe() {
+  const track = $('swipe-track');
+  const fill = $('swipe-fill');
+  const thumb = $('swipe-thumb');
+  const bar = $('swipe-bar');
+  let dragging = false, startX = 0, currentX = 0;
+  const TRACK_W = 160, THUMB_W = 36;
+  const maxDrag = TRACK_W - THUMB_W - 4;
+
+  function onStart(e) {
+    const cx = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+    const rect = track.getBoundingClientRect();
+    if (cx >= rect.left && cx <= rect.right) {
+      dragging = true;
+      startX = cx;
+    }
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    const cx = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+    const rect = track.getBoundingClientRect();
+    let dx = cx - rect.left - 2;
+    dx = Math.max(0, Math.min(maxDrag, dx));
+    const pct = (dx / maxDrag) * 100;
+    fill.style.width = pct + '%';
+    thumb.style.left = dx + 'px';
+    if (pct >= 95) {
+      dragging = false;
+      unlockPhone();
+    }
+  }
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    fill.style.width = '0%';
+    thumb.style.left = '2px';
+  }
+
+  bar.addEventListener('mousedown', onStart);
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onEnd);
+  bar.addEventListener('touchstart', onStart, { passive: true });
+  document.addEventListener('touchmove', onMove, { passive: false });
+  document.addEventListener('touchend', onEnd);
+})();
+
+function unlockPhone() {
+  $('screen-lock').classList.remove('active');
+  $('screen-home').classList.add('active');
+}
+
+// ── INAGRAM ──
+const COLORS = ['#f58529','#dd2a7b','#8134af','#3b6fb6','#3b6fb6','#2dd4a0','#f7c948','#c7b2b2','#e54850','#a855f7'];
+const USERNAMES = [
+  'luna_valle','carlos_mtz','sam_rodriguez','sofia_99','mateo_h',
+  'valentina_r','jose_23','ana_luisa','diego_rp','paula_88',
+  'andres_m','maria_j','felipe_gt','carolina_p','jorge_l',
+  'isabel_t','raul_sa','gabriela_m','ricardo_n','elena_v',
+  'arturo_c','laura_q','hugo_rp','carmen_d','ivan_pl',
+  'rosa_ml','oscar_t','lucia_f','miguel_ag','clara_b'
+];
+const CAPTIONS = [
+  '✨ Nuevo día, nueva aventura',
+  '🌅 Amanecer en Houston',
+  '🚗 Listo para el turno',
+  '🎉 Con la mejor comunidad',
+  '🔥 Noche épica',
+  '💪 Siempre activo',
+  '🌟 Gracias a todos por el apoyo',
+  '🏙️ Houston desde arriba',
+  '🚔 Protegiendo la ciudad',
+  '🎵 Música y buen rollo',
+  '📸 Momento capturado',
+  '🌴 Vida en la ciudad',
+  '⚡ Energía positiva',
+  '🎯 Enfocado en mis metas',
+  '💎 Brilla como el oro',
+  '🚀 Rumbo al éxito',
+  '🏆 Campeones nunca se rinden',
+  '🌊 Fluir como el agua',
+  '🔥 Esto apenas comienza',
+  '👊 Juntos somos más fuertes'
+];
+const POST_EMOJIS = ['🌅','🚗','🎉','🔥','🌟','🏙️','🚔','🎵','🌴','⚡','💎','🚀','🏆','🌊','👊','🎯','📸','💪','✨','🎮','🏈','⚽','🎸','🎨','📚','🍕','🌮','🥤','🎂','🍀'];
+
+let allPosts = [];
+let displayedPosts = 0;
+const POSTS_PER_BATCH = 5;
+let totalGenerated = 0;
+
+function generatePost(id) {
+  const u = USERNAMES[id % USERNAMES.length];
+  const avatarColors = COLORS[id % COLORS.length];
+  const emoji = POST_EMOJIS[id % POST_EMOJIS.length];
+  const cap = CAPTIONS[id % CAPTIONS.length];
+  const likes = Math.floor(Math.random() * 150) + 5;
+  const commentCount = Math.floor(Math.random() * 12);
+  const comments = [];
+  for (let i = 0; i < commentCount; i++) {
+    const cu = USERNAMES[(id + i + 3) % USERNAMES.length];
+    const texts = ['🔥','❤️','👏','Increíble','Qué bien','💯','Me encanta','✨','👌','Fantástico','🙌','Siempre así','🎉','Grande','🚀'];
+    comments.push({ user: cu, text: texts[i % texts.length] });
+  }
+  return {
+    id, user: u, avatarColor, emoji, caption: cap,
+    likes, liked: false, likedBy: likes,
+    comments, showComments: false
+  };
+}
+
+function generateMorePosts() {
+  for (let i = 0; i < 50; i++) {
+    allPosts.push(generatePost(totalGenerated++));
+  }
+}
+
+function renderPost(post) {
+  const div = document.createElement('div');
+  div.className = 'post';
+  div.id = 'post-' + post.id;
+  div.innerHTML = `
+    <div class="post-header">
+      <div class="post-avatar" style="background:${post.avatarColor}">${post.emoji}</div>
+      <div class="post-user">${post.user} <span>• ${Math.floor(Math.random()*3)+1}h</span></div>
+      <div class="post-more">⋯</div>
+    </div>
+    <div class="post-image">
+      <div class="img-bg" style="background:linear-gradient(135deg, ${post.avatarColor}33, ${post.avatarColor}11)"></div>
+      ${post.emoji}
+    </div>
+    <div class="post-actions">
+      <button class="like-btn ${post.liked?'liked':''}" onclick="toggleLike(${post.id})">${post.liked?'❤️':'♡'}</button>
+      <button onclick="focusComment(${post.id})">💬</button>
+      <button>↗️</button>
+      <button class="save-btn">🔖</button>
+    </div>
+    <div class="post-likes" id="likes-${post.id}">${post.likes.toLocaleString()} likes</div>
+    <div class="post-caption"><strong>${post.user}</strong> ${post.caption}</div>
+    <div class="post-comments-toggle" onclick="toggleComments(${post.id})">
+      ${post.comments.length > 0 ? `Ver los ${post.comments.length} comentarios` : ''}
+    </div>
+    <div class="post-comments" id="comments-${post.id}">
+      ${post.comments.slice(0, 3).map(c => `<div class="comment"><strong>${c.user}</strong> ${c.text}</div>`).join('')}
+      <div class="comment-input-wrap">
+        <input id="comment-input-${post.id}" placeholder="Agrega un comentario..." maxlength="60">
+        <button onclick="addComment(${post.id})">→</button>
+      </div>
+    </div>
+  `;
+  return div;
+}
+
+function loadMorePosts() {
+  const feed = $('inagram-feed');
+  const next = Math.min(displayedPosts + POSTS_PER_BATCH, allPosts.length);
+  for (let i = displayedPosts; i < next; i++) {
+    feed.appendChild(renderPost(allPosts[i]));
+  }
+  displayedPosts = next;
+  $('load-more').textContent = displayedPosts < allPosts.length ? '↓ desliza para más' : `📱 ${allPosts.length} posts`;
+  if (displayedPosts < allPosts.length) {
+    // Generate more when running low
+    if (allPosts.length - displayedPosts < 10) {
+      generateMorePosts();
+    }
+  }
+}
+
+function openInagram() {
+  switchScreen('screen-inagram');
+  if (allPosts.length === 0) {
+    generateMorePosts();
+    loadMorePosts();
+    // infinite scroll
+    const feed = $('inagram-feed');
+    feed.addEventListener('scroll', () => {
+      if (feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 200) {
+        loadMorePosts();
+      }
+    });
+  }
+}
+
+function closeInagram() { switchScreen('screen-home'); }
+
+function publishPost() {
+  const input = $('post-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const emoji = POST_EMOJIS[Math.floor(Math.random() * POST_EMOJIS.length)];
+  const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const post = {
+    id: Date.now(),
+    user: userName,
+    avatarColor: color,
+    emoji: emoji,
+    caption: text,
+    likes: 0,
+    liked: false,
+    comments: [],
+    showComments: false
+  };
+  allPosts.unshift(post);
+  input.value = '';
+  // Re-render feed
+  const feed = $('inagram-feed');
+  feed.innerHTML = '';
+  displayedPosts = 0;
+  loadMorePosts();
+  showToast('📷 Publicado!');
+}
+
+function showToast(m) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(13, 20, 36, 0.95);border:1px solid rgba(230, 168, 104, 0.2);border-radius:12px;padding:10px 20px;color:#e4e7ee;font-size:12px;z-index:9999;opacity:0;transition:opacity 0.3s;font-family:Inter,sans-serif;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = m;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.style.opacity = '0', 2000);
+}
+
+function toggleLike(id) {
+  const post = allPosts.find(p => p.id === id);
+  if (!post) return;
+  post.liked = !post.liked;
+  post.likes += post.liked ? 1 : -1;
+  const btn = document.querySelector(`#post-${id} .like-btn`);
+  if (btn) {
+    btn.classList.toggle('liked', post.liked);
+    btn.innerHTML = post.liked ? '❤️' : '♡';
+  }
+  const lbl = $(`likes-${id}`);
+  if (lbl) lbl.textContent = post.likes.toLocaleString() + ' likes';
+}
+
+function toggleComments(id) {
+  const el = $(`comments-${id}`);
+  if (el) el.classList.toggle('show');
+}
+
+function focusComment(id) {
+  toggleComments(id);
+  setTimeout(() => {
+    const inp = $(`comment-input-${id}`);
+    if (inp) inp.focus();
+  }, 100);
+}
+
+function addComment(id) {
+  const inp = $(`comment-input-${id}`);
+  if (!inp || !inp.value.trim()) return;
+  const post = allPosts.find(p => p.id === id);
+  if (!post) return;
+  post.comments.push({ user: userName, text: inp.value.trim() });
+  inp.value = '';
+  const el = $(`comments-${id}`);
+  if (el) {
+    const comms = el.querySelectorAll('.comment');
+    const wrap = el.querySelector('.comment-input-wrap');
+    const newC = document.createElement('div');
+    newC.className = 'comment';
+    newC.innerHTML = `<strong>${userName}</strong> ${post.comments[post.comments.length-1].text}`;
+    el.insertBefore(newC, wrap);
+  }
+  // Update toggle text
+  const toggle = document.querySelector(`#post-${id} .post-comments-toggle`);
+  if (toggle) toggle.textContent = `Ver los ${post.comments.length} comentarios`;
+}
+
+// ── PROFILE ──
+function openProfile() {
+  switchScreen('screen-profile');
+  $(`profile-avatar`).style.background = COLORS[0];
+  $(`profile-avatar`).textContent = '👤';
+  const totalPosts = allPosts.length;
+  const totalLikes = allPosts.reduce((s, p) => s + p.likes, 0);
+  $(`profile-posts`).textContent = totalPosts;
+  $(`profile-likes`).textContent = totalLikes.toLocaleString();
+  $(`profile-bio`).textContent = `👋 ${userName} • Houston RP • 📍 Texas`;
+  const grid = $(`profile-grid`);
+  grid.innerHTML = '';
+  // Show last 9 posts as thumbnails
+  const recent = allPosts.slice(-9);
+  recent.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'profile-grid-item';
+    item.style.background = `linear-gradient(135deg, ${p.avatarColor}33, ${p.avatarColor}11)`;
+    item.textContent = p.emoji;
+    grid.appendChild(item);
+  });
+}
+
+function closeProfile() { switchScreen('screen-inagram'); }
+
+// ── FRIN FRAIREN ──
+let frinRunning = false, frinScore = 0, frinHighScore = 0;
+let frinAnimId = null, frinObstacles = [];
+let frinCanJump = true, frinJumping = false;
+
+function openFrin() {
+  switchScreen('screen-frin');
+  document.getElementById('phone-wrap').classList.add('landscape');
+  initFrinStars();
+}
+
+function closeFrin() {
+  frinRunning = false;
+  if (frinAnimId) cancelAnimationFrame(frinAnimId);
+  frinObstacles.forEach(o => o.el.remove());
+  frinObstacles = [];
+  document.getElementById('phone-wrap').classList.remove('landscape');
+  switchScreen('screen-home');
+}
+
+function initFrinStars() {
+  const container = $('frin-stars');
+  if (container.children.length > 0) return;
+  for (let i = 0; i < 30; i++) {
+    const star = document.createElement('div');
+    star.className = 'frin-star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    star.style.width = (Math.random() * 2 + 1) + 'px';
+    star.style.height = star.style.width;
+    container.appendChild(star);
+  }
+}
+
+function startFrin() {
+  $('frin-start').style.display = 'none';
+  $('frin-gameover').classList.remove('show');
+  frinRunning = true;
+  frinScore = 0;
+  frinJumping = false;
+  frinCanJump = true;
+  frinObstacles.forEach(o => o.el.remove());
+  frinObstacles = [];
+  $('frin-score').textContent = '0';
+  const player = $('frin-player');
+  player.style.bottom = '60px';
+  player.classList.remove('jump');
+
+  // Click/tap to jump
+  const area = $('frin-game-area');
+  area.onclick = () => {
+    if (!frinRunning) return;
+    if (!frinCanJump || frinJumping) return;
+    frinJumping = true;
+    frinCanJump = false;
+    player.classList.add('jump');
+    setTimeout(() => {
+      player.classList.remove('jump');
+      player.style.bottom = '60px';
+      frinJumping = false;
+      setTimeout(() => { frinCanJump = true; }, 150);
+    }, 350);
+  };
+
+  spawnObstacle();
+  frinGameLoop();
+}
+
+function spawnObstacle() {
+  if (!frinRunning) return;
+  const area = $('frin-game-area');
+  const el = document.createElement('div');
+  el.className = 'frin-obstacle';
+  el.style.left = (area.offsetWidth + 10) + 'px';
+  // Random height variation
+  const h = 24 + Math.random() * 16;
+  el.style.height = h + 'px';
+  const colors = ['#e54850','#c7b2b2','#ff9f43','#e74c3c','#ff4757'];
+  el.style.background = `linear-gradient(135deg, ${colors[Math.floor(Math.random()*colors.length)]}, ${colors[Math.floor(Math.random()*colors.length)]})`;
+  area.appendChild(el);
+  frinObstacles.push({ el, x: area.offsetWidth + 10, speed: 2 + frinScore * 0.05 });
+}
+
+function frinGameLoop() {
+  if (!frinRunning) return;
+  const area = $('frin-game-area');
+  const player = $('frin-player');
+  const isJumping = player.classList.contains('jump');
+  const playerY = isJumping ? 140 : (parseInt(player.style.bottom) || 60);
+  const playerRect = { x: 40, y: playerY, w: 30, h: 30 };
+
+  for (let i = frinObstacles.length - 1; i >= 0; i--) {
+    const o = frinObstacles[i];
+    o.x -= o.speed;
+    o.el.style.left = o.x + 'px';
+
+    // Collision
+    const oRect = { x: o.x, y: 60, w: 20, h: parseInt(o.el.style.height) || 30 };
+    if (
+      playerRect.x < oRect.x + oRect.w &&
+      playerRect.x + playerRect.w > oRect.x &&
+      playerRect.y < oRect.y + oRect.h &&
+      playerRect.y + playerRect.h > oRect.y
+    ) {
+      gameOverFrin();
+      return;
+    }
+
+    if (o.x < -30) {
+      o.el.remove();
+      frinObstacles.splice(i, 1);
+      frinScore++;
+      $('frin-score').textContent = frinScore;
+    }
+  }
+
+  // Spawn more obstacles
+  if (frinObstacles.length < 2 && Math.random() < 0.02) {
+    spawnObstacle();
+  }
+  if (frinObstacles.length === 0) {
+    spawnObstacle();
+  }
+
+  frinAnimId = requestAnimationFrame(frinGameLoop);
+}
+
+function gameOverFrin() {
+  frinRunning = false;
+  if (frinAnimId) cancelAnimationFrame(frinAnimId);
+  if (frinScore > frinHighScore) {
+    frinHighScore = frinScore;
+    $('frin-hs').textContent = frinHighScore;
+  }
+  $('frin-final').textContent = frinScore;
+  $('frin-gameover').classList.add('show');
+}
+
+// ── SCREEN SWITCHER ──
+function switchScreen(id) {
+  document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+</script>
+<script src="assets/auth.js"></script>
+<script>
+// ── INIT ──
+init();
+</script>
+</body>
+</html>
+
