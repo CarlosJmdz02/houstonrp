@@ -2916,8 +2916,9 @@
 
   function visibleBolos() {
     return boloCache.filter(b => {
+      if (b.estado === 'eliminado') return false;
       if (boloFilter === 'activos') return b.estado === 'activo';
-      if (boloFilter === 'cerrados') return b.estado === 'cerrado' || b.estado === 'eliminado';
+      if (boloFilter === 'cerrados') return b.estado === 'cerrado';
       return true;
     });
   }
@@ -3126,13 +3127,15 @@
   async function removeBoloById(id) {
     if (!confirm('¿Eliminar definitivamente este BOLO? Esta acción no se puede deshacer.')) return;
     try {
-      const b = boloCache.find(x => String(x.id) === String(id)) || {};
-      await boloUpdateMessage(id, Object.assign({}, b, { estado: 'eliminado', updated_at: new Date().toISOString() }));
+      await supaDelete('radio_messages', { id: `eq.${id}` });
+      boloCache = boloCache.filter(x => String(x.id) !== String(id));
       showToast('🗑️ BOLO eliminado');
-      loadBolos(true);
+      renderBoloList();
+      updateBoloCardBadge();
       loadHistoryBolos(true);
     } catch (err) {
       showToast('❌ Error: ' + (err.message || 'desconocido'), 'error');
+      loadBolos(true);
     }
   }
 
@@ -3157,6 +3160,7 @@
       const names = [robloxUsername].concat(discordIds || []).filter(Boolean);
       const allBolos = await boloFetchAll(500);
       const rows = (allBolos || []).filter(b => {
+        if (b.estado === 'eliminado') return false;
         const hay = [b.roblox_user, b.target_name, (b.roblox_id || '').toString()].filter(Boolean);
         return names.some(n => n && hay.some(h => String(h).toLowerCase().includes(String(n).toLowerCase())));
       });
@@ -3195,7 +3199,7 @@
     const countEl = $('htab-bolo-count');
     if (!list) return;
     try {
-      const rows = boloCache.length || force ? (await boloFetchAll(200).catch(() => [])) : [];
+      const rows = (boloCache.length || force ? (await boloFetchAll(200).catch(() => [])) : []).filter(b => b.estado !== 'eliminado');
       if (!rows || rows.length === 0) {
         list.innerHTML = '<div class="history-empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>No hay BOLOs registrados</p></div>';
         if (countEl) countEl.textContent = '0';
