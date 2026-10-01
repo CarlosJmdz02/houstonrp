@@ -424,6 +424,81 @@
     font-weight: 300;
   }
 
+  /* BANNER DE MANTENIMIENTO */
+  .maintenance-banner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 18px;
+    margin-bottom: 22px;
+    background: linear-gradient(100deg, rgba(245,158,11,0.12) 0%, rgba(245,158,11,0.03) 65%);
+    border: 1px solid rgba(245,158,11,0.38);
+    border-left: 3px solid var(--accent-orange);
+    border-radius: 12px;
+    box-shadow: 0 0 26px rgba(245,158,11,0.08);
+    animation: fadeSlideIn 0.5s ease both;
+  }
+
+  .mb-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: rgba(245,158,11,0.16);
+    border: 1px solid rgba(245,158,11,0.32);
+    color: var(--accent-orange);
+  }
+
+  .mb-body { flex: 1; min-width: 220px; }
+
+  .mb-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent-orange);
+    margin-bottom: 4px;
+  }
+
+  .mb-desc {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  .mb-desc strong { color: var(--text-primary); font-weight: 500; }
+
+  .mb-pill {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 13px;
+    border-radius: 20px;
+    background: rgba(245,158,11,0.16);
+    border: 1px solid rgba(245,158,11,0.45);
+    color: var(--accent-orange);
+    white-space: nowrap;
+    animation: mbPulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes mbPulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(245,158,11,0); }
+    50%      { box-shadow: 0 0 14px rgba(245,158,11,0.35); }
+  }
+
+  .prop-status.unavailable {
+    background: rgba(245,158,11,0.2);
+    color: var(--accent-orange);
+    border: 1px solid rgba(245,158,11,0.45);
+  }
+
   /* SORT BUTTON */
   .btn-sort {
     display: inline-flex;
@@ -1273,6 +1348,19 @@
   </header>
 
   <div class="content">
+
+    <div class="maintenance-banner" role="status">
+      <div class="mb-icon">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="mb-body">
+        <div class="mb-title">Marketplace en mantenimiento</div>
+        <div class="mb-desc">
+          Estamos actualizando las propiedades al nuevo <strong>update de ERLC 2026</strong>, por lo que todas las casas están <strong>no disponibles</strong> temporalmente. En este momento <strong>no se pueden realizar compras</strong>; pronto volverán a estar activas.
+        </div>
+      </div>
+      <span class="mb-pill">Compras pausadas</span>
+    </div>
 
     <div class="page-header">
       <div class="page-heading">
@@ -2459,7 +2547,7 @@ list.forEach(prop => {
             <button class="car-arrow next" type="button" data-car="${prop.id}" data-dir="1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></button>
             <div class="car-dots" id="car-dots-${prop.id}"></div>
           </div>
-          <span class="prop-status ${isMine ? 'sold' : 'available'}">${isMine ? 'Comprada' : 'Disponible'}</span>
+          <span class="prop-status ${isMine ? 'sold' : 'unavailable'}">${isMine ? 'Comprada' : 'No disponible'}</span>
           ${isBusiness ? '<span class="prop-status business">Negocio</span>' : ''}
         </div>
         <div class="prop-body">
@@ -2632,7 +2720,7 @@ const title = prop.name || ('Propiedad #' + prop.id);
     $('modal-type').textContent = prop.type === 'negocio' ? 'Negocio' : 'Vivienda';
     $('modal-bedrooms').textContent = 'N.º ' + prop.id;
     const isMine = !!myProps[prop.id];
-    $('modal-state').textContent = isMine ? 'Comprada' : 'Disponible';
+    $('modal-state').textContent = isMine ? 'Comprada' : 'No disponible';
     syncModalCarousel();
 
     const balEl = $('modal-balance');
@@ -2667,6 +2755,12 @@ const title = prop.name || ('Propiedad #' + prop.id);
         }
         buyBtn.disabled = !enough;
       }
+
+      // Mantenimiento: compras pausadas (update ERLC 2026)
+      buyBtn.disabled = true;
+      buyBtn.classList.remove('confirming');
+      buyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> No disponible`;
+      if (sellNote) sellNote.innerHTML = `<strong>En mantenimiento.</strong> Las compras están pausadas mientras actualizamos las propiedades al <strong>update de ERLC 2026</strong>.`;
     }
     $('modal-overlay').classList.add('open');
   }
@@ -2686,6 +2780,12 @@ const title = prop.name || ('Propiedad #' + prop.id);
   $('modal-buy').addEventListener('click', async () => {
     if (!currentProp || !userId) return;
     const prop = currentProp;
+
+    // Mantenimiento: compras pausadas (update ERLC 2026)
+    if (!myProps[prop.id]) {
+      showToast('Las compras están pausadas: el marketplace está en mantenimiento (update ERLC 2026).', 'error');
+      return;
+    }
 
     // Venta: primero confirmación, luego se ejecuta
     if (myProps[prop.id]) {
