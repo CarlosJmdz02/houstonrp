@@ -914,14 +914,14 @@ function forgotPin() {
     showToast('❌ No se detectó tu Discord ID.');
     return;
   }
-  showToast('🔑 Dirígete a Foundation con tu Discord ID para restablecer tu contraseña.');
+  showToast('🔑 Dirígete a Developer con tu Discord ID para restablecer tu contraseña.');
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;';
   overlay.innerHTML = `
     <div style="background:#0d1a2e;border:1px solid rgba(212,168,67,0.3);border-radius:16px;padding:32px;max-width:400px;width:100%;text-align:center;">
       <div style="font-size:48px;margin-bottom:16px;">🔑</div>
       <h2 style="font-family:'Rajdhani',sans-serif;color:#d4a843;margin-bottom:12px;">Olvidaste tu contraseña</h2>
-      <p style="color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:16px;">Andá a la sección <strong style="color:#e6a868;">Foundation</strong> y decile a un administrador que necesita restablecer tu PIN bancario.</p>
+      <p style="color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:16px;">Andá a la sección <strong style="color:#e6a868;">Developer</strong> y decile a un administrador que necesita restablecer tu PIN bancario.</p>
       <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:12px;">
         <div style="color:rgba(255,255,255,0.4);margin-bottom:4px;">Tu Discord ID</div>
         <div style="color:#d4a843;font-size:18px;font-weight:600;">${userId}</div>

@@ -169,6 +169,22 @@
 
   .btn-sm { padding: 6px 11px; font-size: 12px; border-radius: 6px; }
   .payroll-section-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan); margin-bottom: 8px; }
+
+  /* ── Movido desde Foundation ── */
+  .btn-success { background: linear-gradient(160deg, #4acf8f, #169446); color: #fff; box-shadow: 0 0 12px rgba(74,204,143,0.2); }
+  .btn-success:hover { box-shadow: 0 0 24px rgba(74,204,143,0.35); transform: translateY(-1px); }
+  .btn-gold { background: linear-gradient(160deg, #e6a868, #c48800); color: #fff; box-shadow: 0 0 12px rgba(240,165,0,0.2); }
+  .btn-gold:hover { box-shadow: 0 0 24px rgba(240,165,0,0.35); transform: translateY(-1px); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
+  .log-entry { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 12px; }
+  .log-entry:last-child { border-bottom: none; }
+  .log-icon { width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; background: var(--bg-panel); }
+  .log-body { flex: 1; min-width: 0; }
+  .log-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .log-detail { font-size: 11.5px; color: var(--text-secondary); margin-top: 2px; }
+  .log-time { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); flex-shrink: 0; }
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
@@ -207,8 +223,6 @@
       <a class="nav-item" href="mdt.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 8l10-5 10 5"/><path d="M12 8v13"/><path d="M4 12l8 5 8-5"/></svg></div><span class="nav-label">MDT</span></a>
       <div class="nav-section-label">Developer</div>
       <a class="nav-item active" href="developer.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg></div><span class="nav-label">Developer</span><span class="nav-badge">Dev</span></a>
-      <div class="nav-section-label">Foundation</div>
-      <a class="nav-item" href="foundation.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">Foundation</span></a>
       <div class="nav-section-label">System</div>
       <a class="nav-item" href="#" onclick="event.preventDefault();localStorage.clear();window.location.href='index.html';"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><span class="nav-label">Logout</span></a>
     </nav>
@@ -341,6 +355,93 @@
         <div id="license-list" style="margin-top:8px;"></div>
       </div>
 
+      <!-- ══════════ MOVIDO DESDE FOUNDATION ══════════ -->
+      <div class="payroll-section-title" style="margin-top:10px;">🏛️ Herramientas Foundation</div>
+
+      <!-- REGISTRO DE ACTIVIDAD -->
+      <div class="panel">
+        <h2>📋 Registro de Actividad</h2>
+        <p class="hint">Últimas acciones realizadas en el servidor — vehículos, economía, registros policiales y más.</p>
+        <div id="log-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+          <button class="btn btn-primary" style="padding:6px 14px;font-size:11px;" onclick="loadLogs()">🔄 Recargar</button>
+        </div>
+        <div id="logs-list">
+          <div class="empty-state">Cargando actividad...</div>
+        </div>
+      </div>
+
+      <!-- REGISTRAR VEHÍCULO -->
+      <div class="panel">
+        <h2>🚗 Registrar Vehículo</h2>
+        <p class="hint">Registrá un vehículo nuevo para un ciudadano.</p>
+        <div class="grid2">
+          <div class="field"><label>Dueño (Discord ID) <span style="color:var(--accent-red);">*</span></label>
+            <input id="fv-owner-discord" type="text" placeholder="123456789012345678" style="font-family:'JetBrains Mono',monospace;">
+          </div>
+          <div class="field"><label>Nombre del Dueño <span style="color:var(--accent-red);">*</span></label>
+            <input id="fv-owner-name" type="text" placeholder="ej. Juan Pérez">
+          </div>
+          <div class="field"><label>Modelo <span style="color:var(--accent-red);">*</span></label>
+            <input id="fv-model" type="text" placeholder="ej. Zentorno">
+          </div>
+          <div class="field"><label>Color <span style="color:var(--accent-red);">*</span></label>
+            <input id="fv-color" type="text" placeholder="ej. Rojo">
+          </div>
+          <div class="field"><label>Placa <span style="color:var(--accent-red);">*</span></label>
+            <input id="fv-plate" type="text" placeholder="ej. ABC-1234" style="text-transform:uppercase;font-family:'JetBrains Mono',monospace;">
+          </div>
+        </div>
+        <div style="margin-top:18px;display:flex;gap:12px;align-items:center;">
+          <button class="btn btn-primary" onclick="registerVehicle()">Registrar Vehículo</button>
+          <span id="fv-result" style="font-size:12px;color:var(--text-dim);"></span>
+        </div>
+      </div>
+
+      <!-- CONSULTAR BALANCE -->
+      <div class="panel">
+        <h2>🔍 Consultar Balance</h2>
+        <p class="hint">Ver el balance actual de un ciudadano por su Discord ID.</p>
+        <div class="search-bar-row">
+          <input id="fm-check-id" type="text" placeholder="Discord ID" style="font-family:'JetBrains Mono',monospace;">
+          <button class="btn btn-gold" onclick="fmCheck()">Consultar</button>
+        </div>
+        <div id="fm-check-result"></div>
+      </div>
+
+      <!-- BUSCAR USUARIO POR DISCORD ID -->
+      <div class="panel">
+        <h2>🔍 Buscar Usuario por Discord ID</h2>
+        <p class="hint">Ingresá un Discord ID para ver si el usuario existe en el sistema.</p>
+        <div class="search-bar-row">
+          <input id="us-id" type="text" placeholder="Discord ID" style="font-family:'JetBrains Mono',monospace;">
+          <button class="btn btn-primary" onclick="searchUser()">Buscar</button>
+        </div>
+        <div id="us-result"></div>
+      </div>
+
+      <!-- RESETEAR CUENTA BANCARIA -->
+      <div class="panel">
+        <h2>🏦 Resetear Cuenta Bancaria</h2>
+        <p class="hint">Eliminá los datos bancarios de un ciudadano para que pueda registrarse de nuevo en el banco. Ingresá su Discord Username.</p>
+        <div class="search-bar-row">
+          <input id="br-discord-id" type="text" placeholder="Discord Username" style="font-family:'JetBrains Mono',monospace;">
+          <button class="btn btn-danger" onclick="resetBankAccount()">🗑️ Resetear Cuenta</button>
+        </div>
+        <div id="br-result" style="margin-top:12px;font-size:13px;"></div>
+      </div>
+
+      <!-- CAMBIAR PIN BANCARIO -->
+      <div class="panel">
+        <h2>🔑 Cambiar PIN Bancario</h2>
+        <p class="hint">Cambiá el PIN del banco de un ciudadano por uno nuevo. Ingresá su Discord Username y el nuevo PIN de 4 dígitos.</p>
+        <div class="search-bar-row" style="flex-wrap:wrap;">
+          <input id="cp-discord-id" type="text" placeholder="Discord Username" style="font-family:'JetBrains Mono',monospace;flex:1;min-width:180px;">
+          <input id="cp-new-pin" type="text" placeholder="Nuevo PIN (4 dígitos)" maxlength="4" inputmode="numeric" pattern="[0-9]*" style="font-family:'JetBrains Mono',monospace;width:180px;letter-spacing:4px;font-size:16px;">
+          <button class="btn btn-gold" onclick="changeBankPin()">🔑 Cambiar PIN</button>
+        </div>
+        <div id="cp-result" style="margin-top:12px;font-size:13px;"></div>
+      </div>
+
     </div>
   </div>
 </main>
@@ -409,6 +510,7 @@
       $('access-loading').classList.add('hidden');
       $('app-content').style.display = 'block';
       loadBalance();
+      loadLogs();
       $('license-filter').addEventListener('input', function() { if (allLicenses.length) renderLicenses(); });
       $('license-filter-type').addEventListener('change', function() { if (allLicenses.length) renderLicenses(); });
     } else {
@@ -1171,6 +1273,239 @@
     t.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // ══════════ MOVIDO DESDE FOUNDATION ══════════
+
+  // ── LOGS ──
+  async function loadLogs() {
+    const container = $('logs-list');
+    if (!container) return;
+    container.innerHTML = '<div class="empty-state">Cargando actividad...</div>';
+
+    try {
+      const [vehicles, police, economy, shifts] = await Promise.all([
+        supaSelect('vehicles', 'id,model,plate,owner_name,owner_discord,registered_at', { order: 'registered_at.desc', limit: 50 }),
+        supaSelect('police_records', 'id,type,target_name,officer_name,reason,amount,created_at', { order: 'created_at.desc', limit: 50 }),
+        supaSelect('economy', 'discord_id,balance,updated_at', { order: 'updated_at.desc', limit: 50 }),
+        supaSelect('police_shift_sessions', 'id,username,discord_id,status,start_time', { order: 'start_time.desc', limit: 30 })
+      ]);
+
+      const logs = [];
+
+      (vehicles || []).forEach(v => {
+        logs.push({
+          time: v.registered_at,
+          icon: '🚗',
+          title: `Vehículo registrado: ${v.model}`,
+          detail: `Placa ${v.plate} — Dueño: ${v.owner_name} (${v.owner_discord})`
+        });
+      });
+
+      (police || []).forEach(p => {
+        const label = p.type === 'arrest' ? '🚔 Arresto' : '💰 Multa';
+        logs.push({
+          time: p.created_at,
+          icon: p.type === 'arrest' ? '🚔' : '💰',
+          title: `${label} — ${p.target_name}`,
+          detail: `${p.reason ? p.reason + ' — ' : ''}Oficial: ${p.officer_name}${p.amount ? ' — $' + p.amount.toLocaleString() : ''}`
+        });
+      });
+
+      (economy || []).forEach(e => {
+        logs.push({
+          time: e.updated_at,
+          icon: '💵',
+          title: `Balance actualizado: ${e.username || e.discord_id}`,
+          detail: `Balance: $${(e.balance || 0).toLocaleString()}`
+        });
+      });
+
+      (shifts || []).forEach(s => {
+        const isActive = s.status === 'active';
+        const label = isActive ? 'Inició turno' : 'Terminó turno';
+        logs.push({
+          time: s.start_time,
+          icon: isActive ? '🟢' : '🔴',
+          title: `${s.username} — ${label}`,
+          detail: `Estado: ${s.status}`
+        });
+      });
+
+      logs.sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
+      const top = logs.slice(0, 100);
+
+      if (top.length === 0) {
+        container.innerHTML = '<div class="empty-state">No hay actividad registrada.</div>';
+        return;
+      }
+
+      let html = '<div class="table-wrap"><div style="max-height:600px;overflow-y:auto;">';
+      top.forEach(log => {
+        const timeStr = log.time ? new Date(log.time).toLocaleString('es-AR', { timeZone: 'UTC' }) : '—';
+        html += `<div class="log-entry">
+          <div class="log-icon">${log.icon}</div>
+          <div class="log-body">
+            <div class="log-title">${log.title}</div>
+            <div class="log-detail">${log.detail}</div>
+          </div>
+          <div class="log-time">${timeStr}</div>
+        </div>`;
+      });
+      html += '</div></div>';
+      html += `<div class="result-count">Mostrando ${top.length} eventos recientes</div>`;
+      container.innerHTML = html;
+    } catch (err) {
+      container.innerHTML = `<div class="empty-state" style="color:var(--accent-red);">❌ Error al cargar logs: ${err.message}</div>`;
+    }
+  }
+
+  // ── REGISTER VEHICLE ──
+  async function registerVehicle() {
+    const ownerDiscord = $('fv-owner-discord').value.trim();
+    const ownerName = $('fv-owner-name').value.trim();
+    const model = $('fv-model').value.trim();
+    const color = $('fv-color').value.trim();
+    const plate = $('fv-plate').value.trim().toUpperCase();
+    const result = $('fv-result');
+
+    if (!ownerDiscord || !ownerName || !model || !color || !plate) {
+      result.innerHTML = '<span style="color:var(--accent-red);">⚠️ Completá todos los campos</span>';
+      return;
+    }
+
+    try {
+      await supaInsert('vehicles', { owner_discord: ownerDiscord, owner_name: ownerName, model, color, plate });
+      result.innerHTML = '<span style="color:var(--accent-green);">✅ Vehículo registrado exitosamente</span>';
+      showToast(`🚗 ${model} (${plate}) registrado para ${ownerName}`);
+      logDevAction('Registrar vehículo', `${model} (${plate}) — Dueño: ${ownerName} (${ownerDiscord})`);
+      ['fv-owner-discord', 'fv-owner-name', 'fv-model', 'fv-color', 'fv-plate'].forEach(id => { $(id).value = ''; });
+    } catch (err) {
+      result.innerHTML = `<span style="color:var(--accent-red);">❌ Error: ${err.message}</span>`;
+    }
+  }
+
+  // ── CONSULTAR BALANCE ──
+  async function fmCheck() {
+    const discordId = $('fm-check-id').value.trim();
+    const result = $('fm-check-result');
+    if (!discordId) { result.innerHTML = '<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">⚠️ Ingresa un Discord ID</div>'; return; }
+    try {
+      const balance = await getCurrentBalance(discordId);
+      result.innerHTML = `<div style="padding:8px 0;font-size:13px;color:var(--accent-gold);">💰 Balance de <strong>${discordId}</strong>: $${balance.toLocaleString()}</div>`;
+    } catch (err) {
+      result.innerHTML = `<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">❌ Error: ${err.message}</div>`;
+    }
+  }
+
+  // ── USER SEARCH ──
+  function escUser(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  async function searchUser() {
+    const id = $('us-id').value.trim();
+    const result = $('us-result');
+    if (!id) { result.innerHTML = '<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">⚠️ Ingresa un Discord ID</div>'; return; }
+
+    result.innerHTML = '<div style="padding:8px 0;font-size:13px;color:var(--text-dim);">🔍 Buscando...</div>';
+
+    try {
+      const [police, economy, shifts] = await Promise.all([
+        supaSelect('police_members', 'discord_id,username,role_id', { discord_id: `eq.${id}` }),
+        supaSelect('economy', 'discord_id,balance', { discord_id: `eq.${id}` }),
+        supaSelect('police_shift_sessions', 'discord_id,username,status', { discord_id: `eq.${id}`, limit: '5', order: 'start_time.desc' }),
+      ]);
+
+      let html = `<div style="padding:16px 0;">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">👤 ${escUser(id)}</div>`;
+
+      if (!police?.length && !economy?.length && !shifts?.length) {
+        html += '<div style="padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--accent-red);">❌ No se encontraron datos para este Discord ID en el sistema.</div>';
+      } else {
+        if (police?.length) {
+          html += `<div style="padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;">
+            <div style="font-size:12px;color:var(--accent-cyan);font-weight:600;margin-bottom:4px;">🚔 Policía</div>
+            <div style="font-size:13px;color:var(--text-primary);">Usuario: ${escUser(police[0].username)}</div>
+            <div style="font-size:11px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;">Role ID: ${escUser(police[0].role_id)}</div>
+          </div>`;
+        }
+        if (economy?.length) {
+          html += `<div style="padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;">
+            <div style="font-size:12px;color:var(--accent-gold);font-weight:600;margin-bottom:4px;">💰 Economía</div>
+            <div style="font-size:13px;color:var(--text-primary);">Balance: $${(economy[0].balance || 0).toLocaleString()}</div>
+          </div>`;
+        }
+        if (shifts?.length) {
+          html += `<div style="padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;">
+            <div style="font-size:12px;color:var(--accent-green);font-weight:600;margin-bottom:4px;">📊 Turnos Recientes</div>`;
+          shifts.forEach(s => {
+            html += `<div style="font-size:12px;color:var(--text-secondary);padding:2px 0;">${escUser(s.username || '—')} — ${s.status || '—'}</div>`;
+          });
+          html += `</div>`;
+        }
+      }
+
+      html += '</div>';
+      result.innerHTML = html;
+    } catch (err) {
+      result.innerHTML = `<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">❌ Error: ${err.message}</div>`;
+    }
+  }
+
+  // ── BANK RESET ──
+  async function resetBankAccount() {
+    const discordId = $('br-discord-id').value.trim();
+    const result = $('br-result');
+    if (!discordId) { result.innerHTML = '<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">⚠️ Ingresa un Discord ID</div>'; return; }
+    if (!confirm(`¿Estás seguro de resetear la cuenta bancaria de ${discordId}? Se eliminará su balance y datos bancarios.`)) return;
+
+    result.innerHTML = '<div style="padding:8px 0;font-size:13px;color:var(--text-dim);">⏳ Procesando...</div>';
+
+    try {
+      await supaUpsert('economy', { discord_id: discordId, balance: 0, updated_at: new Date().toISOString() }, 'discord_id');
+
+      const pinKey = 'hrp_bank_pin_' + discordId;
+      const userKey = 'hrp_bank_user_' + discordId;
+      let localRemoved = false;
+      if (localStorage.getItem(pinKey) !== null) { localStorage.removeItem(pinKey); localRemoved = true; }
+      if (localStorage.getItem(userKey) !== null) { localStorage.removeItem(userKey); localRemoved = true; }
+
+      const msg = localRemoved
+        ? '✅ Balance reseteado a $0 y datos locales eliminados.'
+        : '✅ Balance reseteado a $0. El usuario debe cerrar sesión del banco para que los cambios surtan efecto.';
+      result.innerHTML = `<div style="padding:8px 0;font-size:13px;color:var(--accent-green);">${msg}</div>`;
+      showToast(`✅ Cuenta de ${discordId} reseteada`);
+      logDevAction('Resetear cuenta bancaria', `Discord ID: ${discordId}`);
+    } catch (err) {
+      result.innerHTML = `<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">❌ Error al resetear: ${err.message}</div>`;
+    }
+  }
+
+  // ── CHANGE BANK PIN ──
+  async function changeBankPin() {
+    const discordId = $('cp-discord-id').value.trim();
+    const newPin = $('cp-new-pin').value.trim();
+    const result = $('cp-result');
+    if (!discordId) { result.innerHTML = '<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">⚠️ Ingresa un Discord ID</div>'; return; }
+    if (!newPin || newPin.length !== 4 || !/^\d{4}$/.test(newPin)) { result.innerHTML = '<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">⚠️ El PIN debe ser de 4 dígitos numéricos</div>'; return; }
+    if (!confirm(`¿Estás seguro de cambiar el PIN bancario de ${discordId} al nuevo PIN?`)) return;
+    result.innerHTML = '<div style="padding:8px 0;font-size:13px;color:var(--text-dim);">⏳ Procesando...</div>';
+    try {
+      localStorage.setItem('hrp_bank_pin_' + discordId, newPin);
+      if (localStorage.getItem('hrp_bank_pin_' + discordId) === newPin) {
+        result.innerHTML = `<div style="padding:8px 0;font-size:13px;color:var(--accent-green);">✅ PIN cambiado exitosamente para <strong>${discordId}</strong>.</div>
+<div style="padding:8px 0;font-size:12px;color:var(--text-dim);">💡 El usuario debe iniciar sesión en el banco con su nuevo PIN.</div>`;
+        showToast(`🔑 PIN actualizado para ${discordId}`);
+        logDevAction('Cambiar PIN bancario', `Discord ID: ${discordId}`);
+      } else {
+        throw new Error('No se pudo guardar el PIN');
+      }
+    } catch (err) {
+      result.innerHTML = `<div style="padding:8px 0;font-size:13px;color:var(--accent-red);">❌ Error: ${err.message}</div>`;
+    }
   }
 
   // ── HIGHLIGHT CURRENT PAGE ──
