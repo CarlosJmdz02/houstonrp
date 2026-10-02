@@ -1714,6 +1714,32 @@ function hrpInitSidebarWallet() {
   window.addEventListener('focus', refreshWallet);
 }
 
+// ── NAV "CHARACTERS" ──
+// El acceso a Characters solo se muestra si el usuario NO tiene personaje
+// creado. Si un admin (Developer/Foundation) le borra el character, al
+// recargar cualquier página vuelve a aparecer para poder crear otro.
+function hrpSyncCharacterNav() {
+  const links = document.querySelectorAll('a.nav-item[href="app.html"]');
+  if (!links.length) return;
+  const session = hrpGetSession();
+  if (!session || !session.id) return;
+
+  function apply(hasCharacter) {
+    for (let i = 0; i < links.length; i++) {
+      links[i].style.display = hasCharacter ? 'none' : '';
+    }
+  }
+
+  Promise.resolve()
+    .then(function() {
+      return supaSelect('characters', 'user_discord', { user_discord: 'eq.' + session.id, limit: '1' });
+    })
+    .then(function(rows) {
+      apply(Array.isArray(rows) && rows.length > 0);
+    })
+    .catch(function() { /* sin red: se deja visible para no bloquear */ });
+}
+
 // ── CLOSE SIDEBAR ON NAV CLICK (mobile) ──
 document.addEventListener('click', (e) => {
   const link = e.target.closest('.nav-item, .nav-link, .sidebar a[href]');
@@ -1772,6 +1798,7 @@ document.addEventListener('click', (e) => {
     const session = hrpGetSession();
     hrpInitMobileSidebar();
     hrpInitSidebarWallet();
+    hrpSyncCharacterNav();
     if (!session || !session.id) {
       hrpHideRestrictedSections();
       return;

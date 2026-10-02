@@ -736,10 +736,17 @@
       if (currentProfile.licenses.length === 0) {
         $('licenses-body').innerHTML = '<div class="no-records">No se encontraron licencias registradas</div>';
       } else {
-        $('licenses-body').innerHTML = currentProfile.licenses.map(l => {
-          const isDrivers = l.type === 'drivers';
-          const icon = isDrivers ? '🚗' : '🔫';
-          const typeName = isDrivers ? 'Licencia de Conducir' : 'Permiso de Armas';
+        const LIC_TYPES = {
+          drivers:   { name: 'Licencia de Conducir', icon: '🚗', order: 1 },
+          weapons:   { name: 'Permiso de Armas',     icon: '🔫', order: 2 },
+          insurance: { name: 'Seguro de Vehículo',   icon: '🛡️', order: 3 },
+        };
+        const licList = currentProfile.licenses.slice().sort((a, b) =>
+          ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
+        $('licenses-body').innerHTML = licList.map(l => {
+          const meta = LIC_TYPES[l.type] || { name: 'Licencia', icon: '📄' };
+          const icon = meta.icon;
+          const typeName = meta.name;
           const now = Date.now();
           const expired = l.expires_at && new Date(l.expires_at).getTime() < now;
           const status = expired ? 'expired' : l.status;
