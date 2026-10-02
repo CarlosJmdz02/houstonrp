@@ -248,6 +248,30 @@
   .page-title span { color: var(--accent-amber); }
   .page-head { margin-bottom: 18px; }
 
+  /* ── Layout principal: Consulta (izq) + rail de unidades (der) ── */
+  .mdt-top-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr);
+    gap: 18px;
+    align-items: start;
+    margin-bottom: 6px;
+  }
+  .mdt-top-main { min-width: 0; }
+  .mdt-top-rail { min-width: 0; }
+  .mdt-top-rail .on-duty-panel { margin-bottom: 0; }
+  .mdt-top-rail .on-duty-list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    max-height: 460px;
+    gap: 10px;
+  }
+  .mdt-top-rail .on-duty-chip { width: 100%; }
+  @media (max-width: 1100px) {
+    .mdt-top-grid { grid-template-columns: 1fr; }
+    .mdt-top-rail .on-duty-list { flex-direction: row; flex-wrap: wrap; max-height: 200px; }
+    .mdt-top-rail .on-duty-chip { width: auto; }
+  }
+
   /* ═══ DATABASE TABLET ═══ */
   .tab-panel {
     background: linear-gradient(180deg, rgba(20,32,58,0.75), rgba(13,21,38,0.9));
@@ -895,21 +919,9 @@
       <div class="page-title">Base de <span>Datos</span> Policial</div>
     </div>
 
-    <!-- ── OFFICERS ON SERVICE (real-time) ── -->
-    <div class="on-duty-panel" id="on-duty-panel">
-      <div class="on-duty-head">
-        <div class="on-duty-title">
-          <span class="on-duty-dot"></span>
-          Oficiales en Servicio
-          <span class="on-duty-pill" id="on-duty-count">0</span>
-        </div>
-        <span class="on-duty-sub" id="on-duty-last">Actualizando...</span>
-      </div>
-      <div class="on-duty-list" id="on-duty-list">
-        <div class="on-duty-empty">Sin oficiales en servicio</div>
-      </div>
-    </div>
-
+    <!-- ── FILA PRINCIPAL: CONSULTA (izq) + UNIDADES EN SERVICIO (rail der) ── -->
+    <div class="mdt-top-grid">
+      <div class="mdt-top-main">
     <div class="tab-panel">
       <div class="tab-bar">
         <div class="tab-bar-icon">
@@ -1014,6 +1026,25 @@
         </div>
       </div>
     </div>
+      </div><!-- /mdt-top-main -->
+
+      <aside class="mdt-top-rail">
+        <!-- ── UNIDADES EN SERVICIO (rail derecho) ── -->
+        <div class="on-duty-panel" id="on-duty-panel">
+          <div class="on-duty-head">
+            <div class="on-duty-title">
+              <span class="on-duty-dot"></span>
+              Oficiales en Servicio
+              <span class="on-duty-pill" id="on-duty-count">0</span>
+            </div>
+            <span class="on-duty-sub" id="on-duty-last">Actualizando...</span>
+          </div>
+          <div class="on-duty-list" id="on-duty-list">
+            <div class="on-duty-empty">Sin oficiales en servicio</div>
+          </div>
+        </div>
+      </aside>
+    </div><!-- /mdt-top-grid -->
 
     <!-- ── OPERATIONS MODULES ── -->
     <div class="mods-head">
