@@ -832,6 +832,7 @@
     .bolo-top { flex-direction: column; align-items: flex-start; }
   }
 </style>
+<link rel="stylesheet" href="assets/mdt-cad.css">
 </head>
 <body>
 
@@ -846,10 +847,12 @@
       </div>
     </div>
 
-    <div class="cad-strip" id="cad-strip" title="Estado del turno (CAD)">
+    <div class="cad-strip" id="cad-strip" title="Estado de la unidad (CAD)">
       <div class="cad-cell"><span class="cad-k">Dept</span><span class="cad-v" id="cad-dept">HPD</span></div>
+      <div class="cad-cell"><span class="cad-k">Duty</span><span class="cad-v" id="cad-duty">Off Duty</span></div>
       <div class="cad-cell"><span class="cad-k">Status</span><span class="cad-v" id="cad-status">10-7 · Fuera de servicio</span></div>
       <div class="cad-cell"><span class="cad-k">Turno</span><span class="cad-v" id="cad-turn">00:00:00</span></div>
+      <div class="cad-cell"><span class="cad-k">Acumulado</span><span class="cad-v" id="cad-accum">--</span></div>
       <span class="cad-led" id="cad-led"></span>
     </div>
 
@@ -870,7 +873,7 @@
         <div class="balance-label">Tus horas</div>
         <div class="balance-value hours-value" id="user-hours">--h --m</div>
       </div>
-      <div class="live-indicator"><div class="live-dot"></div>Activo</div>
+      <div class="live-indicator" id="conn-indicator" title="Estado de conexión con el servidor"><span class="live-dot"></span>En línea</div>
       <div class="top-clock" id="clock">--:--:--</div>
       <a class="btn-dash" href="dashboard.html">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
@@ -1580,9 +1583,39 @@
     const ct = document.getElementById('cad-turn');
     if (ct && t) ct.textContent = t.textContent.trim();
 
+    const duty = document.getElementById('cad-duty');
+    if (duty && ss) {
+      const raw = ss.textContent.toLowerCase();
+      if (/pausa|descanso|break/.test(raw)) duty.textContent = 'En pausa';
+      else if (/sin turno|fuera de servicio|off/.test(raw)) duty.textContent = 'Off Duty';
+      else duty.textContent = 'En servicio';
+    }
+
+    const acc = document.getElementById('cad-accum');
+    const accum = document.getElementById('shift-accum');
+    if (acc && accum) {
+      acc.textContent = (accum.textContent || '').replace(/^Total acumulado:\s*/i, '').trim() || '--';
+    }
+
     const led = document.getElementById('cad-led');
     if (led) led.className = 'cad-led' + (ss && !/sin turno/i.test(ss.textContent) ? ' on' : '');
+
+    syncConnIndicator();
   }
+
+  // ── Conexión real del navegador (online / offline) ──
+  let _connState = null;
+  function syncConnIndicator() {
+    const el = document.getElementById('conn-indicator');
+    if (!el) return;
+    const on = navigator.onLine !== false;
+    if (on === _connState) return;
+    _connState = on;
+    el.innerHTML = '<span class="live-dot"></span>' + (on ? 'En línea' : 'Sin conexión');
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', function () { _connState = null; syncConnIndicator(); });
+  window.addEventListener('offline', function () { _connState = null; syncConnIndicator(); });
 
   // ── FORMAT ──
   function formatTime(seconds) {
@@ -2915,13 +2948,29 @@
     return map[c] || ['#94a3b8', String(code || 'S/D').toUpperCase()];
   }
 
+  // ── Etiquetas de rango reales (payroll_salaries) — caché 5 min ──
+  let _rankLabels = null;
+  let _rankLabelsAt = 0;
+  async function getRankLabels() {
+    const now = Date.now();
+    if (_rankLabels && (now - _rankLabelsAt) < 300000) return _rankLabels;
+    const map = {};
+    try {
+      const rows = await supaSelect('payroll_salaries', 'department,rank,rank_label', {});
+      (rows || []).forEach(r => { if (r && r.department) map[r.department + '|' + r.rank] = r.rank_label || ''; });
+    } catch (_) {}
+    _rankLabels = map;
+    _rankLabelsAt = now;
+    return map;
+  }
+
   async function loadOnlineOfficers() {
     const list = $('on-duty-list');
     const countEl = $('on-duty-count');
     const lastEl = $('on-duty-last');
     if (!list) return;
     try {
-      const rows = await supaSelect('police_shift_sessions', 'id,discord_id,username,department,status,start_time,status_code', { or: '(status.eq.active,status.eq.break)', order: 'start_time.asc', limit: '100' }).catch(() => []);
+      const rows = await supaSelect('police_shift_sessions', 'id,discord_id,username,department,status,start_time,status_code,bodycam_active', { or: '(status.eq.active,status.eq.break)', order: 'start_time.asc', limit: '100' }).catch(() => []);
       const listRows = rows || [];
       if (listRows.length === 0) {
         list.innerHTML = '<div class="on-duty-empty">Sin oficiales en servicio</div>';
@@ -2942,6 +2991,21 @@
           });
         } catch (_) {}
       }
+
+      // Rango real del oficial (payroll_members + payroll_salaries)
+      let rankByDiscord = {};
+      if (ids.length) {
+        try {
+          const members = await supaSelect('payroll_members', 'discord_id,department,rank',
+            { or: `(${ids.map(i => `discord_id.eq.${i}`).join(',')})`, limit: '50' });
+          const labels = await getRankLabels();
+          (members || []).forEach(m => {
+            if (!m.discord_id) return;
+            rankByDiscord[m.discord_id] = labels[m.department + '|' + m.rank] || '';
+          });
+        } catch (_) {}
+      }
+
       list.innerHTML = listRows.map(o => {
         const assigned = charNameByDiscord[o.discord_id] || '';
         const shownName = assigned || o.username || '—';
@@ -2949,12 +3013,24 @@
         const initial = (shownName || '?').charAt(0).toUpperCase();
         const isBreak = o.status === 'break';
         const [col, dept] = deptCodeLabel(o.department);
-        return `<div class="on-duty-chip" data-user="${esc(o.username || '')}">
+        const rankLabel = rankByDiscord[o.discord_id] || '';
+        const code = String(o.status_code || '').trim();
+        const started = o.start_time ? new Date(o.start_time) : null;
+        const elapsedSec = started ? Math.max(0, Math.floor((Date.now() - started.getTime()) / 1000)) : -1;
+        const camOn = o.bodycam_active === true;
+        return `<div class="on-duty-chip unit-row" data-user="${esc(o.username || '')}">
           <div class="on-duty-ava" style="background:${col}1f;border:1px solid ${col}55;">${initial}</div>
           <div class="on-duty-info">
-            <div class="on-duty-name">${esc(shownName)} ${isBreak ? '<span class="on-duty-break">EN PAUSA</span>' : ''}</div>
+            <div class="on-duty-name">${esc(shownName)}
+              <span class="unit-state ${isBreak ? 'brk' : 'on'}">${isBreak ? 'Pausa' : 'En servicio'}</span>
+            </div>
             ${robLabel ? `<div class="on-duty-roblox">🎮 ${esc(robLabel)}</div>` : ''}
-            <div class="on-duty-meta"><span class="on-duty-dept" style="color:${col}">${dept}</span> · ${isBreak ? 'Pausa' : 'En servicio'} desde ${o.start_time ? new Date(o.start_time).toLocaleTimeString() : '—'}</div>
+            <div class="on-duty-meta"><span class="on-duty-dept" style="color:${col}">${dept}</span>${rankLabel ? ' · ' + esc(rankLabel) : ''}</div>
+            <div class="unit-tags">
+              ${code ? `<span class="unit-tag code">${esc(code)}</span>` : ''}
+              <span class="unit-tag time">⏱ ${elapsedSec >= 0 ? formatTime(elapsedSec) : '—'}</span>
+              ${camOn ? '<span class="unit-tag cam">● REC</span>' : ''}
+            </div>
           </div>
           <span class="on-duty-status ${isBreak ? 'break' : 'live'}"></span>
         </div>`;

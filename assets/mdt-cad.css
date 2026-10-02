@@ -1,0 +1,720 @@
+/* ============================================================
+   HOUSTON RP — SISTEMA DE DISEÑO CAD / MDT
+   ------------------------------------------------------------
+   Archivo compartido por: mdt, dispatch, manage-shift,
+   enmiendas, app, incident-report.
+   Se carga DESPUÉS de los estilos inline de cada página,
+   así que sobreescribe la paleta y los componentes sin tocar
+   la maqueta ni la lógica de cada pantalla.
+   ============================================================ */
+
+/* ─────────────────────────────────────────────
+   1. PALETA OFICIAL (navy + azul eléctrico)
+   ───────────────────────────────────────────── */
+:root {
+  /* Fondos — azul marino profundo */
+  --bg-deep:      #060d1c;
+  --bg-void:      #060d1c;
+  --bg-panel:     #0b1526;
+  --bg-card:      #0f1c33;
+  --bg-card-2:    #132344;
+  --bg-hover:     #16294c;
+
+  /* Acentos */
+  --accent-blue:  #2f81f7;   /* azul eléctrico: acción principal */
+  --accent-cyan:  #38bdf8;   /* datos / información */
+  --accent-amber: #f5a524;   /* advertencia */
+  --accent-orange:#f59e0b;
+  --accent-red:   #f04438;   /* emergencia */
+  --accent-green: #21c55d;   /* estado activo / OK */
+
+  /* Texto */
+  --text-primary:   #eaeff8;
+  --text-secondary: #9fb0cc;
+  --text-dim:       #5d6f8f;
+
+  /* Bordes */
+  --border:        #1c2b47;
+  --border-strong: #2a3d63;
+
+  /* Semánticos de estado (CAD) */
+  --cad-idle:      #64748b;
+  --cad-active:    #21c55d;
+  --cad-break:     #f5a524;
+  --cad-emergency: #f04438;
+
+  /* Elevación */
+  --shadow-panel: 0 10px 30px rgba(2, 8, 20, .55);
+  --shadow-card:  0 4px 14px rgba(2, 8, 20, .45);
+  --radius-panel: 14px;
+  --radius-card:  10px;
+
+  --topbar-h: auto;
+}
+
+/* ─────────────────────────────────────────────
+   2. BASE / TIPOGRAFÍA
+   ───────────────────────────────────────────── */
+html, body { height: 100%; }
+
+body {
+  background-color: var(--bg-deep);
+  background-image:
+    radial-gradient(ellipse at 12% -10%, rgba(47,129,247,.16) 0%, transparent 55%),
+    radial-gradient(ellipse at 88% 110%, rgba(56,189,248,.07) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(6,13,28,0) 0%, rgba(6,13,28,.6) 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Rejilla técnica sutil de fondo tipo CAD */
+body::after {
+  background-image:
+    linear-gradient(rgba(47,129,247,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47,129,247,.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: .55;
+}
+
+.page-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.page-title span { color: var(--accent-blue); }
+
+.page-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  opacity: .9;
+}
+
+.hint, .sub, .page-subtitle, .tab-bar-sub {
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ─────────────────────────────────────────────
+   3. HEADER / TOPBAR — aspecto de terminal CAD
+   ───────────────────────────────────────────── */
+.tablet-top,
+.topbar {
+  background:
+    linear-gradient(180deg, rgba(11,21,38,.99) 0%, rgba(6,13,28,.99) 100%);
+  border-bottom: 1px solid var(--border-strong);
+  box-shadow: 0 10px 34px rgba(0,0,0,.55), inset 0 -1px 0 rgba(47,129,247,.16);
+}
+
+.topbar-title,
+.brand-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.brand-sub,
+.logo-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  opacity: .85;
+}
+
+.logo-shield,
+.brand-shield {
+  border-color: rgba(47,129,247,.45);
+  box-shadow: 0 0 18px rgba(47,129,247,.22);
+}
+
+/* Franja de estado CAD */
+.cad-strip {
+  background: rgba(6,13,28,.85);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(47,129,247,.12);
+}
+.cad-k { color: var(--text-dim); letter-spacing: .18em; }
+.cad-v { color: var(--accent-amber); font-weight: 500; }
+.cad-cell + .cad-cell { border-left: 1px solid var(--border); }
+
+/* Reloj y conexión */
+.top-clock,
+.cs-timer,
+.balance-value.hours-value {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent-amber);
+  letter-spacing: .04em;
+}
+
+.live-indicator {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent-green);
+  border-color: rgba(33,197,93,.4);
+}
+.live-dot { background: var(--accent-green); box-shadow: 0 0 9px var(--accent-green); }
+.live-dot { animation: cadPulse 1.8s ease-in-out infinite; }
+
+/* Consola de control */
+.control-dock {
+  background: linear-gradient(180deg, rgba(15,28,51,.65), rgba(6,13,28,.35));
+  border-top: 1px solid var(--border);
+}
+
+.cs-status { font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.cs-timer-label, .cs-accum {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* Botones de turno */
+.sbtn {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+.sbtn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.08); }
+.sbtn:active:not(:disabled) { transform: translateY(0); }
+.sbtn.start  { box-shadow: 0 4px 14px rgba(33,197,93,.22); }
+.sbtn.end    { box-shadow: 0 4px 14px rgba(240,68,56,.22); }
+.sbtn.bodycam{ box-shadow: 0 4px 14px rgba(47,129,247,.22); }
+.sbtn:disabled { opacity: .4; filter: saturate(.4); }
+
+/* ─────────────────────────────────────────────
+   4. CÓDIGOS 10 — barra de estados estilo CAD
+   ───────────────────────────────────────────── */
+.codes-bar {
+  background: rgba(6,13,28,.72);
+  border-top: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 8px 12px 10px;
+}
+.codes-label > span,
+.codes-label span:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.code-current {
+  background: var(--bg-card);
+  border: 1px solid rgba(47,129,247,.45);
+  border-radius: 7px;
+  box-shadow: 0 0 14px rgba(47,129,247,.18);
+}
+.code-current .cc-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: var(--accent-cyan);
+}
+.codes-row { gap: 6px; }
+
+/* ─────────────────────────────────────────────
+   5. BARRA LATERAL (manage-shift / enmiendas / app)
+   ───────────────────────────────────────────── */
+.sidebar {
+  background: linear-gradient(180deg, #0b1526 0%, #060d1c 100%);
+  border-right: 1px solid var(--border-strong);
+}
+.sidebar-logo, .logo-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.nav-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.nav-item {
+  border-radius: 9px;
+  border: 1px solid transparent;
+  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+}
+.nav-item:hover { background: rgba(47,129,247,.10); border-color: rgba(47,129,247,.28); transform: translateX(2px); }
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(47,129,247,.26), rgba(47,129,247,.04));
+  border-color: rgba(47,129,247,.5);
+  box-shadow: inset 3px 0 0 var(--accent-blue);
+}
+.nav-label { font-family: 'Rajdhani', sans-serif; font-weight: 600; letter-spacing: .05em; }
+.nav-badge {
+  background: rgba(47,129,247,.22);
+  border-color: rgba(47,129,247,.45);
+  color: var(--accent-cyan);
+}
+.user-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: .04em; }
+.user-rank {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-amber);
+}
+.sidebar-footer { border-color: var(--border); }
+
+/* ─────────────────────────────────────────────
+   6. BOTONES
+   ───────────────────────────────────────────── */
+.btn,
+.btn-primary,
+.btn-outline,
+.btn-success,
+.btn-danger,
+.btn-gold,
+.btn-warning {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease, background .16s ease;
+}
+.btn:hover:not(:disabled),
+.btn-primary:hover:not(:disabled),
+.btn-outline:hover:not(:disabled),
+.btn-success:hover:not(:disabled),
+.btn-danger:hover:not(:disabled),
+.btn-gold:hover:not(:disabled),
+.btn-warning:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: .45; filter: saturate(.35); cursor: not-allowed; transform: none; }
+
+.btn-primary { box-shadow: 0 5px 16px rgba(47,129,247,.26); }
+.btn-success { box-shadow: 0 5px 16px rgba(33,197,93,.22); }
+.btn-danger  { box-shadow: 0 5px 16px rgba(240,68,56,.22); }
+.btn-gold    { box-shadow: 0 5px 16px rgba(245,165,36,.22); }
+.btn-warning { box-shadow: 0 5px 16px rgba(245,165,36,.22); }
+
+.btn-outline {
+  background: rgba(47,129,247,.06);
+  border-color: var(--border-strong);
+  color: var(--text-secondary);
+}
+.btn-outline:hover { border-color: rgba(47,129,247,.5); color: var(--text-primary); }
+
+/* ─────────────────────────────────────────────
+   7. PANELES Y TARJETAS
+   ───────────────────────────────────────────── */
+.panel,
+.tab-panel {
+  background: linear-gradient(160deg, rgba(15,28,51,.96), rgba(11,21,38,.96));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+}
+
+.tab-bar {
+  background: rgba(6,13,28,.55);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.tab-bar-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.tab-bar-icon {
+  background: rgba(47,129,247,.16);
+  border: 1px solid rgba(47,129,247,.4);
+  border-radius: 10px;
+  box-shadow: 0 0 14px rgba(47,129,247,.14);
+}
+
+.mod-card {
+  background: linear-gradient(155deg, rgba(15,28,51,.95), rgba(11,21,38,.95));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.mod-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(47,129,247,.5);
+  box-shadow: 0 14px 34px rgba(2,8,20,.6), 0 0 22px rgba(47,129,247,.14);
+}
+.mod-card-title { font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+
+.on-duty-panel {
+  background: linear-gradient(160deg, rgba(15,28,51,.96), rgba(11,21,38,.96));
+  border: 1px solid rgba(33,197,93,.32);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+}
+.on-duty-title { font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.on-duty-dot { background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); animation: cadPulse 1.8s ease-in-out infinite; }
+.on-duty-pill {
+  background: rgba(33,197,93,.18);
+  border-color: rgba(33,197,93,.45);
+  color: var(--accent-green);
+  font-family: 'JetBrains Mono', monospace;
+}
+.on-duty-chip {
+  background: rgba(6,13,28,.75);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color .16s ease, transform .16s ease;
+}
+.on-duty-chip:hover { border-color: rgba(47,129,247,.45); transform: translateY(-1px); }
+.on-duty-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; }
+.on-duty-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+.on-duty-status.live  { background: var(--cad-active);  box-shadow: 0 0 9px var(--cad-active); }
+.on-duty-status.break { background: var(--cad-break);   box-shadow: 0 0 9px var(--cad-break); }
+
+.request-card,
+.record-item,
+.stat-card {
+  background: linear-gradient(155deg, rgba(15,28,51,.95), rgba(11,21,38,.95));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition: border-color .16s ease, transform .16s ease;
+}
+.request-card:hover,
+.record-item:hover { border-color: rgba(47,129,247,.4); transform: translateY(-1px); }
+
+.stat-card { border-left: 3px solid rgba(47,129,247,.55); }
+.stat-value { font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: .03em; }
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.empty-state {
+  background: rgba(6,13,28,.5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+}
+
+/* ─────────────────────────────────────────────
+   8. BADGES DE ESTADO (semántica CAD)
+   ───────────────────────────────────────────── */
+.badge,
+.req-status,
+.bolo-status,
+.qtag {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.badge-active, .req-status.approved {
+  background: rgba(33,197,93,.15);
+  border-color: rgba(33,197,93,.42);
+  color: var(--accent-green);
+}
+.badge-pending, .req-status.pending {
+  background: rgba(245,165,36,.15);
+  border-color: rgba(245,165,36,.42);
+  color: var(--accent-amber);
+}
+.badge-expired, .req-status.rejected {
+  background: rgba(240,68,56,.15);
+  border-color: rgba(240,68,56,.42);
+  color: var(--accent-red);
+}
+.qtag {
+  background: rgba(56,189,248,.12);
+  border-color: rgba(56,189,248,.38);
+  color: var(--accent-cyan);
+}
+.qtag.warn {
+  background: rgba(245,165,36,.12);
+  border-color: rgba(245,165,36,.38);
+  color: var(--accent-amber);
+}
+
+/* ─────────────────────────────────────────────
+   9. TABLAS E HISTORIAL
+   ───────────────────────────────────────────── */
+.history-tabs {
+  background: rgba(6,13,28,.7);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.history-tab {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: background .16s ease, color .16s ease;
+}
+.history-tab.active {
+  background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+  box-shadow: 0 5px 18px rgba(47,129,247,.3);
+}
+.history-record {
+  background: linear-gradient(155deg, rgba(15,28,51,.95), rgba(11,21,38,.95));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  transition: border-color .16s ease, transform .16s ease;
+}
+.history-record:hover { border-color: rgba(47,129,247,.4); transform: translateY(-1px); }
+.history-rec-badge {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────────────
+   10. MODALES, DRAWERS, TOASTS, OVERLAYS
+   ───────────────────────────────────────────── */
+.modal-overlay {
+  background: rgba(3, 8, 18, .78);
+  backdrop-filter: blur(4px);
+}
+.modal, .drawer {
+  background: linear-gradient(160deg, rgba(15,28,51,.99), rgba(6,13,28,.99));
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  box-shadow: 0 30px 70px rgba(0,0,0,.65), 0 0 0 1px rgba(47,129,247,.12);
+}
+.toast {
+  background: linear-gradient(135deg, rgba(15,28,51,.99), rgba(6,13,28,.99));
+  border: 1px solid rgba(33,197,93,.5);
+  border-radius: 11px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.55);
+}
+.toast.error { border-color: rgba(240,68,56,.55); }
+
+.access-overlay {
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(47,129,247,.16), transparent 55%),
+    var(--bg-deep);
+}
+.access-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.access-icon.loading { border-color: rgba(47,129,247,.5); }
+.access-icon.denied  { border-color: rgba(240,68,56,.55); }
+
+/* ─────────────────────────────────────────────
+   11. FORMULARIOS
+   ───────────────────────────────────────────── */
+input, select, textarea {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  color: var(--text-primary);
+  transition: border-color .16s ease, box-shadow .16s ease;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(47,129,247,.65);
+  box-shadow: 0 0 0 3px rgba(47,129,247,.16);
+}
+input::placeholder, textarea::placeholder { color: var(--text-dim); }
+
+label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ─────────────────────────────────────────────
+   12. ANIMACIONES
+   ───────────────────────────────────────────── */
+@keyframes cadPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .3; }
+}
+@keyframes cadRise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.panel, .tab-panel, .mod-card, .request-card, .record-item, .stat-card, .history-record {
+  animation: cadRise .28s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+.live-indicator.offline { color: var(--accent-red); border-color: rgba(240,68,56,.45); }
+.live-indicator.offline .live-dot { background: var(--accent-red); box-shadow: 0 0 9px var(--accent-red); animation: none; }
+
+/* Celdas CAD: nunca se comprimen en móvil */
+@media (max-width: 640px) {
+  .cad-strip { overflow-x: auto; scrollbar-width: none; }
+  .cad-strip::-webkit-scrollbar { display: none; }
+  .cad-cell { flex: 0 0 auto; }
+}
+
+/* ── Fila de unidad (Oficiales en Servicio) ── */
+.unit-row { align-items: flex-start; padding: 10px 12px 10px 9px; }
+.unit-row .on-duty-ava { width: 34px; height: 34px; font-size: 14px; border-radius: 9px; font-family: 'Rajdhani', sans-serif; font-weight: 700; }
+.unit-row .on-duty-info { gap: 1px; }
+.on-duty-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.unit-state {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.unit-state.on  { background: rgba(33,197,93,.16); border-color: rgba(33,197,93,.45); color: var(--accent-green); }
+.unit-state.brk { background: rgba(245,165,36,.16); border-color: rgba(245,165,36,.45); color: var(--accent-amber); }
+
+.unit-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+.unit-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(6,13,28,.8);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+}
+.unit-tag.code { color: var(--accent-cyan); border-color: rgba(56,189,248,.4); background: rgba(56,189,248,.10); }
+.unit-tag.time { color: var(--accent-amber); border-color: rgba(245,165,36,.35); background: rgba(245,165,36,.08); }
+.unit-tag.cam  { color: var(--accent-red);  border-color: rgba(240,68,56,.45); background: rgba(240,68,56,.12); animation: cadPulse 1.6s ease-in-out infinite; }
+
+/* ─────────────────────────────────────────────
+   13. DISPATCH / CAD — paneles, mapa y llamadas
+   ───────────────────────────────────────────── */
+.dashboard-header {
+  background: linear-gradient(180deg, rgba(11,21,38,.98), rgba(6,13,28,.98));
+  border-bottom: 1px solid var(--border-strong);
+}
+.brand-text, .panel-title, .bc-panel-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.brand-sub { color: var(--accent-cyan); }
+
+.panel-header {
+  background: rgba(6,13,28,.72);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  box-shadow: inset 0 1px 0 rgba(47,129,247,.12);
+}
+.panel-section { border-color: var(--border); }
+.panel-count {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(47,129,247,.2);
+  border: 1px solid rgba(47,129,247,.45);
+  color: var(--accent-cyan);
+}
+
+.calls-list, .players-list, .dispatch-log {
+  background: rgba(6,13,28,.55);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+}
+
+.call-dot { box-shadow: 0 0 8px currentColor; }
+.lg {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.map-legend {
+  background: rgba(6,13,28,.88);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+}
+.map-coords, .map-cal-info, .map-follow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background: rgba(6,13,28,.9);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  color: var(--accent-cyan);
+}
+.map-tooltip {
+  background: linear-gradient(160deg, rgba(15,28,51,.99), rgba(6,13,28,.99));
+  border: 1px solid rgba(47,129,247,.5);
+  border-radius: 10px;
+  box-shadow: 0 14px 34px rgba(0,0,0,.6);
+}
+.map-btn {
+  background: rgba(15,28,51,.95);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all .16s ease;
+}
+.map-btn:hover { border-color: rgba(47,129,247,.6); color: var(--accent-cyan); transform: translateY(-1px); }
+.map-btn-sep { background: var(--border); }
+
+.stat-badge {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.stat-icon {
+  background: rgba(47,129,247,.14);
+  border: 1px solid rgba(47,129,247,.35);
+  border-radius: 9px;
+}
+
+.modal-header { border-bottom: 1px solid var(--border); }
+.modal-footer { border-top: 1px solid var(--border); }
+
+.bc-panel {
+  background: linear-gradient(160deg, rgba(15,28,51,.98), rgba(6,13,28,.98));
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  box-shadow: var(--shadow-panel);
+}
+
+/* Indicador de prioridad en llamadas (si existe estilo inline, lo respeta) */
+.empty-state { color: var(--text-secondary); }
