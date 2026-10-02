@@ -454,6 +454,7 @@
   .on-duty-ava { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; color: var(--text-primary); flex-shrink: 0; }
   .on-duty-info { flex: 1; min-width: 0; }
   .on-duty-name { display: flex; align-items: center; gap: 6px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 13px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .on-duty-roblox { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .3px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .on-duty-break { font-size: 9px; letter-spacing: 0.05em; color: var(--accent-amber); border: 1px solid rgba(251,191,36,0.4); border-radius: 4px; padding: 1px 5px; background: rgba(251,191,36,0.1); }
   .on-duty-meta { font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .on-duty-dept { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; }
@@ -2244,6 +2245,22 @@
     $('btn-search').disabled = false;
   }
 
+  // ── DEPARTAMENTOS (etiqueta para el perfil / unidades) ──
+  const DEPT_HERO = {
+    hpd:  { icon: '🚔', code: 'HPD',  name: 'Policía de Houston' },
+    hcso: { icon: '⭐', code: 'HCSO', name: 'Sheriff del Condado Harris' },
+    tph:  { icon: '🛣️', code: 'TPH',  name: 'Patrulla Estatal' },
+    ice:  { icon: '🛡️', code: 'ICE',  name: 'Immigration & Customs' },
+    hfd:  { icon: '🚒', code: 'HFD',  name: 'Bomberos de Houston' },
+    dot:  { icon: '🔧', code: 'HDOT', name: 'Transporte (HDOT)' },
+    ems:  { icon: '🚑', code: 'EMS',  name: 'Emergencias Médicas' },
+    dc:   { icon: '🏢', code: 'DC',   name: 'Departamento Central' },
+  };
+  function deptHeroLabel(code) {
+    const k = String(code || '').toLowerCase();
+    return DEPT_HERO[k] || { icon: '🏛️', code: String(code || '').toUpperCase() || '—', name: 'Departamento' };
+  }
+
   async function openProfile(robloxUsername) {
     $('search-view').style.display = 'none';
     $('profile-view').classList.add('active');
@@ -2279,14 +2296,35 @@
         licenses = await supaSelect('licenses', '*', { or: orFilter }).catch(() => []);
       }
 
-      const charNames = (characters || []).map(c => (c.nombres || '') + ' ' + (c.apellidos || '')).filter(Boolean);
-      const displayName = arrests[0]?.target_name || fines[0]?.target_name || charNames[0] || robloxUsername;
+      // ¿Es miembro de un departamento y está fuera de servicio?
+      // Si es así, en el hero NO se muestra el nombre asignado (solo el depto).
+      let deptInfo = null;
+      if (discordIds.length > 0) {
+        const idsOr = `(${discordIds.map(id => `discord_id.eq.${id}`).join(',')})`;
+        const [members, sessions] = await Promise.all([
+          supaSelect('payroll_members', 'discord_id, department, rank', { or: idsOr, limit: '10' }).catch(() => []),
+          supaSelect('police_shift_sessions', 'discord_id, status', { or: idsOr, limit: '50' }).catch(() => []),
+        ]);
+        const mem = (members || [])[0] || null;
+        const onDuty = (sessions || []).some(s => s.status === 'active' || s.status === 'break');
+        if (mem && mem.department) deptInfo = { department: mem.department, rank: mem.rank || '', onDuty: onDuty };
+      }
+      const masked = !!(deptInfo && !deptInfo.onDuty);
+
       const profileChar = (characters || []).find(c => String(c.roblox || '').toLowerCase() === String(robloxUsername || '').toLowerCase()) || (characters || [])[0] || null;
+      const assignedName = profileChar ? [profileChar.nombres, profileChar.apellidos].filter(Boolean).join(' ').trim() : '';
+      const displayName = assignedName || arrests[0]?.target_name || fines[0]?.target_name || robloxUsername;
       renderCharInfo(profileChar);
       const totalFinesAmount = fines.reduce((sum, f) => sum + (f.amount || 0), 0);
       const activeBolos = (bolos || []).filter(b => b.estado === 'activo' && [b.roblox_user, b.target_name].some(h => h && String(h).toLowerCase().includes(robloxUsername.toLowerCase())));
 
       currentProfile = { robloxUsername, displayName, avatarUrl, arrests, fines, licenses: licenses || [], vehicles: vehicles || [], bolos: activeBolos || [] };
+
+      const dh = masked ? deptHeroLabel(deptInfo.department) : null;
+      const heroName = dh ? `${dh.icon} ${dh.code} — ${dh.name}` : esc(displayName);
+      const heroSub = dh
+        ? `🎮 ${esc(robloxUsername)} · 👮 Fuera de servicio`
+        : `🎮 ${esc(robloxUsername)}`;
 
       $('profile-hero').innerHTML = `
         <div class="profile-header">
@@ -2294,8 +2332,8 @@
             ${avatarUrl ? `<img src="${avatarUrl}" alt="${esc(robloxUsername)}">` : esc(robloxUsername.charAt(0).toUpperCase())}
           </div>
           <div class="profile-info">
-            <div class="profile-name">${esc(displayName)}</div>
-            <div class="profile-username">🎮 ${esc(robloxUsername)}</div>
+            <div class="profile-name"${dh ? ' style="color:var(--accent-gold);font-size:22px;letter-spacing:.5px;"' : ''}>${heroName}</div>
+            <div class="profile-username">${heroSub}</div>
           </div>
         </div>
         ${activeBolos.length > 0 ? `<div style="margin:12px 0;padding:12px 16px;border:1px solid rgba(239,68,68,0.55);background:rgba(239,68,68,0.12);border-radius:12px;display:flex;align-items:center;gap:12px;">
@@ -2809,7 +2847,7 @@
   let onDutyStatus = {};
 
   function deptCodeLabel(code) {
-    const map = { hpd: ['#38bdf8', 'HPD'], hcso: ['#a78bfa', 'HCSO'], ice: ['#fbbf24', 'ICE'], tph: ['#34d399', 'TPH'], dc: ['#94a3b8', 'DC'] };
+    const map = { hpd: ['#38bdf8', 'HPD'], hcso: ['#a78bfa', 'HCSO'], ice: ['#fbbf24', 'ICE'], tph: ['#34d399', 'TPH'], hfd: ['#ef4444', 'HFD'], dot: ['#fbbf24', 'HDOT'], ems: ['#22d3ee', 'EMS'], dc: ['#94a3b8', 'DC'] };
     const c = (code || '').toLowerCase();
     return map[c] || ['#94a3b8', String(code || 'S/D').toUpperCase()];
   }
@@ -2829,14 +2867,30 @@
         return;
       }
       listRows.forEach(o => { onDutyStatus[o.username || o.discord_id] = o; });
+      const ids = listRows.map(r => r.discord_id).filter(Boolean);
+      let charNameByDiscord = {};
+      if (ids.length) {
+        try {
+          const cs = await supaSelect('characters', 'user_discord,nombres,apellidos',
+            { or: `(${ids.map(i => `user_discord.eq.${i}`).join(',')})`, limit: '200' });
+          (cs || []).forEach(c => {
+            const k = c.user_discord;
+            if (k && !charNameByDiscord[k]) charNameByDiscord[k] = [c.nombres, c.apellidos].filter(Boolean).join(' ').trim();
+          });
+        } catch (_) {}
+      }
       list.innerHTML = listRows.map(o => {
-        const initial = (o.username || '—').charAt(0).toUpperCase();
+        const assigned = charNameByDiscord[o.discord_id] || '';
+        const shownName = assigned || o.username || '—';
+        const robLabel = assigned && o.username ? o.username : '';
+        const initial = (shownName || '?').charAt(0).toUpperCase();
         const isBreak = o.status === 'break';
         const [col, dept] = deptCodeLabel(o.department);
         return `<div class="on-duty-chip" data-user="${esc(o.username || '')}">
           <div class="on-duty-ava" style="background:${col}1f;border:1px solid ${col}55;">${initial}</div>
           <div class="on-duty-info">
-            <div class="on-duty-name">${esc(o.username || '—')} ${isBreak ? '<span class="on-duty-break">EN PAUSA</span>' : ''}</div>
+            <div class="on-duty-name">${esc(shownName)} ${isBreak ? '<span class="on-duty-break">EN PAUSA</span>' : ''}</div>
+            ${robLabel ? `<div class="on-duty-roblox">🎮 ${esc(robLabel)}</div>` : ''}
             <div class="on-duty-meta"><span class="on-duty-dept" style="color:${col}">${dept}</span> · ${isBreak ? 'Pausa' : 'En servicio'} desde ${o.start_time ? new Date(o.start_time).toLocaleTimeString() : '—'}</div>
           </div>
           <span class="on-duty-status ${isBreak ? 'break' : 'live'}"></span>

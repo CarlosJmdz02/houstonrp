@@ -544,6 +544,14 @@
     gap: 10px;
   }
 
+  .user-roblox {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-dim);
+    letter-spacing: .2px;
+  }
+
+
   .user-avatar-sm {
     width: 30px; height: 30px;
     border-radius: 50%;
@@ -1151,10 +1159,11 @@ let userId = null;
   let rankOptions = [];
   let rankByUser = {};
   let rankFilterReady = false;
+  let charNameByDiscord = {};
 
   function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
 
-  const DEPT_NAMES = { hcso: 'HCSO', hpd: 'HPD', ice: 'ICE', tph: 'TPH' };
+  const DEPT_NAMES = { hcso: 'HCSO', hpd: 'HPD', ice: 'ICE', tph: 'TPH', hfd: 'HFD', dot: 'HDOT', dc: 'DC', ems: 'EMS' };
   const TEN_CODES = [
     { code: '10-6',   color: '#e6a868', label: 'Ocupado' },
     { code: '10-7',   color: '#2d2d3d', label: 'Fuera de servicio' },
@@ -1326,6 +1335,21 @@ async function loadUsers() {
     if (typeof hrpGetAllUsersWithHours !== 'function') return;
     allUsers = await hrpGetAllUsersWithHours(selectedDept || undefined);
     const discordIds = allUsers.map(u => u.discord_id).filter(Boolean);
+
+    // Nombre asignado (characters) por Discord ID → se usa en toda la vista.
+    charNameByDiscord = {};
+    if (discordIds.length && typeof supaSelect === 'function') {
+      try {
+        const chars = await supaSelect('characters', 'user_discord,nombres,apellidos',
+          { or: `(${discordIds.map(i => `user_discord.eq.${i}`).join(',')})`, limit: '500' });
+        (chars || []).forEach(c => {
+          if (c.user_discord && !charNameByDiscord[c.user_discord]) {
+            charNameByDiscord[c.user_discord] = [c.nombres, c.apellidos].filter(Boolean).join(' ').trim();
+          }
+        });
+      } catch (_) {}
+    }
+
     userAvatarMap = (typeof hrpGetUserAvatars === 'function') ? await hrpGetUserAvatars(discordIds) : {};
     const session = (typeof hrpGetSession === 'function') ? hrpGetSession() : null;
     if (session && session.id && session.avatar && !userAvatarMap[session.id]) {
@@ -1359,18 +1383,21 @@ async function loadUsers() {
 
     let html = '';
     users.forEach((u, i) => {
+      const assigned = charNameByDiscord[u.discord_id] || '';
+      const shownName = assigned || u.username || 'Desconocido';
+      const robLabel = assigned && u.username ? u.username : '';
       const avatarHash = userAvatarMap[u.discord_id];
       const avatarHtml = avatarHash
         ? `<img src="https://cdn.discordapp.com/avatars/${u.discord_id}/${avatarHash}.png" style="width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;">`
-        : `<div class="user-avatar-sm">${(u.username || 'U').charAt(0).toUpperCase()}</div>`;
+        : `<div class="user-avatar-sm">${(shownName || 'U').charAt(0).toUpperCase()}</div>`;
       const deptLabel = u.department ? (DEPT_NAMES[u.department] || u.department.toUpperCase()) : '—';
       const rankLabel = rankLabelOf(u);
-      html += `<tr data-name="${(u.username || '').toLowerCase()}">
+      html += `<tr data-name="${(((assigned || '') + ' ' + (u.username || '')).toLowerCase().trim())}">
         <td style="color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:12px;">#${i + 1}</td>
         <td>
           <div class="user-cell">
             ${avatarHtml}
-            <span>${u.username || 'Desconocido'}</span>
+            <span>${esc(shownName)}${robLabel ? `<span class="user-roblox"> · ${esc(robLabel)}</span>` : ''}</span>
           </div>
         </td>
         <td>
@@ -1397,7 +1424,7 @@ async function loadUsers() {
     const rk = ($('rank-filter') || {}).value || '';
     selectedRank = rk;
     let filtered = allUsers;
-    if (q) filtered = filtered.filter(u => (u.username || '').toLowerCase().includes(q));
+    if (q) filtered = filtered.filter(u => (((charNameByDiscord[u.discord_id] || '') + ' ' + (u.username || '')).toLowerCase().includes(q)));
     if (rk) filtered = filtered.filter(u => rankByUser[String(u.discord_id)] === rk);
     renderUsers(filtered);
   }
