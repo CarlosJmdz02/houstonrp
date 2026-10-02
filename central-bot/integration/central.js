@@ -663,6 +663,21 @@ let edgeFails = 0;
 let edgeCooldownUntil = 0;
 let voiceLogged = false;
 
+/**
+ * Limita el tiempo de una promesa. Sin esto, una llamada de TTS o de red que
+ * se cuelga bloquea TODA la cola de voz y las respuestas salen minutos después.
+ */
+function withTimeout(promise, ms, label) {
+  let timer = null;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error((label || 'timeout') + ' > ' + ms + 'ms')), ms);
+  });
+  return Promise.race([
+    Promise.resolve(promise).finally(() => { if (timer) clearTimeout(timer); }),
+    timeout,
+  ]);
+}
+
 function escapeXml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
@@ -682,14 +697,19 @@ async function edgeMp3(text, voice, rate) {
   let tts = ttsInstances.get(voice);
   if (!tts) {
     tts = new EdgeTTS();
-    await tts.setMetadata(voice, EdgeFormat.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
+    try {
+      await withTimeout(tts.setMetadata(voice, EdgeFormat.AUDIO_24KHZ_48KBITRATE_MONO_MP3), 8000, 'edge.setMetadata');
+    } catch (e) {
+      ttsInstances.delete(voice);
+      throw e;
+    }
     ttsInstances.set(voice, tts);
   }
   const dir = path.join(os.tmpdir(), 'central-tts',
     Date.now() + '-' + Math.random().toString(36).slice(2, 8));
   fs.mkdirSync(dir, { recursive: true });
   try {
-    const { audioFilePath } = await tts.toFile(dir, escapeXml(text), { rate });
+    const { audioFilePath } = await withTimeout(tts.toFile(dir, escapeXml(text), { rate }), 9000, 'edge.toFile');
     const buf = fs.readFileSync(audioFilePath);
     return buf;
   } finally {
@@ -698,13 +718,32 @@ async function edgeMp3(text, voice, rate) {
 }
 
 async function googleMp3(text) {
-  const res = await fetch(ttsUrl(text), { headers: { 'User-Agent': 'Mozilla/5.0' } });
-  if (!res.ok) throw new Error('TTS HTTP ' + res.status);
-  return Buffer.from(await res.arrayBuffer());
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 6000);   // sin esto el fetch puede colgarse ~10 min
+  try {
+    const res = await fetch(ttsUrl(text), {
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+      signal: ctrl.signal,
+    });
+    if (!res.ok) throw new Error('TTS HTTP ' + res.status);
+    return Buffer.from(await res.arrayBuffer());
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /** Devuelve mp3: Edge (voz humana) → si falla Google. */
 async function synthesizeMp3(text) {
+  // Presupuesto total: si Edge se cuelga, no puede retener la cola de voz.
+  try {
+    return await withTimeout(synthesizeEdge(text), 14000, 'tts.edge');
+  } catch (e) {
+    console.warn('[central] ⚠️ voz principal agotada (' + e.message + '), uso Google TTS');
+    return googleMp3(text);   // googleMp3 ya tiene su propio aborto de 6 s
+  }
+}
+
+async function synthesizeEdge(text) {
   if (Date.now() > edgeCooldownUntil) {
     for (const voice of [currentVoice, VOICES.jorge, VOICES.dalia]) {
       try {
@@ -723,8 +762,7 @@ async function synthesizeMp3(text) {
       }
     }
   }
-  console.warn('[central] ⚠️ usando voz de respaldo (Google TTS)');
-  return googleMp3(text);
+  throw new Error('Edge TTS sin respuesta');
 }
 
 /** Habla el texto en el canal central. Devuelve true si sonó. */
@@ -764,7 +802,8 @@ async function playBuffer(buf, label) {
     const resource = createAudioResource(Readable.from([pcm]), { inputType: StreamType.Raw });
     audioPlayer.play(resource);
     await entersState(audioPlayer, AudioPlayerStatus.Playing, 15000);
-    await entersState(audioPlayer, AudioPlayerStatus.Idle, 60000);
+    // 20 s (antes 60): si el reproductor se queda trabado no debe retener la cola.
+    await entersState(audioPlayer, AudioPlayerStatus.Idle, 20000);
     console.log(`[central] 🔊 audio enviado (${(pcm.length / 2 / 48000).toFixed(1)}s)${label ? ': ' + label : ''}`);
     return true;
   } catch (e) {
@@ -789,14 +828,19 @@ async function playSoundFile(file) {
 }
 
 function enqueueSound(file) {
-  const job = voiceQueue.then(() => playSoundFile(file)).catch(() => false);
+  // tope duro por trabajo: si algo se cuelga, la cola sigue andando igual.
+  const job = voiceQueue
+    .then(() => withTimeout(playSoundFile(file), 25000, 'cola.sonido'))
+    .catch(() => false);
   voiceQueue = job.catch(() => false);
   return job;
 }
 
 let voiceQueue = Promise.resolve();
 function enqueueSpeak(text) {
-  const job = voiceQueue.then(() => speak(text)).catch(() => false);
+  const job = voiceQueue
+    .then(() => withTimeout(speak(text), 25000, 'cola.tts'))
+    .catch(() => false);
   voiceQueue = job.catch(() => false);
   return job;
 }
