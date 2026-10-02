@@ -280,6 +280,29 @@
   }
   .search-box input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
   .search-box input::placeholder { color: var(--text-dim); }
+  .search-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    max-width: 720px;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .4px;
+    color: var(--text-dim);
+  }
+  .search-hint .kbd {
+    display: inline-block;
+    padding: 1px 6px;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 9.5px;
+  }
+  .search-hint-sep { width: 1px; height: 11px; background: var(--border); margin: 0 6px; }
 
   .search-modes { display: flex; gap: 8px; margin-bottom: 12px; }
   .mode-btn {
@@ -759,8 +782,7 @@
       </div>
     </div>
 
-    <div class="cad-strip" id="cad-strip" title="Estado de la unidad (CAD)">
-      <div class="cad-cell"><span class="cad-k">Unit</span><span class="cad-v" id="cad-unit">—</span></div>
+    <div class="cad-strip" id="cad-strip" title="Estado del turno (CAD)">
       <div class="cad-cell"><span class="cad-k">Dept</span><span class="cad-v" id="cad-dept">HPD</span></div>
       <div class="cad-cell"><span class="cad-k">Status</span><span class="cad-v" id="cad-status">10-7 · Fuera de servicio</span></div>
       <div class="cad-cell"><span class="cad-k">Turno</span><span class="cad-v" id="cad-turn">00:00:00</span></div>
@@ -868,7 +890,7 @@
 
     <!-- ── DATABASE: MAIN SCREEN ── -->
     <div class="page-head">
-      <div class="page-eyebrow">// HPD · NCIC / CAD TERMINAL</div>
+      <div class="page-eyebrow">HPD · NCIC / CAD TERMINAL</div>
       <div class="page-title">Base de <span>Datos</span> Policial</div>
     </div>
 
@@ -906,15 +928,17 @@
 
       <div class="tab-body">
         <div id="search-view">
-          <div class="search-modes">
-            <button id="mode-person" class="mode-btn active" onclick="setSearchMode('person')">👤 Ciudadanos</button>
-          </div>
           <div class="search-box">
-            <input id="db-person" type="text" placeholder="Escribí el nombre de usuario Roblox..." autocomplete="off" spellcheck="false">
+            <input id="db-person" type="text" placeholder="Buscar ciudadano: nombre Roblox, Discord o #caso…" autocomplete="off" spellcheck="false">
             <button class="btn btn-primary" onclick="dbSearch()" id="btn-search">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               Buscar
             </button>
+          </div>
+          <div class="search-hint">
+            <span class="kbd">/</span> enfoca la búsqueda · <span class="kbd">Enter</span> busca · <span class="kbd">Esc</span> limpia
+            <span class="search-hint-sep"></span>
+            Búsqueda automática mientras escribís
           </div>
           <div id="db-person-result"></div>
         </div>
@@ -993,7 +1017,7 @@
     <!-- ── OPERATIONS MODULES ── -->
     <div class="mods-head">
       <div>
-        <div class="page-eyebrow">// HPD · FIELD OPERATIONS</div>
+        <div class="page-eyebrow">HPD · FIELD OPERATIONS</div>
         <div class="page-title" style="font-size:24px;">Módulos de <span>Operaciones</span><span class="qtag">Q-02 · Campo</span></div>
       </div>
     </div>
@@ -1076,7 +1100,7 @@
       <div class="history-top">
         <div class="history-top-left">
           <div>
-            <div class="page-eyebrow">// HPD · CAD HISTORY LOG</div>
+            <div class="page-eyebrow">HPD · CAD HISTORY LOG</div>
             <div class="page-title" style="font-size:26px;">Historial de <span>Operaciones</span><span class="qtag">Q-03 · Log</span></div>
           </div>
         </div>
@@ -1139,7 +1163,7 @@
     <div id="bolo-panel">
       <div class="bolo-top">
         <div>
-          <div class="page-eyebrow">// HPD · ALERT BOARD</div>
+          <div class="page-eyebrow">HPD · ALERT BOARD</div>
           <div class="page-title" style="font-size:26px;">BOLO · <span>Alerta de Vigilancia</span><span class="qtag warn">Q-04 · Be on lookout</span></div>
         </div>
         <button class="history-close" onclick="closeBoloPanel()">
@@ -1470,23 +1494,10 @@
     syncCadStrip();
   }
 
-  // ── CAD: barra de unidad (solo presentación) ──
-  const CAD_LETTERS = ['ADAM','BRAVO','CHARLIE','DELTA','ECHO','FOXTROT','GOLF','HOTEL','INDIA','JULIET'];
-  let _cadCall = '';
-  function cadCallsign() {
-    if (_cadCall) return _cadCall;
-    const seed = String(userId || userName || '');
-    if (!seed) return '';
-    let h = 0;
-    for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-    _cadCall = ((h % 9) + 1) + '-' + CAD_LETTERS[h % CAD_LETTERS.length] + '-' + ((h % 89) + 10);
-    return _cadCall;
-  }
+  // ── CAD: barra de turno (solo presentación) ──
   function syncCadStrip() {
-    const u = document.getElementById('cad-unit');
-    if (!u) return;
-    const cs = cadCallsign();
-    if (cs) u.textContent = cs;
+    const d0 = document.getElementById('cad-dept');
+    if (!d0) return;
 
     const chip = document.querySelector('.dept-chip.active');
     const dept = (chip && chip.dataset && chip.dataset.dept) || selectedDept || localStorage.getItem('hrp_selected_dept') || 'hpd';
@@ -3622,11 +3633,34 @@
     }
 
     const dbInput = $('db-person');
+    let dbDebounce = null;
     if (dbInput) {
       dbInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter') { dbSearch(); }
+        if (e.key === 'Enter') { clearTimeout(dbDebounce); dbSearch(); }
+        if (e.key === 'Escape') {
+          clearTimeout(dbDebounce);
+          dbInput.value = '';
+          const r0 = $('db-person-result');
+          if (r0) r0.innerHTML = '';
+          dbInput.blur();
+        }
+      });
+      dbInput.addEventListener('input', () => {
+        clearTimeout(dbDebounce);
+        const v = dbInput.value.trim();
+        const r0 = $('db-person-result');
+        if (v.length < 2) { if (r0) r0.innerHTML = ''; return; }
+        dbDebounce = setTimeout(dbSearch, 450);
       });
       setTimeout(() => dbInput.focus(), 350);
+      document.addEventListener('keydown', e => {
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
+          e.preventDefault();
+          dbInput.focus();
+          dbInput.select();
+        }
+      });
     }
 
     buildDeptBar();
