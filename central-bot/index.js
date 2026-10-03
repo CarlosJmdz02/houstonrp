@@ -228,7 +228,16 @@ async function speak(text) {
   if (!conn || !audioPlayer) return false;
   try {
     const url = getAudioUrl(String(text), 'es', 1, 1000);
-    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+    // Sin este aborto el fetch puede quedarse colgado varios minutos y
+    // retrasar toda la respuesta del bot (era la demora de ~10 min).
+    const ctrl = new AbortController();
+    const ttsTimer = setTimeout(() => ctrl.abort(), 8000);
+    let res;
+    try {
+      res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: ctrl.signal });
+    } finally {
+      clearTimeout(ttsTimer);
+    }
     if (!res.ok) throw new Error('TTS HTTP ' + res.status);
     const mp3 = Buffer.from(await res.arrayBuffer());
 
@@ -248,7 +257,8 @@ async function speak(text) {
       voice.entersState(audioPlayer, voice.AudioPlayerStatus.Playing, 15000),
       spawnFail,
     ]);
-    await voice.entersState(audioPlayer, voice.AudioPlayerStatus.Idle, 60000);
+    // 20 s (antes 60): si el reproductor se traba no debe retener la respuesta.
+    await voice.entersState(audioPlayer, voice.AudioPlayerStatus.Idle, 20000);
     return true;
   } catch (e) {
     console.warn('[voice] TTS falló:', e.message);

@@ -769,7 +769,10 @@ function normId(v){
   if(v==null) return '';
   let s=String(v).trim();
   if(/%[0-9a-f]{2}/i.test(s)){ try{ s=decodeURIComponent(s); }catch(_){} }
-  return s.toLowerCase();
+  s=s.toLowerCase().replace(/\s+/g,' ');
+  // Sin acentos: 'Perez' y 'Perez' con tilde deben ser el mismo nombre.
+  try{ s=s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); }catch(_){}
+  return s;
 }
 function idPattern(v){
   let s=String(v==null?'':v);
@@ -780,7 +783,7 @@ async function getMyIds(){
   if(_myIds) return _myIds;
   const ids=[userId];
   try{
-    const chars=await supaSelect('characters','roblox,nombres,apellidos',{user_discord:`eq.${userId}`,limit:'25'});
+    const chars=await supaSelect('characters','roblox,nombres,apellidos',{user_discord:`eq.${userId}`,limit:'6'});
     (chars||[]).forEach(c=>{
       const extras=[c.roblox];
       const full=[c.nombres,c.apellidos].filter(Boolean).join(' ').trim();
@@ -810,8 +813,20 @@ async function myRecordsFilter(extra){
   return Object.assign({or:'('+parts.join(',')+')'},extra||{});
 }
 function isMyRecord(r,ids){
-  const set=ids.map(normId).filter(Boolean);
-  return set.indexOf(normId(r.target_discord))>-1 || set.indexOf(normId(r.target_name))>-1;
+  const hay=[r.target_discord,r.target_name]
+    .map(v=>normId(v))
+    .filter(Boolean);
+  if(!hay.length) return false;
+  const set=ids.map(v=>normId(v)).filter(Boolean);
+  if(!set.length) return false;
+  // Coincidencia tolerante: igualdad exacta o contención (el oficial puede
+  // haber escrito el Discord ID, el usuario de Roblox o el nombre a medias).
+  return set.some(id=>hay.some(h=>{
+    if(h===id) return true;
+    const n=Math.min(h.length,id.length);
+    if(n<6) return false;          // evita falsos positivos con nombres cortos
+    return h.indexOf(id)>-1 || id.indexOf(h)>-1;
+  }));
 }
 async function fetchMyRecords(select,extra){
   const ids=await getMyIds();

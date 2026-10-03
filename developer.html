@@ -490,6 +490,28 @@
   }
 
   // ── INIT ──
+  // ── ACCESO EXCLUSIVO DEL PANEL DE DESARROLLO ──
+  // Único rol autorizado. NO usa el caché compartido de auth.js (manage/dev)
+  // para que nadie que entró antes a otra página conserve el acceso.
+  const DEV_ONLY_ROLE = '1289866878403088444';
+  async function hasDeveloperAccess(discordId) {
+    if (!discordId) return false;
+    try {
+      const r = await hrpCallCheckPoliceRole({
+        discord_id: discordId,
+        username: (session && session.username) || 'Unknown',
+        role_id: DEV_ONLY_ROLE,
+      });
+      if (r && r.allowed) return true;
+    } catch (_) {}
+    try {
+      const d = await supaSingle('police_members', 'discord_id',
+        { discord_id: `eq.${discordId}`, role_id: `eq.${DEV_ONLY_ROLE}` });
+      if (d) return true;
+    } catch (_) {}
+    return false;
+  }
+
   async function init() {
     if (typeof hrpGetSession !== 'function') { window.location.href = 'index.html'; return; }
     session = hrpGetSession();
@@ -505,7 +527,7 @@
     }
     $('user-name').textContent = userName;
 
-    const allowed = await hrpCheckManageAccess(userId);
+    const allowed = await hasDeveloperAccess(userId);
     if (allowed) {
       $('access-loading').classList.add('hidden');
       $('app-content').style.display = 'block';
