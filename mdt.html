@@ -59,9 +59,10 @@
     background: linear-gradient(180deg, rgba(16,26,44,0.98), rgba(10,16,29,0.98));
     border-bottom: 1px solid var(--border);
     box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-    z-index: 60;
-    position: relative;
-  }
+    z-index: 80;
+    position: sticky;
+    top: 0;
+    }
   .top-main { display: flex; align-items: center; gap: 14px; padding: 10px 18px; flex-wrap: wrap; }
   .top-brand { display: flex; align-items: center; gap: 10px; }
   .brand-shield { width: 36px; height: 38px; flex-shrink: 0; }
@@ -847,15 +848,6 @@
       </div>
     </div>
 
-    <div class="cad-strip" id="cad-strip" title="Estado de la unidad (CAD)">
-      <div class="cad-cell"><span class="cad-k">Dept</span><span class="cad-v" id="cad-dept">HPD</span></div>
-      <div class="cad-cell"><span class="cad-k">Duty</span><span class="cad-v" id="cad-duty">Off Duty</span></div>
-      <div class="cad-cell"><span class="cad-k">Status</span><span class="cad-v" id="cad-status">10-7 · Fuera de servicio</span></div>
-      <div class="cad-cell"><span class="cad-k">Turno</span><span class="cad-v" id="cad-turn">00:00:00</span></div>
-      <div class="cad-cell"><span class="cad-k">Acumulado</span><span class="cad-v" id="cad-accum">--</span></div>
-      <span class="cad-led" id="cad-led"></span>
-    </div>
-
     <div class="top-user">
       <div class="user-avatar" id="user-avatar">?</div>
       <div class="user-info">
@@ -1001,11 +993,6 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               Buscar
             </button>
-          </div>
-          <div class="search-hint">
-            <span class="kbd">/</span> enfoca la búsqueda · <span class="kbd">Enter</span> busca · <span class="kbd">Esc</span> limpia
-            <span class="search-hint-sep"></span>
-            Búsqueda automática mientras escribís
           </div>
           <div id="db-person-result"></div>
         </div>
@@ -1559,6 +1546,7 @@
     const now = new Date();
     $('clock').textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     syncCadStrip();
+    syncConnIndicator();   // la franja CAD ya no existe: la conexión se refresca acá
   }
 
   // ── CAD: barra de turno (solo presentación) ──
@@ -2472,8 +2460,22 @@
           weapons:   { name: 'Permiso de Armas',     icon: '🔫', order: 2 },
           insurance: { name: 'Seguro de Vehículo',   icon: '🛡️', order: 3 },
         };
-        const licList = currentProfile.licenses.slice().sort((a, b) =>
-          ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
+        // 1 fila por tipo: si quedó una vencida + una vigente (renovaciones
+        // antiguas), se muestra solo la vigente.
+        const nowMs = Date.now();
+        const isAlive = l => l.status === 'active' && (!l.expires_at || new Date(l.expires_at).getTime() >= nowMs);
+        const bestByType = {};
+        (currentProfile.licenses || []).forEach(l => {
+          const k = l.type || 'otra';
+          const prev = bestByType[k];
+          const better = !prev
+            || (isAlive(l) && !isAlive(prev))
+            || (isAlive(l) === isAlive(prev) && new Date(l.expires_at || 0) > new Date(prev.expires_at || 0));
+          if (better) bestByType[k] = l;
+        });
+        const licList = Object.keys(bestByType)
+          .map(k => bestByType[k])
+          .sort((a, b) => ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
         $('licenses-body').innerHTML = licList.map(l => {
           const meta = LIC_TYPES[l.type] || { name: 'Licencia', icon: '📄' };
           const icon = meta.icon;

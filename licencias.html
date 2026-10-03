@@ -1312,7 +1312,20 @@
         if (!data || !data.length) { panel.style.display = 'none'; return; }
         panel.style.display = '';
         const now = Date.now();
-        list.innerHTML = data.map(l => {
+        // 1 fila por tipo: si quedó una vencida + una activa (histórico de
+        // renovaciones), se muestra solo la vigente.
+        const bestByType = {};
+        data.forEach(l => {
+          const k = l.type || 'otra';
+          const alive = l.status === 'active' && (!l.expires_at || new Date(l.expires_at).getTime() >= now);
+          const prev = bestByType[k];
+          const prevAlive = prev && prev.status === 'active' && (!prev.expires_at || new Date(prev.expires_at).getTime() >= now);
+          if (!prev || (alive && !prevAlive) || (alive === prevAlive && new Date(l.expires_at || 0) > new Date(prev.expires_at || 0))) {
+            bestByType[k] = l;
+          }
+        });
+        const visibleLicenses = Object.keys(bestByType).map(k => bestByType[k]);
+        list.innerHTML = visibleLicenses.map(l => {
           const meta = licMeta(l.type);
           const expired = l.expires_at && new Date(l.expires_at).getTime() < now;
           const status = expired ? 'expired' : l.status;
@@ -1386,6 +1399,13 @@
             btn.textContent = meta.applyLabel;
             return;
           }
+        }
+
+        // Registrar de nuevo = renovar: borra las vencidas/duplicadas de este
+        // tipo para que solo quede UNA licencia activa (la nueva).
+        for (const l of (existing || [])) {
+          if (l.id == null) continue;
+          try { await supaDelete('licenses', { id: `eq.${l.id}` }); } catch (_) {}
         }
 
         await supaInsert('licenses', {
@@ -1487,6 +1507,13 @@
         const base = (target.expires_at && new Date(target.expires_at).getTime() > now) ? new Date(target.expires_at).getTime() : now;
         const newExp = new Date(base + meta.period).toISOString();
         await supaUpdate('licenses', { expires_at: newExp, status: 'active' }, { id: `eq.${target.id}` });
+
+        // Renovación: elimina el resto de filas de este tipo (vencidas o
+        // duplicadas) para que solo quede la licencia recién activada.
+        for (const l of existing) {
+          if (l.id == null || String(l.id) === String(target.id)) continue;
+          try { await supaDelete('licenses', { id: `eq.${l.id}` }); } catch (_) {}
+        }
 
         try {
           await hrpSendDiscordWebhook(LICENSE_WEBHOOK_URL, {

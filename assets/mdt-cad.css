@@ -718,3 +718,26 @@ label {
 
 /* Indicador de prioridad en llamadas (si existe estilo inline, lo respeta) */
 .empty-state { color: var(--text-secondary); }
+
+/* ─────────────────────────────────────────────
+   14. CÓDIGOS 10 — scrollbar visible para pantallas chicas
+   ───────────────────────────────────────────── */
+.codes-row {
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-blue) rgba(6,13,28,.75);
+  scroll-behavior: smooth;
+}
+.codes-row::-webkit-scrollbar { display: block !important; height: 10px; }
+.codes-row::-webkit-scrollbar-track {
+  background: rgba(6,13,28,.75);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.codes-row::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  border-radius: 8px;
+  border: 2px solid rgba(6,13,28,.9);
+}
+.codes-row::-webkit-scrollbar-thumb:hover { filter: brightness(1.18); }
+.codes-row::-webkit-scrollbar-corner { background: transparent; }

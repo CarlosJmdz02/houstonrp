@@ -741,8 +741,22 @@
           weapons:   { name: 'Permiso de Armas',     icon: '🔫', order: 2 },
           insurance: { name: 'Seguro de Vehículo',   icon: '🛡️', order: 3 },
         };
-        const licList = currentProfile.licenses.slice().sort((a, b) =>
-          ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
+        // 1 fila por tipo: si quedó una vencida + una vigente (renovaciones
+        // antiguas), se muestra solo la vigente.
+        const nowMs = Date.now();
+        const isAlive = l => l.status === 'active' && (!l.expires_at || new Date(l.expires_at).getTime() >= nowMs);
+        const bestByType = {};
+        (currentProfile.licenses || []).forEach(l => {
+          const k = l.type || 'otra';
+          const prev = bestByType[k];
+          const better = !prev
+            || (isAlive(l) && !isAlive(prev))
+            || (isAlive(l) === isAlive(prev) && new Date(l.expires_at || 0) > new Date(prev.expires_at || 0));
+          if (better) bestByType[k] = l;
+        });
+        const licList = Object.keys(bestByType)
+          .map(k => bestByType[k])
+          .sort((a, b) => ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
         $('licenses-body').innerHTML = licList.map(l => {
           const meta = LIC_TYPES[l.type] || { name: 'Licencia', icon: '📄' };
           const icon = meta.icon;
