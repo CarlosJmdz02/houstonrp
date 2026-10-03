@@ -1215,8 +1215,15 @@ async function hrpAddBalance(discordId, amount) {
   if (!discordId || !amount) return false;
   try {
     const cur = await supaSelect('economy', 'balance', { discord_id: `eq.${discordId}` });
+    const exists = Array.isArray(cur) && cur.length > 0;
     const current = parseInt(cur?.[0]?.balance) || 0;
-    await supaUpdate('economy', { balance: current + amount }, { discord_id: `eq.${discordId}` });
+    await supaUpdate('economy', { balance: current + amount, updated_at: new Date().toISOString() }, { discord_id: `eq.${discordId}` });
+    // Si el usuario todavía no tenía fila en `economy`, el UPDATE no afecta
+    // nada y el dinero se "pierde" aunque el frontend muestre éxito.
+    // En ese caso creamos la fila con el monto acreditado.
+    if (!exists) {
+      await supaInsert('economy', { discord_id: discordId, balance: amount, updated_at: new Date().toISOString() });
+    }
     return true;
   } catch (e) {
     console.error('Add balance error:', e);

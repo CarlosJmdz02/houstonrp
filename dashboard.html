@@ -1407,6 +1407,19 @@
   }
   loadBalance();
 
+  // Refresca TODOS los saldos visibles a la vez: sidebar, billetera y la
+  // tarjeta "Saldo en cuenta" de la ficha del personaje. Sin esto, cobrar
+  // actualizaba el sidebar pero la ficha seguía mostrando el monto viejo.
+  async function refreshMoneyDisplays() {
+    if (!userId) return;
+    const bal = await hrpGetBalance(userId);
+    const txt = hrpFormatBalance(bal);
+    const a = $('sidebar-balance'); if (a) a.textContent = txt;
+    const b = document.getElementById('hrp-wallet-amount'); if (b) b.textContent = txt;
+    const c = document.getElementById('char-balance'); if (c) c.textContent = txt;
+    return bal;
+  }
+
   // ── PAGO POR TURNO (RANGOS + ECONOMÍA) ──
   // Dos botones: reclamar el sueldo del turno y recolectar las
   // recompensas por reporte/incidente/multa por separado. El monto
@@ -1601,9 +1614,7 @@
           state.baseTs = Date.now();
           showPayToast('💰 Reclamaste ' + fmt(shiftAmount) + ' por tu turno. Tu turno sigue en curso.');
           render();
-          await loadBalance();
-          const wEl = document.getElementById('hrp-wallet-amount');
-          if (wEl) wEl.textContent = hrpFormatBalance(await hrpGetBalance(userId));
+          await refreshMoneyDisplays();
         }
         await refresh();
       } catch (e) {
@@ -1636,9 +1647,7 @@
               state.bonusTotal = 0;
               showPayToast('🎖️ Recolecaste ' + fmt(res.amount) + ' en rewards oficiales.');
               render();
-              await loadBalance();
-              const wEl = document.getElementById('hrp-wallet-amount');
-              if (wEl) wEl.textContent = hrpFormatBalance(await hrpGetBalance(userId));
+              await refreshMoneyDisplays();
               await refreshBonus();
               return;
             }
@@ -1693,9 +1702,7 @@
           state.bonusTotal = 0;
           showPayToast('🎖️ Recolecaste ' + fmt(bonusTotal) + ' en rewards oficiales.');
           render();
-          await loadBalance();
-          const wEl = document.getElementById('hrp-wallet-amount');
-          if (wEl) wEl.textContent = hrpFormatBalance(await hrpGetBalance(userId));
+          await refreshMoneyDisplays();
         } else {
           showPayToast('No se pudo acreditar el pago de recompensas.', 'error');
         }
@@ -1807,7 +1814,7 @@
         <div class="stats-grid-char">
           <div class="stat-card-char">
             <div class="stat-icon" style="background:rgba(240,165,0,0.12);color:var(--accent-gold)">$</div>
-            <div class="stat-value" style="color:var(--accent-gold)">${hrpFormatBalance(stats.balance)}</div>
+            <div class="stat-value" id="char-balance" style="color:var(--accent-gold)">${hrpFormatBalance(stats.balance)}</div>
             <div class="stat-label">Saldo en cuenta</div>
           </div>
           <div class="stat-card-char">
