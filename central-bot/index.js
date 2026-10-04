@@ -362,6 +362,9 @@ function main() {
   });
 
   let started = false;
+  // true cuando integration/central.js (voz + IA) se cargó bien; mientras
+  // sea false, index.js responde con su manejo de texto simple.
+  let CENTRAL_OK = false;
   const onReady = (c) => {
     if (started) return;
     started = true;
@@ -395,10 +398,34 @@ function main() {
 
     // Red de seguridad: si el bot es expulsado de la voz, vuelve solo.
     setInterval(() => ensureVoice(client), 30000);
+
+    // ── Carga el pipeline completo: VOZ (opus → whisper) + IA (Groq) ──
+    // Si falta cualquier cosa, seguimos con el manejo de texto simple de
+    // este archivo: el bot nunca queda mudo ni se rompe el arranque.
+    if (!CONFIG.dryRun) {
+      (async () => {
+        try {
+          const m = await import('./integration/central.js');
+          if (m && typeof m.initCentral === 'function') {
+            m.initCentral(client);
+            CENTRAL_OK = true;
+            console.log('[bot] ✅ Central completo cargado (VOZ + chat + IA)');
+          } else {
+            console.warn('[bot] ⚠️ central.js no expone initCentral → manejo simple');
+          }
+        } catch (e) {
+          console.warn('[bot] ⚠️ No cargó integration/central.js: ' + e.message);
+          console.log('[bot] → sigo con el manejo de texto simple de index.js');
+        }
+      })();
+    }
   };
   client.once('clientReady', onReady);
 
   client.on('messageCreate', (message) => {
+    // integration/central.js ya está respondiendo (texto + voz + IA):
+    // evitamos contestar DOS veces.
+    if (CENTRAL_OK) return;
     if (CONFIG.dryRun) {
       if (message.channelId === CONFIG.channelVoiceId && !message.author.bot) {
         console.log(`[dry] ${message.author.tag}: "${message.content}"`);
