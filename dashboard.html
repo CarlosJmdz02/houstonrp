@@ -1601,24 +1601,36 @@
       render();
       try {
         let shiftAmount = 0;
+        let srvBalance = null;
+        let srvError = null;
         try {
           const res = await hrpPayCollect();
-          if (res && res.status === 'ok') shiftAmount = Number(res.amount) || 0;
-        } catch (_) {}
-        if (shiftAmount <= 0) {
+          if (res && res.status === 'ok') {
+            shiftAmount = Number(res.amount) || 0;
+            if (res.balance !== undefined && res.balance !== null) srvBalance = Number(res.balance);
+          } else {
+            srvError = (res && (res.message || res.error || res.detail)) || 'el servidor no respondió';
+          }
+        } catch (e) { srvError = (e && e.message) || 'error de red'; }
+
+        if (srvError) {
+          // En vez de fingir "no hay dinero", mostramos el motivo real.
+          showPayToast('⚠️ Servidor: ' + srvError, 'error');
+        } else if (shiftAmount <= 0) {
           showPayToast('Aún no tienes dinero de turno para cobrar.', 'warn');
         } else {
           // Reinicia el pendiente local YA (el servidor ya actualizó
           // collected_seconds; esto solo evita que la UI muestre el monto viejo).
           state.basePending = 0;
           state.baseTs = Date.now();
-          showPayToast('💰 Reclamaste ' + fmt(shiftAmount) + ' por tu turno. Tu turno sigue en curso.');
           render();
-          await refreshMoneyDisplays();
+          const nuevo = await refreshMoneyDisplays();
+          const visto = (srvBalance !== null && !isNaN(srvBalance)) ? srvBalance : nuevo;
+          showPayToast('💰 Reclamaste ' + fmt(shiftAmount) + '. Saldo del servidor: ' + hrpFormatBalance(visto));
         }
         await refresh();
       } catch (e) {
-        showPayToast('Error al cobrar las horas.', 'error');
+        showPayToast('Error al cobrar las horas: ' + ((e && e.message) || 'desconocido'), 'error');
       }
       collectShiftBusy = false;
       render();
@@ -1642,12 +1654,19 @@
           try {
             const res = await hrpRpc('hrp_claim_officer_bonuses', { p_discord_id: String(userId) });
             if (res && res.status === 'ok' && Number(res.amount) > 0) {
+              const before = await hrpGetBalance(userId);
               // Limpia el contador local YA para que el botón se apague.
               state.counts = { arrest: 0, incident: 0, fine: 0 };
               state.bonusTotal = 0;
-              showPayToast('🎖️ Recolecaste ' + fmt(res.amount) + ' en rewards oficiales.');
               render();
-              await refreshMoneyDisplays();
+              let despues = await refreshMoneyDisplays();
+              // Red de seguridad: si la RPC respondió "ok" pero el saldo NO
+              // cambió, acreditamos nosotros para que el dinero no se pierda.
+              if (before !== null && despues === before) {
+                await hrpAddBalance(userId, Number(res.amount));
+                despues = await refreshMoneyDisplays();
+              }
+              showPayToast('🎖️ Recolecaste ' + fmt(res.amount) + ' en rewards. Saldo: ' + hrpFormatBalance(despues));
               await refreshBonus();
               return;
             }
