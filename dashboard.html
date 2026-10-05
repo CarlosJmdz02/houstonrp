@@ -1252,6 +1252,36 @@
   .hrp-toast.show { transform: translateX(0); opacity:1; }
   .hrp-toast.warn { border-left-color:#f0a500; }
   .hrp-toast.error { border-left-color:#e54850; }
+  /* ── Sesión de Discord vencida (bloquea el cobro de dinero) ── */
+  .reauth-banner {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 14px 18px; margin-bottom: 18px;
+    background: linear-gradient(100deg, rgba(245,158,11,.14), rgba(245,158,11,.04));
+    border: 1px solid rgba(245,158,11,.42);
+    border-left: 3px solid #f59e0b;
+    border-radius: 12px;
+    animation: fadeUp .3s ease both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  .rb-icon { font-size: 22px; line-height: 1; }
+  .rb-text { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 3px; }
+  .rb-text strong { color: #f5b544; font-size: 14px; }
+  .rb-text span { font-size: 12.5px; color: rgba(255,255,255,.72); line-height: 1.5; }
+  .rb-btn {
+    padding: 9px 16px; border-radius: 8px; cursor: pointer;
+    border: 1px solid rgba(245,158,11,.5);
+    background: rgba(245,158,11,.16); color: #f5b544;
+    font-size: 13px; font-weight: 700; transition: all .18s ease;
+  }
+  .rb-btn:hover { background: rgba(245,158,11,.3); transform: translateY(-1px); }
+  .btn-reconnect {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 11px 16px; margin-bottom: 8px;
+    background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.3);
+    border-radius: 8px; color: #f5b544; font-size: 13px; font-weight: 600;
+    text-decoration: none; transition: all .18s ease;
+  }
+  .btn-reconnect:hover { background: rgba(245,158,11,.2); border-color: rgba(245,158,11,.6); }
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
@@ -1305,6 +1335,10 @@
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">Balance</div>
       <div id="sidebar-balance" style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--accent-gold);margin-top:2px;">$---</div>
     </div>
+    <a class="btn-reconnect" href="#" onclick="event.preventDefault(); hrpForceReauth();" title="Renueva tu token de Discord para poder cobrar dinero">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Reconectar Discord
+    </a>
     <a class="btn-logout" href="#" onclick="event.preventDefault(); localStorage.clear(); window.location.href='index.html';">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       Cerrar Sesión
@@ -1334,6 +1368,16 @@
   </div>
 
   <div class="content">
+
+    <!-- Sesión de Discord vencida: bloquea el cobro de dinero -->
+    <div class="reauth-banner" id="reauth-banner" style="display:none;">
+      <div class="rb-icon">🔐</div>
+      <div class="rb-text">
+        <strong>Tu sesión de Discord venció</strong>
+        <span>Mientras siga vencida no podés cobrar el dinero de servicio. Tocá «Reconectar Discord» al pie del menú.</span>
+      </div>
+      <button class="rb-btn" onclick="hrpForceReauth()">Reconectar Discord</button>
+    </div>
 
     <div class="page-header">
       <div class="page-eyebrow">HOUSTON RP Tu Identidad</div>
@@ -1406,6 +1450,20 @@
     if (el) el.textContent = hrpFormatBalance(bal);
   }
   loadBalance();
+
+  // El backend valida el token contra /users/@me; si venció, no se puede
+  // cobrar nada (implícito: response_type=token, no hay refresh_token).
+  async function checkDiscordToken() {
+    const el = document.getElementById('reauth-banner');
+    if (!el) return;
+    const t = (typeof hrpGetToken === 'function') ? hrpGetToken() : null;
+    if (!t) return;
+    try {
+      const r = await fetch('https://discord.com/api/users/@me', { headers: { Authorization: 'Bearer ' + t } });
+      if (!r.ok) el.style.display = 'flex';
+    } catch (_) { /* sin red no avisamos */ }
+  }
+  checkDiscordToken();
 
   // Refresca TODOS los saldos visibles a la vez: sidebar, billetera y la
   // tarjeta "Saldo en cuenta" de la ficha del personaje. Sin esto, cobrar
@@ -1614,8 +1672,10 @@
         } catch (e) { srvError = (e && e.message) || 'error de red'; }
 
         if (srvError) {
-          // En vez de fingir "no hay dinero", mostramos el motivo real.
-          showPayToast('⚠️ Servidor: ' + srvError, 'error');
+          const sinToken = /token|discord|expirado|inv.lido|\b401\b/i.test(srvError);
+          showPayToast(sinToken
+            ? '🔐 Venció tu sesión de Discord → tocá «Reconectar Discord» (pie del menú) y volvé a cobrar.'
+            : '⚠️ Servidor: ' + srvError, 'error');
         } else if (shiftAmount <= 0) {
           showPayToast('Aún no tienes dinero de turno para cobrar.', 'warn');
         } else {
