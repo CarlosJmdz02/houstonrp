@@ -1276,7 +1276,48 @@
     .topbar { padding: 10px 12px; flex-direction: column; align-items: flex-start; gap: 6px; height: auto; }
     .topbar-right { width: 100%; justify-content: space-between; }
   }
-</style>
+  /* ═══════════════ TIENDA ═══════════════ */
+  .shop-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+    margin: 34px 0 18px; padding-top: 26px;
+    border-top: 1px solid var(--border);
+  }
+  .shop-pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 6px 12px; border-radius: 20px;
+    background: rgba(74,204,143,.14); border: 1px solid rgba(74,204,143,.4);
+    color: #4acf8f; white-space: nowrap;
+  }
+  .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .shop-card {
+    background: linear-gradient(160deg, rgba(20,32,58,.95), rgba(13,21,38,.95));
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .shop-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(59,111,182,.55);
+    box-shadow: 0 14px 32px rgba(0,0,0,.45);
+  }
+  .shop-img { aspect-ratio: 4 / 3; background: #0b1526; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .shop-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .shop-img.noimg::after { content: '🛒'; font-size: 34px; opacity: .35; }
+  .shop-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 5px; }
+  .shop-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: .04em; color: var(--text-primary); }
+  .shop-price { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 25px; line-height: 1; color: var(--accent-gold); }
+  .shop-buy {
+    margin-top: 8px; padding: 10px 14px; border-radius: 9px;
+    border: 1px solid transparent; cursor: pointer;
+    font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: .06em; text-transform: uppercase;
+    background: linear-gradient(160deg, #4acf8f, #169446); color: #fff;
+    transition: all .16s ease;
+  }
+  .shop-buy:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(74,204,143,.3); }
+  .shop-buy:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+  @media (max-width: 640px) { .shop-grid { grid-template-columns: 1fr; } }</style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
 </head>
@@ -1356,10 +1397,10 @@
       <div class="mb-body">
         <div class="mb-title">Marketplace en mantenimiento</div>
         <div class="mb-desc">
-          Estamos actualizando las propiedades al nuevo <strong>update de ERLC 2026</strong>, por lo que todas las casas están <strong>no disponibles</strong> temporalmente. En este momento <strong>no se pueden realizar compras</strong>; pronto volverán a estar activas.
+          Estamos actualizando las propiedades al nuevo <strong>update de ERLC 2026</strong>, por lo que todas las casas están <strong>no disponibles</strong> temporalmente. En este momento <strong>no se pueden comprar propiedades</strong>; la <strong>Tienda</strong> de abajo sí funciona con normalidad.
         </div>
       </div>
-      <span class="mb-pill">Compras pausadas</span>
+      <span class="mb-pill">Propiedades pausadas</span>
     </div>
 
     <div class="page-header">
@@ -1407,6 +1448,24 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
       </button>
     </div>
+
+    <!-- ═══════════════ TIENDA (artículos comprables) ═══════════════ -->
+    <div class="shop-head">
+      <div class="shop-head-text">
+        <div class="page-eyebrow">HOUSTON RP · TIENDA</div>
+        <div class="page-title" style="font-size:26px;">Tien<span>da</span></div>
+        <div class="page-subtitle">Artículos comprables con tu balance. El descuento es inmediato.</div>
+      </div>
+      <span class="shop-pill" id="shop-count">—</span>
+    </div>
+
+    <div class="shop-grid" id="shop-grid">
+      <div class="market-loading">
+        <div class="spinner"></div>
+        Cargando tienda...
+      </div>
+    </div>
+
 
   </div>
 </main>
@@ -1511,8 +1570,9 @@
     myBalance = await hrpGetBalance(userId);
     const el = $('sidebar-balance');
     if (el) el.textContent = hrpFormatBalance(myBalance);
-  }
-  loadBalance();
+    }
+    loadBalance();
+    renderShop();
 
   // ═══════════════════════════════════════
   //  PROPIEDADES (datos del servidor RP)
@@ -2877,6 +2937,74 @@ const title = prop.name || ('Propiedad #' + prop.id);
 
   // ── Toast ──
   let toastTimer = null;
+  // ═══════════════ TIENDA ═══════════════
+  // Para agregar un artículo: meté la foto en images/propiedades/<n>/
+  // y agregá una línea acá (id, name, price, image). El carrusel de
+  // propiedades NO se toca: esto es un apartado aparte.
+  const SHOP_ITEMS = [
+    { id: 'coffe',  name: 'Coffe',  price: 10, image: 'images/propiedades/11/Coffe.png'  },
+    { id: 'concha', name: 'Concha', price: 6,  image: 'images/propiedades/11/Concha.png' },
+    { id: 'donut',  name: 'Donut',  price: 5,  image: 'images/propiedades/11/Donut.png'  },
+  ];
+  let shopBusy = false;
+
+  function renderShop() {
+    const g = document.getElementById('shop-grid');
+    if (!g) return;
+    const cnt = document.getElementById('shop-count');
+    if (cnt) cnt.textContent = SHOP_ITEMS.length + ' artículos';
+    g.innerHTML = SHOP_ITEMS.map(it => `
+      <div class="shop-card">
+        <div class="shop-img"><img src="${it.image}" alt="${it.name}" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.style.display='none';"></div>
+        <div class="shop-body">
+          <div class="shop-name">${it.name}</div>
+          <div class="shop-price">$${it.price}</div>
+          <button class="shop-buy" onclick="buyShopItem('${it.id}')">🛒 Comprar</button>
+        </div>
+      </div>`).join('');
+  }
+
+  async function buyShopItem(id) {
+    if (shopBusy) return;
+    const it = SHOP_ITEMS.find(x => x.id === id);
+    if (!it) return;
+    if (!userId) { showToast('Inicia sesión para poder comprar.', 'error'); return; }
+    if (!confirm(`¿Comprar ${it.name} por $${it.price}?`)) return;
+
+    shopBusy = true;
+    document.querySelectorAll('.shop-buy').forEach(b => b.disabled = true);
+    try {
+      const bal = await hrpGetBalance(userId);
+      if (bal === null || bal === undefined) { showToast('No se pudo leer tu balance.', 'error'); return; }
+      if (bal < it.price) {
+        showToast(`Necesitas $${it.price} y tienes $${Number(bal).toLocaleString()}.`, 'error');
+        return;
+      }
+      const ok = await hrpDeductBalance(userId, it.price);
+      if (!ok) { showToast('No se pudo procesar el pago.', 'error'); return; }
+
+      // Historial de compra (tabla con RLS abierto)
+      try {
+        await supaInsert('economy_adjustments', {
+          discord_id: userId,
+          username: userName || '',
+          amount: -it.price,
+          reason: 'Compra en tienda: ' + it.name,
+          created_by: 'marketplace',
+        });
+      } catch (_) {}
+
+      showToast(`¡Compraste ${it.name} por $${it.price}!`, 'success');
+      await loadBalance();
+    } catch (e) {
+      showToast('Error al comprar: ' + ((e && e.message) || 'desconocido'), 'error');
+    } finally {
+      shopBusy = false;
+      document.querySelectorAll('.shop-buy').forEach(b => b.disabled = false);
+    }
+  }
+  window.buyShopItem = buyShopItem;
+
   function showToast(msg, type = 'success') {
     const toast = $('toast');
     $('toast-msg').textContent = msg;
