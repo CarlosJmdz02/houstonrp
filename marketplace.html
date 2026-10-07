@@ -2995,6 +2995,16 @@ const title = prop.name || ('Propiedad #' + prop.id);
 
       showToast(`¡Compraste ${it.name} por $${it.price}!`, 'success');
       await loadBalance();
+
+    // Aviso al canal de Discord con el mensaje normal del bot (no webhook).
+    // Va en paralelo: si falla, la compra ya está hecha igual.
+    try {
+      fetch('/.netlify/functions/notify-purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discord_id: userId, item: it.name, price: it.price }),
+      }).catch(() => {});
+    } catch (_) {}
     } catch (e) {
       showToast('Error al comprar: ' + ((e && e.message) || 'desconocido'), 'error');
     } finally {
