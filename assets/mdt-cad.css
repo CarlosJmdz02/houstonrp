@@ -773,3 +773,54 @@ body.mdt-page main.tablet-main {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
+
+/* ─────────────────────────────────────────────
+   16. MDT — resultados de vehículos (consulta por placa)
+   ───────────────────────────────────────────── */
+.veh-block {
+  margin: 0 0 16px;
+  background: linear-gradient(160deg, rgba(15,28,51,.96), rgba(11,21,38,.96));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+  animation: cadRise .28s ease both;
+}
+.veh-title {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  background: rgba(6,13,28,.72);
+  border-bottom: 1px solid var(--border);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700; font-size: 14px;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-primary);
+}
+.veh-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; padding: 2px 8px; border-radius: 6px;
+  background: rgba(47,129,247,.2); border: 1px solid rgba(47,129,247,.45);
+  color: var(--accent-cyan);
+}
+.veh-card {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background .16s ease;
+}
+.veh-card:last-child { border-bottom: none; }
+.veh-card:hover { background: rgba(47,129,247,.06); }
+.veh-plate {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px; font-weight: 600; letter-spacing: .12em;
+  padding: 7px 13px; border-radius: 8px;
+  background: rgba(6,13,28,.9);
+  border: 1px solid rgba(47,129,247,.5);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 14px rgba(47,129,247,.14);
+  flex-shrink: 0;
+}
+.veh-info { flex: 1; min-width: 200px; }
+.veh-model { font-size: 13.5px; color: var(--text-primary); font-weight: 500; }
+.veh-owner { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
+.veh-did { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); }

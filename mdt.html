@@ -994,6 +994,7 @@
               Buscar
             </button>
           </div>
+          <div id="vehicle-result"></div>
           <div id="db-person-result"></div>
         </div>
 
@@ -2267,7 +2268,62 @@
   }
 
   function dbSearch() {
+    // En paralelo: si lo que escribiste es una placa/modelo/dueño, arriba
+    // aparecen los vehículos; si es una persona, se abre su ficha.
+    dbSearchVehicles();
     return dbSearchPerson();
+  }
+
+  /** Búsqueda de vehículos por placa / modelo / dueño (tabla vehicles). */
+  async function dbSearchVehicles() {
+    const box = document.getElementById('vehicle-result');
+    if (!box) return;
+    const raw = ($('db-person') ? $('db-person').value : '').trim();
+    // Sanitizamos: PostgREST arma el filtro "or" y una coma o paréntesis
+    // dentro del texto rompería la query.
+    const q = raw.replace(/[,'"()\\*]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (q.length < 2) { box.innerHTML = ''; return; }
+
+    let vehicles = [];
+    try {
+      vehicles = await supaSelect('vehicles', '*', {
+        or: `(plate.ilike.*${q}*,model.ilike.*${q}*,owner_name.ilike.*${q}*,owner_discord.ilike.*${q}*)`,
+        order: 'plate.asc',
+        limit: '8',
+      });
+    } catch (_) { vehicles = []; }
+
+    if (!vehicles || !vehicles.length) { box.innerHTML = ''; return; }
+
+    // Dueño → personaje, para abrir la ficha con el usuario de Roblox (avatar incluido)
+    const owners = [...new Set(vehicles.map(v => v.owner_discord).filter(Boolean))];
+    const robloxByDiscord = {};
+    if (owners.length) {
+      try {
+        const chars = await supaSelect('characters', 'user_discord,roblox', {
+          or: `(${owners.map(id => `user_discord.eq.${id}`).join(',')})`,
+          limit: '20',
+        });
+        (chars || []).forEach(c => {
+          if (c.user_discord && !robloxByDiscord[c.user_discord]) robloxByDiscord[c.user_discord] = c.roblox || '';
+        });
+      } catch (_) {}
+    }
+
+    box.innerHTML = `<div class="veh-block">
+      <div class="veh-title">🚗 Vehículos <span class="veh-count">${vehicles.length}</span></div>
+      ${vehicles.map(v => {
+        const key = robloxByDiscord[v.owner_discord] || v.owner_discord || '';
+        return `<div class="veh-card">
+          <div class="veh-plate">${esc(v.plate || '—')}</div>
+          <div class="veh-info">
+            <div class="veh-model">${esc(v.model || '—')} · ${esc(v.color || '—')}</div>
+            <div class="veh-owner">👤 ${esc(v.owner_name || '—')}${v.owner_discord ? ' <span class="veh-did">' + esc(v.owner_discord) + '</span>' : ''}</div>
+          </div>
+          ${key ? `<button class="btn btn-primary" onclick="openProfile('${esc(key)}')" style="font-size:12px;padding:7px 14px;flex-shrink:0;">Ver ficha →</button>` : ''}
+        </div>`;
+      }).join('')}
+    </div>`;
   }
 
   async function dbSearchPerson() {
