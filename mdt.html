@@ -9,7 +9,6 @@
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
 <meta name="theme-color" content="#0d1424">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
     --bg-deep:       #0a101d;
@@ -833,6 +832,10 @@
     .bolo-top { flex-direction: column; align-items: flex-start; }
   }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap
+">
 <link rel="stylesheet" href="assets/mdt-cad.css">
 </head>
 <body class="mdt-page">
@@ -2189,7 +2192,12 @@
 
   async function fetchRobloxAvatar(username) {
     try {
-      const res = await fetch(`/.netlify/functions/roblox-avatar/by-username/${encodeURIComponent(username)}`);
+      // Tope de 3 s: si el servicio de Roblox se cuelga, la búsqueda no
+      // puede quedarse esperando (se muestra la inicial y listo).
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), 3000);
+      const res = await fetch(`/.netlify/functions/roblox-avatar/by-username/${encodeURIComponent(username)}`, { signal: ctrl.signal });
+      clearTimeout(to);
       if (!res.ok) return null;
       const data = await res.json();
       return data.url || null;
@@ -2400,7 +2408,7 @@
         supaSelect('characters', '*', { or: `(roblox.ilike.*${q}*,user_discord.ilike.*${q}*,nombres.ilike.*${q}*,apellidos.ilike.*${q}*)`, limit: '10' }).catch(() => []),
         supaSelect('police_records', '*', { or: `(target_name.ilike.*${q}*,target_discord.ilike.*${q}*)`, order: 'created_at.desc', limit: '50' }).catch(() => []),
         supaSelect('vehicles', '*', { or: `(owner_name.ilike.*${q}*,owner_discord.ilike.*${q}*)` }).catch(() => []),
-        boloFetchAll(500).catch(() => []),
+        boloFetchAll(100).catch(() => []),
       ]);
 
       const arrests = (records || []).filter(rec => rec.type === 'arrest');
@@ -2476,7 +2484,7 @@
         supaSelect('characters', '*', { or: `(roblox.ilike.*${robloxUsername}*,user_discord.ilike.*${robloxUsername}*,nombres.ilike.*${robloxUsername}*,apellidos.ilike.*${robloxUsername}*)`, limit: '10' }).catch(() => []),
         supaSelect('police_records', '*', { or: `(target_name.ilike.*${robloxUsername}*,target_discord.ilike.*${robloxUsername}*)`, order: 'created_at.desc', limit: '100' }).catch(() => []),
         supaSelect('vehicles', '*', { or: `(owner_name.ilike.*${robloxUsername}*,owner_discord.ilike.*${robloxUsername}*)` }).catch(() => []),
-        boloFetchAll(500).catch(() => []),
+        boloFetchAll(100).catch(() => []),
       ]);
 
       const arrests = (records || []).filter(r => r.type === 'arrest');
@@ -3210,7 +3218,9 @@
     });
   }
   async function boloFetchAll(max) {
-    const rows = await supaSelect('radio_messages', '*', { type: `eq.${BOLO_STORE_TYPE}`, order: 'created_at.desc', limit: String(max || 300) }).catch(() => []);
+    // Solo las columnas que usa boloRowToObj: la tabla radio_messages es
+    // grande y pedir '*' en cada búsqueda/refresh alentaba toda la MDT.
+    const rows = await supaSelect('radio_messages', 'id,created_at,message,user_id,username', { type: `eq.${BOLO_STORE_TYPE}`, order: 'created_at.desc', limit: String(max || 100) }).catch(() => []);
     return (rows || []).map(boloRowToObj);
   }
   async function boloUpdateMessage(id, b) {
@@ -3566,7 +3576,7 @@
     if (!body) return;
     try {
       const names = [robloxUsername].concat(discordIds || []).filter(Boolean);
-      const allBolos = await boloFetchAll(500);
+      const allBolos = await boloFetchAll(100);
       const rows = (allBolos || []).filter(b => {
         if (b.estado === 'eliminado') return false;
         const hay = [b.roblox_user, b.target_name, (b.roblox_id || '').toString()].filter(Boolean);
@@ -3607,7 +3617,7 @@
     const countEl = $('htab-bolo-count');
     if (!list) return;
     try {
-      const rows = (boloCache.length || force ? (await boloFetchAll(200).catch(() => [])) : []).filter(b => b.estado !== 'eliminado');
+      const rows = (boloCache.length || force ? (await boloFetchAll(150).catch(() => [])) : []).filter(b => b.estado !== 'eliminado');
       if (!rows || rows.length === 0) {
         list.innerHTML = '<div class="history-empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>No hay BOLOs registrados</p></div>';
         if (countEl) countEl.textContent = '0';
@@ -3963,7 +3973,7 @@
         const v = dbInput.value.trim();
         const r0 = $('db-person-result');
         if (v.length < 2) { if (r0) r0.innerHTML = ''; return; }
-        dbDebounce = setTimeout(dbSearch, 450);
+        dbDebounce = setTimeout(dbSearch, 300);
       });
       setTimeout(() => dbInput.focus(), 350);
       document.addEventListener('keydown', e => {
