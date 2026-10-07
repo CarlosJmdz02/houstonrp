@@ -1572,7 +1572,6 @@
     if (el) el.textContent = hrpFormatBalance(myBalance);
     }
     loadBalance();
-    renderShop();
 
   // ═══════════════════════════════════════
   //  PROPIEDADES (datos del servidor RP)
@@ -3004,6 +3003,9 @@ const title = prop.name || ('Propiedad #' + prop.id);
     }
   }
   window.buyShopItem = buyShopItem;
+  // Se llama DESPUÉS de declarar SHOP_ITEMS: si se llamara antes, el
+  // TDZ de `const` rompe todo el script y no se pinta ni una propiedad.
+  renderShop();
 
   function showToast(msg, type = 'success') {
     const toast = $('toast');
