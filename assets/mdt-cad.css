@@ -824,3 +824,25 @@ body.mdt-page main.tablet-main {
 .veh-model { font-size: 13.5px; color: var(--text-primary); font-weight: 500; }
 .veh-owner { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
 .veh-did { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); }
+
+.veh-live {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 6px; margin-left: auto;
+  background: rgba(33,197,93,.16); border: 1px solid rgba(33,197,93,.45);
+  color: var(--accent-green);
+  animation: cadPulse 1.8s ease-in-out infinite;
+}
+.veh-flag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: .1em;
+  padding: 2px 7px; border-radius: 5px; margin-left: 6px;
+  background: rgba(33,197,93,.16); border: 1px solid rgba(33,197,93,.45);
+  color: var(--accent-green);
+}
+.veh-wanted {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; padding: 1px 7px; border-radius: 5px;
+  background: rgba(240,68,56,.16); border: 1px solid rgba(240,68,56,.45);
+  color: var(--accent-red);
+}

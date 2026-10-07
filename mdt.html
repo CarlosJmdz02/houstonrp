@@ -2274,7 +2274,25 @@
     return dbSearchPerson();
   }
 
-  /** Búsqueda de vehículos por placa / modelo / dueño (tabla vehicles). */
+  // ── Vehículos: BD local + servidor EN VIVO de ER:LC ──
+  let _erlcCache = { at: 0, data: null };
+  async function fetchErlcLive() {
+    const now = Date.now();
+    if (_erlcCache.data && (now - _erlcCache.at) < 12000) return _erlcCache.data;
+    try {
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), 7000);
+      const res = await fetch('/.netlify/functions/erlc-vehicles', { signal: ctrl.signal });
+      clearTimeout(to);
+      if (!res.ok) return null;
+      const j = await res.json();
+      if (!j || !j.ok) return null;
+      _erlcCache = { at: now, data: j };
+      return j;
+    } catch (_) { return null; }
+  }
+
+  /** Búsqueda de vehículos por placa / modelo / dueño. */
   async function dbSearchVehicles() {
     const box = document.getElementById('vehicle-result');
     if (!box) return;
@@ -2283,20 +2301,27 @@
     // dentro del texto rompería la query.
     const q = raw.replace(/[,'"()\\*]/g, ' ').replace(/\s+/g, ' ').trim();
     if (q.length < 2) { box.innerHTML = ''; return; }
+    const ql = q.toLowerCase();
+    const hits = (s) => String(s || '').toLowerCase().includes(ql);
 
-    let vehicles = [];
+    let local = [];
     try {
-      vehicles = await supaSelect('vehicles', '*', {
+      local = await supaSelect('vehicles', '*', {
         or: `(plate.ilike.*${q}*,model.ilike.*${q}*,owner_name.ilike.*${q}*,owner_discord.ilike.*${q}*)`,
         order: 'plate.asc',
         limit: '8',
       });
-    } catch (_) { vehicles = []; }
+    } catch (_) { local = []; }
 
-    if (!vehicles || !vehicles.length) { box.innerHTML = ''; return; }
+    const live = await fetchErlcLive();
+    const liveVeh = ((live && live.vehicles) || []).filter(v =>
+      hits(v.plate) || hits(v.model) || hits(v.owner) || hits(v.color));
+    const players = (live && live.players) || [];
 
-    // Dueño → personaje, para abrir la ficha con el usuario de Roblox (avatar incluido)
-    const owners = [...new Set(vehicles.map(v => v.owner_discord).filter(Boolean))];
+    if (!local.length && !liveVeh.length) { box.innerHTML = ''; return; }
+
+    // Dueño registrado → usuario de Roblox, para abrir la ficha
+    const owners = [...new Set((local || []).map(v => v.owner_discord).filter(Boolean))];
     const robloxByDiscord = {};
     if (owners.length) {
       try {
@@ -2310,19 +2335,49 @@
       } catch (_) {}
     }
 
+    const seen = {};
+    const rows = [];
+
+    // 1) EN VIVO (spawneados ahora en el servidor) — prioridad
+    liveVeh.forEach(v => {
+      const k = String(v.plate || '').toUpperCase();
+      if (k && seen[k]) return;
+      if (k) seen[k] = 1;
+      const p = players.find(x => x.username && v.owner &&
+        x.username.toLowerCase() === String(v.owner).toLowerCase());
+      const place = p ? [p.postal, p.street].filter(Boolean).join(' ') : '';
+      rows.push({
+        plate: v.plate, model: v.model, color: v.color,
+        ownerLabel: v.owner || '—', ownerKey: v.owner || '',
+        live: true,
+        where: place ? '📍 ' + place : '',
+        wanted: p ? p.wanted : 0,
+      });
+    });
+
+    // 2) registrados en la BD local
+    local.forEach(v => {
+      const k = String(v.plate || '').toUpperCase();
+      if (k && seen[k]) return;
+      if (k) seen[k] = 1;
+      const rb = robloxByDiscord[v.owner_discord] || '';
+      rows.push({
+        plate: v.plate, model: v.model, color: v.color,
+        ownerLabel: v.owner_name || '—', ownerKey: rb || v.owner_discord || '',
+        live: false, where: '', wanted: 0,
+      });
+    });
+
     box.innerHTML = `<div class="veh-block">
-      <div class="veh-title">🚗 Vehículos <span class="veh-count">${vehicles.length}</span></div>
-      ${vehicles.map(v => {
-        const key = robloxByDiscord[v.owner_discord] || v.owner_discord || '';
-        return `<div class="veh-card">
-          <div class="veh-plate">${esc(v.plate || '—')}</div>
-          <div class="veh-info">
-            <div class="veh-model">${esc(v.model || '—')} · ${esc(v.color || '—')}</div>
-            <div class="veh-owner">👤 ${esc(v.owner_name || '—')}${v.owner_discord ? ' <span class="veh-did">' + esc(v.owner_discord) + '</span>' : ''}</div>
-          </div>
-          ${key ? `<button class="btn btn-primary" onclick="openProfile('${esc(key)}')" style="font-size:12px;padding:7px 14px;flex-shrink:0;">Ver ficha →</button>` : ''}
-        </div>`;
-      }).join('')}
+      <div class="veh-title">🚗 Vehículos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO · ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
+      ${rows.map(v => `<div class="veh-card">
+        <div class="veh-plate">${esc(v.plate || '—')}</div>
+        <div class="veh-info">
+          <div class="veh-model">${esc(v.model || '—')}${v.color ? ' · ' + esc(v.color) : ''}${v.live ? ' <span class="veh-flag">● EN VIVO</span>' : ''}</div>
+          <div class="veh-owner">👤 ${esc(v.ownerLabel)}${v.where ? ' &nbsp; ' + esc(v.where) : ''}${v.wanted > 0 ? ` <span class="veh-wanted">⚠ ${v.wanted}</span>` : ''}</div>
+        </div>
+        ${v.ownerKey ? `<button class="btn btn-primary" onclick="openProfile('${esc(v.ownerKey)}')" style="font-size:12px;padding:7px 14px;flex-shrink:0;">Ver ficha →</button>` : ''}
+      </div>`).join('')}
     </div>`;
   }
 
