@@ -2549,6 +2549,13 @@ const PER_PAGE = 10;
   let currentPage = 1;
   let searchQuery = '';
 
+  // Escapado de HTML (no existía en este archivo y rompía renderShopCards).
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = (s === undefined || s === null) ? '' : String(s);
+    return d.innerHTML;
+  }
+
   /** Artículos de la Tienda dibujados con las MISMAS tarjetas de propiedades. */
   function renderShopCards(grid) {
     if (!grid) return;
@@ -2964,7 +2971,9 @@ const title = prop.name || ('Propiedad #' + prop.id);
       return;
     }
     const btn = e.target.closest('.btn-view');
-    if (btn && !btn.classList.contains('disabled')) {
+    // Ignoramos el botón "Comprar" de la Tienda: no tiene data-id y abriría
+    // el modal de una propiedad con NaN. Su onclick llama a buyShopItem().
+    if (btn && btn.dataset.id && !btn.classList.contains('disabled')) {
       openModal(parseInt(btn.dataset.id));
     }
   });
