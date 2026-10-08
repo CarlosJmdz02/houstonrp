@@ -1420,6 +1420,7 @@
         <button class="filter-btn active" data-filter="todos">Todos</button>
         <button class="filter-btn" data-filter="vivienda">Viviendas</button>
         <button class="filter-btn" data-filter="negocio">Negocios</button>
+        <button class="filter-btn" data-filter="tienda">🛒 Tienda</button>
       </div>
       <div class="toolbar-right">
         <div class="search-wrap">
@@ -2548,8 +2549,49 @@ const PER_PAGE = 10;
   let currentPage = 1;
   let searchQuery = '';
 
+  /** Artículos de la Tienda dibujados con las MISMAS tarjetas de propiedades. */
+  function renderShopCards(grid) {
+    if (!grid) return;
+    if (!SHOP_ITEMS.length) {
+      grid.innerHTML = '<div class="market-empty"><div class="big-icon">🛒</div><h3>Tienda vacía</h3><p>Pronto habrá más artículos.</p></div>';
+      return;
+    }
+    grid.innerHTML = SHOP_ITEMS.map(it => `
+      <div class="prop-card shop-item">
+        <div class="prop-image">
+          <div class="carousel"><div class="track">
+            <img src="${it.image}" alt="${esc(it.name)}" loading="lazy" onerror="this.style.display='none'">
+          </div></div>
+          <span class="prop-status available">Disponible</span>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">$${it.price}</div>
+          <div class="prop-address">${esc(it.name)}</div>
+          <button class="btn-view shop-buy-grid" onclick="buyShopItem('${it.id}')">🛒 Comprar</button>
+        </div>
+      </div>`).join('');
+  }
+
   function renderProperties() {
     const grid = $('market-grid');
+    const pag = document.querySelector('.pagination');
+    const shopHead = document.querySelector('.shop-head');
+    const shopGrid = document.getElementById('shop-grid');
+
+    // ── Categoría "Tienda": mismas tarjetas, mismo grid ──
+    if (activeFilter === 'tienda') {
+      if (shopHead) shopHead.style.display = 'none';
+      if (shopGrid) shopGrid.style.display = 'none';
+      if (pag) pag.style.display = 'none';
+      const cntT = $('market-count');
+      if (cntT) cntT.textContent = SHOP_ITEMS.length + ' artículos';
+      renderShopCards(grid);
+      return;
+    }
+    // Las demás categorías: la sección Tienda de abajo vuelve a mostrarse
+    if (shopHead) shopHead.style.display = '';
+    if (shopGrid) shopGrid.style.display = '';
+    if (pag) pag.style.display = '';
 
     // Solo propiedades completadas por el admin (con nombre o precio)
     const all = [...PROPERTIES]
