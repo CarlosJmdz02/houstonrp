@@ -1317,7 +1317,133 @@
   }
   .shop-buy:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(74,204,143,.3); }
   .shop-buy:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
-  @media (max-width: 640px) { .shop-grid { grid-template-columns: 1fr; } }</style>
+  @media (max-width: 640px) { .shop-grid { grid-template-columns: 1fr; } }
+  /* ═══════════════════════════════════════════════
+     MARKETPLACE · REDESIGN VISUAL
+     Solo presentación: no toca datos ni flujos.
+     ═══════════════════════════════════════════ */
+  body {
+    background-image:
+      radial-gradient(ellipse at 15% -10%, rgba(59,111,182,0.16) 0%, transparent 55%),
+      radial-gradient(ellipse at 95% 105%, rgba(56,189,248,0.07) 0%, transparent 50%),
+      linear-gradient(180deg, rgba(13,20,36,0) 0%, rgba(6,11,22,0.65) 100%);
+    background-attachment: fixed;
+  }
+
+  /* Encabezados */
+  .page-eyebrow { font-size: 9.5px; letter-spacing: .3em; color: var(--accent-orange); opacity: .95; }
+  .page-title { text-transform: uppercase; letter-spacing: .05em; }
+  .page-subtitle { color: var(--text-secondary); font-size: 13.5px; }
+
+  /* Categorías */
+  .filter-btn {
+    position: relative;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    transition: all .2s ease;
+  }
+  .filter-btn:hover { border-color: rgba(245,158,11,.55); color: var(--text-primary); transform: translateY(-1px); }
+  .filter-btn.active {
+    background: linear-gradient(135deg, rgba(245,158,11,.22), rgba(245,158,11,.06));
+    border-color: rgba(245,158,11,.7);
+    color: var(--accent-orange);
+    box-shadow: 0 4px 18px rgba(245,158,11,.22);
+  }
+
+  /* Buscador */
+  .search-wrap input {
+    background: rgba(255,255,255,0.03);
+    border-radius: 999px;
+    transition: all .2s ease;
+  }
+  .search-wrap input:focus { width: 260px; background: rgba(245,158,11,.06); box-shadow: 0 0 0 3px rgba(245,158,11,.12); }
+
+  /* Grid */
+  .market-grid { grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 20px; }
+
+  /* Tarjetas */
+  .prop-card { background: linear-gradient(160deg, rgba(24,38,70,.95), rgba(13,21,38,.98)); border-color: var(--border); }
+  .prop-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245,158,11,.55);
+    box-shadow: 0 22px 44px rgba(0,0,0,.5), 0 0 0 1px rgba(245,158,11,.15);
+  }
+  .prop-card:hover .prop-image img { transform: scale(1.06); }
+  .prop-image { aspect-ratio: 16 / 10; }
+  .prop-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s cubic-bezier(.2,.7,.3,1); }
+  .prop-price { font-size: 27px; }
+  .prop-price::before { content: 'USD '; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--text-dim); vertical-align: 6px; margin-right: 4px; }
+
+  /* Botón */
+  .btn-view {
+    background: rgba(245,158,11,.08);
+    border: 1px solid rgba(245,158,11,.35);
+    color: var(--accent-orange);
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-size: 12px;
+    transition: all .2s ease;
+  }
+  .btn-view:hover {
+    background: linear-gradient(135deg, rgba(245,158,11,.3), rgba(59,111,182,.22));
+    transform: translateY(-1px);
+  }
+
+  /* Skeleton de carga (reemplaza al spinner) */
+  .market-loading { display: block; padding: 24px 0; }
+  .market-loading-text { font-size: 12px; color: var(--text-dim); letter-spacing: .12em; text-transform: uppercase; margin-top: 16px; }
+  .skel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 20px; width: 100%; }
+  .skel-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; padding-bottom: 16px; }
+  .skel-img { aspect-ratio: 16 / 10; background: rgba(255,255,255,.04); }
+  .skel-line { height: 12px; border-radius: 6px; background: rgba(255,255,255,.06); margin: 14px 16px 0; }
+  .skel-line.w75 { width: 75%; } .skel-line.w60 { width: 60%; } .skel-line.w50 { width: 50%; }
+  .skel-line.w45 { width: 45%; } .skel-line.w35 { width: 35%; } .skel-line.w30 { width: 30%; }
+  .skel-img, .skel-line { animation: skelPulse 1.4s ease-in-out infinite; }
+  @keyframes skelPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+
+  /* Estados vacíos */
+  .market-empty .big-icon { font-size: 44px; }
+  .market-empty h3 { font-family: 'Rajdhani', sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+  .market-empty p { color: var(--text-dim); font-size: 13px; }
+
+  /* Paginación */
+  .page-btn {
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-size: 12px;
+    transition: all .2s ease;
+  }
+  .page-btn:hover:not(:disabled) { border-color: rgba(245,158,11,.6); color: var(--accent-orange); transform: translateY(-1px); }
+  .page-info { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-secondary); }
+  .market-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: .06em; }
+
+  /* Modal */
+  .modal { border-color: rgba(245,158,11,.4); box-shadow: 0 30px 80px rgba(0,0,0,.7), 0 0 60px rgba(245,158,11,.08); }
+  .modal-overlay { backdrop-filter: blur(8px); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-track { background: rgba(255,255,255,.03); }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(245,158,11,.7), rgba(59,111,182,.6)); border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { filter: brightness(1.15); }
+
+  @media (max-width: 700px) {
+    .market-grid, .skel-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .prop-price { font-size: 22px; }
+    .search-wrap input { width: 100%; }
+    .search-wrap input:focus { width: 100%; }
+  }
+  @media (max-width: 460px) {
+    .market-grid, .skel-grid { grid-template-columns: 1fr; }
+    .filter-bar { flex-wrap: wrap; }
+  }</style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
 </head>
@@ -1433,8 +1559,12 @@
 
     <div class="market-grid" id="market-grid">
       <div class="market-loading">
-        <div class="spinner"></div>
-        Cargando propiedades...
+        <div class="skel-grid">
+          <div class="skel-card"><div class="skel-img"></div><div class="skel-line w60"></div><div class="skel-line w35"></div></div>
+          <div class="skel-card"><div class="skel-img"></div><div class="skel-line w75"></div><div class="skel-line w45"></div></div>
+          <div class="skel-card"><div class="skel-img"></div><div class="skel-line w50"></div><div class="skel-line w30"></div></div>
+        </div>
+        <div class="market-loading-text">Cargando propiedades…</div>
       </div>
     </div>
 
@@ -1450,23 +1580,7 @@
       </button>
     </div>
 
-    <!-- ═══════════════ TIENDA (artículos comprables) ═══════════════ -->
-    <div class="shop-head">
-      <div class="shop-head-text">
-        <div class="page-eyebrow">HOUSTON RP · TIENDA</div>
-        <div class="page-title" style="font-size:26px;">Tien<span>da</span></div>
-        <div class="page-subtitle">Artículos comprables con tu balance. El descuento es inmediato.</div>
-      </div>
-      <span class="shop-pill" id="shop-count">—</span>
-    </div>
-
-    <div class="shop-grid" id="shop-grid">
-      <div class="market-loading">
-        <div class="spinner"></div>
-        Cargando tienda...
-      </div>
-    </div>
-
+    <!-- (la Tienda ahora vive en la categoría "🛒 Tienda" del filtro) -->
 
   </div>
 </main>
@@ -2582,22 +2696,19 @@ const PER_PAGE = 10;
   function renderProperties() {
     const grid = $('market-grid');
     const pag = document.querySelector('.pagination');
-    const shopHead = document.querySelector('.shop-head');
-    const shopGrid = document.getElementById('shop-grid');
+    const banner = document.querySelector('.maintenance-banner');
 
     // ── Categoría "Tienda": mismas tarjetas, mismo grid ──
+    // El aviso de mantenimiento es SOLO de propiedades: en la Tienda no va.
     if (activeFilter === 'tienda') {
-      if (shopHead) shopHead.style.display = 'none';
-      if (shopGrid) shopGrid.style.display = 'none';
+      if (banner) banner.style.display = 'none';
       if (pag) pag.style.display = 'none';
       const cntT = $('market-count');
       if (cntT) cntT.textContent = SHOP_ITEMS.length + ' artículos';
       renderShopCards(grid);
       return;
     }
-    // Las demás categorías: la sección Tienda de abajo vuelve a mostrarse
-    if (shopHead) shopHead.style.display = '';
-    if (shopGrid) shopGrid.style.display = '';
+    if (banner) banner.style.display = '';
     if (pag) pag.style.display = '';
 
     // Solo propiedades completadas por el admin (con nombre o precio)

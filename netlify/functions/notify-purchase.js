@@ -1,11 +1,14 @@
 const https = require('https');
 
-// Aviso de compras de la Tienda → canal del bot (mensaje normal del bot,
-// NO un webhook). El canal lo puso el dueño del proyecto.
-const CHANNEL_ID = process.env.MARKET_CHANNEL_ID || '1554967862572220416';
+// Aviso de compras de la Tienda → canal por WEBHOOK.
+// (Webhook en vez de token de bot: no expone credenciales ni requiere
+//  variables de entorno en Netlify.)
+const WEBHOOK_URL =
+  process.env.MARKET_WEBHOOK_URL ||
+  'https://discord.com/api/webhooks/1558266220590137415/TPmXqVnXT6ZvhTUkCUijEk1Qbs0my9F5lUVXCbSJDVKVH94eZIwezKer38x74GwR66eo';
+
 const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://qqgtroxrkccftlrpqwsk.supabase.co').replace(/\/$/, '');
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || 'sb_publishable_ZTcgdobN4BxLtxo59UUCuA_raeLls6H';
-const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || '';
 const RECENT_MS = 5 * 60 * 1000; // la compra debe ser reciente para avisar
 
 const CORS = {
@@ -23,7 +26,7 @@ function request(url, options) {
     const data = options.body ? JSON.stringify(options.body) : null;
     const opts = {
       method: options.method || 'GET',
-      headers: Object.assign({}, options.headers),
+      headers: Object.assign({ 'User-Agent': 'Mozilla/5.0' }, options.headers),
       timeout: 8000,
     };
     if (data) {
@@ -46,10 +49,6 @@ exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' };
   if (event.httpMethod !== 'POST') return json(405, { ok: false, error: 'Method not allowed' });
 
-  if (!BOT_TOKEN) {
-    return json(500, { ok: false, error: 'Falta DISCORD_BOT_TOKEN en las variables de entorno de Netlify' });
-  }
-
   let payload = {};
   try { payload = JSON.parse(event.body || '{}'); } catch (_) { return json(400, { ok: false, error: 'JSON inválido' }); }
 
@@ -62,8 +61,8 @@ exports.handler = async (event) => {
   if (!item || item.length > 60 || /@(everyone|here)/i.test(item)) return json(400, { ok: false, error: 'item inválido' });
   if (!isFinite(price) || price < 0 || price > 1000000) return json(400, { ok: false, error: 'price inválido' });
 
-  // 1) Verificamos que la compra exista de verdad en economy_adjustments
-  //    (si no, cualquiera podría spamear el canal desde el navegador).
+  // 1) Verificamos que la compra exista de verdad en economy_adjustments.
+  //    Sin esto, cualquiera podría spamear el canal desde la consola.
   try {
     const reason = 'Compra en tienda: ' + item;
     const url = SUPABASE_URL + '/rest/v1/economy_adjustments' +
@@ -88,16 +87,15 @@ exports.handler = async (event) => {
     return json(502, { ok: false, error: 'Verificación falló: ' + e.message });
   }
 
-  // 2) Mensaje normal del bot en el canal (no webhook)
+  // 2) Aviso corto por webhook: quién, qué y cuánto.
   const content = '<@' + discordId + '> compró **' + item + '** por $' + price;
   try {
-    const r = await request('https://discord.com/api/v10/channels/' + CHANNEL_ID + '/messages', {
+    const r = await request(WEBHOOK_URL, {
       method: 'POST',
-      headers: { Authorization: 'Bot ' + BOT_TOKEN },
-      body: { content: content },
+      body: { content: content, allowed_mentions: { users: [discordId] } },
     });
     if (r.status < 200 || r.status >= 300) {
-      return json(502, { ok: false, error: 'Discord respondió ' + r.status + ': ' + r.body.slice(0, 160) });
+      return json(502, { ok: false, error: 'Discord webhook respondió ' + r.status + ': ' + r.body.slice(0, 160) });
     }
     return json(200, { ok: true, content: content });
   } catch (e) {
