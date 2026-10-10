@@ -1052,7 +1052,56 @@
     .radio-panel.tac { right: 8px; left: 8px; width: auto; }
     .tac-controls { grid-template-columns: 1fr; }
     .tac-lcd-title { font-size: 18px; }
-  }</style>
+  }
+  /* ── Puerta de entrada: elegir canal 1-5 ── */
+  .tac-gate {
+    position: absolute; inset: 0; z-index: 20;
+    background: linear-gradient(180deg, rgba(6,13,28,.97), rgba(2,6,16,.99));
+    border-radius: 14px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 9px; padding: 20px 16px; text-align: center;
+    animation: cadRise .22s ease both;
+  }
+  .tac-gate.hidden { display: none; }
+  .tac-gate-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .28em;
+    text-transform: uppercase; color: #fbbf24;
+    border: 1px solid rgba(251,191,36,.45); background: rgba(251,191,36,.10);
+    padding: 4px 10px; border-radius: 6px;
+  }
+  .tac-gate-title {
+    font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 22px;
+    letter-spacing: .14em; text-transform: uppercase; color: #22d3ee;
+    text-shadow: 0 0 16px rgba(34,211,248,.45); margin-top: 2px;
+  }
+  .tac-gate-sub { font-size: 12px; color: #94a3b8; line-height: 1.5; max-width: 250px; }
+  .tac-gate-sub b { color: #fbbf24; }
+  .tac-gate-row { display: flex; gap: 8px; width: 100%; max-width: 240px; }
+  .tac-gate-row input {
+    flex: 1; min-width: 0; text-align: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700;
+    letter-spacing: .1em; padding: 9px 10px; border-radius: 10px;
+    background: #02060f; border: 2px solid #1e3a8a; color: #22d3ee;
+    box-shadow: inset 0 0 16px rgba(0,0,0,.8);
+  }
+  .tac-gate-row input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 18px rgba(59,130,246,.5), inset 0 0 16px rgba(0,0,0,.8); }
+  .tac-gate-go {
+    flex: 0 0 auto; padding: 0 16px; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(180deg, #1e3a8a, #0f172a);
+    border: 2px solid rgba(59,130,246,.6); color: #fff;
+    font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: .1em; text-transform: uppercase; transition: all .16s ease;
+  }
+  .tac-gate-go:hover { box-shadow: 0 0 20px rgba(59,130,246,.5); transform: translateY(-1px); }
+  .tac-gate-btns { display: flex; gap: 7px; }
+  .tac-gate-btns button {
+    width: 40px; height: 40px; border-radius: 10px; cursor: pointer;
+    background: rgba(59,130,246,.10); border: 1px solid rgba(59,130,246,.45);
+    color: #93c5fd; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 17px;
+    transition: all .16s ease;
+  }
+  .tac-gate-btns button:hover { background: rgba(59,130,246,.3); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59,130,246,.35); }
+  .tac-gate-err { font-size: 11px; color: #f87171; min-height: 14px; font-family: 'JetBrains Mono', monospace; }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap
@@ -1558,6 +1607,26 @@
 <div id="radio-voices" style="display:none;"></div>
 
 <div id="radio-panel" class="radio-panel tac hidden">
+
+  <!-- Puerta de entrada: hay que indicar el canal (1-5) para conectar -->
+  <div class="tac-gate" id="radio-gate">
+    <div class="tac-gate-badge">HPD TAC-NET</div>
+    <div class="tac-gate-title">Selecciona canal</div>
+    <div class="tac-gate-sub">Escribí un número del <b>1 al 5</b> para entrar a la radio</div>
+    <div class="tac-gate-row">
+      <input type="text" inputmode="numeric" maxlength="1" id="radio-gate-input" placeholder="1"
+             onkeydown="if(event.key==='Enter'){HRPRadio.join(this.value)}">
+      <button class="tac-gate-go" type="button" onclick="HRPRadio.join(document.getElementById('radio-gate-input').value)">CONECTAR</button>
+    </div>
+    <div class="tac-gate-btns">
+      <button type="button" onclick="HRPRadio.join(1)">1</button>
+      <button type="button" onclick="HRPRadio.join(2)">2</button>
+      <button type="button" onclick="HRPRadio.join(3)">3</button>
+      <button type="button" onclick="HRPRadio.join(4)">4</button>
+      <button type="button" onclick="HRPRadio.join(5)">5</button>
+    </div>
+    <div class="tac-gate-err" id="radio-gate-err"></div>
+  </div>
 
   <div class="tac-body">
     <div class="tac-ant a"></div>

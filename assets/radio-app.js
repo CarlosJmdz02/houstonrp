@@ -39,7 +39,9 @@
   var ME = Math.random().toString(36).slice(2, 10);
 
   var state = {
-    visible: localStorage.getItem(LS.visible) !== '0',
+    // Nunca arranca conectada: hay que pulsar el botón de la radio.
+    visible: false,
+    connected: false,
     channel: parseInt(localStorage.getItem(LS.channel) || '1', 10) || 1,
     pttKey:  localStorage.getItem(LS.ptt) || DEFAULT_PTT,
     volume:  Number(localStorage.getItem(LS.vol) || '1'),
@@ -120,18 +122,56 @@
   }
 
   // ---------- Visibilidad ----------
+  function showGate() {
+    var g = document.getElementById('radio-gate');
+    if (g) g.classList.remove('hidden');
+    var i = document.getElementById('radio-gate-input');
+    if (i) { i.value = ''; setTimeout(function () { try { i.focus(); } catch (_) {} }, 60); }
+  }
+  function hideGate() {
+    var g = document.getElementById('radio-gate');
+    if (g) g.classList.add('hidden');
+  }
+
+  /** Entrar a la radio: pide el canal (1 al 5) y recién ahí conecta. */
+  function join(raw) {
+    var n = parseInt(String(raw).trim(), 10);
+    if (!(n >= 1 && n <= 5)) {
+      var st = document.getElementById('radio-gate-err');
+      if (st) st.textContent = 'Ingresá un número del 1 al 5';
+      return;
+    }
+    var err = document.getElementById('radio-gate-err');
+    if (err) err.textContent = '';
+    state.connected = true;
+    hideGate();
+    armMic();                       // gesto del usuario → permiso de micrófono
+    setChannel(n);
+    logEvent('SISTEMA', 'Conectado a la red táctica HPD.', 'sys');
+    logEvent('SISTEMA', 'Frecuencia TAC ' + n + ' en escucha.', 'sys');
+  }
+
   function applyVisibility() {
     var panel = $('radio-panel');
     var btn = $('radio-toggle');
     if (panel) panel.classList.toggle('hidden', !state.visible);
     if (btn) btn.classList.toggle('active', state.visible);
     save(LS.visible, state.visible ? '1' : '0');
+
     if (state.visible) {
-      armMic();                       // gesto del usuario → pedir micrófono ya
-      if (chan) status('Escuchando · CH ' + state.channel, '');
-      else status('Elegí un canal', 'warn');
+      if (state.connected && chan) {
+        hideGate();
+        status('Escuchando · CH ' + state.channel, '');
+      } else {
+        // Todavía no eligió canal → nada de conexión, solo el selector.
+        showGate();
+        status('Elegí un canal (1 al 5)', 'warn');
+      }
     } else {
       releasePTT();
+      if (chan) { teardown(); }     // cerrar la radio = desconectar
+      state.connected = false;
+      showGate();
     }
   }
 
@@ -151,7 +191,7 @@
     var sel = $('radio-channel'); if (sel) sel.value = String(n);
     var lab = $('radio-channel-label'); if (lab) lab.textContent = 'CH ' + n;
     teardown();
-    if (state.visible) connect();
+    if (state.visible && state.connected) connect();
   }
 
   // ---------- Micrófono ----------
@@ -491,6 +531,7 @@
   // ---------- API ----------
   window.HRPRadio = {
     toggle: toggleRadio,
+    join: join,
     setChannel: setChannel,
     bindKey: bindKey,
     press: pressPTT,
