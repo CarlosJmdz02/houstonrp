@@ -148,7 +148,7 @@
     armMic();                       // gesto del usuario → permiso de micrófono
     setChannel(n);
     logEvent('SISTEMA', 'Conectado a la red táctica HPD.', 'sys');
-    logEvent('SISTEMA', 'Frecuencia TAC ' + n + ' en escucha.', 'sys');
+    logEvent('SISTEMA', channelLabel(n) + ' en escucha.', 'sys');
   }
 
   function applyVisibility() {
@@ -582,6 +582,44 @@
   // la radio, así que si algo falla acá, la radio sigue funcionando.
   var tacLog = [];
   var tacLast = { talking: false, channel: -1, peers: '' };
+  // Canales con nombre real de operación (sin siglas TAC)
+  var CHANNEL_NAMES = {
+    1: 'PATRULLA', 2: 'DESPACHO', 3: 'TRÁFICO', 4: 'INVESTIGACIONES', 5: 'EMERGENCIAS'
+  };
+  function channelLabel(n) { return 'CANAL ' + n + ' · ' + (CHANNEL_NAMES[n] || 'RADIO'); }
+
+  // Medidor de nivel REAL: mide el volumen del micrófono del usuario.
+  var vuAnalyser = null, vuData = null, vuTimer = null;
+  function ensureVU() {
+    if (vuAnalyser || !localStream) return;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      var ctx = new AC();
+      var src = ctx.createMediaStreamSource(localStream);
+      var an = ctx.createAnalyser();
+      an.fftSize = 256;
+      an.smoothingTimeConstant = 0.55;
+      src.connect(an);
+      vuAnalyser = an;
+      vuData = new Uint8Array(an.frequencyBinCount);
+      if (vuTimer) clearInterval(vuTimer);
+      vuTimer = setInterval(vuTick, 60);
+    } catch (_) {}
+  }
+  function vuTick() {
+    if (!vuAnalyser || !vuData) return;
+    var bars = document.querySelectorAll('.tac-wave i');
+    if (!bars.length) return;
+    vuAnalyser.getByteTimeDomainData(vuData);
+    var sum = 0;
+    for (var i = 0; i < vuData.length; i++) { var v = (vuData[i] - 128) / 128; sum += v * v; }
+    var level = Math.min(1, Math.sqrt(sum / vuData.length) * 5);
+    for (var b = 0; b < bars.length; b++) {
+      var h = state.talking ? Math.max(3, Math.round(level * 17 * (0.5 + Math.random() * 0.8))) : 3;
+      bars[b].style.height = h + 'px';
+    }
+  }
 
   function tacNow() {
     return new Date().toLocaleTimeString('es-ES', { hour12: false });
@@ -607,7 +645,8 @@
 
     // Canal (estado real)
     var title = document.getElementById('screen-channel-title');
-    if (title) title.textContent = 'TAC ' + state.channel;
+    if (title) title.textContent = channelLabel(state.channel);
+    if (localStream) ensureVU();
 
     // Unidades en frecuencia (roster real)
     var online = document.getElementById('tac-online');
@@ -622,7 +661,7 @@
       if (state.talking) {
         box.classList.add('tx');
         main.textContent = 'TRANSMITIENDO EN VIVO';
-        sub.textContent = 'TAC ' + state.channel + ' · ' + myName();
+        sub.textContent = 'CANAL ' + state.channel + ' · ' + myName();
       } else {
         box.classList.remove('tx');
         main.textContent = chan ? 'CANAL A ESCUCHA' : 'SIN CONECTAR';
@@ -643,7 +682,7 @@
       tacLast.talking = state.talking;
     }
     if (state.channel !== tacLast.channel) {
-      if (tacLast.channel !== -1) logEvent('SISTEMA', 'Frecuencia cambiada a TAC ' + state.channel, 'sys');
+      if (tacLast.channel !== -1) logEvent('SISTEMA', 'Frecuencia cambiada a ' + channelLabel(state.channel), 'sys');
       tacLast.channel = state.channel;
     }
     var peersKey = Object.keys(roster).sort().join(',');
@@ -657,8 +696,8 @@
   }
 
   function initTacticalDisplay() {
-    logEvent('SISTEMA', 'Conectado a la red táctica HPD.', 'sys');
-    logEvent('SISTEMA', 'Frecuencia TAC ' + state.channel + ' en escucha.', 'sys');
+    logEvent('SISTEMA', 'Conectado a la red de radio HPD.', 'sys');
+    logEvent('SISTEMA', channelLabel(n) + ' en escucha.', 'sys');
     setInterval(tacTick, 400);
     tacTick();
   }

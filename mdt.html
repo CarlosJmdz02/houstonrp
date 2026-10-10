@@ -1006,7 +1006,7 @@
   .tac-status-txt em { font-style: normal; font-size: 9px; color: #64748b; font-family: 'JetBrains Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tac-wave { margin-left: auto; display: none; align-items: flex-end; gap: 3px; height: 18px; flex-shrink: 0; }
   .tac-status.tx .tac-wave { display: flex; }
-  .tac-wave i { width: 3px; background: #22d3ee; border-radius: 2px; animation: cadPulse .65s ease-in-out infinite; }
+  .tac-wave i { width: 3px; height: 3px; background: #22d3ee; border-radius: 2px; transition: height .06s linear; }
   .tac-wave i:nth-child(1) { height: 6px; }
   .tac-wave i:nth-child(2) { height: 14px; animation-delay: .1s; }
   .tac-wave i:nth-child(3) { height: 18px; animation-delay: .2s; }
@@ -1610,7 +1610,7 @@
 
   <!-- Puerta de entrada: hay que indicar el canal (1-5) para conectar -->
   <div class="tac-gate" id="radio-gate">
-    <div class="tac-gate-badge">HPD TAC-NET</div>
+    <div class="tac-gate-badge">RADIO TÁCTICA HPD</div>
     <div class="tac-gate-title">Selecciona canal</div>
     <div class="tac-gate-sub">Escribí un número del <b>1 al 5</b> para entrar a la radio</div>
     <div class="tac-gate-row">
@@ -1634,7 +1634,7 @@
 
     <div class="tac-brand">
       <span class="tac-led" id="tac-led"></span>
-      <span class="tac-brand-txt">HPD TAC-NET</span>
+      <span class="tac-brand-txt">HOUSTON PD · RADIO</span>
       <span class="tac-chip" id="radio-channel-label">CH 1</span>
       <button class="radio-close" type="button" onclick="HRPRadio.toggle()" title="Ocultar la radio">✕</button>
     </div>
@@ -1648,7 +1648,7 @@
         <span id="screen-clock">00:00:00</span>
       </div>
 
-      <div class="tac-lcd-title" id="screen-channel-title">TAC 1 · CANAL 1</div>
+      <div class="tac-lcd-title" id="screen-channel-title">CANAL 1 · PATRULLA</div>
       <div class="tac-lcd-sub" id="radio-status">—</div>
 
       <div class="tac-status" id="screen-status-box">
@@ -1667,11 +1667,11 @@
       <div class="tac-field">
         <label>Canal</label>
         <select id="radio-channel" class="radio-select">
-          <option value="1">TAC 1 · Canal 1</option>
-          <option value="2">TAC 2 · Canal 2</option>
-          <option value="3">TAC 3 · Canal 3</option>
-          <option value="4">TAC 4 · Canal 4</option>
-          <option value="5">TAC 5 · Canal 5</option>
+          <option value="1">Canal 1 · Patrulla</option>
+          <option value="2">Canal 2 · Despacho</option>
+          <option value="3">Canal 3 · Tráfico</option>
+          <option value="4">Canal 4 · Investigaciones</option>
+          <option value="5">Canal 5 · Emergencias</option>
         </select>
       </div>
       <div class="tac-field">
