@@ -52,6 +52,8 @@
   var localStream = null;
   var peers = {};        // peer -> RTCPeerConnection
   var roster = {};       // peer -> nombre
+  var rosterReplyAt = {}; // peer -> timestamp del último "hello" que le mandamos
+  var helloTimer = null;  // anuncio periódico de presencia
   var remoteAudios = {}; // peer -> HTMLAudioElement
   var started = false;
   var micPromise = null;
@@ -62,7 +64,15 @@
   function myName() {
     try {
       var s = (typeof hrpGetSession === 'function') ? hrpGetSession() : null;
-      if (s) return String(s.username || s.global_name || s.id || 'Unidad');
+      var n = s && (s.username || s.global_name);
+      if (n) return String(n);
+      // Respaldo: el nombre que ya muestra la cabecera del MDT.
+      var el = document.getElementById('user-name');
+      if (el && el.textContent) {
+        var t = el.textContent.trim();
+        if (t && t !== 'Cargando…' && t !== '...') return t;
+      }
+      if (s && s.id) return String(s.id);
     } catch (_) {}
     return 'Unidad';
   }
@@ -405,10 +415,17 @@
     chan.on('broadcast', { event: 'hello' }, function (msg) {
       var p = msg && msg.payload;
       if (!p || !p.from || p.from === ME) return;
+      var now = Date.now();
       var first = !roster[p.from];
+      var lastReply = rosterReplyAt[p.from] || 0;
       roster[p.from] = p.name || p.from;
       renderRoster();
-      if (first) send('hello', { from: ME, name: myName() });   // responde solo la primera vez
+      // Respondemos la primera vez y después con una pausa de 9 s:
+      // si el primer mensaje se perdió, el siguiente lo recupera.
+      if (first || (now - lastReply) > 9000) {
+        rosterReplyAt[p.from] = now;
+        send('hello', { from: ME, name: myName() });
+      }
       if (ME < p.from) connectTo(p.from);
     });
 
@@ -428,6 +445,12 @@
         send('hello', { from: ME, name: myName() });
         armMic();
         status('Escuchando · CH ' + state.channel, '');
+        // Anuncio periódico: si entraste tarde o se perdió un mensaje,
+        // en menos de 8 s ves a todos los conectados.
+        if (helloTimer) clearInterval(helloTimer);
+        helloTimer = setInterval(function () {
+          if (chan && started) send('hello', { from: ME, name: myName() });
+        }, 8000);
       } else if (st === 'CHANNEL_ERROR' || st === 'TIMED_OUT') {
         status('Reconectando…', 'err');
         setTimeout(function () { if (state.visible) connect(); }, 4000);
@@ -436,8 +459,10 @@
   }
 
   function teardown() {
+    if (helloTimer) { clearInterval(helloTimer); helloTimer = null; }
     Object.keys(peers).forEach(dropPeer);
     roster = {};
+    rosterReplyAt = {};
     renderRoster();
     if (chan) { try { chan.unsubscribe(); } catch (_) {} chan = null; }
     started = false;
