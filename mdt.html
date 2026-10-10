@@ -1479,10 +1479,10 @@
       </button>
 
       <button id="radio-ptt" class="radio-ptt" type="button"
-              onpointerdown="event.preventDefault(); HRPRadio.press();"
+              onpointerdown="event.preventDefault(); try{this.setPointerCapture(event.pointerId);}catch(e){}; HRPRadio.press();"
               onpointerup="HRPRadio.release()"
-              onpointerleave="HRPRadio.release()"
-              onpointercancel="HRPRadio.release()">
+              onpointercancel="HRPRadio.release()"
+              onlostpointercapture="HRPRadio.release()">
         <span class="radio-ptt-dot" id="radio-ptt-dot"></span>
         <span class="radio-ptt-text" id="radio-ptt-label">Mantener para hablar</span>
       </button>

@@ -288,6 +288,14 @@
     releasePTT();
   });
 
+  // Seguridad: el PTT nunca puede quedarse trabado transmitiendo.
+  window.addEventListener('pointerup', function () { releasePTT(); });
+  window.addEventListener('pointercancel', function () { releasePTT(); });
+  window.addEventListener('blur', function () { releasePTT(); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) releasePTT();
+  });
+
   // ---------- WebRTC ----------
   function send(event, payload) {
     if (!chan) return;
@@ -357,14 +365,21 @@
     var from = p.from, d = p.data;
     if (d.t === 'offer') {
       var pc = pcFor(from);
-      addLocalTrack(pc);                       // responde con SU pista si ya la tiene
-      pc.setRemoteDescription(new RTCSessionDescription(d.sdp))
-        .then(function () { return pc.createAnswer(); })
-        .then(function (ans) { return pc.setLocalDescription(ans).then(function () {
-          send('signal', { to: from, from: ME, data: { t: 'answer', sdp: pc.localDescription } });
-        }); })
-        .catch(function () {});
-      armMic();                                 // si el mic llega tarde → renegocia
+      // Esperamos hasta 3 s al micrófono para que la RESPUESTA ya traiga
+      // nuestra pista de audio. Si no llega, contestamos igual (se puede
+      // escuchar) y armMic() se encarga de renegociar después.
+      Promise.race([
+        ensureMic().catch(function () { return null; }),
+        new Promise(function (r) { setTimeout(function () { r(null); }, 3000); }),
+      ]).then(function () {
+        addLocalTrack(pc);
+        return pc.setRemoteDescription(new RTCSessionDescription(d.sdp))
+          .then(function () { return pc.createAnswer(); })
+          .then(function (ans) { return pc.setLocalDescription(ans).then(function () {
+            send('signal', { to: from, from: ME, data: { t: 'answer', sdp: pc.localDescription } });
+          }); });
+      }).catch(function () {});
+      armMic();
     } else if (d.t === 'answer') {
       var pc2 = peers[from];
       if (pc2) pc2.setRemoteDescription(new RTCSessionDescription(d.sdp)).catch(function () {});
@@ -464,5 +479,16 @@
     var lbl = $('radio-channel-label');
     if (lbl) lbl.textContent = 'CH ' + state.channel;
     status(state.visible ? 'Escuchando · CH ' + state.channel : 'CH ' + state.channel + ' · oculta', '');
+
+    // Red de seguridad: cada 5 s comprobamos que NUESTRA pista esté en todas
+    // las conexiones. Si el micrófono llegó tarde o una renegociación falló,
+    // la volvemos a enganchar — era el caso de "no me dejan hablar".
+    setInterval(function () {
+      if (!state.visible) return;
+      var list = Object.keys(peers);
+      if (!list.length) return;
+      if (!localStream) { armMic(); return; }
+      list.forEach(function (p) { attachLocal(peers[p], p); });
+    }, 5000);
   });
 })();
