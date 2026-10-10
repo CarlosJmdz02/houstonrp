@@ -1,17 +1,19 @@
 // ============================================================
-// HRPRADIO — Radio táctica dentro del MDT (1 a 5 canales)
+// HRPRADIO — Radio táctica del MDT (1 a 5 canales)
 // ------------------------------------------------------------
-// TRANSPORTE: WebRTC (audio P2P) + señalización por Supabase
-// Realtime Broadcast. Es el MISMO esquema que ya usa la bodycam
-// (assets/bodycam-app.js), así que no depende de nada nuevo.
+// TRANSPORTE: WebRTC audio P2P + señalización por Supabase
+// Realtime Broadcast (mismo esquema que la bodycam).
 //
-// • 5 canales, la elección queda guardada
-// • Push-to-talk con tecla rebindable + botón táctil (tocar y sostener)
-// • Sonido al pulsar (audios/radio-ptt.wav)
-// • Se puede ocultar/mostrar; el estado persiste en localStorage
+// Correcciones respecto a la v1:
+//  1) MICRÓFONO TEMPRANO: se pide al abrir la radio y al entrar
+//     al canal (hay gesto del usuario). Si el permiso llega DESPUÉS
+//     de crear las conexiones, se añade la pista a todas ellas y se
+//     renegocia — era por eso que otros no te oían.
+//  2) onnegotiationneeded: renegocia cuando aparece una pista nueva.
+//  3) Roster con nombres reales (quién está conectado).
+//  4) Sonido también al SOLTAR el PTT (bajada de micro).
 //
-// La radio NO transmite nada hasta que el usuario pulsa el PTT:
-// la pista de audio nace silenciada (track.enabled = false).
+// La pista nace silenciada: no transmitimos nada sin PTT.
 // ============================================================
 (function () {
   'use strict';
@@ -25,7 +27,7 @@
     vol:     'hrp_radio_vol',
   };
   var CHANNELS = [1, 2, 3, 4, 5];
-  var DEFAULT_PTT = 'KeyR';   // mantener R pulsado para hablar
+  var DEFAULT_PTT = 'KeyR';
 
   var ICE = [
     { urls: 'stun:stun.l.google.com:19302' },
@@ -37,40 +39,63 @@
   var ME = Math.random().toString(36).slice(2, 10);
 
   var state = {
-    visible:  localStorage.getItem(LS.visible) !== '0',
-    channel:  parseInt(localStorage.getItem(LS.channel) || '1', 10) || 1,
-    pttKey:   localStorage.getItem(LS.ptt) || DEFAULT_PTT,
-    volume:   Number(localStorage.getItem(LS.vol) || '1'),
-    online:   0,
-    talking:  false,
-    pendingKey: false,   // esperando una tecla para re-asignar el PTT
+    visible: localStorage.getItem(LS.visible) !== '0',
+    channel: parseInt(localStorage.getItem(LS.channel) || '1', 10) || 1,
+    pttKey:  localStorage.getItem(LS.ptt) || DEFAULT_PTT,
+    volume:  Number(localStorage.getItem(LS.vol) || '1'),
+    talking: false,
+    pendingKey: false,
+    micError: '',
   };
 
   var chan = null;
   var localStream = null;
-  var peers = {};        // peerId -> RTCPeerConnection
-  var remoteAudios = {}; // peerId -> HTMLAudioElement
+  var peers = {};        // peer -> RTCPeerConnection
+  var roster = {};       // peer -> nombre
+  var remoteAudios = {}; // peer -> HTMLAudioElement
   var started = false;
+  var micPromise = null;
 
-  // ---------- DOM ----------
   function $(id) { return document.getElementById(id); }
-
   function save(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
+
+  function myName() {
+    try {
+      var s = (typeof hrpGetSession === 'function') ? hrpGetSession() : null;
+      if (s) return String(s.username || s.global_name || s.id || 'Unidad');
+    } catch (_) {}
+    return 'Unidad';
+  }
 
   function status(txt, cls) {
     var el = $('radio-status');
     if (el) { el.textContent = txt; el.className = 'radio-status ' + (cls || ''); }
   }
 
-  function onlineCount(n) {
-    state.online = n;
-    var el = $('radio-online');
-    if (el) el.textContent = n + (n === 1 ? ' en línea' : ' en línea');
+  function renderRoster() {
+    var box = document.getElementById('radio-roster');
+    var cnt = document.getElementById('radio-roster-count');
+    var names = Object.keys(roster).map(function (k) { return { id: k, name: roster[k] }; });
+    if (cnt) cnt.textContent = String(names.length + 1);   // + yo
+    if (!box) return;
+    var mine = '<div class="roster-row me"><span class="roster-dot"></span><span class="roster-name">' +
+      escTxt(myName()) + '<em> (vos)</em></span></div>';
+    var others = names.map(function (n) {
+      return '<div class="roster-row"><span class="roster-dot"></span><span class="roster-name">' +
+        escTxt(n.name || n.id) + '</span></div>';
+    }).join('');
+    box.innerHTML = mine + others;
   }
 
-  // ---------- Sonido de PTT ----------
-  function playClick() {
-    var a = $('radio-ptt-sound');
+  function escTxt(s) {
+    var d = document.createElement('div');
+    d.textContent = (s === undefined || s === null) ? '' : String(s);
+    return d.innerHTML;
+  }
+
+  // ---------- Sonidos ----------
+  function playSound(id) {
+    var a = document.getElementById(id);
     if (!a) return;
     try {
       a.volume = Math.max(0, Math.min(1, state.volume));
@@ -80,24 +105,25 @@
     } catch (_) {}
   }
 
-  // ---------- UI: mostrar / ocultar ----------
+  // ---------- Visibilidad ----------
   function applyVisibility() {
     var panel = $('radio-panel');
     var btn = $('radio-toggle');
     if (panel) panel.classList.toggle('hidden', !state.visible);
     if (btn) btn.classList.toggle('active', state.visible);
     save(LS.visible, state.visible ? '1' : '0');
-    // Al ocultar dejamos de escuchar el PTT para no dejar la clave colgada.
-    if (!state.visible) releasePTT();
+    if (state.visible) {
+      armMic();                       // gesto del usuario → pedir micrófono ya
+      if (chan) status('Escuchando · CH ' + state.channel, '');
+      else status('Elegí un canal', 'warn');
+    } else {
+      releasePTT();
+    }
   }
 
   function toggleRadio() {
     state.visible = !state.visible;
     applyVisibility();
-    if (state.visible) {
-      if (started) status('Canal ' + state.channel + ' · listo', '');
-      else status('Elegí un canal para conectar', '');
-    }
   }
 
   // ---------- Canales ----------
@@ -108,57 +134,111 @@
     if (n === state.channel && chan) return;
     state.channel = n;
     save(LS.channel, String(n));
-    var sel = $('radio-channel');
-    if (sel) sel.value = String(n);
-    var lab = $('radio-channel-label');
-    if (lab) lab.textContent = 'CH ' + n;
+    var sel = $('radio-channel'); if (sel) sel.value = String(n);
+    var lab = $('radio-channel-label'); if (lab) lab.textContent = 'CH ' + n;
     teardown();
-    connect();
+    if (state.visible) connect();
   }
 
-  // ---------- Audio local (solo existe tras un gesto del usuario) ----------
+  // ---------- Micrófono ----------
   function ensureMic() {
     if (localStream) return Promise.resolve(localStream);
+    if (micPromise) return micPromise;
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      return Promise.reject(new Error('El navegador no permite micrófono'));
+      return Promise.reject(new Error('navegador sin micrófono'));
     }
-    return navigator.mediaDevices.getUserMedia({
+    micPromise = navigator.mediaDevices.getUserMedia({
       audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
     }).then(function (s) {
       localStream = s;
-      // Nace silenciada: no transmitimos nada sin PTT.
+      micPromise = null;
       s.getAudioTracks().forEach(function (t) { t.enabled = false; });
       return s;
+    }, function (e) {
+      micPromise = null;
+      state.micError = (e && e.message) || 'permiso denegado';
+      throw e;
+    });
+    return micPromise;
+  }
+
+  /** Pide el micrófono y, cuando llega, lo engancha a TODAS las conexiones. */
+  function armMic() {
+    ensureMic().then(function () {
+      Object.keys(peers).forEach(function (p) { attachLocal(peers[p], p); });
+      var b = document.getElementById('radio-mic');
+      if (b) b.classList.add('hidden');      // ya está concedido → se oculta
+      state.micError = '';
+    }).catch(function () {
+      var b = document.getElementById('radio-mic');
+      if (b) b.classList.remove('hidden');   // hace falta pulsarlo (gesto del usuario)
+      status('Sin micrófono: tocá "Activar mic"', 'err');
     });
   }
 
+  function hasLocalTrack(pc) {
+    try {
+      return pc.getSenders().some(function (s) { return s.track && s.track.kind === 'audio'; });
+    } catch (_) { return false; }
+  }
+
+  function addLocalTrack(pc) {
+    if (!localStream || !pc) return;
+    var senders;
+    try { senders = pc.getSenders(); } catch (_) { senders = []; }
+    localStream.getAudioTracks().forEach(function (t) {
+      var already = senders.some(function (s) { return s.track === t; });
+      if (already) return;
+      try { pc.addTrack(t, localStream); } catch (_) {}
+    });
+  }
+
+  function attachLocal(pc, peer) {
+    if (!pc || !localStream) return;
+    if (hasLocalTrack(pc)) return;
+    addLocalTrack(pc);
+    negotiate(peer, pc);
+  }
+
+  function negotiate(peer, pc) {
+    if (!pc || pc.signalingState !== 'stable') return;   // ya hay una negociación
+    try {
+      pc.createOffer().then(function (offer) {
+        return pc.setLocalDescription(offer).then(function () {
+          send('signal', { to: peer, from: ME, data: { t: 'offer', sdp: pc.localDescription } });
+        });
+      }).catch(function () {});
+    } catch (_) {}
+  }
+
+  // ---------- PTT ----------
   function setTalking(on) {
     state.talking = on;
     if (localStream) localStream.getAudioTracks().forEach(function (t) { t.enabled = on; });
-    var dot = $('radio-ptt-dot');
-    if (dot) dot.classList.toggle('on', on);
+    var dot = $('radio-ptt-dot'); if (dot) dot.classList.toggle('on', on);
+    var wrap = $('radio-ptt'); if (wrap) wrap.classList.toggle('talking', on);
     var lbl = $('radio-ptt-label');
-    if (lbl) lbl.textContent = on ? 'TRANSMITIENDO…' : 'Mantener para hablar';
-    var wrap = $('radio-ptt');
-    if (wrap) wrap.classList.toggle('talking', on);
+    if (lbl) lbl.textContent = on ? 'Transmitiendo…' : 'Mantener para hablar';
+    status(on ? 'Transmitiendo · CH ' + state.channel
+              : ('Escuchando · CH ' + state.channel), on ? 'live' : '');
   }
 
   function pressPTT() {
     if (state.talking) return;
     if (!state.visible) return;
+    armMic();
     ensureMic().then(function () {
-      playClick();
+      playSound('radio-ptt-sound');
       setTalking(true);
-      status('Transmitiendo en CH ' + state.channel, 'live');
-    }).catch(function (e) {
-      status('Sin micrófono: ' + (e && e.message ? e.message : 'error'), 'err');
+    }).catch(function () {
+      status('Sin micrófono: tocá "Activar mic"', 'err');
     });
   }
 
   function releasePTT() {
-    if (!state.talking) return;
+    if (!state.talking) { return; }
     setTalking(false);
-    status(state.online > 0 ? ('CH ' + state.channel + ' · ' + state.online + ' en línea') : 'CH ' + state.channel + ' · solo vos', '');
+    playSound('radio-ptt-off');
   }
 
   // ---------- Tecla PTT ----------
@@ -167,22 +247,19 @@
     if (code.indexOf('Key') === 0) return code.slice(3);
     if (code.indexOf('Digit') === 0) return code.slice(5);
     if (code === 'Space') return 'ESPACIO';
-    if (code === 'ShiftLeft' || code === 'ShiftRight') return 'SHIFT';
-    if (code === 'ControlLeft' || code === 'ControlRight') return 'CTRL';
-    if (code === 'AltLeft' || code === 'AltRight') return 'ALT';
+    if (/^Shift/.test(code)) return 'SHIFT';
+    if (/^Control/.test(code)) return 'CTRL';
+    if (/^Alt/.test(code)) return 'ALT';
     return code.replace(/Left|Right/, '').toUpperCase();
   }
-
   function renderPttKey() {
     var el = $('radio-ptt-key');
     if (el) el.textContent = keyLabel(state.pttKey);
   }
-
   function bindKey() {
     state.pendingKey = true;
-    var el = $('radio-ptt-key');
-    if (el) el.textContent = '…';
-    status('Pulsá la tecla que quieras usar', 'warn');
+    var el = $('radio-ptt-key'); if (el) el.textContent = '…';
+    status('Pulsá la tecla a usar (Esc cancela)', 'warn');
   }
 
   document.addEventListener('keydown', function (e) {
@@ -193,7 +270,7 @@
       state.pttKey = e.code;
       save(LS.ptt, e.code);
       renderPttKey();
-      status('Tecla asignada: ' + keyLabel(e.code), '');
+      status('Tecla PTT: ' + keyLabel(e.code), '');
       return;
     }
     if (!state.visible) return;
@@ -211,7 +288,7 @@
     releasePTT();
   });
 
-  // ---------- WebRTC (mismo esquema que la bodycam) ----------
+  // ---------- WebRTC ----------
   function send(event, payload) {
     if (!chan) return;
     try { chan.send({ type: 'broadcast', event: event, payload: payload }); } catch (_) {}
@@ -225,6 +302,14 @@
     pc.onicecandidate = function (ev) {
       if (ev.candidate) send('signal', { to: peer, from: ME, data: { t: 'ice', c: ev.candidate } });
     };
+
+    // Si aparece una pista nueva (micrófono concedido tarde), renegociamos.
+    pc.onnegotiationneeded = function () {
+      if (!peers[peer]) return;
+      if (pc.signalingState !== 'stable') return;
+      negotiate(peer, pc);
+    };
+
     pc.ontrack = function (ev) {
       var a = remoteAudios[peer];
       if (!a) {
@@ -240,8 +325,9 @@
       var p = a.play();
       if (p && p.catch) p.catch(function () {});
     };
+
     pc.onconnectionstatechange = function () {
-      if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') dropPeer(peer);
+      if (pc.connectionState === 'failed') dropPeer(peer);
     };
     return pc;
   }
@@ -251,26 +337,19 @@
     if (pc) { try { pc.close(); } catch (_) {} delete peers[peer]; }
     var a = remoteAudios[peer];
     if (a) { try { a.pause(); } catch (_) {} if (a.parentNode) a.parentNode.removeChild(a); delete remoteAudios[peer]; }
+    delete roster[peer];
     send('bye', { from: ME, to: peer });
-    updateCount();
-  }
-
-  function addLocalTrack(pc) {
-    if (!localStream) return;
-    localStream.getTracks().forEach(function (t) { try { pc.addTrack(t, localStream); } catch (_) {} });
+    renderRoster();
   }
 
   function connectTo(peer) {
     if (peers[peer]) return;
-    ensureMic().then(function () {
-      var pc = pcFor(peer);
-      addLocalTrack(pc);
-      return pc.createOffer().then(function (offer) {
-        return pc.setLocalDescription(offer).then(function () {
-          send('signal', { to: peer, from: ME, data: { t: 'offer', sdp: pc.localDescription } });
-        });
-      });
-    }).catch(function () { /* sin micrófono igual podemos escuchar */ });
+    // El micrófono se pide aparte (armMic); acá creamos la conexión igual
+    // para poder RECIBIR aunque el permiso aún no llegó.
+    var pc = pcFor(peer);
+    addLocalTrack(pc);
+    if (pc.signalingState === 'stable') negotiate(peer, pc);
+    armMic();
   }
 
   function handleSignal(p) {
@@ -278,13 +357,14 @@
     var from = p.from, d = p.data;
     if (d.t === 'offer') {
       var pc = pcFor(from);
-      addLocalTrack(pc);
+      addLocalTrack(pc);                       // responde con SU pista si ya la tiene
       pc.setRemoteDescription(new RTCSessionDescription(d.sdp))
         .then(function () { return pc.createAnswer(); })
         .then(function (ans) { return pc.setLocalDescription(ans).then(function () {
           send('signal', { to: from, from: ME, data: { t: 'answer', sdp: pc.localDescription } });
         }); })
         .catch(function () {});
+      armMic();                                 // si el mic llega tarde → renegocia
     } else if (d.t === 'answer') {
       var pc2 = peers[from];
       if (pc2) pc2.setRemoteDescription(new RTCSessionDescription(d.sdp)).catch(function () {});
@@ -294,11 +374,7 @@
     }
   }
 
-  function updateCount() {
-    onlineCount(Object.keys(peers).length + (chan ? 1 : 0));
-  }
-
-  // ---------- Canal Realtime ----------
+  // ---------- Canal Realtime + roster ----------
   function connect() {
     var sb = null;
     if (window.__HRP_RADIO_SB) sb = window.__HRP_RADIO_SB;
@@ -312,16 +388,18 @@
     chan = sb.channel(channelName(), { broadcast: { self: false } });
 
     chan.on('broadcast', { event: 'hello' }, function (msg) {
-      var from = msg && msg.payload && msg.payload.from;
-      if (!from || from === ME) return;
-      if (ME < from) connectTo(from);          // sólo uno inicia → sin dobles ofertas
-      updateCount();
+      var p = msg && msg.payload;
+      if (!p || !p.from || p.from === ME) return;
+      var first = !roster[p.from];
+      roster[p.from] = p.name || p.from;
+      renderRoster();
+      if (first) send('hello', { from: ME, name: myName() });   // responde solo la primera vez
+      if (ME < p.from) connectTo(p.from);
     });
 
     chan.on('broadcast', { event: 'bye' }, function (msg) {
       var from = msg && msg.payload && msg.payload.from;
       if (from) dropPeer(from);
-      updateCount();
     });
 
     chan.on('broadcast', { event: 'signal' }, function (msg) {
@@ -331,11 +409,12 @@
     chan.subscribe(function (st) {
       if (st === 'SUBSCRIBED') {
         started = true;
-        onlineCount(1);
-        send('hello', { from: ME });
-        status('CH ' + state.channel + ' · listo', '');
+        renderRoster();
+        send('hello', { from: ME, name: myName() });
+        armMic();
+        status('Escuchando · CH ' + state.channel, '');
       } else if (st === 'CHANNEL_ERROR' || st === 'TIMED_OUT') {
-        status('Error de conexión, reintentando…', 'err');
+        status('Reconectando…', 'err');
         setTimeout(function () { if (state.visible) connect(); }, 4000);
       }
     });
@@ -343,18 +422,20 @@
 
   function teardown() {
     Object.keys(peers).forEach(dropPeer);
+    roster = {};
+    renderRoster();
     if (chan) { try { chan.unsubscribe(); } catch (_) {} chan = null; }
     started = false;
-    onlineCount(0);
   }
 
-  // ---------- API pública ----------
+  // ---------- API ----------
   window.HRPRadio = {
     toggle: toggleRadio,
     setChannel: setChannel,
     bindKey: bindKey,
     press: pressPTT,
     release: releasePTT,
+    enableMic: armMic,
     setVolume: function (v) {
       state.volume = Math.max(0, Math.min(1, Number(v)));
       save(LS.vol, String(state.volume));
@@ -372,6 +453,7 @@
       sel.addEventListener('change', function () { setChannel(Number(sel.value)); });
     }
     renderPttKey();
+    renderRoster();
     applyVisibility();
 
     var vol = $('radio-volume');
@@ -381,6 +463,6 @@
     }
     var lbl = $('radio-channel-label');
     if (lbl) lbl.textContent = 'CH ' + state.channel;
-    status('CH ' + state.channel + ' · sin conectar', '');
+    status(state.visible ? 'Escuchando · CH ' + state.channel : 'CH ' + state.channel + ' · oculta', '');
   });
 })();

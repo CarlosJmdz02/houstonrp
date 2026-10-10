@@ -899,6 +899,55 @@
     .radio-panel { right: 10px; left: 10px; bottom: 10px; width: auto; }
     .radio-hint { display: none; }
     .btn-radio { padding: 9px 12px; }
+  }
+  /* ── Radio: layout de 2 columnas + mini sidebar de conectados ── */
+  .radio-main { display: flex; gap: 0; align-items: stretch; }
+  .radio-controls { flex: 1 1 auto; min-width: 0; padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .radio-roster-box {
+    flex: 0 0 138px; min-width: 0;
+    border-left: 1px solid var(--border);
+    background: rgba(6,13,28,.72);
+    display: flex; flex-direction: column;
+  }
+  .radio-roster-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace; font-size: 8.5px;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--text-dim);
+  }
+  .radio-roster-count {
+    min-width: 18px; text-align: center; padding: 1px 5px; border-radius: 5px;
+    background: rgba(33,197,93,.18); border: 1px solid rgba(33,197,93,.45);
+    color: var(--accent-green); font-size: 9.5px;
+  }
+  .radio-roster { flex: 1; overflow-y: auto; max-height: 168px; padding: 6px 0; }
+  .roster-row { display: flex; align-items: center; gap: 7px; padding: 5px 10px; }
+  .roster-row.me { background: rgba(56,189,248,.10); }
+  .roster-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    background: var(--accent-green); box-shadow: 0 0 7px var(--accent-green);
+  }
+  .roster-row.me .roster-dot { background: var(--accent-cyan); box-shadow: 0 0 7px var(--accent-cyan); }
+  .roster-name {
+    font-size: 11px; color: var(--text-secondary); min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .roster-name em { font-style: normal; color: var(--text-dim); font-size: 9.5px; }
+
+  .radio-mic {
+    width: 100%; padding: 9px; border-radius: 9px; cursor: pointer;
+    background: rgba(245,165,36,.10); border: 1px dashed rgba(245,165,36,.5);
+    color: var(--accent-amber); font-size: 12px; font-weight: 600;
+    font-family: 'Rajdhani', sans-serif; letter-spacing: .06em; text-transform: uppercase;
+    transition: all .16s ease;
+  }
+  .radio-mic:hover { background: rgba(245,165,36,.2); }
+  .radio-mic.hidden { display: none; }
+
+  @media (max-width: 640px) {
+    .radio-main { flex-direction: column; }
+    .radio-roster-box { flex: 1 1 auto; border-left: none; border-top: 1px solid var(--border); }
+    .radio-roster { max-height: 110px; }
   }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1401,6 +1450,7 @@
 
 <!-- ═══════════════ RADIO TÁCTICA ═══════════════ -->
 <audio id="radio-ptt-sound" src="audios/radio-ptt.wav" preload="auto"></audio>
+<audio id="radio-ptt-off" src="audios/radio-ptt-off.wav" preload="auto"></audio>
 <div id="radio-voices" style="display:none;"></div>
 
 <div id="radio-panel" class="radio-panel hidden">
@@ -1411,39 +1461,52 @@
     <button class="radio-close" type="button" onclick="HRPRadio.toggle()" title="Ocultar la radio">✕</button>
   </div>
 
-  <div class="radio-body">
-    <div class="radio-row">
-      <span class="radio-label">Canal</span>
-      <select id="radio-channel" class="radio-select">
-        <option value="1">Canal 1</option>
-        <option value="2">Canal 2</option>
-        <option value="3">Canal 3</option>
-        <option value="4">Canal 4</option>
-        <option value="5">Canal 5</option>
-      </select>
-      <span class="radio-online" id="radio-online">0 en línea</span>
+  <div class="radio-main">
+    <div class="radio-controls">
+      <div class="radio-row">
+        <span class="radio-label">Canal</span>
+        <select id="radio-channel" class="radio-select">
+          <option value="1">Canal 1</option>
+          <option value="2">Canal 2</option>
+          <option value="3">Canal 3</option>
+          <option value="4">Canal 4</option>
+          <option value="5">Canal 5</option>
+        </select>
+      </div>
+
+      <button class="radio-mic" id="radio-mic" type="button" onclick="HRPRadio.enableMic()">
+        🎤 Activar micrófono
+      </button>
+
+      <button id="radio-ptt" class="radio-ptt" type="button"
+              onpointerdown="event.preventDefault(); HRPRadio.press();"
+              onpointerup="HRPRadio.release()"
+              onpointerleave="HRPRadio.release()"
+              onpointercancel="HRPRadio.release()">
+        <span class="radio-ptt-dot" id="radio-ptt-dot"></span>
+        <span class="radio-ptt-text" id="radio-ptt-label">Mantener para hablar</span>
+      </button>
+
+      <div class="radio-row radio-keyrow">
+        <span class="radio-label">Tecla PTT</span>
+        <kbd class="radio-kbd" id="radio-ptt-key">R</kbd>
+        <button class="radio-mini" type="button" onclick="HRPRadio.bindKey()">Re-asignar</button>
+        <span class="radio-hint">o mantené presionado el botón</span>
+      </div>
+
+      <div class="radio-row">
+        <span class="radio-label">Volumen</span>
+        <input type="range" id="radio-volume" class="radio-range" min="0" max="100" value="100">
+      </div>
     </div>
 
-    <button id="radio-ptt" class="radio-ptt" type="button"
-            onpointerdown="event.preventDefault(); HRPRadio.press();"
-            onpointerup="HRPRadio.release()"
-            onpointerleave="HRPRadio.release()"
-            onpointercancel="HRPRadio.release()">
-      <span class="radio-ptt-dot" id="radio-ptt-dot"></span>
-      <span class="radio-ptt-text" id="radio-ptt-label">Mantener para hablar</span>
-    </button>
-
-    <div class="radio-row radio-keyrow">
-      <span class="radio-label">Tecla PTT</span>
-      <kbd class="radio-kbd" id="radio-ptt-key">R</kbd>
-      <button class="radio-mini" type="button" onclick="HRPRadio.bindKey()">Re-asignar</button>
-      <span class="radio-hint">o mantené presionado el botón</span>
-    </div>
-
-    <div class="radio-row">
-      <span class="radio-label">Volumen</span>
-      <input type="range" id="radio-volume" class="radio-range" min="0" max="100" value="100">
-    </div>
+    <aside class="radio-roster-box">
+      <div class="radio-roster-head">
+        <span>Conectados</span>
+        <span class="radio-roster-count" id="radio-roster-count">1</span>
+      </div>
+      <div class="radio-roster" id="radio-roster"></div>
+    </aside>
   </div>
 </div>
 
