@@ -52,6 +52,7 @@
   var localStream = null;
   var peers = {};        // peer -> RTCPeerConnection
   var roster = {};       // peer -> nombre
+  var rosterTalking = {}; // peer -> está con el micro abierto
   var rosterReplyAt = {}; // peer -> timestamp del último "hello" que le mandamos
   var helloTimer = null;  // anuncio periódico de presencia
   var remoteAudios = {}; // peer -> HTMLAudioElement
@@ -88,11 +89,14 @@
     var names = Object.keys(roster).map(function (k) { return { id: k, name: roster[k] }; });
     if (cnt) cnt.textContent = String(names.length + 1);   // + yo
     if (!box) return;
-    var mine = '<div class="roster-row me"><span class="roster-dot"></span><span class="roster-name">' +
+    var mine = '<div class="roster-row me' + (state.talking ? ' talking' : '') + '">' +
+      '<span class="roster-dot"></span><span class="roster-name">' +
       escTxt(myName()) + '<em> (vos)</em></span></div>';
     var others = names.map(function (n) {
-      return '<div class="roster-row"><span class="roster-dot"></span><span class="roster-name">' +
-        escTxt(n.name || n.id) + '</span></div>';
+      var talking = !!rosterTalking[n.id];
+      return '<div class="roster-row' + (talking ? ' talking' : '') + '">' +
+        '<span class="roster-dot"></span><span class="roster-name">' + escTxt(n.name || n.id) + '</span>' +
+        (talking ? '<span class="roster-live">● al aire</span>' : '') + '</div>';
     }).join('');
     box.innerHTML = mine + others;
   }
@@ -229,6 +233,7 @@
     var wrap = $('radio-ptt'); if (wrap) wrap.classList.toggle('talking', on);
     var lbl = $('radio-ptt-label');
     if (lbl) lbl.textContent = on ? 'Transmitiendo…' : 'Mantener para hablar';
+    renderRoster();
     status(on ? 'Transmitiendo · CH ' + state.channel
               : ('Escuchando · CH ' + state.channel), on ? 'live' : '');
   }
@@ -240,6 +245,8 @@
     ensureMic().then(function () {
       playSound('radio-ptt-sound');
       setTalking(true);
+      // Todos los del canal oyen el "click" de quien abre el micro.
+      send('ptt', { from: ME, on: true });
     }).catch(function () {
       status('Sin micrófono: tocá "Activar mic"', 'err');
     });
@@ -249,6 +256,7 @@
     if (!state.talking) { return; }
     setTalking(false);
     playSound('radio-ptt-off');
+    send('ptt', { from: ME, on: false });   // cierre de micro para todos
   }
 
   // ---------- Tecla PTT ----------
@@ -356,6 +364,7 @@
     var a = remoteAudios[peer];
     if (a) { try { a.pause(); } catch (_) {} if (a.parentNode) a.parentNode.removeChild(a); delete remoteAudios[peer]; }
     delete roster[peer];
+    delete rosterTalking[peer];
     send('bye', { from: ME, to: peer });
     renderRoster();
   }
@@ -438,6 +447,16 @@
       handleSignal(msg && msg.payload);
     });
 
+    // Click de PTT de OTROS: suena acá (como una radio de verdad) y se
+    // marca quién está hablando en el sidebar.
+    chan.on('broadcast', { event: 'ptt' }, function (msg) {
+      var p = msg && msg.payload;
+      if (!p || !p.from || p.from === ME) return;
+      rosterTalking[p.from] = !!p.on;
+      playSound(p.on ? 'radio-ptt-sound' : 'radio-ptt-off');
+      renderRoster();
+    });
+
     chan.subscribe(function (st) {
       if (st === 'SUBSCRIBED') {
         started = true;
@@ -462,6 +481,7 @@
     if (helloTimer) { clearInterval(helloTimer); helloTimer = null; }
     Object.keys(peers).forEach(dropPeer);
     roster = {};
+    rosterTalking = {};
     rosterReplyAt = {};
     renderRoster();
     if (chan) { try { chan.unsubscribe(); } catch (_) {} chan = null; }

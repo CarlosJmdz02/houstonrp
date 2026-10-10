@@ -948,6 +948,19 @@
     .radio-main { flex-direction: column; }
     .radio-roster-box { flex: 1 1 auto; border-left: none; border-top: 1px solid var(--border); }
     .radio-roster { max-height: 110px; }
+  }
+  /* ── Quién está al aire en el roster ── */
+  .roster-row.talking { background: rgba(33,197,93,.14); }
+  .roster-row.talking .roster-dot {
+    background: var(--accent-green);
+    box-shadow: 0 0 10px var(--accent-green);
+    animation: cadPulse .7s ease-in-out infinite;
+  }
+  .roster-live {
+    margin-left: auto; flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 7.5px;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-green);
   }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
