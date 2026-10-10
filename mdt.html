@@ -831,7 +831,75 @@
     .bolo-form-row { flex-direction: column; }
     .bolo-top { flex-direction: column; align-items: flex-start; }
   }
-</style>
+
+  /* ══════════════ RADIO TÁCTICA ══════════════ */
+  .btn-radio {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 14px; border-radius: 10px; cursor: pointer;
+    background: rgba(56,189,248,.08); border: 1px solid rgba(56,189,248,.35);
+    color: var(--accent-cyan); font-family: 'Rajdhani', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+    transition: all .18s ease;
+  }
+  .btn-radio:hover { background: rgba(56,189,248,.18); transform: translateY(-1px); }
+  .btn-radio.active { background: rgba(56,189,248,.24); border-color: rgba(56,189,248,.7); box-shadow: 0 0 18px rgba(56,189,248,.3); }
+
+  .radio-panel {
+    position: fixed; right: 18px; bottom: 18px; z-index: 220;
+    width: 330px; max-width: calc(100vw - 24px);
+    background: linear-gradient(160deg, rgba(15,28,51,.985), rgba(6,13,28,.99));
+    border: 1px solid rgba(56,189,248,.45);
+    border-radius: 14px;
+    box-shadow: 0 26px 60px rgba(0,0,0,.65), 0 0 0 1px rgba(56,189,248,.10);
+    overflow: hidden;
+    animation: cadRise .25s ease both;
+  }
+  #radio-panel.hidden { display: none; }
+  .radio-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(6,13,28,.85); border-bottom: 1px solid var(--border); }
+  .radio-title { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
+  .radio-chip { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 6px; background: rgba(56,189,248,.16); border: 1px solid rgba(56,189,248,.4); color: var(--accent-cyan); white-space: nowrap; }
+  .radio-status { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--text-dim); flex: 1; min-width: 0; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .radio-status.live { color: var(--accent-green); }
+  .radio-status.err  { color: var(--accent-red); }
+  .radio-status.warn { color: var(--accent-amber); }
+  .radio-close { width: 24px; height: 24px; flex-shrink: 0; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; line-height: 1; }
+  .radio-close:hover { color: var(--accent-red); border-color: rgba(240,68,56,.5); }
+  .radio-body { padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .radio-row { display: flex; align-items: center; gap: 10px; }
+  .radio-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-dim); min-width: 64px; }
+  .radio-select { flex: 1; padding: 7px 10px; background: var(--bg-deep); border: 1px solid var(--border-strong); border-radius: 8px; color: var(--text-primary); font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer; }
+  .radio-online { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-green); white-space: nowrap; }
+
+  .radio-ptt {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px; border-radius: 12px; cursor: pointer;
+    background: linear-gradient(160deg, rgba(47,129,247,.22), rgba(47,129,247,.06));
+    border: 1px solid rgba(47,129,247,.5); color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px;
+    letter-spacing: .1em; text-transform: uppercase; user-select: none;
+    touch-action: none; transition: all .12s ease;
+  }
+  .radio-ptt:hover { background: linear-gradient(160deg, rgba(47,129,247,.32), rgba(47,129,247,.12)); }
+  .radio-ptt.talking {
+    background: linear-gradient(160deg, rgba(33,197,93,.34), rgba(33,197,93,.12));
+    border-color: rgba(33,197,93,.75);
+    box-shadow: 0 0 26px rgba(33,197,93,.35);
+  }
+  .radio-ptt-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--text-dim); transition: all .12s ease; }
+  .radio-ptt-dot.on { background: var(--accent-green); box-shadow: 0 0 12px var(--accent-green); animation: cadPulse .7s ease-in-out infinite; }
+
+  .radio-keyrow { flex-wrap: wrap; }
+  .radio-kbd { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; min-width: 26px; text-align: center; padding: 3px 8px; border-radius: 6px; background: var(--bg-deep); border: 1px solid var(--border-strong); border-bottom-width: 2px; color: var(--text-primary); }
+  .radio-mini { padding: 4px 10px; font-size: 10.5px; font-family: 'JetBrains Mono', monospace; letter-spacing: .06em; text-transform: uppercase; border-radius: 6px; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); cursor: pointer; }
+  .radio-mini:hover { border-color: rgba(47,129,247,.55); color: var(--accent-cyan); }
+  .radio-hint { font-size: 10.5px; color: var(--text-dim); width: 100%; }
+  .radio-range { flex: 1; accent-color: var(--accent-cyan); cursor: pointer; }
+
+  @media (max-width: 640px) {
+    .radio-panel { right: 10px; left: 10px; bottom: 10px; width: auto; }
+    .radio-hint { display: none; }
+    .btn-radio { padding: 9px 12px; }
+  }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap
@@ -870,7 +938,11 @@
       </div>
       <div class="live-indicator" id="conn-indicator" title="Estado de conexión con el servidor"><span class="live-dot"></span>En línea</div>
       <div class="top-clock" id="clock">--:--:--</div>
-      <a class="btn-dash" href="dashboard.html">
+        <button class="btn-radio" id="radio-toggle" type="button" onclick="HRPRadio.toggle()" title="Mostrar / ocultar la radio táctica">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.9 19.1a10 10 0 0 1 0-14.2"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/></svg>
+          Radio
+        </button>
+        <a class="btn-dash" href="dashboard.html">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
         Dashboard
       </a>
@@ -1327,6 +1399,54 @@
   </div>
 </div>
 
+<!-- ═══════════════ RADIO TÁCTICA ═══════════════ -->
+<audio id="radio-ptt-sound" src="audios/radio-ptt.wav" preload="auto"></audio>
+<div id="radio-voices" style="display:none;"></div>
+
+<div id="radio-panel" class="radio-panel hidden">
+  <div class="radio-head">
+    <span class="radio-title">📡 Radio táctica</span>
+    <span class="radio-chip" id="radio-channel-label">CH 1</span>
+    <span class="radio-status" id="radio-status">—</span>
+    <button class="radio-close" type="button" onclick="HRPRadio.toggle()" title="Ocultar la radio">✕</button>
+  </div>
+
+  <div class="radio-body">
+    <div class="radio-row">
+      <span class="radio-label">Canal</span>
+      <select id="radio-channel" class="radio-select">
+        <option value="1">Canal 1</option>
+        <option value="2">Canal 2</option>
+        <option value="3">Canal 3</option>
+        <option value="4">Canal 4</option>
+        <option value="5">Canal 5</option>
+      </select>
+      <span class="radio-online" id="radio-online">0 en línea</span>
+    </div>
+
+    <button id="radio-ptt" class="radio-ptt" type="button"
+            onpointerdown="event.preventDefault(); HRPRadio.press();"
+            onpointerup="HRPRadio.release()"
+            onpointerleave="HRPRadio.release()"
+            onpointercancel="HRPRadio.release()">
+      <span class="radio-ptt-dot" id="radio-ptt-dot"></span>
+      <span class="radio-ptt-text" id="radio-ptt-label">Mantener para hablar</span>
+    </button>
+
+    <div class="radio-row radio-keyrow">
+      <span class="radio-label">Tecla PTT</span>
+      <kbd class="radio-kbd" id="radio-ptt-key">R</kbd>
+      <button class="radio-mini" type="button" onclick="HRPRadio.bindKey()">Re-asignar</button>
+      <span class="radio-hint">o mantené presionado el botón</span>
+    </div>
+
+    <div class="radio-row">
+      <span class="radio-label">Volumen</span>
+      <input type="range" id="radio-volume" class="radio-range" min="0" max="100" value="100">
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><span id="toast-text"></span></div>
 
 <!-- ═══ RECORD DRAWER (Registrar Arresto / Multa sin salir del MDT) ═══ -->
@@ -1353,6 +1473,7 @@
 <!-- supabase-js LOCAL (sin CDN): hace que la librería de bodycam siempre cargue -->
 <script src="assets/supabase-js.umd.js"></script>
 <script src="assets/bodycam-app.js"></script>
+<script src="assets/radio-app.js"></script>
 <script>
 (function(){
   let userId = null;
