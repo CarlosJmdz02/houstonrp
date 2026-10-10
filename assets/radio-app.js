@@ -536,4 +536,104 @@
       list.forEach(function (p) { attachLocal(peers[p], p); });
     }, 5000);
   });
+  // ═══════════ CONSOLA TÁCTICA (LCD + log) ═══════════
+  // Se sincroniza LEYENDO el estado cada 400 ms: no toca la lógica de
+  // la radio, así que si algo falla acá, la radio sigue funcionando.
+  var tacLog = [];
+  var tacLast = { talking: false, channel: -1, peers: '' };
+
+  function tacNow() {
+    return new Date().toLocaleTimeString('es-ES', { hour12: false });
+  }
+
+  function logEvent(who, msg, cls) {
+    tacLog.push({ t: tacNow(), who: who, msg: msg, cls: cls || 'sys' });
+    if (tacLog.length > 60) tacLog.shift();
+    var box = document.getElementById('radio-log');
+    if (!box) return;
+    if (!tacLog.length) { box.innerHTML = '<div class="empty">Sin comunicaciones</div>'; return; }
+    box.innerHTML = tacLog.map(function (e) {
+      return '<div><span class="t">[' + e.t + ']</span> <span class="' + e.cls + '">' +
+        escTxt(e.who) + ':</span> ' + escTxt(e.msg) + '</div>';
+    }).join('');
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function tacTick() {
+    // Reloj real del LCD
+    var clock = document.getElementById('screen-clock');
+    if (clock) clock.textContent = tacNow();
+
+    // Canal (estado real)
+    var title = document.getElementById('screen-channel-title');
+    if (title) title.textContent = 'TAC ' + state.channel;
+
+    // Unidades en frecuencia (roster real)
+    var online = document.getElementById('tac-online');
+    var total = Object.keys(roster).length + 1;
+    if (online) online.textContent = String(total);
+
+    // Estado del PTT
+    var box = document.getElementById('screen-status-box');
+    var main = document.getElementById('status-text-main');
+    var sub = document.getElementById('status-text-sub');
+    if (box && main && sub) {
+      if (state.talking) {
+        box.classList.add('tx');
+        main.textContent = 'TRANSMITIENDO EN VIVO';
+        sub.textContent = 'TAC ' + state.channel + ' · ' + myName();
+      } else {
+        box.classList.remove('tx');
+        main.textContent = chan ? 'CANAL A ESCUCHA' : 'SIN CONECTAR';
+        sub.textContent = chan ? 'LISTO PARA TRANSMITIR' : 'ELEGÍ UN CANAL';
+      }
+    }
+
+    // LED de encendido
+    var led = document.getElementById('tac-led');
+    if (led) {
+      led.style.background = chan ? '#22c55e' : '#f59e0b';
+      led.style.boxShadow = '0 0 8px ' + (chan ? '#22c55e' : '#f59e0b');
+    }
+
+    // Log por CAMBIOS de estado (no spamea)
+    if (state.talking !== tacLast.talking) {
+      logEvent(myName(), state.talking ? 'abrió el micro' : 'cerró el micro', state.talking ? 'tx' : 'sys');
+      tacLast.talking = state.talking;
+    }
+    if (state.channel !== tacLast.channel) {
+      if (tacLast.channel !== -1) logEvent('SISTEMA', 'Frecuencia cambiada a TAC ' + state.channel, 'sys');
+      tacLast.channel = state.channel;
+    }
+    var peersKey = Object.keys(roster).sort().join(',');
+    if (peersKey !== tacLast.peers) {
+      var prev = tacLast.peers === '' ? [] : tacLast.peers.split(',');
+      var actual = peersKey === '' ? [] : peersKey.split(',');
+      actual.forEach(function (p) { if (p && prev.indexOf(p) < 0) logEvent(roster[p] || p, 'entra a la frecuencia', 'sys'); });
+      prev.forEach(function (p) { if (p && actual.indexOf(p) < 0) logEvent(p, 'sale de la frecuencia', 'sys'); });
+      tacLast.peers = peersKey;
+    }
+  }
+
+  function initTacticalDisplay() {
+    logEvent('SISTEMA', 'Conectado a la red táctica HPD.', 'sys');
+    logEvent('SISTEMA', 'Frecuencia TAC ' + state.channel + ' en escucha.', 'sys');
+    setInterval(tacTick, 400);
+    tacTick();
+  }
+
+  if (window.HRPRadio) {
+    window.HRPRadio.clearLog = function () {
+      tacLog = [];
+      var box = document.getElementById('radio-log');
+      if (box) box.innerHTML = '<div class="empty">Sin comunicaciones</div>';
+      logEvent('SISTEMA', 'Historial reiniciado.', 'sys');
+    };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTacticalDisplay);
+  } else {
+    initTacticalDisplay();
+  }
 })();
