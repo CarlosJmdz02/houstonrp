@@ -66,6 +66,10 @@ exports.handler = async (event) => {
         postal: (p.Location && p.Location.PostalCode) || '',
         street: (p.Location && p.Location.StreetName) || '',
         building: (p.Location && p.Location.BuildingNumber) || '',
+        // Coordenadas de mundo (X/Z) — solo vienen en Players, nunca en
+        // Vehicles. Las usa el ALPR para las cámaras virtuales.
+        x: (p.Location && typeof p.Location.LocationX === 'number') ? p.Location.LocationX : null,
+        z: (p.Location && typeof p.Location.LocationZ === 'number') ? p.Location.LocationZ : null,
       };
     });
 

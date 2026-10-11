@@ -1101,7 +1101,122 @@
     transition: all .16s ease;
   }
   .tac-gate-btns button:hover { background: rgba(59,130,246,.3); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59,130,246,.35); }
-  .tac-gate-err { font-size: 11px; color: #f87171; min-height: 14px; font-family: 'JetBrains Mono', monospace; }</style>
+  .tac-gate-err { font-size: 11px; color: #f87171; min-height: 14px; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── ALPR / FLOCK ── */
+  #alpr-panel { display: none; }
+  #alpr-panel.active { display: block; animation: fadeIn 0.3s ease both; }
+  .alpr-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+  .alpr-status {
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    padding: 14px 16px; border-radius: 14px; margin-bottom: 18px;
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-panel));
+    border: 1px solid var(--border);
+  }
+  .alpr-stat { display: flex; flex-direction: column; gap: 3px; min-width: 92px; }
+  .alpr-stat-label { font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+  .alpr-stat-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--text-primary); font-weight: 600; }
+  .alpr-switch { margin-left: auto; display: flex; align-items: center; gap: 9px; cursor: pointer; user-select: none; }
+  .alpr-switch input { display: none; }
+  .alpr-track {
+    width: 40px; height: 21px; border-radius: 20px; position: relative;
+    background: var(--bg-void); border: 1px solid var(--border-strong); transition: all .18s ease;
+  }
+  .alpr-track::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 15px; height: 15px;
+    border-radius: 50%; background: var(--text-dim); transition: all .18s ease;
+  }
+  .alpr-switch input:checked + .alpr-track { background: rgba(52,211,153,.22); border-color: var(--accent-green); }
+  .alpr-switch input:checked + .alpr-track::after { left: 21px; background: var(--accent-green); box-shadow: 0 0 10px rgba(52,211,153,.7); }
+  .alpr-switch-label { font-size: 11.5px; font-weight: 700; color: var(--text-secondary); letter-spacing: .04em; text-transform: uppercase; }
+  .alpr-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .alpr-tab {
+    display: flex; align-items: center; gap: 7px; cursor: pointer;
+    padding: 9px 15px; border-radius: 10px; font-size: 12.5px; font-weight: 700;
+    background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim);
+    transition: all .16s ease; font-family: 'Rajdhani', sans-serif; letter-spacing: .04em;
+  }
+  .alpr-tab:hover { color: var(--text-secondary); border-color: var(--border-strong); }
+  .alpr-tab.active { background: rgba(56,189,248,.12); border-color: rgba(56,189,248,.5); color: var(--accent-cyan); }
+  .alpr-section { display: none; }
+  .alpr-section.active { display: block; animation: fadeIn .22s ease both; }
+  .alpr-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .alpr-table th {
+    text-align: left; padding: 8px 10px; font-size: 9.5px; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--text-dim); font-weight: 700;
+    border-bottom: 1px solid var(--border-strong);
+  }
+  .alpr-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+  .alpr-table tr.alpr-flagged td { background: rgba(239,68,68,.10); color: var(--text-primary); }
+  .alpr-table tr.alpr-flagged td:first-child { box-shadow: inset 3px 0 0 var(--accent-red); }
+  .alpr-plate {
+    font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 600;
+    color: var(--accent-cyan); background: rgba(56,189,248,.10); padding: 2px 7px; border-radius: 5px;
+  }
+  .alpr-chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 20px; letter-spacing: .04em; text-transform: uppercase;
+  }
+  .alpr-chip.hot { background: rgba(239,68,68,.16); color: var(--accent-red); }
+  .alpr-chip.live { background: rgba(52,211,153,.14); color: var(--accent-green); }
+  .alpr-chip.dim { background: rgba(148,163,184,.12); color: var(--text-dim); }
+  .alpr-empty { text-align: center; padding: 40px 20px; color: var(--text-dim); font-size: 13px; }
+  .alpr-empty svg { margin-bottom: 10px; opacity: .4; }
+  .alpr-form {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;
+    padding: 14px 16px; border-radius: 14px; margin-bottom: 16px;
+    background: var(--bg-card); border: 1px solid var(--border);
+  }
+  .alpr-field { display: flex; flex-direction: column; gap: 5px; }
+  .alpr-field label { font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+  .alpr-input {
+    background: var(--bg-void); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 10px; color: var(--text-primary); font-size: 12.5px; font-family: 'JetBrains Mono', monospace;
+    min-width: 100px; transition: border-color .15s ease;
+  }
+  .alpr-input:focus { outline: none; border-color: var(--accent-cyan); }
+  .alpr-btn {
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+    padding: 9px 15px; border-radius: 9px; font-size: 12px; font-weight: 700;
+    background: linear-gradient(180deg, #3b82f6, #2563eb); border: 1px solid transparent;
+    color: #fff; font-family: 'Rajdhani', sans-serif; letter-spacing: .05em; text-transform: uppercase;
+    transition: all .16s ease;
+  }
+  .alpr-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(59,130,246,.4); }
+  .alpr-btn.ghost { background: transparent; border-color: var(--border-strong); color: var(--text-dim); }
+  .alpr-btn.ghost:hover { color: var(--accent-red); border-color: var(--accent-red); box-shadow: none; }
+  .alpr-btn.danger { background: linear-gradient(180deg, #ef4444, #b91c1c); }
+  .alpr-node-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .alpr-node {
+    position: relative; padding: 13px 14px; border-radius: 13px;
+    background: var(--bg-card); border: 1px solid var(--border);
+  }
+  .alpr-node::before {
+    content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; border-radius: 13px 13px 0 0;
+    background: linear-gradient(90deg, #3b82f6, #38bdf8);
+  }
+  .alpr-node.off::before { background: var(--border-strong); }
+  .alpr-node-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .alpr-node-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14.5px; color: var(--text-primary); }
+  .alpr-node-meta { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-dim); line-height: 1.6; }
+  .alpr-hit {
+    display: flex; align-items: flex-start; gap: 11px; padding: 11px 13px;
+    border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-red); margin-bottom: 8px;
+  }
+  .alpr-hit.vehicle { border-left-color: var(--accent-amber); }
+  .alpr-hit-icon { font-size: 17px; line-height: 1; margin-top: 1px; }
+  .alpr-hit-body { flex: 1; min-width: 0; }
+  .alpr-hit-title { font-size: 12.5px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+  .alpr-hit-sub { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-dim); word-break: break-word; }
+  .alpr-hit-time { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); white-space: nowrap; }
+  @media (max-width: 720px) {
+    .alpr-table thead { display: none; }
+    .alpr-table tr { display: block; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 10px; padding: 6px; }
+    .alpr-table td { display: flex; justify-content: space-between; gap: 10px; border: none; padding: 4px 6px; }
+    .alpr-table td::before { content: attr(data-l); font-size: 9.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--text-dim); font-weight: 700; }
+    .alpr-switch { margin-left: 0; }
+  }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap
@@ -1421,6 +1536,17 @@
         </div>
         <div id="bolo-card-badge" class="bolo-nav-badge bolo-hidden"></div>
       </div>
+
+      <div class="mod-card" onclick="openALPRPanel()" style="--mc:#22d3ee;cursor:pointer;">
+        <div class="mod-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="mod-card-info">
+          <div class="mod-card-title">ALPR</div>
+          <div class="mod-card-label">Cámaras y placas</div>
+        </div>
+        <div id="alpr-card-badge" class="bolo-nav-badge bolo-hidden"></div>
+      </div>
     </div>
 
     <!-- ═══ HISTORY PANEL ═══ -->
@@ -1558,6 +1684,126 @@
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <p>Cargando BOLOs...</p>
         </div>
+      </div>
+    </div>
+
+    <!-- ═══ ALPR / FLOCK PANEL ═══ -->
+    <div id="alpr-panel">
+      <div class="alpr-top">
+        <div>
+          <div class="page-title" style="font-size:26px;">ALPR · <span>Lector de Placas</span></div>
+          <div class="page-subtitle" style="margin-top:6px;">Radar de vehículos y cámaras virtuales sobre los BOLOs activos.</div>
+        </div>
+        <button class="history-close" onclick="closeALPRPanel()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Cerrar Panel
+        </button>
+      </div>
+
+      <div class="alpr-status">
+        <div class="alpr-stat">
+          <div class="alpr-stat-label">Estado</div>
+          <div class="alpr-stat-value" id="alpr-state" style="color:var(--text-dim);">OFF</div>
+        </div>
+        <div class="alpr-stat">
+          <div class="alpr-stat-label">Último escaneo</div>
+          <div class="alpr-stat-value" id="alpr-last">—</div>
+        </div>
+        <div class="alpr-stat">
+          <div class="alpr-stat-label">En el servidor</div>
+          <div class="alpr-stat-value" id="alpr-online">0</div>
+        </div>
+        <div class="alpr-stat">
+          <div class="alpr-stat-label">Placas</div>
+          <div class="alpr-stat-value" id="alpr-plates">0</div>
+        </div>
+        <div class="alpr-stat">
+          <div class="alpr-stat-label">Cámaras</div>
+          <div class="alpr-stat-value" id="alpr-cams">0</div>
+        </div>
+        <div class="alpr-stat">
+          <div class="alpr-stat-label">Detecciones</div>
+          <div class="alpr-stat-value" id="alpr-hits" style="color:var(--accent-red);">0</div>
+        </div>
+        <label class="alpr-switch" title="Sigue escaneando aunque cierres el panel">
+          <input type="checkbox" id="alpr-enabled" onchange="toggleALPR(this.checked)">
+          <span class="alpr-track"></span>
+          <span class="alpr-switch-label">Vigilancia activa</span>
+        </label>
+      </div>
+
+      <div class="alpr-tabs">
+        <button class="alpr-tab active" onclick="switchALPRTab('radar', this)" id="alpr-tab-radar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          Radar
+        </button>
+        <button class="alpr-tab" onclick="switchALPRTab('cams', this)" id="alpr-tab-cams">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          Cámaras
+        </button>
+        <button class="alpr-tab" onclick="switchALPRTab('hits', this)" id="alpr-tab-hits">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Historial
+          <span class="tab-count" id="alpr-tab-hits-count">0</span>
+        </button>
+      </div>
+
+      <!-- RADAR -->
+      <div class="alpr-section active" id="alpr-sec-radar">
+        <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:15px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-primary);">Vehículos en el servidor</div>
+          <span class="alpr-chip dim" id="alpr-radar-note">Escaneando placas contra BOLOs activos</span>
+        </div>
+        <div id="alpr-vehicles"></div>
+
+        <div style="margin:22px 0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:15px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-primary);">Buscados detectados en vivo</div>
+          <span class="alpr-chip dim" id="alpr-spotted-note">—</span>
+        </div>
+        <div id="alpr-spotted"></div>
+      </div>
+
+      <!-- CÁMARAS -->
+      <div class="alpr-section" id="alpr-sec-cams">
+        <div class="alpr-form">
+          <div class="alpr-field">
+            <label>Nombre de la cámara</label>
+            <input class="alpr-input" id="alpr-cam-name" type="text" placeholder="Main St &amp; Grand Ave" style="min-width:190px;">
+          </div>
+          <div class="alpr-field">
+            <label>X (mundo)</label>
+            <input class="alpr-input" id="alpr-cam-x" type="number" step="0.1" placeholder="1084.9">
+          </div>
+          <div class="alpr-field">
+            <label>Z (mundo)</label>
+            <input class="alpr-input" id="alpr-cam-z" type="number" step="0.1" placeholder="2302.2">
+          </div>
+          <div class="alpr-field">
+            <label>Radio (m)</label>
+            <input class="alpr-input" id="alpr-cam-r" type="number" step="10" value="120" style="min-width:80px;">
+          </div>
+          <button class="alpr-btn" onclick="alprAddCamera()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Instalar
+          </button>
+          <button class="alpr-btn ghost" onclick="alprUseMyCoords()" title="Pega las coordenadas del jugador seleccionado">
+            Usar mis coords
+          </button>
+          <div class="alpr-field" style="flex:1;min-width:200px;">
+            <label>&nbsp;</label>
+            <span id="alpr-cam-msg" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-dim);"></span>
+          </div>
+        </div>
+        <div class="alpr-node-list" id="alpr-cams-list"></div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div class="alpr-section" id="alpr-sec-hits">
+        <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:15px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-primary);">Detecciones registradas</div>
+          <button class="alpr-btn ghost" onclick="alprClearHits()" style="padding:6px 12px;font-size:11px;">Limpiar historial</button>
+        </div>
+        <div id="alpr-hits-list"></div>
       </div>
     </div>
 
@@ -4050,6 +4296,408 @@
     }
   }
 
+  // ═══════════════════════ ALPR / FLOCK ═══════════════════════
+  // Aviso honesto: la API de ER:LC NO expone la posición de los vehículos,
+  // solo la de los jugadores. Por eso esto no es un Flock real de placa en
+  // movimiento, sino: (a) radar que cruza las PLACAS del servidor contra los
+  // BOLOs activos (por dueño), y (b) cámaras virtuales que detectan jugadores
+  // con BOLO dentro de un radio X/Z. Todo se guarda en radio_messages con
+  // type propio, igual que los BOLOs (sin migración nueva).
+  const ALPR_NODE_TYPE = 'alpr_node';
+  const ALPR_HIT_TYPE = 'alpr_hit';
+  const ALPR_COOLDOWN_MS = 8 * 60 * 1000;  // no repetir el mismo hit por 8 min
+
+  let alprNodes = [];
+  let alprHits = [];
+  let alprVehicles = [];
+  let alprPlayers = [];
+  let alprBolos = [];
+  let alprPollTimer = null;
+  let alprPanelOpen = false;
+  let alprEnabled = false;
+  let alprUnseen = 0;
+  let alprCooldown = new Map();
+
+  function alprNodeToObj(row) {
+    let d = {}; try { d = JSON.parse(row.message || '{}'); } catch (_) {}
+    return {
+      id: row.id, name: d.name || 'Cámara', x: +d.x || 0, z: +d.z || 0,
+      radius: +d.radius || 120, active: d.active !== false,
+      created_by: d.created_by || row.username || '', created_at: row.created_at || d.created_at,
+    };
+  }
+  function alprNodeToMessage(n) {
+    return JSON.stringify({
+      name: n.name, x: n.x, z: n.z, radius: n.radius, active: n.active !== false,
+      created_by: n.created_by || '', created_at: n.created_at || new Date().toISOString(),
+    });
+  }
+  function alprHitToObj(row) {
+    let d = {}; try { d = JSON.parse(row.message || '{}'); } catch (_) {}
+    return {
+      id: row.id, kind: d.kind || 'player', roblox_id: d.roblox_id || '', username: d.username || '',
+      plate: d.plate || '', model: d.model || '', color: d.color || '',
+      street: d.street || '', postal: d.postal || '', x: +d.x || 0, z: +d.z || 0,
+      camera_id: d.camera_id || null, camera_name: d.camera_name || 'Radar global',
+      motivo: d.motivo || '', prioridad: d.prioridad || 'media',
+      created_at: row.created_at || d.created_at,
+    };
+  }
+  function alprHitToMessage(h) {
+    return JSON.stringify({
+      kind: h.kind, roblox_id: h.roblox_id, username: h.username, plate: h.plate,
+      model: h.model, color: h.color, street: h.street, postal: h.postal,
+      x: h.x, z: h.z, camera_id: h.camera_id, camera_name: h.camera_name,
+      motivo: h.motivo, prioridad: h.prioridad,
+      created_at: h.created_at || new Date().toISOString(),
+    });
+  }
+
+  async function alprLoadNodes() {
+    const rows = await supaSelect('radio_messages', 'id,created_at,message,user_id,username',
+      { type: `eq.${ALPR_NODE_TYPE}`, order: 'created_at.desc', limit: '100' }).catch(() => []);
+    alprNodes = (rows || []).map(alprNodeToObj);
+    const el = $('alpr-cams');
+    if (el) el.textContent = String(alprNodes.filter(n => n.active !== false).length);
+  }
+  async function alprSaveNode(n) {
+    await supaInsert('radio_messages', {
+      user_id: n.created_by || 'alpr', username: n.created_by_name || 'ALPR',
+      message: alprNodeToMessage(n), type: ALPR_NODE_TYPE,
+    });
+  }
+  async function alprDeleteNode(id) {
+    await supaDelete('radio_messages', { id: `eq.${id}`, type: `eq.${ALPR_NODE_TYPE}` });
+  }
+  async function alprLoadHits() {
+    const rows = await supaSelect('radio_messages', 'id,created_at,message,user_id,username',
+      { type: `eq.${ALPR_HIT_TYPE}`, order: 'created_at.desc', limit: '60' }).catch(() => []);
+    alprHits = (rows || []).map(alprHitToObj);
+    const c = $('alpr-tab-hits-count'); if (c) c.textContent = String(alprHits.length);
+    const h = $('alpr-hits'); if (h) h.textContent = String(alprHits.length);
+  }
+  async function alprInsertHit(h) {
+    await supaInsert('radio_messages', {
+      user_id: h.roblox_id || 'alpr', username: h.username || 'ALPR',
+      message: alprHitToMessage(h), type: ALPR_HIT_TYPE,
+    });
+  }
+  async function alprFetchLive() {
+    const res = await fetch('/.netlify/functions/erlc-vehicles', { cache: 'no-store' });
+    const j = await res.json();
+    return (j && j.ok) ? j : null;
+  }
+
+  function alprToast(h) {
+    const who = h.plate ? `Placa ${h.plate}` : (h.username || 'Sospechoso');
+    const where = h.street ? ` · ${h.street}${h.postal ? ' (' + h.postal + ')' : ''}` : '';
+    const via = h.camera_name && h.camera_name !== 'Radar global' ? ` [${h.camera_name}]` : '';
+    showToast(`🚨 ALPR${via}: ${who} — ${h.model || 'vehículo'}${where}`, 'error');
+    try { playSound(audioPanic); } catch (_) {}
+  }
+
+  function alprSetScan(txt) { const e = $('alpr-last'); if (e) e.textContent = txt || '—'; }
+  function alprSetState(on) {
+    const e = $('alpr-state'); if (!e) return;
+    e.textContent = on ? 'ON' : 'OFF';
+    e.style.color = on ? 'var(--accent-green)' : 'var(--text-dim)';
+  }
+  function updateAlprCardBadge() {
+    const badge = $('alpr-card-badge'); if (!badge) return;
+    if (alprUnseen > 0) { badge.textContent = alprUnseen; badge.classList.remove('bolo-hidden'); }
+    else badge.classList.add('bolo-hidden');
+  }
+
+  async function alprTick() {
+    try {
+      const live = await alprFetchLive();
+      if (!live) { alprSetScan('Sin conexión'); return; }
+      alprVehicles = live.vehicles || [];
+      alprPlayers = live.players || [];
+      const onEl = $('alpr-online'); if (onEl) onEl.textContent = String(live.online || 0);
+      const plEl = $('alpr-plates'); if (plEl) plEl.textContent = String(alprVehicles.length);
+
+      // BOLOs activos (refrescamos cada tick: son pocos y baratos)
+      alprBolos = (await boloFetchAll(300)).filter(b => b.estado === 'activo');
+
+      const byUser = new Map(), byId = new Map();
+      alprBolos.forEach(b => {
+        const u = String(b.roblox_user || '').trim().toLowerCase();
+        const i = String(b.roblox_id || '').trim();
+        if (u) byUser.set(u, b);
+        if (i) byId.set(i, b);
+      });
+
+      const hits = [];
+      const spotted = [];
+
+      // (a) Radar de placas: vehículo cuyo DUEÑO tiene BOLO activo
+      alprVehicles.forEach(v => {
+        const b = byUser.get(String(v.owner || '').trim().toLowerCase());
+        if (!b) return;
+        hits.push({
+          kind: 'vehicle', roblox_id: b.roblox_id || '', username: v.owner || b.roblox_user || '',
+          plate: v.plate || 'SIN PLACA', model: v.model || '—', color: v.color || v.colorHex || '',
+          street: '', postal: '', x: 0, z: 0, camera_id: null, camera_name: 'Radar de placas',
+          motivo: b.motivo || '', prioridad: b.prioridad || 'media',
+        });
+      });
+
+      // (b) Jugadores con BOLO en el servidor (con ubicación de mundo)
+      alprPlayers.forEach(p => {
+        const id = String(p.robloxId || '');
+        const b = byId.get(id) || byUser.get(String(p.username || '').toLowerCase());
+        if (!b) return;
+        const rec = {
+          kind: 'player', roblox_id: id, username: p.username || '', plate: '', model: '', color: '',
+          street: p.street || '', postal: p.postal || '', x: +p.x || 0, z: +p.z || 0,
+          camera_id: null, camera_name: 'Radar de personas',
+          motivo: b.motivo || '', prioridad: b.prioridad || 'media',
+        };
+        spotted.push(rec);
+        hits.push(rec);
+      });
+
+      // (c) Cámaras virtuales: si un buscado entra al radio de un nodo
+      alprNodes.filter(n => n.active !== false).forEach(n => {
+        spotted.forEach(p => {
+          if (!p.x && !p.z) return;
+          const dx = p.x - n.x, dz = p.z - n.z;
+          if (Math.sqrt(dx * dx + dz * dz) > (n.radius || 120)) return;
+          hits.push(Object.assign({}, p, { camera_id: n.id, camera_name: n.name }));
+        });
+      });
+
+      // Dedupe por cooldown + persistencia
+      const now = Date.now();
+      for (const h of hits) {
+        const key = [h.kind, h.roblox_id || String(h.username || '').toLowerCase(), h.camera_id || 'radar'].join('|');
+        if (now - (alprCooldown.get(key) || 0) < ALPR_COOLDOWN_MS) continue;
+        alprCooldown.set(key, now);
+        h.created_at = new Date().toISOString();
+        alprHits.unshift(h);
+        await alprInsertHit(h).catch(() => {});
+        alprToast(h);
+        if (!alprPanelOpen) { alprUnseen++; updateAlprCardBadge(); }
+      }
+      if (alprHits.length > 60) alprHits.length = 60;
+
+      alprLastSpotted = spotted;
+      alprSetScan(new Date().toLocaleTimeString());
+      renderALPR();
+    } catch (_) {
+      alprSetScan('Error de red');
+    }
+  }
+  let alprLastSpotted = [];
+
+  function alprStartPolling() {
+    alprStopPolling();
+    alprTick();
+    alprPollTimer = setInterval(alprTick, 15000);
+  }
+  function alprStopPolling() {
+    if (alprPollTimer) { clearInterval(alprPollTimer); alprPollTimer = null; }
+  }
+  function toggleALPR(on) {
+    alprEnabled = !!on;
+    try { localStorage.setItem('hrp_alpr_on', alprEnabled ? '1' : '0'); } catch (_) {}
+    alprSetState(alprEnabled);
+    if (alprEnabled) { alprStartPolling(); showToast('📹 ALPR: vigilancia activada.'); }
+    else { alprStopPolling(); showToast('ALPR: vigilancia desactivada.'); }
+  }
+
+  function switchALPRTab(tab, btn) {
+    document.querySelectorAll('.alpr-tab').forEach(b => b.classList.toggle('active', b === btn));
+    ['radar', 'cams', 'hits'].forEach(t => {
+      const s = $('alpr-sec-' + t);
+      if (s) s.classList.toggle('active', t === tab);
+    });
+    if (tab === 'cams') alprLoadNodes().then(renderALPR);
+    if (tab === 'hits') alprLoadHits().then(renderALPR);
+  }
+
+  async function openALPRPanel() {
+    const panel = $('alpr-panel'), content = $('mdt-content');
+    if (!panel || !content) return;
+    Array.from(content.children).forEach(c => { if (c.id !== 'alpr-panel') c.style.display = 'none'; });
+    panel.classList.add('active');
+    panel.style.display = 'block';
+    alprPanelOpen = true;
+    alprUnseen = 0; updateAlprCardBadge();
+    const sw = $('alpr-enabled'); if (sw) sw.checked = alprEnabled;
+    alprSetState(alprEnabled);
+    await alprLoadNodes();
+    await alprLoadHits();
+    if (alprEnabled) alprStartPolling(); else renderALPR();
+  }
+  function closeALPRPanel() {
+    const panel = $('alpr-panel'), content = $('mdt-content');
+    if (!panel || !content) return;
+    panel.classList.remove('active');
+    panel.style.display = 'none';
+    alprPanelOpen = false;
+    Array.from(content.children).forEach(c => { if (c.id !== 'alpr-panel') c.style.display = ''; });
+    // Si la vigilancia sigue activa, el polling continúa en segundo plano.
+    if (!alprEnabled) alprStopPolling();
+  }
+
+  function alprPriorityColor(p) {
+    return p === 'alta' ? 'var(--accent-red)' : (p === 'baja' ? 'var(--accent-green)' : 'var(--accent-amber)');
+  }
+
+  function renderALPR() {
+    // ── Radar: vehículos ──
+    const vWrap = $('alpr-vehicles');
+    if (vWrap) {
+      if (!alprVehicles.length) {
+        vWrap.innerHTML = '<div class="alpr-empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Ningún vehículo con la API en este momento.</p></div>';
+      } else {
+        const flagged = alprVehicles.filter(v =>
+          alprBolos.some(b => String(b.roblox_user || '').trim().toLowerCase() === String(v.owner || '').trim().toLowerCase()));
+        const note = $('alpr-radar-note');
+        if (note) {
+          note.textContent = flagged.length ? `${flagged.length} placa(s) de interés` : 'Sin coincidencias con BOLOs';
+          note.className = 'alpr-chip ' + (flagged.length ? 'hot' : 'dim');
+        }
+        vWrap.innerHTML = '<table class="alpr-table"><thead><tr>' +
+          '<th>Placa</th><th>Modelo</th><th>Color</th><th>Dueño</th><th>Estado</th></tr></thead><tbody>' +
+          alprVehicles.map(v => {
+            const b = alprBolos.find(x => String(x.roblox_user || '').trim().toLowerCase() === String(v.owner || '').trim().toLowerCase());
+            return '<tr class="' + (b ? 'alpr-flagged' : '') + '">' +
+              '<td data-l="Placa"><span class="alpr-plate">' + esc(v.plate || 'SIN PLACA') + '</span></td>' +
+              '<td data-l="Modelo">' + esc(v.model || '—') + '</td>' +
+              '<td data-l="Color">' + esc(v.color || '—') + '</td>' +
+              '<td data-l="Dueño">' + esc(v.owner || '—') + '</td>' +
+              '<td data-l="Estado">' + (b
+                ? '<span class="alpr-chip hot">BOLO · ' + esc((b.prioridad || 'media').toUpperCase()) + '</span>'
+                : '<span class="alpr-chip dim">Limpio</span>') + '</td></tr>';
+          }).join('') + '</tbody></table>';
+      }
+    }
+
+    // ── Radar: buscados en vivo ──
+    const sWrap = $('alpr-spotted');
+    if (sWrap) {
+      const sNote = $('alpr-spotted-note');
+      if (sNote) {
+        sNote.textContent = alprLastSpotted.length
+          ? alprLastSpotted.length + ' buscado(s) en el servidor'
+          : 'Ningún BOLO localizado en el server';
+        sNote.className = 'alpr-chip ' + (alprLastSpotted.length ? 'hot' : 'dim');
+      }
+      sWrap.innerHTML = alprLastSpotted.length
+        ? alprLastSpotted.map(p =>
+            '<div class="alpr-hit"><div class="alpr-hit-icon">🎯</div><div class="alpr-hit-body">' +
+            '<div class="alpr-hit-title">' + esc(p.username || 'Desconocido') +
+            ' <span class="alpr-chip hot" style="margin-left:6px;">' + esc((p.prioridad || 'media').toUpperCase()) + '</span></div>' +
+            '<div class="alpr-hit-sub">' + esc(p.street || 'ubicación desconocida') +
+            (p.postal ? ' · postal ' + esc(p.postal) : '') +
+            (p.x || p.z ? ' · X ' + p.x.toFixed(0) + ' Z ' + p.z.toFixed(0) : '') + '</div>' +
+            '<div class="alpr-hit-sub" style="margin-top:3px;">BOLO: ' + esc(p.motivo || '—') + '</div>' +
+            '</div></div>').join('')
+        : '<div class="alpr-empty"><p>No hay buscados de tus BOLOs dentro del servidor ahora mismo.</p></div>';
+    }
+
+    // ── Cámaras ──
+    const cWrap = $('alpr-cams-list');
+    if (cWrap) {
+      cWrap.innerHTML = alprNodes.length
+        ? alprNodes.map(n =>
+            '<div class="alpr-node ' + (n.active === false ? 'off' : '') + '">' +
+            '<div class="alpr-node-head"><div class="alpr-node-name">' + esc(n.name) + '</div>' +
+            '<button class="alpr-btn ghost" style="padding:4px 9px;font-size:10px;" onclick="alprRemoveCamera(' + n.id + ')">✕</button></div>' +
+            '<div class="alpr-node-meta">X ' + n.x.toFixed(1) + ' · Z ' + n.z.toFixed(1) + '<br>Radio ' + n.radius + ' m · ' +
+            (n.active === false ? 'apagada' : 'activa') + '<br>Instalada por ' + esc(n.created_by || '—') + '</div></div>').join('')
+        : '<div class="alpr-empty"><p>No hay cámaras instaladas. Agregá una con las coordenadas X/Z del mapa de Dispatch.</p></div>';
+    }
+
+    // ── Historial ──
+    const hWrap = $('alpr-hits-list');
+    if (hWrap) {
+      hWrap.innerHTML = alprHits.length
+        ? alprHits.map(h => {
+            const t = h.created_at ? new Date(h.created_at) : null;
+            const time = t ? t.toLocaleDateString() + ' ' + t.toLocaleTimeString() : '—';
+            return '<div class="alpr-hit ' + esc(h.kind) + '"><div class="alpr-hit-icon">' + (h.kind === 'vehicle' ? '🚗' : '🎯') + '</div>' +
+              '<div class="alpr-hit-body">' +
+              '<div class="alpr-hit-title">' +
+              (h.plate ? '<span class="alpr-plate">' + esc(h.plate) + '</span> ' : '') +
+              esc(h.username || 'Desconocido') + (h.model ? ' · ' + esc(h.model) : '') +
+              ' <span class="alpr-chip" style="background:rgba(56,189,248,.12);color:var(--accent-cyan);margin-left:6px;">' + esc(h.camera_name) + '</span></div>' +
+              '<div class="alpr-hit-sub">' +
+              (h.street ? esc(h.street) + (h.postal ? ' (' + esc(h.postal) + ')' : '') : (h.x || h.z ? 'X ' + h.x.toFixed(0) + ' Z ' + h.z.toFixed(0) : 'sin ubicación')) +
+              (h.motivo ? ' · BOLO: ' + esc(h.motivo) : '') + '</div>' +
+              '</div><div class="alpr-hit-time">' + esc(time) + '</div></div>';
+          }).join('')
+        : '<div class="alpr-empty"><p>Todavía no se registró ninguna detección.</p></div>';
+    }
+  }
+
+  async function alprAddCamera() {
+    const name = ($('alpr-cam-name').value || '').trim();
+    const x = parseFloat($('alpr-cam-x').value);
+    const z = parseFloat($('alpr-cam-z').value);
+    const r = parseFloat($('alpr-cam-r').value) || 120;
+    const msg = $('alpr-cam-msg');
+    if (!name) { msg.textContent = '⚠ Faltan nombre'; msg.style.color = 'var(--accent-red)'; return; }
+    if (isNaN(x) || isNaN(z)) { msg.textContent = '⚠ X y Z deben ser números'; msg.style.color = 'var(--accent-red)'; return; }
+    try {
+      await alprSaveNode({ name, x, z, radius: r, active: true, created_by: userName || 'Oficial' });
+      $('alpr-cam-name').value = ''; $('alpr-cam-x').value = ''; $('alpr-cam-z').value = '';
+      msg.textContent = '✓ Cámara instalada'; msg.style.color = 'var(--accent-green)';
+      await alprLoadNodes();
+      renderALPR();
+    } catch (e) {
+      msg.textContent = '⚠ No se pudo guardar'; msg.style.color = 'var(--accent-red)';
+    }
+  }
+  async function alprRemoveCamera(id) {
+    await alprDeleteNode(id).catch(() => {});
+    await alprLoadNodes();
+    renderALPR();
+  }
+  function alprUseMyCoords() {
+    const me = alprPlayers.find(p => String(p.robloxId) === String(robloxId));
+    const msg = $('alpr-cam-msg');
+    if (!me || (!me.x && !me.z)) {
+      msg.textContent = '⚠ No estás en el servidor (o sin coordenadas)';
+      msg.style.color = 'var(--accent-red)';
+      return;
+    }
+    $('alpr-cam-x').value = me.x.toFixed(1);
+    $('alpr-cam-z').value = me.z.toFixed(1);
+    if (!($('alpr-cam-name').value || '').trim()) $('alpr-cam-name').value = 'Cámara ' + (me.street || 'manual');
+    msg.textContent = '✓ Coordenadas de ' + me.username + ' cargadas';
+    msg.style.color = 'var(--accent-green)';
+  }
+  async function alprClearHits() {
+    for (const h of alprHits.slice(0, 60)) {
+      await supaDelete('radio_messages', { id: `eq.${h.id}`, type: `eq.${ALPR_HIT_TYPE}` }).catch(() => {});
+    }
+    alprHits = [];
+    alprCooldown = new Map();
+    await alprLoadHits();
+    renderALPR();
+  }
+
+  // Reanuda la vigilancia si el oficial la había dejado encendida.
+  function alprRestore() {
+    try { alprEnabled = localStorage.getItem('hrp_alpr_on') === '1'; } catch (_) { alprEnabled = false; }
+    const sw = $('alpr-enabled'); if (sw) sw.checked = alprEnabled;
+    alprSetState(alprEnabled);
+    if (alprEnabled) alprStartPolling();
+  }
+
+  window.openALPRPanel = openALPRPanel;
+  window.closeALPRPanel = closeALPRPanel;
+  window.switchALPRTab = switchALPRTab;
+  window.toggleALPR = toggleALPR;
+  window.alprAddCamera = alprAddCamera;
+  window.alprRemoveCamera = alprRemoveCamera;
+  window.alprUseMyCoords = alprUseMyCoords;
+  window.alprClearHits = alprClearHits;
+
   // ── BODYCAM: activar / desactivar (emisor WebRTC) ──
   // Al activar: pide la cámara, arranca HRPBC.startServer y publica el
   // peerId en el turno activo para que solo el Dispatch lo encuentre.
@@ -4322,6 +4970,7 @@
     setInterval(loadOnlineOfficers, 3000);
 
     startPanicPolling();
+    alprRestore();
 
     loadBolos(false);
     updateBoloCardBadge();
