@@ -529,6 +529,9 @@ async function fetchData() {
       mapController.setPlayers(enrichedPlayers);
       mapController.setCalls(data.EmergencyCalls || []);
       mapController.ensureFollowCentered();
+      // Las tarjetas de llamada dibujan su propio mini-mapa con esta función.
+      window.HRP_MINIMAP = (canvas, x, z, opts) =>
+        mapController.renderMiniMap(canvas, x, z, opts);
     }
 
     const enrichedShifts = await buildEnrichedShifts(shifts);
@@ -565,6 +568,9 @@ async function fetchData() {
 
     const emergencyCalls = data.EmergencyCalls || [];
     const assignments = await fetchCallAssignments();
+    // Las llamadas 911 no traen calle ni postal: las tarjetas las deducen
+    // del jugador vivo más cercano que sí tenga StreetName/PostalCode.
+    ui.setLivePlayers(data.Players || []);
     ui.renderEmergencyCalls(emergencyCalls, enrichedShifts, assignments);
 
     checkAndAutoEndShifts(players, shifts).catch(err => {

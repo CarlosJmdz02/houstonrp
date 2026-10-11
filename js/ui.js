@@ -248,6 +248,28 @@ export class UI {
     return { added: [], removed: [] };
   }
 
+  setLivePlayers(players) {
+    this._livePlayers = Array.isArray(players) ? players : [];
+  }
+
+  // Las llamadas 911 del juego solo traen X/Z (Position) y el texto del
+  // motivo. Para poder mostrar "postal y calle" buscamos al jugador vivo más
+  // cercano que sí tenga StreetName/PostalCode y lo usamos como referencia.
+  nearestKnownStreet(x, z) {
+    const list = this._livePlayers || [];
+    let best = null, bestD = Infinity;
+    for (const p of list) {
+      const loc = this.locationOf(p);
+      if (!loc || !loc.street) continue;
+      if (!isFinite(loc.x) || !isFinite(loc.z)) continue;
+      const dx = loc.x - x, dz = loc.z - z;
+      const d = dx * dx + dz * dz;
+      if (d < bestD) { bestD = d; best = loc; }
+    }
+    if (!best) return null;
+    return { street: best.street, postal: best.postal, dist: Math.sqrt(bestD) };
+  }
+
   renderEmergencyCalls(calls, activeShifts, assignments) {
     const list = document.getElementById('calls-list');
     const count = document.getElementById('calls-count');
@@ -291,11 +313,25 @@ export class UI {
     const assignMap = (assignments && typeof assignments === 'object') ? assignments : {};
     list.innerHTML = arr.map((c, i) => {
       const caller = this.escapeHtml(c.Caller || 'Desconocido');
-      const reason = this.escapeHtml(c.Description || c.description || c.Reason || c.reason || '—');
-      const loc = c.PositionDescriptor
-        ? this.escapeHtml(c.PositionDescriptor)
-        : (c.Location ? this.escapeHtml(c.Location) : (c.Position ? `X:${c.Position[0]?.toFixed(0)} Z:${c.Position[1]?.toFixed(0)}` : '—'));
+      const reason = this.escapeHtml(c.Description || c.description || c.Reason || c.reason || 'Motivo no declarado');
       const id = c.id || c.CallNumber || c.CallId || '';
+      const pos = _callPosById[id];
+      const near = pos ? this.nearestKnownStreet(pos.x, pos.z) : null;
+
+      // Dirección: primero lo que el juego mandó; si no, el punto más cercano
+      // conocido (jugador vivo con calle/postal).
+      let street = '';
+      if (c.PositionDescriptor) street = String(c.PositionDescriptor);
+      else if (c.Location) street = String(c.Location);
+      else if (near && near.street) street = near.street;
+      const streetHtml = street ? this.escapeHtml(street) : 'Ubicación exacta no disponible';
+      const usedNear = !!(near && near.street && !c.PositionDescriptor && !c.Location);
+      const nearTag = usedNear && near.dist < 450 ? ' <em class="call-near">· cerca</em>' : '';
+
+      const postal = (near && near.postal) ? String(near.postal) : '';
+      const coordTxt = pos ? `X ${pos.x.toFixed(0)} · Z ${pos.z.toFixed(0)}` : '';
+      const teamColor = ({ Police: '#3b6fb6', Sheriff: '#d4a017', Fire: '#e54850', EMS: '#9b72cf' })[c.Team] || '#3b6fb6';
+
       const assigned = assignMap[id];
       let assignHtml = '';
       if (assigned) {
@@ -313,18 +349,42 @@ export class UI {
             </select>
           </div>`;
       }
+
       return `<div class="call-card" data-call-id="${id}">
+        <div class="call-mini">
+          <canvas class="call-minimap" data-call-id="${id}"></canvas>
+          <span class="call-mini-badge" style="--tc:${teamColor}">${this.escapeHtml(c.Team || '911')}</span>
+          <div class="call-mini-foot">
+            ${postal ? `<span class="call-postal">postal ${this.escapeHtml(postal)}</span>` : ''}
+            <span class="call-coord">${this.escapeHtml(coordTxt)}</span>
+          </div>
+        </div>
         <div class="call-card-header">
-          <span class="call-card-id">#${id}</span>
-          <span class="call-card-reason">${reason}</span>
+          <span class="call-card-id">#${this.escapeHtml(String(id))}</span>
+          <span class="call-card-reason" title="${reason}">${reason}</span>
+        </div>
+        <div class="call-card-addr">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>${streetHtml}${nearTag}</span>
         </div>
         <div class="call-card-body">
-          <div class="call-card-row"><span class="call-label">🆔</span><span>${caller}</span></div>
-          <div class="call-card-row"><span class="call-label">📍</span><span>${loc}</span></div>
+          <div class="call-card-row"><span class="call-label">Reportó</span><span>${caller}</span></div>
         </div>
         ${assignHtml}
       </div>`;
     }).join('');
+
+    // Los mini-mapas se dibujan después del innerHTML, cuando el canvas ya
+    // tiene tamaño real. Si el mapa principal aún no cargó, no pasa nada:
+    // se vuelven a dibujar en el siguiente render.
+    requestAnimationFrame(() => {
+      if (typeof window.HRP_MINIMAP !== 'function') return;
+      list.querySelectorAll('canvas.call-minimap').forEach(cv => {
+        const p = self._callPosById[cv.dataset.callId];
+        if (!p) return;
+        window.HRP_MINIMAP(cv, p.x, p.z, { color: '#e54850', zoomDiv: 22 });
+      });
+    });
 
     list.querySelectorAll('.call-card').forEach(card => {
       card.style.cursor = 'pointer';

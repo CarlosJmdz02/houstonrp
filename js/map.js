@@ -258,6 +258,107 @@ export class MapController {
     return { x: worldX, z: worldZ };
   }
 
+  // ── Mini-mapa para las tarjetas de llamada 911 ──
+  // Dibuja un recorte del mapa centrado en una coordenada de mundo, con
+  // cruceta y marcador pulsante. Usa la MISMA calibración y el mismo
+  // recuadro de contenido (contentRect) que el mapa grande, así que el
+  // punto queda en la misma calle que en el mapa principal.
+  renderMiniMap(canvas, worldX, worldZ, opts) {
+    if (!canvas || !isFinite(worldX) || !isFinite(worldZ)) return false;
+    const o = opts || {};
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    const cssW = Math.round(canvas.clientWidth || o.width || 260);
+    const cssH = Math.round(canvas.clientHeight || o.height || 128);
+    if (canvas.width !== cssW * dpr) canvas.width = cssW * dpr;
+    if (canvas.height !== cssH * dpr) canvas.height = cssH * dpr;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return false;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+
+    // Fondo por si la imagen del mapa aún no cargó
+    const bg = ctx.createLinearGradient(0, 0, 0, cssH);
+    bg.addColorStop(0, '#101a2c');
+    bg.addColorStop(1, '#0a101d');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    const cr = this.getContentRect();
+    const imgW = cr.w || this.mapImageWidth || 1;
+    const imgH = cr.h || this.mapImageHeight || 1;
+    const fullW = this.mapImageWidth || imgW;
+    const fullH = this.mapImageHeight || imgH;
+
+    const u = (worldX - this.worldMinX) / (this.worldMaxX - this.worldMinX);
+    let v = (worldZ - this.worldMinZ) / (this.worldMaxZ - this.worldMinZ);
+    if (this.worldFlipZ) v = 1 - v;
+    const cxImg = cr.x + u * imgW;
+    const cyImg = cr.y + v * imgH;
+
+    if (this.imageLoaded && this.mapImage) {
+      // Cuántos píxeles de imagen se ven: a mayor zoomDiv, más de cerca.
+      const sw = Math.max(80, Math.round(imgW / (o.zoomDiv || 22)));
+      const sh = Math.max(60, Math.round(sw * (cssH / cssW)));
+      const sx = Math.max(0, Math.min(Math.max(0, fullW - sw), cxImg - sw / 2));
+      const sy = Math.max(0, Math.min(Math.max(0, fullH - sh), cyImg - sh / 2));
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      try { ctx.drawImage(this.mapImage, sx, sy, sw, sh, 0, 0, cssW, cssH); } catch (_) {}
+    }
+
+    // Viñeta para que el marcador resalte
+    const vg = ctx.createRadialGradient(cssW / 2, cssH / 2, cssH * 0.12, cssW / 2, cssH / 2, cssH * 0.9);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(4,9,20,.62)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    const mx = Math.round(cssW / 2) + 0.5;
+    const my = Math.round(cssH / 2) + 0.5;
+    const color = o.color || '#e54850';
+
+    // Cruceta punteada
+    ctx.save();
+    ctx.strokeStyle = 'rgba(56,189,248,.40)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath();
+    ctx.moveTo(mx, 8); ctx.lineTo(mx, cssH - 8);
+    ctx.moveTo(8, my); ctx.lineTo(cssW - 8, my);
+    ctx.stroke();
+    ctx.restore();
+
+    // Anillos de pulso
+    for (let i = 0; i < 2; i++) {
+      ctx.beginPath();
+      ctx.arc(mx, my, 9 + i * 9, 0, Math.PI * 2);
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = 0.34 - i * 0.15;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // Punto del incidente
+    ctx.beginPath();
+    ctx.arc(mx, my, 5.5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 14;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(mx, my, 2.2, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+
+    // Marco
+    ctx.strokeStyle = 'rgba(255,255,255,.09)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(0.5, 0.5, cssW - 1, cssH - 1);
+    return true;
+  }
+
   getStatusColor(statusCode) {
     const colors = {
       '10-8': '#4acf8f',
