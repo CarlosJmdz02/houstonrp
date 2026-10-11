@@ -13,12 +13,12 @@
    ───────────────────────────────────────────── */
 :root {
   /* Fondos — azul marino profundo */
-  --bg-deep:      #060d1c;
-  --bg-void:      #060d1c;
-  --bg-panel:     #0b1526;
-  --bg-card:      #0f1c33;
-  --bg-card-2:    #132344;
-  --bg-hover:     #16294c;
+  --bg-deep:      #0a1428;
+  --bg-void:      #0a1428;
+  --bg-panel:     #121f3a;
+  --bg-card:      #16274a;
+  --bg-card-2:    #1c3059;
+  --bg-hover:     #1e3563;
 
   /* Acentos */
   --accent-blue:  #2f81f7;   /* azul eléctrico: acción principal */
@@ -62,7 +62,7 @@ body {
   background-image:
     radial-gradient(ellipse at 12% -10%, rgba(47,129,247,.16) 0%, transparent 55%),
     radial-gradient(ellipse at 88% 110%, rgba(56,189,248,.07) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(6,13,28,0) 0%, rgba(6,13,28,.6) 100%);
+    linear-gradient(180deg, rgba(10,20,40,0) 0%, rgba(10,20,40,.6) 100%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -233,7 +233,7 @@ body::after {
    5. BARRA LATERAL (manage-shift / enmiendas / app)
    ───────────────────────────────────────────── */
 .sidebar {
-  background: linear-gradient(180deg, #0b1526 0%, #060d1c 100%);
+  background: linear-gradient(180deg, #121f3a 0%, #0a1428 100%);
   border-right: 1px solid var(--border-strong);
 }
 .sidebar-logo, .logo-title {
