@@ -114,7 +114,10 @@
     var a = document.getElementById(id);
     if (!a) return;
     try {
-      a.volume = Math.max(0, Math.min(1, state.volume));
+      // data-gain permite bajar/aumentar un sonido sin reescribir el archivo.
+      var gain = Number(a.getAttribute('data-gain') || '1');
+      if (!isFinite(gain) || gain <= 0) gain = 1;
+      a.volume = Math.max(0, Math.min(1, state.volume * gain));
       a.currentTime = 0;
       var p = a.play();
       if (p && p.catch) p.catch(function () {});
