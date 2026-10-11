@@ -1151,7 +1151,6 @@
     background: rgba(56,189,248,.18); border: 1px solid rgba(56,189,248,.45);
     color: #7dd3fc; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
   }
-  .call-mini-coord { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: rgba(226,232,240,.5); white-space: nowrap; }
   .call-mini-body { padding: 11px 12px 12px; }
   .call-mini-reason {
     display: flex; align-items: flex-start; gap: 7px; font-size: 12.5px; font-weight: 700;
@@ -4177,7 +4176,10 @@
       const res = await fetch(CALLS_PROXY, { cache: 'no-store' });
       const data = await res.json();
       callsPlayers = data.Players || [];
-      callsCache = data.EmergencyCalls || [];
+      // El MDT es de law enforcement: solo Policía/Sheriff. Las llamadas
+      // de Fire/EMS (y las sin equipo) se muestran en el ITMDT.
+      const LE_TEAMS = { Police: 1, Sheriff: 1 };
+      callsCache = (data.EmergencyCalls || []).filter(c => LE_TEAMS[c.Team] !== undefined);
       const nEl = $('calls-n'); if (nEl) nEl.textContent = String(callsCache.length);
       const sEl = $('calls-server'); if (sEl) sEl.textContent = data.Name ? String(data.Name).slice(0, 22) : '—';
       const lEl = $('calls-last'); if (lEl) lEl.textContent = new Date().toLocaleTimeString();
@@ -4215,7 +4217,6 @@
       const nearTag = (near && near.street && !c.PositionDescriptor && near.dist < 450)
         ? ' <em class="call-mini-near">· cerca</em>' : '';
       const postal = near && near.postal ? esc(near.postal) : '';
-      const coordTxt = (x !== null && isFinite(x)) ? 'X ' + x.toFixed(0) + ' · Z ' + z.toFixed(0) : '';
 
       const t = c.StartedAt ? new Date(c.StartedAt * (c.StartedAt < 1e12 ? 1000 : 1)) : null;
       const timeTxt = t ? t.toLocaleTimeString() : '—';
@@ -4227,7 +4228,6 @@
           '<span class="call-mini-num">#' + esc(String(id)) + '</span>' +
           '<div class="call-mini-foot">' +
             (postal ? '<span class="call-mini-postal">postal ' + postal + '</span>' : '<span class="call-mini-postal" style="opacity:.5">postal —</span>') +
-            '<span class="call-mini-coord">' + esc(coordTxt) + '</span>' +
           '</div>' +
         '</div>' +
         '<div class="call-mini-body">' +
