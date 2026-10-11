@@ -316,9 +316,12 @@ export class MapController {
     const cyImg = (cr.y + v * imgH) * scale;
 
     if (src && (useHD || this.imageLoaded)) {
-      // Cuántos píxeles de imagen se ven: a mayor zoomDiv, más de cerca.
-      const sw = Math.max(80, Math.round(imgW / (o.zoomDiv || 22))) * scale;
-      const sh = Math.max(60, Math.round((imgW / (o.zoomDiv || 22)) * (cssH / cssW))) * scale;
+      // zoomDiv = cuántas veces cabe el mapa en el ancho del recorte.
+      // 5 → se ve ~1/5 del condado: suficiente contexto para reconocer la
+      // zona, y el recorte de origen sigue siendo más ancho que el canvas
+      // (2x por el devicePixelRatio), así NO se pixela al agrandarlo.
+      const sw = Math.max(200, Math.round(imgW / (o.zoomDiv || 4))) * scale;
+      const sh = Math.max(150, Math.round((imgW / (o.zoomDiv || 4)) * (cssH / cssW))) * scale;
       const sx = Math.max(0, Math.min(Math.max(0, fullW - sw), cxImg - sw / 2));
       const sy = Math.max(0, Math.min(Math.max(0, fullH - sh), cyImg - sh / 2));
       ctx.imageSmoothingEnabled = true;
@@ -326,10 +329,11 @@ export class MapController {
       try { ctx.drawImage(src, sx, sy, sw, sh, 0, 0, cssW, cssH); } catch (_) {}
     }
 
-    // Viñeta para que el marcador resalte
-    const vg = ctx.createRadialGradient(cssW / 2, cssH / 2, cssH * 0.12, cssW / 2, cssH / 2, cssH * 0.9);
+    // Viñeta MUY suave: solo hace resaltar el marcador, sin oscurecer
+    // las calles de alrededor.
+    const vg = ctx.createRadialGradient(cssW / 2, cssH / 2, cssH * 0.3, cssW / 2, cssH / 2, cssH * 1.1);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
-    vg.addColorStop(1, 'rgba(4,9,20,.62)');
+    vg.addColorStop(1, 'rgba(4,9,20,.34)');
     ctx.fillStyle = vg;
     ctx.fillRect(0, 0, cssW, cssH);
 
@@ -339,21 +343,21 @@ export class MapController {
 
     // Cruceta punteada
     ctx.save();
-    ctx.strokeStyle = 'rgba(56,189,248,.40)';
+    ctx.strokeStyle = 'rgba(56,189,248,.55)';
     ctx.lineWidth = 1;
     ctx.setLineDash([3, 4]);
     ctx.beginPath();
-    ctx.moveTo(mx, 8); ctx.lineTo(mx, cssH - 8);
-    ctx.moveTo(8, my); ctx.lineTo(cssW - 8, my);
+    ctx.moveTo(mx, 10); ctx.lineTo(mx, cssH - 10);
+    ctx.moveTo(10, my); ctx.lineTo(cssW - 10, my);
     ctx.stroke();
     ctx.restore();
 
-    // Anillos de pulso
+    // Anillos de pulso (más chicos: tapan menos el mapa)
     for (let i = 0; i < 2; i++) {
       ctx.beginPath();
-      ctx.arc(mx, my, 9 + i * 9, 0, Math.PI * 2);
+      ctx.arc(mx, my, 8 + i * 8, 0, Math.PI * 2);
       ctx.strokeStyle = color;
-      ctx.globalAlpha = 0.34 - i * 0.15;
+      ctx.globalAlpha = 0.32 - i * 0.14;
       ctx.lineWidth = 1.5;
       ctx.stroke();
     }

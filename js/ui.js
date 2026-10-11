@@ -382,7 +382,7 @@ export class UI {
       list.querySelectorAll('canvas.call-minimap').forEach(cv => {
         const p = self._callPosById[cv.dataset.callId];
         if (!p) return;
-        window.HRP_MINIMAP(cv, p.x, p.z, { color: '#e54850', zoomDiv: 22 });
+        window.HRP_MINIMAP(cv, p.x, p.z, { color: '#e54850', zoomDiv: 4 });
       });
     });
 

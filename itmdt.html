@@ -302,7 +302,7 @@
   }
   .call-mini-card:hover { transform: translateY(-2px); border-color: rgba(229,72,80,.5); box-shadow: 0 10px 28px rgba(0,0,0,.4); }
   .call-mini-wrap { position: relative; border-bottom: 1px solid var(--border); }
-  .call-mini-canvas { display: block; width: 100%; height: 118px; cursor: crosshair; }
+  .call-mini-canvas { display: block; width: 100%; height: 150px; cursor: crosshair; }
   .call-mini-badge {
     position: absolute; top: 8px; left: 8px; padding: 2.5px 9px; border-radius: 20px;
     font-size: 9.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
@@ -1524,7 +1524,7 @@
         Array.prototype.forEach.call(grid.querySelectorAll('canvas.call-mini-canvas'), function (cv) {
           var x = parseFloat(cv.dataset.x), z = parseFloat(cv.dataset.z);
           if (!isFinite(x) || !isFinite(z)) return;
-          R.render(cv, x, z, { color: '#e54850', zoomDiv: 20 });
+          R.render(cv, x, z, { color: '#e54850', zoomDiv: 4 });
         });
       };
       if (R.isReady()) drawAll();

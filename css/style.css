@@ -742,7 +742,7 @@ html, body {
 .call-minimap {
   display: block;
   width: 100%;
-  height: 120px;
+  height: 152px;
   cursor: crosshair;
 }
 .call-mini-badge {

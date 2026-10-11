@@ -85,7 +85,7 @@
 
     var bg = ctx.createLinearGradient(0, 0, 0, cssH);
     bg.addColorStop(0, '#101a2c');
-    bg.addColorStop(1, '#0a1428');
+    bg.addColorStop(1, '#03101f');
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, cssW, cssH);
 
@@ -98,8 +98,11 @@
     var cyImg = cr.y + v * cr.h;
 
     if (ready) {
-      var sw = Math.max(120, Math.round(cr.w / (o.zoomDiv || 22)));
-      var sh = Math.max(90, Math.round(sw * (cssH / cssW)));
+      // zoomDiv 5 = ~1/5 del condado a la vista. El recorte de origen es
+      // más ancho que el canvas (2x dpr), así que sale nítido y con
+      // contexto suficiente para reconocer la zona.
+      var sw = Math.max(200, Math.round(cr.w / (o.zoomDiv || 4)));
+      var sh = Math.max(150, Math.round((cr.w / (o.zoomDiv || 4)) * (cssH / cssW)));
       var sx = Math.max(0, Math.min(Math.max(0, fullW - sw), cxImg - sw / 2));
       var sy = Math.max(0, Math.min(Math.max(0, fullH - sh), cyImg - sh / 2));
       ctx.imageSmoothingEnabled = true;
@@ -107,9 +110,9 @@
       try { ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cssW, cssH); } catch (_) {}
     }
 
-    var vg = ctx.createRadialGradient(cssW / 2, cssH / 2, cssH * 0.12, cssW / 2, cssH / 2, cssH * 0.9);
+    var vg = ctx.createRadialGradient(cssW / 2, cssH / 2, cssH * 0.3, cssW / 2, cssH / 2, cssH * 1.1);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
-    vg.addColorStop(1, 'rgba(4,9,20,.62)');
+    vg.addColorStop(1, 'rgba(4,9,20,.34)');
     ctx.fillStyle = vg;
     ctx.fillRect(0, 0, cssW, cssH);
 
@@ -118,20 +121,20 @@
     var color = o.color || '#e54850';
 
     ctx.save();
-    ctx.strokeStyle = 'rgba(56,189,248,.40)';
+    ctx.strokeStyle = 'rgba(56,189,248,.55)';
     ctx.lineWidth = 1;
     ctx.setLineDash([3, 4]);
     ctx.beginPath();
-    ctx.moveTo(mx, 8); ctx.lineTo(mx, cssH - 8);
-    ctx.moveTo(8, my); ctx.lineTo(cssW - 8, my);
+    ctx.moveTo(mx, 10); ctx.lineTo(mx, cssH - 10);
+    ctx.moveTo(10, my); ctx.lineTo(cssW - 10, my);
     ctx.stroke();
     ctx.restore();
 
     for (var i = 0; i < 2; i++) {
       ctx.beginPath();
-      ctx.arc(mx, my, 9 + i * 9, 0, Math.PI * 2);
+      ctx.arc(mx, my, 8 + i * 8, 0, Math.PI * 2);
       ctx.strokeStyle = color;
-      ctx.globalAlpha = 0.34 - i * 0.15;
+      ctx.globalAlpha = 0.32 - i * 0.14;
       ctx.lineWidth = 1.5;
       ctx.stroke();
     }
