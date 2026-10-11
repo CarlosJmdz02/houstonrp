@@ -1,28 +1,43 @@
 /* ============================================================
-   HRPS · TEMA UNIFICADO
+   HRPS · TEMA UNIFICADO — color del MDT
    ------------------------------------------------------------
-   Fondo gris-azulado en todo el sitio + encabezados de página
-   con barra de acento. Solo presentación: no toca lógica ni
-   datos. Se carga DESPUÉS de los estilos inline de cada página.
+   Paleta extraída de mdt.html (inline :root) + mdt-cad.css.
+   Se carga DESPUÉS de los estilos inline de cada página y usa
+   !important en el fondo, por lo que gana sin importar el orden.
+   NO se enlaza en index.html.
    ============================================================ */
 
-/* ── Fondo gris azul ── */
-body {
-  background-color: #18223a;
-  background-image:
-    radial-gradient(ellipse at 10% -10%, rgba(125,155,210,0.20) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 110%, rgba(150,170,210,0.12) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(24,34,58,0) 0%, rgba(12,18,34,0.75) 100%);
-  background-attachment: fixed;
+/* ── Variables de fondo del MDT ── */
+:root {
+  --bg-deep:      #0a101d;
+  --bg-void:      #0a101d;
+  --bg-panel:     #101a2c;
+  --bg-card:      #14203a;
+  --bg-card-2:    #182646;
+  --bg-hover:     #1a2a4a;
+  --border:       #22314e;
+  --border-strong:#2f4266;
 }
 
-/* ── Barras laterales y superiores: mismo tono gris azul ── */
-.sidebar,
+/* ── Fondo del MDT ── */
+html, body { background-color: #0a101d !important; }
+body {
+  background-image:
+    radial-gradient(ellipse at 12% -10%, rgba(47,129,247,.16) 0%, transparent 55%),
+    radial-gradient(ellipse at 88% 110%, rgba(56,189,248,.07) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(10,16,29,0) 0%, rgba(10,16,29,.6) 100%) !important;
+  background-attachment: fixed !important;
+}
+
+/* ── Barras laterales y superiores: paneles del MDT ── */
+.sidebar {
+  background: linear-gradient(180deg, #101a2c 0%, #0a101d 100%) !important;
+  border-right: 1px solid #22314e;
+}
 .topbar,
 .tablet-top {
-  background: linear-gradient(180deg, #1c2740 0%, #141d31 100%) !important;
-  border-right: 1px solid #2a3757;
-  border-bottom: 1px solid #2a3757;
+  background: linear-gradient(180deg, #101a2c 0%, #0a101d 100%) !important;
+  border-bottom: 1px solid #22314e;
 }
 
 /* ── Encabezado de página: barra de acento + respiración ── */
@@ -50,11 +65,10 @@ body {
 .page-title span { color: #38bdf8; }
 .page-subtitle {
   margin-top: 6px;
-  color: #8fa3c0;
+  color: #94a3b8;
   font-size: 13.5px;
   line-height: 1.5;
 }
-/* Los botones de acción del encabezado se alinean con el título */
 .page-header > button,
 .page-header > .btn-sort { align-self: flex-end; }
 
@@ -63,7 +77,6 @@ body {
 ::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
 ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(59,130,246,0.65), rgba(56,189,248,0.45)); border-radius: 8px; }
 ::-webkit-scrollbar-thumb:hover { filter: brightness(1.15); }
-
 
 /* Dashboard conserva su encabezado original (sin barra de acento) */
 body.dashboard-page .page-header { padding-left: 0; margin-bottom: 20px; }
