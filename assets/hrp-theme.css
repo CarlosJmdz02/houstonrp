@@ -63,3 +63,8 @@ body {
 ::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
 ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(59,130,246,0.65), rgba(56,189,248,0.45)); border-radius: 8px; }
 ::-webkit-scrollbar-thumb:hover { filter: brightness(1.15); }
+
+
+/* Dashboard conserva su encabezado original (sin barra de acento) */
+body.dashboard-page .page-header { padding-left: 0; margin-bottom: 20px; }
+body.dashboard-page .page-header::before { display: none; }
