@@ -1103,21 +1103,22 @@
   .tac-gate-btns button:hover { background: rgba(59,130,246,.3); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59,130,246,.35); }
   .tac-gate-err { font-size: 11px; color: #f87171; min-height: 14px; font-family: 'JetBrains Mono', monospace; }
 
-  /* ── LLAMADAS 911 (mini-mapa) ── */
-  #calls-panel { display: none; }
-  #calls-panel.active { display: block; animation: fadeIn 0.3s ease both; }
-  .calls-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
-  .calls-bar {
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-    padding: 11px 15px; border-radius: 13px; margin-bottom: 16px;
-    background: linear-gradient(180deg, var(--bg-card), var(--bg-panel)); border: 1px solid var(--border);
+  /* ── LLAMADAS 911 · sección en la pantalla principal ── */
+  .calls-inline { margin: 22px 0 4px; }
+  .calls-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .calls-head-title { display: flex; align-items: center; gap: 9px; }
+  .calls-head-right { display: flex; align-items: center; gap: 11px; }
+  .calls-live { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-green); }
+  .calls-live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 9px var(--accent-green); animation: callsPulse 1.5s ease-in-out infinite; }
+  @keyframes callsPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.75); } }
+  .calls-count {
+    min-width: 24px; height: 22px; padding: 0 8px; border-radius: 20px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700;
+    color: #fecaca; background: rgba(229,72,80,.16); border: 1px solid rgba(229,72,80,.4);
   }
-  .calls-bar-stat { display: flex; flex-direction: column; gap: 2px; }
-  .calls-bar-label { font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
-  .calls-bar-value { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--text-primary); font-weight: 600; }
-  .calls-bar-live { margin-left: auto; display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; color: var(--accent-green); letter-spacing: .05em; text-transform: uppercase; }
-  .calls-bar-live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 9px var(--accent-green); animation: bodycamPulse 1.6s ease-in-out infinite; }
-  .calls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(288px, 1fr)); gap: 15px; }
+  .calls-stamp { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-dim); }
+  .calls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); gap: 14px; }
   .call-mini-card {
     border-radius: 14px; overflow: hidden; padding: 0;
     background: linear-gradient(180deg, var(--bg-card), var(--bg-panel));
@@ -1127,22 +1128,22 @@
   }
   .call-mini-card:hover { transform: translateY(-2px); border-color: rgba(229,72,80,.5); box-shadow: 0 10px 28px rgba(0,0,0,.4); }
   .call-mini-wrap { position: relative; border-bottom: 1px solid var(--border); }
-  .call-mini-canvas { display: block; width: 100%; height: 138px; cursor: crosshair; }
+  .call-mini-canvas { display: block; width: 100%; height: 118px; cursor: crosshair; }
   .call-mini-badge {
-    position: absolute; top: 9px; left: 9px; padding: 2.5px 9px; border-radius: 20px;
+    position: absolute; top: 8px; left: 8px; padding: 2.5px 9px; border-radius: 20px;
     font-size: 9.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
     color: #fff; background: var(--tc, #3b6fb6); box-shadow: 0 2px 10px rgba(0,0,0,.5);
     font-family: 'JetBrains Mono', monospace;
   }
   .call-mini-num {
-    position: absolute; top: 9px; right: 9px; padding: 2.5px 8px; border-radius: 8px;
+    position: absolute; top: 8px; right: 8px; padding: 2.5px 8px; border-radius: 8px;
     font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
     color: #fecaca; background: rgba(229,72,80,.22); border: 1px solid rgba(229,72,80,.45);
   }
   .call-mini-foot {
     position: absolute; left: 0; right: 0; bottom: 0;
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    padding: 14px 9px 8px;
+    padding: 14px 8px 7px;
     background: linear-gradient(180deg, rgba(6,13,28,0) 0%, rgba(6,13,28,.92) 100%);
   }
   .call-mini-postal {
@@ -1151,10 +1152,10 @@
     color: #7dd3fc; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
   }
   .call-mini-coord { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: rgba(226,232,240,.5); white-space: nowrap; }
-  .call-mini-body { padding: 12px 13px 13px; }
+  .call-mini-body { padding: 11px 12px 12px; }
   .call-mini-reason {
-    display: flex; align-items: flex-start; gap: 7px; font-size: 13px; font-weight: 700;
-    color: var(--text-primary); line-height: 1.4; margin-bottom: 9px;
+    display: flex; align-items: flex-start; gap: 7px; font-size: 12.5px; font-weight: 700;
+    color: var(--text-primary); line-height: 1.4; margin-bottom: 8px;
   }
   .call-mini-reason svg { flex: none; margin-top: 2px; color: #f87171; }
   .call-mini-addr {
@@ -1166,8 +1167,8 @@
   .call-mini-addr span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .call-mini-near { font-style: normal; font-size: 10px; color: var(--text-dim); font-weight: 500; }
   .call-mini-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
-  .calls-empty { text-align: center; padding: 48px 20px; color: var(--text-dim); font-size: 13px; grid-column: 1/-1; }
-  .calls-empty svg { margin-bottom: 10px; opacity: .4; }
+  .calls-empty { text-align: center; padding: 34px 20px; color: var(--text-dim); font-size: 13px; grid-column: 1/-1; border: 1px dashed var(--border); border-radius: 14px; }
+  .calls-empty svg { margin-bottom: 8px; opacity: .4; }
   @media (max-width: 720px) { .calls-grid { grid-template-columns: 1fr; } }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1410,6 +1411,27 @@
       </div>
     </div>
 
+    <!-- ═══ LLAMADAS 911 · EN VIVO (bajo Consulta de Personas) ═══ -->
+    <div class="calls-inline">
+      <div class="calls-head">
+        <div class="calls-head-title">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#f87171" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span class="page-title" style="font-size:19px;">Llamadas <span>911</span></span>
+        </div>
+        <div class="calls-head-right">
+          <span class="calls-live"><span class="dot"></span> En vivo</span>
+          <span class="calls-count" id="calls-n">0</span>
+          <span class="calls-stamp" id="calls-last">—</span>
+        </div>
+      </div>
+      <div class="calls-grid" id="calls-grid">
+        <div class="calls-empty">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <p>Conectando con el servidor…</p>
+        </div>
+      </div>
+    </div>
+
     <!-- ── OPERATIONS MODULES ── -->
     <div class="mods-head">
       <div>
@@ -1487,17 +1509,6 @@
           <div class="mod-card-label">Vigilancia y alertas</div>
         </div>
         <div id="bolo-card-badge" class="bolo-nav-badge bolo-hidden"></div>
-      </div>
-
-      <div class="mod-card" onclick="openCallsPanel()" style="--mc:#f87171;cursor:pointer;">
-        <div class="mod-card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <div class="mod-card-info">
-          <div class="mod-card-title">Llamadas 911</div>
-          <div class="mod-card-label">Mini-mapa y ubicación</div>
-        </div>
-        <div id="calls-card-badge" class="bolo-nav-badge bolo-hidden"></div>
       </div>
     </div>
 
@@ -1635,43 +1646,6 @@
         <div class="bolo-empty">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <p>Cargando BOLOs...</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ LLAMADAS 911 (mini-mapa) ═══ -->
-    <div id="calls-panel">
-      <div class="calls-top">
-        <div>
-          <div class="page-title" style="font-size:26px;">Llamadas <span>911</span></div>
-          <div class="page-subtitle" style="margin-top:6px;">Ubicación exacta de cada alerta activa del servidor, con mini-mapa y motivo.</div>
-        </div>
-        <button class="history-close" onclick="closeCallsPanel()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          Cerrar Panel
-        </button>
-      </div>
-
-      <div class="calls-bar">
-        <div class="calls-bar-stat">
-          <div class="calls-bar-label">Activas</div>
-          <div class="calls-bar-value" id="calls-n" style="color:var(--accent-red);">0</div>
-        </div>
-        <div class="calls-bar-stat">
-          <div class="calls-bar-label">Servidor</div>
-          <div class="calls-bar-value" id="calls-server">—</div>
-        </div>
-        <div class="calls-bar-stat">
-          <div class="calls-bar-label">Última lectura</div>
-          <div class="calls-bar-value" id="calls-last">—</div>
-        </div>
-        <div class="calls-bar-live"><span class="dot"></span> En vivo</div>
-      </div>
-
-      <div class="calls-grid" id="calls-grid">
-        <div class="calls-empty">
-          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <p>Conectando con el servidor…</p>
         </div>
       </div>
     </div>
@@ -4170,7 +4144,6 @@
   // El juego manda las llamadas con X/Z y el motivo, pero SIN calle ni
   // postal. Para poder mostrarlas, buscamos al jugador vivo más cercano
   // que sí tenga StreetName/PostalCode y lo usamos como referencia.
-  let callsPanelOpen = false;
   let callsTimer = null;
   let callsCache = [];
   let callsPlayers = [];
@@ -4208,11 +4181,6 @@
       const nEl = $('calls-n'); if (nEl) nEl.textContent = String(callsCache.length);
       const sEl = $('calls-server'); if (sEl) sEl.textContent = data.Name ? String(data.Name).slice(0, 22) : '—';
       const lEl = $('calls-last'); if (lEl) lEl.textContent = new Date().toLocaleTimeString();
-      const badge = $('calls-card-badge');
-      if (badge) {
-        if (callsCache.length > 0) { badge.textContent = callsCache.length; badge.classList.remove('bolo-hidden'); }
-        else badge.classList.add('bolo-hidden');
-      }
       renderCalls();
     } catch (_) {
       const lEl = $('calls-last'); if (lEl) lEl.textContent = 'Sin conexión';
@@ -4292,29 +4260,16 @@
     });
   }
 
-  function openCallsPanel() {
-    const panel = $('calls-panel'), content = $('mdt-content');
-    if (!panel || !content) return;
-    Array.from(content.children).forEach(c => { if (c.id !== 'calls-panel') c.style.display = 'none'; });
-    panel.classList.add('active');
-    panel.style.display = 'block';
-    callsPanelOpen = true;
+  // La sección vive en la pantalla principal (bajo Consulta de Personas),
+  // así que se sondea sola desde init() y se corta al salir de la página.
+  function startCallsLive() {
     loadCalls();
     if (callsTimer) clearInterval(callsTimer);
-    callsTimer = setInterval(loadCalls, 12000);
+    callsTimer = setInterval(loadCalls, 15000);
   }
-  function closeCallsPanel() {
-    const panel = $('calls-panel'), content = $('mdt-content');
-    if (!panel || !content) return;
-    panel.classList.remove('active');
-    panel.style.display = 'none';
-    callsPanelOpen = false;
-    Array.from(content.children).forEach(c => { if (c.id !== 'calls-panel') c.style.display = ''; });
+  function stopCallsLive() {
     if (callsTimer) { clearInterval(callsTimer); callsTimer = null; }
   }
-
-  window.openCallsPanel = openCallsPanel;
-  window.closeCallsPanel = closeCallsPanel;
 
   // ── BODYCAM: activar / desactivar (emisor WebRTC) ──
   // Al activar: pide la cámara, arranca HRPBC.startServer y publica el
@@ -4588,6 +4543,7 @@
     setInterval(loadOnlineOfficers, 3000);
 
     startPanicPolling();
+    startCallsLive();
 
     loadBolos(false);
     updateBoloCardBadge();
@@ -4649,6 +4605,7 @@
     window.addEventListener('pagehide', function() {
       if (currentShift) saveLocalState();
       if (bodycamServer) stopBodycamLocal();
+      stopCallsLive();
     });
   }
 
