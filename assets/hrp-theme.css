@@ -1,31 +1,65 @@
 /* ============================================================
-   HRPS · TEMA UNIFICADO (fondo)
+   HRPS · TEMA UNIFICADO
    ------------------------------------------------------------
-   Mismo fondo que el MDT, aplicado al resto de las páginas.
-   Solo cambia el FONDO: no toca tarjetas, botones ni lógica.
-   Se carga DESPUÉS de los estilos inline de cada página, así
-   que pisa el background sin romper nada más.
+   Fondo gris-azulado en todo el sitio + encabezados de página
+   con barra de acento. Solo presentación: no toca lógica ni
+   datos. Se carga DESPUÉS de los estilos inline de cada página.
    ============================================================ */
 
+/* ── Fondo gris azul ── */
 body {
-  background-color: #060d1c;
+  background-color: #18223a;
   background-image:
-    radial-gradient(ellipse at 12% -10%, rgba(47,129,247,0.16) 0%, transparent 55%),
-    radial-gradient(ellipse at 88% 110%, rgba(56,189,248,0.07) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(6,13,28,0) 0%, rgba(6,13,28,0.6) 100%);
+    radial-gradient(ellipse at 10% -10%, rgba(125,155,210,0.20) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 110%, rgba(150,170,210,0.12) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(24,34,58,0) 0%, rgba(12,18,34,0.75) 100%);
   background-attachment: fixed;
 }
 
-/* Barras laterales y cabeceras: mismo tono de profundidad que el MDT */
+/* ── Barras laterales y superiores: mismo tono gris azul ── */
 .sidebar,
-.topbar {
-  background: linear-gradient(180deg, #0b1526 0%, #060d1c 100%) !important;
-  border-right: 1px solid #1c2b47;
-  border-bottom: 1px solid #1c2b47;
+.topbar,
+.tablet-top {
+  background: linear-gradient(180deg, #1c2740 0%, #141d31 100%) !important;
+  border-right: 1px solid #2a3757;
+  border-bottom: 1px solid #2a3757;
 }
 
-/* Scrollbar acorde al tema */
+/* ── Encabezado de página: barra de acento + respiración ── */
+.page-header {
+  position: relative;
+  padding-left: 16px;
+  margin-bottom: 26px;
+}
+.page-header::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 6px; bottom: 6px;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #3b82f6, #38bdf8);
+  box-shadow: 0 0 12px rgba(59,130,246,.45);
+}
+.page-heading { min-width: 0; }
+.page-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.page-title span { color: #38bdf8; }
+.page-subtitle {
+  margin-top: 6px;
+  color: #8fa3c0;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+/* Los botones de acción del encabezado se alinean con el título */
+.page-header > button,
+.page-header > .btn-sort { align-self: flex-end; }
+
+/* ── Scrollbar acorde al tema ── */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
-::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(47,129,247,0.65), rgba(56,189,248,0.45)); border-radius: 8px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(59,130,246,0.65), rgba(56,189,248,0.45)); border-radius: 8px; }
 ::-webkit-scrollbar-thumb:hover { filter: brightness(1.15); }
