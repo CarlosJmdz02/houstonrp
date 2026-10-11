@@ -258,6 +258,19 @@ export class MapController {
     return { x: worldX, z: worldZ };
   }
 
+  // Imagen HD compartida por todos los mini-mapas (se carga una sola vez).
+  static _hdImage() {
+    if (!MapController._hd) {
+      const im = new Image();
+      im.onload = () => { MapController._hdReady = true; };
+      im.onerror = () => { MapController._hdReady = false; };
+      im.src = 'images/erlcmap-hd2560.webp?v=1';
+      MapController._hd = im;
+      MapController._hdReady = false;
+    }
+    return MapController._hd;
+  }
+
   // ── Mini-mapa para las tarjetas de llamada 911 ──
   // Dibuja un recorte del mapa centrado en una coordenada de mundo, con
   // cruceta y marcador pulsante. Usa la MISMA calibración y el mismo
@@ -286,24 +299,31 @@ export class MapController {
     const cr = this.getContentRect();
     const imgW = cr.w || this.mapImageWidth || 1;
     const imgH = cr.h || this.mapImageHeight || 1;
-    const fullW = this.mapImageWidth || imgW;
-    const fullH = this.mapImageHeight || imgH;
+
+    // Preferimos la imagen HD (2560px) para que el recorte salga nítido.
+    // Mientras carga, dibujamos con la del mapa grande (1024px).
+    const hd = MapController._hdImage();
+    const useHD = !!(hd && MapController._hdReady && hd.naturalWidth);
+    const src = useHD ? hd : this.mapImage;
+    const scale = useHD ? (hd.naturalWidth / (this.mapImageWidth || 1)) : 1;
+    const fullW = useHD ? hd.naturalWidth : (this.mapImageWidth || imgW);
+    const fullH = useHD ? hd.naturalHeight : (this.mapImageHeight || imgH);
 
     const u = (worldX - this.worldMinX) / (this.worldMaxX - this.worldMinX);
     let v = (worldZ - this.worldMinZ) / (this.worldMaxZ - this.worldMinZ);
     if (this.worldFlipZ) v = 1 - v;
-    const cxImg = cr.x + u * imgW;
-    const cyImg = cr.y + v * imgH;
+    const cxImg = (cr.x + u * imgW) * scale;
+    const cyImg = (cr.y + v * imgH) * scale;
 
-    if (this.imageLoaded && this.mapImage) {
+    if (src && (useHD || this.imageLoaded)) {
       // Cuántos píxeles de imagen se ven: a mayor zoomDiv, más de cerca.
-      const sw = Math.max(80, Math.round(imgW / (o.zoomDiv || 22)));
-      const sh = Math.max(60, Math.round(sw * (cssH / cssW)));
+      const sw = Math.max(80, Math.round(imgW / (o.zoomDiv || 22))) * scale;
+      const sh = Math.max(60, Math.round((imgW / (o.zoomDiv || 22)) * (cssH / cssW))) * scale;
       const sx = Math.max(0, Math.min(Math.max(0, fullW - sw), cxImg - sw / 2));
       const sy = Math.max(0, Math.min(Math.max(0, fullH - sh), cyImg - sh / 2));
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
-      try { ctx.drawImage(this.mapImage, sx, sy, sw, sh, 0, 0, cssW, cssH); } catch (_) {}
+      try { ctx.drawImage(src, sx, sy, sw, sh, 0, 0, cssW, cssH); } catch (_) {}
     }
 
     // Viñeta para que el marcador resalte

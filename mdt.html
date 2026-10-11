@@ -1101,7 +1101,74 @@
     transition: all .16s ease;
   }
   .tac-gate-btns button:hover { background: rgba(59,130,246,.3); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59,130,246,.35); }
-  .tac-gate-err { font-size: 11px; color: #f87171; min-height: 14px; font-family: 'JetBrains Mono', monospace; }</style>
+  .tac-gate-err { font-size: 11px; color: #f87171; min-height: 14px; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── LLAMADAS 911 (mini-mapa) ── */
+  #calls-panel { display: none; }
+  #calls-panel.active { display: block; animation: fadeIn 0.3s ease both; }
+  .calls-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .calls-bar {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 11px 15px; border-radius: 13px; margin-bottom: 16px;
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-panel)); border: 1px solid var(--border);
+  }
+  .calls-bar-stat { display: flex; flex-direction: column; gap: 2px; }
+  .calls-bar-label { font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+  .calls-bar-value { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--text-primary); font-weight: 600; }
+  .calls-bar-live { margin-left: auto; display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; color: var(--accent-green); letter-spacing: .05em; text-transform: uppercase; }
+  .calls-bar-live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 9px var(--accent-green); animation: bodycamPulse 1.6s ease-in-out infinite; }
+  .calls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(288px, 1fr)); gap: 15px; }
+  .call-mini-card {
+    border-radius: 14px; overflow: hidden; padding: 0;
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-panel));
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 20px rgba(0,0,0,.28);
+    transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+  }
+  .call-mini-card:hover { transform: translateY(-2px); border-color: rgba(229,72,80,.5); box-shadow: 0 10px 28px rgba(0,0,0,.4); }
+  .call-mini-wrap { position: relative; border-bottom: 1px solid var(--border); }
+  .call-mini-canvas { display: block; width: 100%; height: 138px; cursor: crosshair; }
+  .call-mini-badge {
+    position: absolute; top: 9px; left: 9px; padding: 2.5px 9px; border-radius: 20px;
+    font-size: 9.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+    color: #fff; background: var(--tc, #3b6fb6); box-shadow: 0 2px 10px rgba(0,0,0,.5);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .call-mini-num {
+    position: absolute; top: 9px; right: 9px; padding: 2.5px 8px; border-radius: 8px;
+    font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+    color: #fecaca; background: rgba(229,72,80,.22); border: 1px solid rgba(229,72,80,.45);
+  }
+  .call-mini-foot {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 14px 9px 8px;
+    background: linear-gradient(180deg, rgba(6,13,28,0) 0%, rgba(6,13,28,.92) 100%);
+  }
+  .call-mini-postal {
+    display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px;
+    background: rgba(56,189,248,.18); border: 1px solid rgba(56,189,248,.45);
+    color: #7dd3fc; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
+  }
+  .call-mini-coord { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: rgba(226,232,240,.5); white-space: nowrap; }
+  .call-mini-body { padding: 12px 13px 13px; }
+  .call-mini-reason {
+    display: flex; align-items: flex-start; gap: 7px; font-size: 13px; font-weight: 700;
+    color: var(--text-primary); line-height: 1.4; margin-bottom: 9px;
+  }
+  .call-mini-reason svg { flex: none; margin-top: 2px; color: #f87171; }
+  .call-mini-addr {
+    display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600;
+    color: var(--text-primary); padding: 6px 9px; border-radius: 8px; margin-bottom: 8px;
+    background: rgba(56,189,248,.07); border: 1px solid rgba(56,189,248,.16);
+  }
+  .call-mini-addr svg { flex: none; color: #38bdf8; }
+  .call-mini-addr span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .call-mini-near { font-style: normal; font-size: 10px; color: var(--text-dim); font-weight: 500; }
+  .call-mini-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
+  .calls-empty { text-align: center; padding: 48px 20px; color: var(--text-dim); font-size: 13px; grid-column: 1/-1; }
+  .calls-empty svg { margin-bottom: 10px; opacity: .4; }
+  @media (max-width: 720px) { .calls-grid { grid-template-columns: 1fr; } }</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap
@@ -1421,6 +1488,17 @@
         </div>
         <div id="bolo-card-badge" class="bolo-nav-badge bolo-hidden"></div>
       </div>
+
+      <div class="mod-card" onclick="openCallsPanel()" style="--mc:#f87171;cursor:pointer;">
+        <div class="mod-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="mod-card-info">
+          <div class="mod-card-title">Llamadas 911</div>
+          <div class="mod-card-label">Mini-mapa y ubicación</div>
+        </div>
+        <div id="calls-card-badge" class="bolo-nav-badge bolo-hidden"></div>
+      </div>
     </div>
 
     <!-- ═══ HISTORY PANEL ═══ -->
@@ -1557,6 +1635,43 @@
         <div class="bolo-empty">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <p>Cargando BOLOs...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LLAMADAS 911 (mini-mapa) ═══ -->
+    <div id="calls-panel">
+      <div class="calls-top">
+        <div>
+          <div class="page-title" style="font-size:26px;">Llamadas <span>911</span></div>
+          <div class="page-subtitle" style="margin-top:6px;">Ubicación exacta de cada alerta activa del servidor, con mini-mapa y motivo.</div>
+        </div>
+        <button class="history-close" onclick="closeCallsPanel()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Cerrar Panel
+        </button>
+      </div>
+
+      <div class="calls-bar">
+        <div class="calls-bar-stat">
+          <div class="calls-bar-label">Activas</div>
+          <div class="calls-bar-value" id="calls-n" style="color:var(--accent-red);">0</div>
+        </div>
+        <div class="calls-bar-stat">
+          <div class="calls-bar-label">Servidor</div>
+          <div class="calls-bar-value" id="calls-server">—</div>
+        </div>
+        <div class="calls-bar-stat">
+          <div class="calls-bar-label">Última lectura</div>
+          <div class="calls-bar-value" id="calls-last">—</div>
+        </div>
+        <div class="calls-bar-live"><span class="dot"></span> En vivo</div>
+      </div>
+
+      <div class="calls-grid" id="calls-grid">
+        <div class="calls-empty">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <p>Conectando con el servidor…</p>
         </div>
       </div>
     </div>
@@ -1736,6 +1851,7 @@
 <script src="assets/supabase-js.umd.js"></script>
 <script src="assets/bodycam-app.js"></script>
 <script src="assets/radio-app.js"></script>
+<script src="assets/hrp-minimap.js"></script>
 <script>
 (function(){
   let userId = null;
@@ -4049,6 +4165,156 @@
       if (countEl) countEl.textContent = '0';
     }
   }
+
+  // ═══════════════════ LLAMADAS 911 (mini-mapa) ═══════════════════
+  // El juego manda las llamadas con X/Z y el motivo, pero SIN calle ni
+  // postal. Para poder mostrarlas, buscamos al jugador vivo más cercano
+  // que sí tenga StreetName/PostalCode y lo usamos como referencia.
+  let callsPanelOpen = false;
+  let callsTimer = null;
+  let callsCache = [];
+  let callsPlayers = [];
+
+  const CALLS_PROXY = '/.netlify/functions/proxy?path=/v2/server&Players=true&EmergencyCalls=true';
+
+  function callsLocationOf(p) {
+    if (!p || !p.Location) return null;
+    const x = Number(p.Location.LocationX);
+    const z = Number(p.Location.LocationZ);
+    if (!isFinite(x) || !isFinite(z)) return null;
+    return { x: x, z: z, street: p.Location.StreetName || '', postal: p.Location.PostalCode || '' };
+  }
+
+  function callsNearestStreet(x, z) {
+    let best = null, bestD = Infinity;
+    for (const p of callsPlayers) {
+      const loc = callsLocationOf(p);
+      if (!loc || !loc.street) continue;
+      const dx = loc.x - x, dz = loc.z - z;
+      const d = dx * dx + dz * dz;
+      if (d < bestD) { bestD = d; best = loc; }
+    }
+    return best ? { street: best.street, postal: best.postal, dist: Math.sqrt(bestD) } : null;
+  }
+
+  const CALLS_TEAM_COLOR = { Police: '#3b6fb6', Sheriff: '#d4a017', Fire: '#e54850', EMS: '#9b72cf' };
+
+  async function loadCalls() {
+    try {
+      const res = await fetch(CALLS_PROXY, { cache: 'no-store' });
+      const data = await res.json();
+      callsPlayers = data.Players || [];
+      callsCache = data.EmergencyCalls || [];
+      const nEl = $('calls-n'); if (nEl) nEl.textContent = String(callsCache.length);
+      const sEl = $('calls-server'); if (sEl) sEl.textContent = data.Name ? String(data.Name).slice(0, 22) : '—';
+      const lEl = $('calls-last'); if (lEl) lEl.textContent = new Date().toLocaleTimeString();
+      const badge = $('calls-card-badge');
+      if (badge) {
+        if (callsCache.length > 0) { badge.textContent = callsCache.length; badge.classList.remove('bolo-hidden'); }
+        else badge.classList.add('bolo-hidden');
+      }
+      renderCalls();
+    } catch (_) {
+      const lEl = $('calls-last'); if (lEl) lEl.textContent = 'Sin conexión';
+    }
+  }
+
+  function renderCalls() {
+    const grid = $('calls-grid');
+    if (!grid) return;
+    if (!callsCache.length) {
+      grid.innerHTML = '<div class="calls-empty">' +
+        '<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' +
+        '<p>No hay llamadas 911 activas en este momento.</p></div>';
+      return;
+    }
+
+    grid.innerHTML = callsCache.map(c => {
+      const id = c.CallNumber || c.CallId || c.id || '—';
+      const reason = esc(c.Description || c.description || c.Reason || c.reason || 'Motivo no declarado');
+      const caller = esc(c.Caller || 'Desconocido');
+      const team = c.Team || '911';
+      const tc = CALLS_TEAM_COLOR[team] || '#3b6fb6';
+
+      let x = null, z = null;
+      if (Array.isArray(c.Position) && c.Position.length >= 2) { x = +c.Position[0]; z = +c.Position[1]; }
+      else if (c.Location && isFinite(+c.Location.LocationX)) { x = +c.Location.LocationX; z = +c.Location.LocationZ; }
+
+      const near = (x !== null) ? callsNearestStreet(x, z) : null;
+      let street = c.PositionDescriptor || c.Location || (near && near.street) || '';
+      if (typeof street === 'object') street = street.StreetName || '';
+      const streetTxt = street ? esc(street) : 'Ubicación exacta no disponible';
+      const nearTag = (near && near.street && !c.PositionDescriptor && near.dist < 450)
+        ? ' <em class="call-mini-near">· cerca</em>' : '';
+      const postal = near && near.postal ? esc(near.postal) : '';
+      const coordTxt = (x !== null && isFinite(x)) ? 'X ' + x.toFixed(0) + ' · Z ' + z.toFixed(0) : '';
+
+      const t = c.StartedAt ? new Date(c.StartedAt * (c.StartedAt < 1e12 ? 1000 : 1)) : null;
+      const timeTxt = t ? t.toLocaleTimeString() : '—';
+
+      return '<div class="call-mini-card">' +
+        '<div class="call-mini-wrap">' +
+          '<canvas class="call-mini-canvas" data-x="' + (x === null ? '' : x) + '" data-z="' + (z === null ? '' : z) + '"></canvas>' +
+          '<span class="call-mini-badge" style="--tc:' + tc + '">' + esc(team) + '</span>' +
+          '<span class="call-mini-num">#' + esc(String(id)) + '</span>' +
+          '<div class="call-mini-foot">' +
+            (postal ? '<span class="call-mini-postal">postal ' + postal + '</span>' : '<span class="call-mini-postal" style="opacity:.5">postal —</span>') +
+            '<span class="call-mini-coord">' + esc(coordTxt) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="call-mini-body">' +
+          '<div class="call-mini-reason">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+            '<span>' + reason + '</span>' +
+          '</div>' +
+          '<div class="call-mini-addr">' +
+            '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+            '<span>' + streetTxt + nearTag + '</span>' +
+          '</div>' +
+          '<div class="call-mini-meta"><span>Reportó ' + caller + '</span><span>' + esc(timeTxt) + '</span></div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // Los mini-mapas se dibujan cuando el canvas ya tiene tamaño real.
+    requestAnimationFrame(function () {
+      const R = window.HRP_MINIMAP_STATIC;
+      if (!R) return;
+      const drawAll = function () {
+        grid.querySelectorAll('canvas.call-mini-canvas').forEach(cv => {
+          const x = parseFloat(cv.dataset.x), z = parseFloat(cv.dataset.z);
+          if (!isFinite(x) || !isFinite(z)) return;
+          R.render(cv, x, z, { color: '#e54850', zoomDiv: 20 });
+        });
+      };
+      if (R.isReady()) drawAll();
+      else R.whenReady(drawAll);
+    });
+  }
+
+  function openCallsPanel() {
+    const panel = $('calls-panel'), content = $('mdt-content');
+    if (!panel || !content) return;
+    Array.from(content.children).forEach(c => { if (c.id !== 'calls-panel') c.style.display = 'none'; });
+    panel.classList.add('active');
+    panel.style.display = 'block';
+    callsPanelOpen = true;
+    loadCalls();
+    if (callsTimer) clearInterval(callsTimer);
+    callsTimer = setInterval(loadCalls, 12000);
+  }
+  function closeCallsPanel() {
+    const panel = $('calls-panel'), content = $('mdt-content');
+    if (!panel || !content) return;
+    panel.classList.remove('active');
+    panel.style.display = 'none';
+    callsPanelOpen = false;
+    Array.from(content.children).forEach(c => { if (c.id !== 'calls-panel') c.style.display = ''; });
+    if (callsTimer) { clearInterval(callsTimer); callsTimer = null; }
+  }
+
+  window.openCallsPanel = openCallsPanel;
+  window.closeCallsPanel = closeCallsPanel;
 
   // ── BODYCAM: activar / desactivar (emisor WebRTC) ──
   // Al activar: pide la cámara, arranca HRPBC.startServer y publica el
