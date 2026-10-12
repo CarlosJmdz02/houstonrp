@@ -373,25 +373,6 @@ function main() {
     console.log(`[bot] Guild: ${CONFIG.guildId} | Canal voz: ${CONFIG.channelVoiceId}`);
     console.log(`[bot] Personas en canal: ${peopleInChannel(client)} (activo si > ${CONFIG.minPeople})`);
 
-    // ── ECONOMIA ──
-    // /ver_cartera · /pagar · /reclamar → hablan con la MISMA Supabase
-    // que la website (tablas economy y economy_adjustments).
-    // Sin restriccion de canal: funcionan en cualquier lado.
-    (async () => {
-      try {
-        const eco = await import('./integration/economy_command.js');
-        globalThis.__HRP_ECO = eco;
-        const { REST, Routes } = await import('discord.js');
-        const token = process.env.DISCORD_BOT_TOKEN || '';
-        if (!token) { console.warn('[economia] Falta DISCORD_BOT_TOKEN'); return; }
-        const rest = new REST({ version: '10' }).setToken(token);
-        await rest.put(Routes.applicationCommands(cli.user.id), { body: eco.economyCommands });
-        console.log('[economia] Registrados: /ver_cartera  /pagar  /reclamar');
-      } catch (e) {
-        console.warn('[economia] No se pudieron registrar: ' + e.message);
-      }
-    })();
-
     if (CONFIG.dryRun) {
       const guild = getGuild(client);
       const ch = guild && guild.channels.cache.get(CONFIG.channelVoiceId);
@@ -455,20 +436,8 @@ function main() {
     handleMessage(client, message).catch(e => console.warn('[msg] error:', e.message));
   });
 
-  // ── ECONOMIA: despacho de /ver_cartera · /pagar · /reclamar ──
-  client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-    try {
-      if (!globalThis.__HRP_ECO) {
-        globalThis.__HRP_ECO = await import('./integration/economy_command.js');
-      }
-      await globalThis.__HRP_ECO.handleEconomyInteraction(interaction);
-    } catch (e) {
-      console.warn('[economia] interaction error:', e && e.message);
-    }
-  });
-
-  client.on('voiceStateUpdate', (oldState, newState) => {    const me = getGuild(client) && getGuild(client).members.me;
+  client.on('voiceStateUpdate', (oldState, newState) => {
+    const me = getGuild(client) && getGuild(client).members.me;
     if (!me) return;
     const left = oldState.id === me.id && oldState.channelId && !newState.channelId;
     const moved = oldState.id === me.id && oldState.channelId !== newState.channelId;
