@@ -434,6 +434,23 @@ body::after {
 .modal-btn.danger:hover{box-shadow:0 0 20px rgba(229,72,80,.35);transform:translateY(-1px)}
 
 .hidden{display:none!important}
+  /* ── Búsqueda manual de registros por usuario de Roblox ── */
+  .record-search{display:flex;gap:8px;align-items:center;padding:0 0 12px;border-bottom:1px solid var(--border);margin-bottom:12px;flex-wrap:wrap}
+  .record-search input{
+    flex:1;min-width:180px;padding:9px 12px;border-radius:9px;font-size:12.5px;
+    background:var(--bg-void);border:1px solid var(--border);color:var(--text-primary);
+    font-family:inherit;transition:border-color .15s ease
+  }
+  .record-search input:focus{outline:none;border-color:var(--accent-cyan)}
+  .record-search input::placeholder{color:var(--text-dim)}
+  .alias-btn{
+    padding:9px 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;
+    background:linear-gradient(180deg,#3b82f6,#2563eb);border:1px solid transparent;
+    color:#fff;font-family:'Rajdhani',sans-serif;letter-spacing:.05em;text-transform:uppercase;
+    transition:all .15s ease
+  }
+  .alias-btn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(59,130,246,.4)}
+  .alias-hint{font-size:11px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;width:100%}
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
@@ -568,6 +585,10 @@ body::after {
           <div class="panel-header">
             <div class="panel-title"><span class="ico">💰</span> Mis Multas</div>
             <span class="panel-badge urgent" id="fines-count-badge">0 Pendientes</span>
+          </div>
+          <div class="record-search">
+            <input id="alias-input" type="text" placeholder="🔎 Si no ves tus multas, escribí tu usuario de Roblox…" autocomplete="off" spellcheck="false">
+            <button class="alias-btn" onclick="saveAlias()">Buscar</button>
           </div>
           <div class="panel-body" id="fines-container">
             <div class="loading-spinner"><div class="spinner"></div>Cargando multas...</div>
@@ -766,6 +787,11 @@ function tickCountdowns(){
 // (o a veces el Discord ID), pero la sesión sólo tiene el Discord ID.
 // Por eso el portal resuelve: Discord ID + usuarios Roblox + nombres de sus personajes.
 let _myIds = null;
+// Alias manual: el ciudadano puede escribir su usuario de Roblox si los
+// registros no aparecen solos (pasa cuando no existe personaje vinculado
+// o el oficial escribió otro identificador).
+function getManualAlias(){try{return(localStorage.getItem('hrp_alias_'+userId)||'').trim()}catch(_){return''}}
+function setManualAlias(v){try{if(v)localStorage.setItem('hrp_alias_'+userId,v);else localStorage.removeItem('hrp_alias_'+userId)}catch(_){}}
 function normId(v){
   if(v==null) return '';
   let s=String(v).trim();
@@ -783,6 +809,8 @@ function idPattern(v){
 async function getMyIds(){
   if(_myIds) return _myIds;
   const ids=[userId];
+  const alias=getManualAlias();
+  if(alias && !ids.some(x=>normId(x)===normId(alias))) ids.push(alias);
   try{
     const chars=await supaSelect('characters','roblox,nombres,apellidos',{user_discord:`eq.${userId}`,limit:'6'});
     (chars||[]).forEach(c=>{
@@ -802,10 +830,17 @@ async function myRecordsFilter(extra){
   const ids=await getMyIds();
   const parts=[];
   ids.forEach(id=>{
-    const p=idPattern(id);
-    if(!p) return;
-    const variants=[p];
-    if(p.indexOf(' ')>-1) variants.push(p.replace(/ /g,'%20'));
+    const raw=idPattern(id);
+    let decoded=raw;
+    try{decoded=decodeURIComponent(raw)}catch(_){}
+    // Varias formas del mismo identificador: crudo, decodificado y con
+    // los espacios codificados (%20 o +) tal como algunos oficiales los
+    // guardan en la base.
+    const variants=new Set();
+    [raw,decoded].forEach(v=>{if(v)variants.add(v)});
+    [raw,decoded].forEach(v=>{
+      if(v&&v.indexOf(' ')>-1){variants.add(v.replace(/ /g,'%20'));variants.add(v.replace(/ /g,'+'))}
+    });
     variants.forEach(v=>{
       parts.push(`target_discord.ilike.*${v}*`);
       parts.push(`target_name.ilike.*${v}*`);
@@ -840,12 +875,24 @@ async function fetchMyRecords(select,extra){
   return (rows||[]).filter(r=>isMyRecord(r,ids));
 }
 
+// Guarda el alias manual y recarga TODO (multas, arrestos y pagos).
+async function saveAlias(){
+  const v=($('alias-input').value||'').trim();
+  setManualAlias(v);
+  _myIds=null;
+  const hint=$('alias-hint');
+  if(hint) hint.textContent=v?('Buscando como "'+v+'"'):'';
+  loadAllData();
+  showToast(v?('Buscando registros de '+v):'Búsqueda manual desactivada');
+}
+window.saveAlias=saveAlias;
+
 async function loadFines(){
   const container=$('fines-container');
   try{
     const data=await fetchMyRecords('*',{type:'eq.fine',order:'created_at.desc',limit:'50'});
     if(!data||data.length===0){
-      container.innerHTML='<div class="empty-state"><div class="big-icon">🎉</div><p>No tienes multas activas</p><div class="sub">Mantén un récord limpio</div></div>';
+      container.innerHTML='<div class="empty-state"><div class="big-icon">🎉</div><p>No tienes multas activas</p><div class="sub">Mantén un récord limpio</div><div class="sub" style="margin-top:8px;opacity:.8">¿Deberías tener una? Escribí tu usuario de Roblox arriba y pulsá <b>Buscar</b>.</div></div>';
       $('fines-count-badge').textContent='0 Pendientes';
       return;
     }
@@ -1274,6 +1321,15 @@ async function init(){
   };
   initAvatar('user-avatar');
   initAvatar('hero-avatar');
+
+  // Caja de búsqueda manual por usuario de Roblox (recuerda lo último usado)
+  const ai=$('alias-input');
+  if(ai){
+    ai.value=getManualAlias();
+    ai.addEventListener('keydown',e=>{if(e.key==='Enter')saveAlias()});
+    const hint=$('alias-hint');
+    if(hint&&ai.value) hint.textContent='Buscando como "'+ai.value+'"';
+  }
 
   const nu=$('user-name');if(nu)nu.textContent=userName;
   const ns=$('user-sub');if(ns)ns.textContent='@'+userName;
