@@ -866,11 +866,6 @@ async function hrpHasRole(roleId, discordId) {
     if (member && Array.isArray(member.roles) && member.roles.includes(roleId)) return true;
   } catch (_) {}
 
-  try {
-    const rows = await supaSelect('police_members', 'role_id', { discord_id: `eq.${id}` });
-    if (Array.isArray(rows) && rows.some(r => String(r.role_id) === String(roleId))) return true;
-  } catch (_) {}
-
   return false;
 }
 
@@ -940,24 +935,6 @@ async function hrpCheckPoliceAccess(discordId) {
       }
     }
   } catch (_) {}
-
-  // 2) Fallback: check police_members table
-  try {
-    const data = await supaSingle("police_members", "discord_id",
-      { discord_id: `eq.${discordId}`, role_id: `eq.${discordPoliceRoleId}` }
-    );
-    if (data) {
-      const allDepts = Object.keys(DEPARTMENT_ROLES);
-      cachedDepartments = allDepts;
-      localStorage.setItem('hrp_departments', JSON.stringify(allDepts));
-      hrpSetAccessCache('police', true);
-      return true;
-    }
-  } catch (err) {
-    if (err.message?.includes("does not exist") || err.code === 404) {
-      console.warn("police_members table not found");
-    }
-  }
 
   // 3) Fallback — shared guild member fetch
   const member = await hrpFetchGuildMember();
@@ -1828,3 +1805,74 @@ document.addEventListener('click', (e) => {
     }
   })();
 })();
+
+// =============================
+// ?? MDT ACCESS (ESTRICTO)
+// Solo roles autorizados. La tabla police_members NO otorga acceso:
+// es un registro historico, no una fuente de autorizacion.
+// =============================
+const HRP_MDT_ROLES = [
+  '1431255106212335686', // Policia (MDT)
+  '1502940318092366056', // Dispatch
+  '1414695837258485780', // HFD
+  '1414695846552801421', // HDOT
+  '1364729666128314418', // HPD
+  '1364729668569137172', // HCSO
+  '1310839129252298802', // ICE
+  '1310839295988334612', // TPH
+];
+const HRP_POLICE_ROLE_ID = '1431255106212335686';
+
+let _hrpMdtCache = { v: null, t: 0 };
+
+// Devuelve true solo si Discord confirma el rol en vivo (edge function o OAuth).
+async function hrpHasMdtAccess() {
+  const session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
+  if (!session || !session.id) return false;
+
+  if (_hrpMdtCache.v !== null && (Date.now() - _hrpMdtCache.t) < 60000) return _hrpMdtCache.v;
+
+  let ok = false;
+  try {
+    if (typeof hrpFetchGuildMember === 'function') {
+      const member = await hrpFetchGuildMember();
+      if (member && Array.isArray(member.roles) && member.roles.some(r => HRP_MDT_ROLES.includes(r))) ok = true;
+    }
+  } catch (_) {}
+
+  if (!ok) {
+    for (const roleId of HRP_MDT_ROLES) {
+      try {
+        const r = await hrpCallCheckPoliceRole({ discord_id: session.id, username: session.username || 'Unknown', role_id: roleId });
+        if (r && r.allowed === true) { ok = true; break; }
+      } catch (_) {}
+    }
+  }
+
+  _hrpMdtCache = { v: ok, t: Date.now() };
+  return ok;
+}
+
+// Devuelve true solo con el rol de Policia (para Arrestos / MDP).
+async function hrpHasPoliceRole() {
+  const session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
+  if (!session || !session.id) return false;
+  try {
+    const r = await hrpCallCheckPoliceRole({ discord_id: session.id, username: session.username || 'Unknown', role_id: HRP_POLICE_ROLE_ID });
+    if (r && r.allowed === true) return true;
+  } catch (_) {}
+  try {
+    const member = await hrpFetchGuildMember();
+    if (member && Array.isArray(member.roles) && member.roles.includes(HRP_POLICE_ROLE_ID)) return true;
+  } catch (_) {}
+  return false;
+}
+
+// Oculta el link del MDT a civiles en TODAS las paginas que cargan auth.js.
+document.addEventListener('DOMContentLoaded', function () {
+  const links = document.querySelectorAll('a[href="mdt.html"], a[href="itmdt.html"]');
+  if (!links.length) return;
+  hrpHasMdtAccess().then(function (ok) {
+    if (!ok) links.forEach(function (a) { a.style.display = 'none'; });
+  }).catch(function () {});
+});

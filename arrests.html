@@ -452,6 +452,9 @@
     } catch (_) {}
   }
   async function registerArrest() {
+    let _ok = false;
+    try { if (typeof hrpHasPoliceRole === 'function') _ok = await hrpHasPoliceRole(); } catch (_) { _ok = false; }
+    if (!_ok) { showToast('? No tienes permiso de Policia para registrar arrestos', 'error'); return; }
     const name = $('arrest-name').value.trim();
     const roblox = $('arrest-roblox').value.trim();
     const details = $('arrest-details').value.trim();
@@ -586,6 +589,20 @@ await deductArrestFine(roblox, totalFine);
     userId = session.id;
     userName = session.username || 'User';
 
+    // ?? GATE: solo el rol de Policia puede registrar arrestos.
+    let canAccess = false;
+    try {
+      if (typeof hrpHasPoliceRole === 'function') canAccess = await hrpHasPoliceRole();
+    } catch (_) { canAccess = false; }
+    if (!canAccess) {
+      const ov = document.getElementById('arrest-access-denied');
+      if (ov) ov.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      const rb = document.getElementById('arrest-reauth-btn');
+      if (rb && typeof hrpReauthNeeded !== 'undefined' && hrpReauthNeeded) rb.style.display = 'inline-block';
+      return;
+    }
+
     const avatarEl = $('user-avatar');
     if (avatarEl) {
       avatarEl.innerHTML = session.avatar
@@ -608,6 +625,17 @@ await deductArrestFine(roblox, totalFine);
   }
   document.addEventListener('DOMContentLoaded', init);
 </script>
+<div id="arrest-access-denied" style="display:none;position:fixed;inset:0;z-index:100000;background:rgba(6,10,20,0.96);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px;font-family:Inter,sans-serif;">
+  <div style="width:64px;height:64px;border-radius:50%;border:2px solid #e54850;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e54850" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  </div>
+  <div style="font-size:22px;font-weight:700;color:#e4e7ee;margin-bottom:10px;">Acceso Denegado</div>
+  <div style="font-size:14px;color:#8a93a7;max-width:420px;line-height:1.6;margin-bottom:24px;">No tienes el rol de Polic&iacute;a necesario para registrar arrestos. Si crees que es un error, contacta con el staff.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+    <button id="arrest-reauth-btn" onclick="hrpForceReauth()" style="display:none;padding:10px 22px;border-radius:8px;border:1px solid #3b6fb6;background:transparent;color:#3b6fb6;font-weight:600;cursor:pointer;">Re-conectar con Discord</button>
+    <a href="dashboard.html" style="padding:10px 22px;border-radius:8px;border:1px solid #3b6fb6;background:#3b6fb6;color:#fff;font-weight:600;text-decoration:none;">Volver al Dashboard</a>
+  </div>
+</div>
 <script src="assets/auth.js"></script>
 </body>
 </html>

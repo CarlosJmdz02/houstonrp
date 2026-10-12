@@ -1923,19 +1923,13 @@
   // Departamentos que pertenecen al MDT original (HFD/HDOT solo están en el ITMDT).
   const MDT_DEPTS = ['hpd', 'hcso', 'tph', 'ice'];
 
-  // Roles de Discord del usuario (OAuth guilds.members.read + respaldo police_members).
+  // Roles de Discord del usuario (OAuth guilds.members.read).
   async function getMdtRoleSet() {
     const roles = new Set();
     try {
       if (typeof hrpFetchGuildMember === 'function') {
         const member = await hrpFetchGuildMember();
         ((member && member.roles) || []).forEach(r => roles.add(r));
-      }
-    } catch (e) {}
-    try {
-      if (typeof supaSelect === 'function') {
-        const members = await supaSelect('police_members', 'role_id', { discord_id: 'eq.' + session.id });
-        (members || []).forEach(m => { if (m.role_id) roles.add(String(m.role_id)); });
       }
     } catch (e) {}
     return roles;
@@ -1963,7 +1957,7 @@
       } catch (e) {}
     }
 
-    // 2) Miembro del servidor de Discord vía OAuth + 3) tabla police_members.
+    // 2) Miembro del servidor de Discord vía OAuth.
     const roles = await getMdtRoleSet();
     if (fullRoles.some(r => roles.has(r))) return { level: 'full', roles };
     return { level: null, roles };
