@@ -524,7 +524,7 @@ function buildFinalLicense(){
 /* 🔵 DISCORD WEBHOOK */
 /* ============================= */
 
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1522262318363181086/VnGPkai2LSZm7SVGvnJNGOREDG6gEdyRo2AyDRv1UvKSTGele_PIxN1cwoxMdTCbCGaD";
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1559297416258392256/VnGPkai2LSZm7SVGvnJNGOREDG6gEdyRo2AyDRv1UvKSTGele_PIxN1cwoxMdTCbCGaD";
 
 async function sendWebhook(payload){
   try {
