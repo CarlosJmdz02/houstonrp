@@ -531,7 +531,7 @@ async function sendWebhook(payload){
     await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ username: "Houston Hub", ...payload })
     });
   } catch(e) {
     console.error("Webhook error:", e);

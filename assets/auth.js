@@ -84,7 +84,9 @@ async function hrpSendDiscordWebhook(webhookUrl, payload) {
     const response = await fetch(proxyUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      // Nombre visible del webhook en Discord. Va primero para que un
+      // payload pueda sobreescribirlo si alguna vez lo necesita.
+      body: JSON.stringify({ username: "Houston Hub", ...payload }),
     });
     return response.ok ? response : null;
   } catch (err) {

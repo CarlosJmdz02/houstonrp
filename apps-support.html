@@ -341,7 +341,7 @@
   const REPORTES_WEBHOOK_URL = 'https://discord.com/api/webhooks/1527888398667481188/NdGq8TOvBF8VN7fwz6aFv1Bk5id-ub4HFHFoafLWK3ENKHNwSVcArk19Qz5UKT-bDFuY';
   const K9_WEBHOOK_URL = 'https://discord.com/api/webhooks/1527888495459434536/hlLdF4c2SX-IBC6dM5v3dZJSlSJC2Yvj00EsWjl6Zd8X3Ah8p37MIDDupEMfXeLohh3E';
   async function hrpSendWebhook(payload, url) {
-    try { await fetch(url || WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch {}
+    try { await fetch(url || WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: 'Houston Hub', ...payload }) }); } catch {}
   }
   const DEPT_RANKS = {
     THP: ['Probationary Trooper','Trooper I','Senior Trooper','Master Trooper','Trooper First Class','Corporal','Senior Corporal','Sergeant','Staff Sergeant','Master Sergeant','Trooper Major','Lieutenant','Captain','Colonel','Lieutenant Colonel','Trooper Chief'],

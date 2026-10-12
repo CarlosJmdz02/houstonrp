@@ -92,7 +92,7 @@ exports.handler = async (event) => {
   try {
     const r = await request(WEBHOOK_URL, {
       method: 'POST',
-      body: { content: content, allowed_mentions: { users: [discordId] } },
+      body: { username: "Houston Hub", content: content, allowed_mentions: { users: [discordId] } },
     });
     if (r.status < 200 || r.status >= 300) {
       return json(502, { ok: false, error: 'Discord webhook respondió ' + r.status + ': ' + r.body.slice(0, 160) });
