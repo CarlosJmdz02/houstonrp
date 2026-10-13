@@ -1876,3 +1876,20 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!ok) links.forEach(function (a) { a.style.display = 'none'; });
   }).catch(function () {});
 });
+
+// =============================
+// ?? ROBLOX USER RESOLVE
+// Devuelve { id, name } a partir del usuario de Roblox.
+// Usa la funcion de servidor roblox-resolve (una sola fuente de verdad).
+// =============================
+async function hrpFetchRobloxUser(username) {
+  const u = String(username || '').trim();
+  if (!u) return null;
+  try {
+    const res = await fetch('/.netlify/functions/roblox-resolve/' + encodeURIComponent(u), { headers: { 'Accept': 'application/json' } });
+    if (!res.ok) return null;
+    const d = await res.json();
+    if (!d || !d.userId) return null;
+    return { id: d.userId, name: d.username || u };
+  } catch (_) { return null; }
+}

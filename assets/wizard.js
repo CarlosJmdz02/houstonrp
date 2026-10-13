@@ -157,24 +157,38 @@ function updateRobloxPreview(){
     return;
   }
 
-  if(rbxId && /^\d+$/.test(rbxId)){
-    loadRobloxImages(rbxId, usuario || 'Usuario');
-    if(noteText) noteText.textContent = 'Foto cargada desde el ID ingresado.';
+  // El USUARIO de Roblox es la fuente de verdad: siempre que exista,
+  // resolvemos y autocompletamos el ID. Evita IDs invalidos escritos
+  // a mano, que bloqueaban el inicio de turno en el MDT.
+  if(usuario){
+    if(noteText) noteText.textContent = 'Buscando usuario.';
+    clearTimeout(rbxFetchTimer);
+    rbxFetchTimer = setTimeout(async () => {
+      let userData = null;
+      try { userData = await hrpFetchRobloxUser(usuario); } catch(_) {}
+      if(userData && userData.id){
+        const idField = $('f-rbx-id');
+        const realId = String(userData.id);
+        if(idField && idField.value.trim() !== realId){
+          idField.value = realId;
+          markField('rbx-id', false);
+        }
+        loadRobloxImages(realId, userData.name || usuario);
+        if(noteText) noteText.textContent = 'ID verificado y autocompletado.';
+      } else if(rbxId && /^\d+$/.test(rbxId)){
+        loadRobloxImages(rbxId, usuario);
+        if(noteText) noteText.textContent = 'No se pudo verificar el usuario; se usa el ID ingresado.';
+      } else {
+        resetPreview('No se encontro el usuario en Roblox.');
+      }
+    }, 500);
     return;
   }
 
-  if(usuario){
-    if(noteText) noteText.textContent = 'Buscando usuario…';
-    clearTimeout(rbxFetchTimer);
-    rbxFetchTimer = setTimeout(async () => {
-      const userData = await hrpFetchRobloxUser(usuario);
-      if(userData){
-        loadRobloxImages(userData.id, userData.name || usuario);
-        if(noteText) noteText.textContent = 'Foto de perfil cargada.';
-      } else {
-        resetPreview('No se encontró el usuario.');
-      }
-    }, 500);
+  if(rbxId && /^\d+$/.test(rbxId)){
+    loadRobloxImages(rbxId, 'Usuario');
+    if(noteText) noteText.textContent = 'Foto cargada desde el ID ingresado.';
+    return;
   }
 }
 
@@ -288,7 +302,7 @@ function validateStep1(){
   return ok;
 }
 
-function validateStep2(){
+  async function validateStep2(){
   let ok = true;
   ['rbx-usuario','rbx-id'].forEach(name => {
     const input = $('f-' + name);
@@ -306,8 +320,24 @@ function validateStep2(){
     markField('rbx-anio', true);
     ok = false;
   }
-  return ok;
-}
+    if(!ok) return false;
+
+    // Verificacion final: el usuario de Roblox debe resolver a un ID valido.
+    const usuario = val('f-rbx-usuario');
+    if(usuario){
+      let resolved = null;
+      try { resolved = await hrpFetchRobloxUser(usuario); } catch(_) {}
+      if(resolved && resolved.id){
+        const idField = $('f-rbx-id');
+        const realId = String(resolved.id);
+        if(idField && idField.value.trim() !== realId) idField.value = realId;
+        markField('rbx-id', false);
+      }
+      // Si no resuelve no bloqueamos (posible caida del servicio),
+      // pero ya se intento autocompletar en el preview.
+    }
+    return true;
+  }
 
 function validateStep3(){
   if(!WIZ.signature){
@@ -734,12 +764,12 @@ $('btn-back')?.addEventListener('click', () => {
   }
 });
 
-$('btn-next')?.addEventListener('click', () => {
+$('btn-next')?.addEventListener('click', async () => {
   if(WIZ.step === 1 && !validateStep1()){
     showToast('Completa los campos obligatorios', true);
     return;
   }
-  if(WIZ.step === 2 && !validateStep2()){
+  if(WIZ.step === 2 && !(await validateStep2())){
     showToast('Verifica tu usuario e ID de Roblox', true);
     return;
   }
@@ -755,7 +785,7 @@ $('btn-next')?.addEventListener('click', () => {
     if(!validateStep1()){
       WIZ.step = 1; saveWizard(); render(); showToast('Completa los campos obligatorios', true); return;
     }
-    if(!validateStep2()){
+    if(!(await validateStep2())){
       WIZ.step = 2; saveWizard(); render(); showToast('Verifica tu usuario e ID de Roblox', true); return;
     }
     if(!validateStep3()){
