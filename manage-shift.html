@@ -604,6 +604,8 @@
   .action-btn.add:hover { background: linear-gradient(135deg, rgba(74,204,143,0.22), rgba(74,204,143,0.08)); }
   .action-btn.remove { background: linear-gradient(135deg, rgba(240,165,0,0.12), rgba(240,165,0,0.04)); border-color: rgba(240,165,0,0.25); color: var(--accent-gold); }
   .action-btn.remove:hover { background: linear-gradient(135deg, rgba(240,165,0,0.22), rgba(240,165,0,0.08)); }
+  .action-btn.fire { background: linear-gradient(135deg, rgba(229,72,80,0.20), rgba(229,72,80,0.06)); border-color: rgba(229,72,80,0.45); color: #ff6b6b; font-weight:700; }
+  .action-btn.fire:hover { background: rgba(229,72,80,0.30); border-color: rgba(229,72,80,0.7); }
   .action-btn.reset { background: linear-gradient(135deg, rgba(229,72,80,0.12), rgba(229,72,80,0.04)); border-color: rgba(229,72,80,0.25); color: var(--accent-red); }
   .action-btn.reset:hover { background: linear-gradient(135deg, rgba(229,72,80,0.22), rgba(229,72,80,0.08)); }
 
@@ -1141,6 +1143,24 @@
   </div>
 </div>
 
+<!-- Modal Despedir -->
+<div class="modal-overlay" id="modal-fire">
+  <div class="modal">
+    <div class="modal-title" style="color:#ff6b6b;">Despedir Oficial</div>
+    <div class="modal-sub" id="modal-fire-sub">Vas a despedir a <strong>Usuario</strong>.</div>
+    <div style="margin:14px 0;padding:12px;border:1px solid rgba(229,72,80,.3);border-radius:8px;background:rgba(229,72,80,.06);font-size:12.5px;line-height:1.7;color:var(--text-secondary);">
+      Se quitara:<br>
+      &bull; Los roles de Discord (Policia / Sheriff / Dispatch / departamentos)<br>
+      &bull; El rango asignado en el departamento<br>
+      &bull; El acceso al MDT<br><br>
+      <strong style="color:#4acf8f;">Se conserva:</strong> el personaje (nombre IC) y las horas registradas.
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeModal('modal-fire')">Cancelar</button>
+      <button class="modal-btn danger" id="btn-confirm-fire" onclick="confirmFire()">Si, Despedir</button>
+    </div>
+  </div>
+</div>
 <!-- Toast -->
 <div class="toast" id="toast">
   <span id="toast-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4acf8f" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
@@ -1412,6 +1432,7 @@ async function loadUsers() {
             <button class="action-btn add" onclick="window._addHours('${u.discord_id}', '${u.username}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Añadir</button>
             <button class="action-btn remove" onclick="window._removeHours('${u.discord_id}', '${u.username}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg> Remover</button>
             <button class="action-btn reset" onclick="window._resetHours('${u.discord_id}', '${u.username}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M21.34 8A10 10 0 0 0 5.26 6.34"/><path d="M2.66 16a10 10 0 0 0 16.08 1.66"/></svg> Reset</button>
+            <button class="action-btn fire" title="Despedir: quita rango, placa y acceso" onclick="window._fireOfficer('${u.discord_id}', '${u.username}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="22" y1="11" x2="16" y2="11"/></svg> Despedir</button>
           </div>
         </td>
       </tr>`;
@@ -1536,6 +1557,29 @@ async function loadUsers() {
     }
   }
   window.confirmReset = confirmReset;
+
+  window._fireOfficer = function(discordId, username) {
+    selectedUser = { discord_id: discordId, username: username };
+    $('modal-fire-sub').innerHTML = 'Vas a despedir a <strong>' + username + '</strong>. Esta accion le quita roles, rango y acceso al MDT.';
+    openModal('modal-fire', selectedUser);
+  };
+
+  async function confirmFire() {
+    if (!selectedUser) return;
+    const who = selectedUser.username;
+    $('btn-confirm-fire').disabled = true;
+    const res = await hrpFireOfficer(selectedUser.discord_id);
+    $('btn-confirm-fire').disabled = false;
+
+    if (res && res.ok) {
+      showToast(who + ' fue despedido. Personaje y horas conservados.', 'success');
+      closeModal('modal-fire');
+      loadUsers();
+    } else {
+      showToast('No se pudo despedir: ' + ((res && res.error) || 'error desconocido'), 'error');
+    }
+  }
+  window.confirmFire = confirmFire;
 
   // ── ADMIN TABS ──
   // ── RANGOS + ECONOMÍA (migración 019) ──

@@ -1893,3 +1893,36 @@ async function hrpFetchRobloxUser(username) {
     return { id: d.userId, name: d.username || u };
   } catch (_) { return null; }
 }
+
+// =============================
+// ?? DESPEDIR OFICIAL
+// Quita roles de Discord, rango (rank_members) y acceso al MDT
+// (police_members). NO toca el personaje (nombre IC) ni las horas.
+// Toda la verificacion ocurre en el servidor (edge function).
+// =============================
+async function hrpFireOfficer(targetDiscordId) {
+  const token = hrpGetToken();
+  if (!token) return { ok: false, error: 'No hay sesion de Discord. Reconectate.' };
+  if (!targetDiscordId) return { ok: false, error: 'Falta el usuario a despedir.' };
+
+  const body = JSON.stringify({
+    caller_token: token,
+    target_discord_id: String(targetDiscordId),
+  });
+
+  try {
+    const res = await fetch(`${supabaseUrl}/functions/v1/fire-officer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+    });
+    let data = null;
+    try { data = await res.json(); } catch (_) {}
+    if (!res.ok) {
+      return { ok: false, error: (data && data.error) || ('HTTP ' + res.status) };
+    }
+    return data || { ok: false, error: 'Respuesta vacia del servidor' };
+  } catch (err) {
+    return { ok: false, error: 'No se pudo contactar al servidor.' };
+  }
+}
