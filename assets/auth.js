@@ -1115,12 +1115,13 @@ async function hrpRemoveHours(discordId, username, seconds, reason, adminId, dep
 // 🔵 MANAGE SHIFT — RESET HOURS
 // =============================
 async function hrpResetUserHours(discordId, department) {
+  // El anon key ya NO puede borrar (RLS cerrado). El reset lo ejecuta
+  // el servidor con la service_role, verificando que seas admin.
   try {
-    await Promise.all([
-      supaDelete("police_shift_sessions", { discord_id: `eq.${discordId}`, status: "eq.completed", ...depFilter(department) }),
-      supaDelete("police_hours_adjustments", { discord_id: `eq.${discordId}`, ...depFilter(department) }),
-    ]);
-    return true;
+    const res = await hrpFireOfficer(discordId, "reset_hours");
+    if (res && res.ok) return true;
+    console.error("Reset hours server error:", res && res.error);
+    return false;
   } catch (err) {
     console.error("Reset hours error:", err);
     return false;
@@ -1900,7 +1901,7 @@ async function hrpFetchRobloxUser(username) {
 // (police_members). NO toca el personaje (nombre IC) ni las horas.
 // Toda la verificacion ocurre en el servidor (edge function).
 // =============================
-async function hrpFireOfficer(targetDiscordId) {
+async function hrpFireOfficer(targetDiscordId, actionName) {
   const token = hrpGetToken();
   if (!token) return { ok: false, error: 'No hay sesion de Discord. Reconectate.' };
   if (!targetDiscordId) return { ok: false, error: 'Falta el usuario a despedir.' };
@@ -1908,6 +1909,7 @@ async function hrpFireOfficer(targetDiscordId) {
   const body = JSON.stringify({
     caller_token: token,
     target_discord_id: String(targetDiscordId),
+    action: actionName || "fire",
   });
 
   try {

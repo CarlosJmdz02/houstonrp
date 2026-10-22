@@ -8,11 +8,14 @@ const DISPATCH_ROLE_ID = Deno.env.get("DISPATCH_ROLE_ID") || "150294031809236605
 const MANAGE_ROLE_ID = Deno.env.get("MANAGE_ROLE_ID") || "1502940172348690482";
 const DEV_ROLE_ID = Deno.env.get("DEV_ROLE_ID") || "1425697670495862844";
 const FOUNDATION_ROLE_ID = Deno.env.get("FOUNDATION_ROLE_ID") || "1430728225423884419";
+// Todos los roles de departamento (mismos que DEPARTMENT_ROLES del frontend).
 const DEPT_ROLES = [
   "1364729666128314418", // hpd
   "1364729668569137172", // hcso
   "1310839129252298802", // ice
   "1310839295988334612", // tph
+  "1414695837258485780", // hfd  (Bomberos)
+  "1414695846552801421", // dot  (HDOT)
 ];
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";
@@ -49,10 +52,11 @@ serve(async (req) => {
       return json({ ok: false, error: "Server not configured" }, 500);
     }
 
-    const { caller_token, target_discord_id } = await req.json();
+    const { caller_token, target_discord_id, action } = await req.json();
     if (!caller_token || !target_discord_id) {
       return json({ ok: false, error: "Missing parameters" }, 400);
     }
+    const mode = action === "reset_hours" ? "reset_hours" : "fire";
 
     // ── 1) IDENTIDAD REAL DEL QUE PIDE (no se confia en el navegador) ──
     const meRes = await fetch("https://discord.com/api/v10/users/@me", {
@@ -70,19 +74,39 @@ serve(async (req) => {
     );
     if (!isAdmin) return json({ ok: false, error: "Not authorized" }, 403);
 
-    // ── 3) NO DEJARSE ECHAR A SI MISMO NI A UN ADMIN ──
-    if (target_discord_id === callerId) {
-      return json({ ok: false, error: "You cannot fire yourself" }, 400);
-    }
     const targetRoles = await getMemberRoles(target_discord_id);
     const targetIsAdmin = (targetRoles || []).some((r) =>
       r === MANAGE_ROLE_ID || r === DEV_ROLE_ID || r === FOUNDATION_ROLE_ID
     );
+
+    const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+
+    // ── RESET DE HORAS (solo servidor: el anon key no puede borrar ──
+    // desde que se cerro RLS; el service_role si lo hace).
+    if (mode === "reset_hours") {
+      const { error: e1 } = await sb
+        .from("police_shift_sessions")
+        .delete()
+        .eq("discord_id", target_discord_id)
+        .eq("status", "completed");
+      const { error: e2 } = await sb
+        .from("police_hours_adjustments")
+        .delete()
+        .eq("discord_id", target_discord_id);
+      if (e1 || e2) {
+        return json({ ok: false, error: (e1 || e2)?.message || "delete failed" }, 500);
+      }
+      return json({ ok: true, mode: "reset_hours", target: target_discord_id, by: callerId });
+    }
+
+    // ── DESPIDO ──
+    if (target_discord_id === callerId) {
+      return json({ ok: false, error: "You cannot fire yourself" }, 400);
+    }
     if (targetIsAdmin) {
       return json({ ok: false, error: "Cannot fire an administrator" }, 403);
     }
 
-    const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
     const removedRoles: string[] = [];
 
     // ── 4) QUITAR ROLES DE DISCORD (policia, dispatch y departamentos) ──
@@ -109,6 +133,15 @@ serve(async (req) => {
       .delete()
       .eq("discord_id", target_discord_id);
     if (pmErr) console.error("police_members delete:", pmErr.message);
+
+    // ── 6b) BORRAR MEMBRESIA DE DEPARTAMENTO ──
+    // Sin esto, la busqueda del MDT sigue pintando el hero con
+    // "HPD - Policia de Houston / Fuera de servicio" en vez del nombre.
+    const { error: payErr } = await sb
+      .from("payroll_members")
+      .delete()
+      .eq("discord_id", target_discord_id);
+    if (payErr) console.error("payroll_members delete:", payErr.message);
 
     // ── 7) REGISTRO DE AUDITORIA (no borra nada, solo deja constancia) ──
     try {
