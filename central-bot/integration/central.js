@@ -519,12 +519,20 @@ export function ensureCentralVoice(client) {
     }
     conn.subscribe(audioPlayer);
 
-    conn.on(VoiceConnectionStatus.Ready, () => {
-      console.log('[central] ✅ conexión de voz lista');
-      announce(readyClient || client, 'voice', '🎧 Central conectado a la voz del canal — escuchando.');
-      updateActivation(readyClient || client);
-      syncListeners(readyClient || client);
-    });
+    if (!conn._centralReadyHook) {
+      conn._centralReadyHook = true;
+      conn.on(VoiceConnectionStatus.Ready, () => {
+        // Ante reconexiones seguidas (IP discovery) no repetir el anuncio.
+        const _now = Date.now();
+        if (!_lastReadyAnnounce || _now - _lastReadyAnnounce > 600000) {
+          _lastReadyAnnounce = _now;
+          console.log('[central] conexion de voz lista');
+          announce(readyClient || client, 'voice', 'Central conectado a la voz del canal - escuchando.');
+        }
+        updateActivation(readyClient || client);
+        syncListeners(readyClient || client);
+      });
+    }
     conn.on(VoiceConnectionStatus.Disconnected, async () => {
       console.log('[central] ⚠️ voz desconectada, intentando volver…');
       try {
@@ -662,6 +670,7 @@ let EdgeFormat = null;
 let edgeFails = 0;
 let edgeCooldownUntil = 0;
 let voiceLogged = false;
+let _lastReadyAnnounce = 0;
 
 /**
  * Limita el tiempo de una promesa. Sin esto, una llamada de TTS o de red que
@@ -736,7 +745,7 @@ async function googleMp3(text) {
 async function synthesizeMp3(text) {
   // Presupuesto total: si Edge se cuelga, no puede retener la cola de voz.
   try {
-    return await withTimeout(synthesizeEdge(text), 14000, 'tts.edge');
+    return await withTimeout(synthesizeEdge(text), 7000, 'tts.edge');
   } catch (e) {
     console.warn('[central] ⚠️ voz principal agotada (' + e.message + '), uso Google TTS');
     return googleMp3(text);   // googleMp3 ya tiene su propio aborto de 6 s
@@ -756,7 +765,9 @@ async function synthesizeEdge(text) {
       } catch (e) {
         edgeFails++;
         if (edgeFails >= 3) {
-          edgeCooldownUntil = Date.now() + 600000;
+          const long = /403|WebSocket error/.test(String(e.message));
+          edgeCooldownUntil = Date.now() + (long ? 21600000 : 600000);
+          console.warn('[central] Edge TTS ' + (long ? 'bloqueado (403) - pausa 6 h' : 'sin respuesta - pausa 10 min') + ': ' + e.message);
           console.warn('[central] ⚠️ Edge TTS no responde (10 min de pausa):', e.message);
         }
       }
