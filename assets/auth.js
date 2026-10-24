@@ -61,12 +61,12 @@ async function hrpSendToJail(username, months) {
 // 🔵 DISCORD WEBHOOKS
 // =============================
 const HRP_DISCORD_WEBHOOKS = {
-  incident: "https://discord.com/api/webhooks/1466065185088471273/l4G1ClfOUAi8uFEhxbMVkcgIjOhMSDpvpk8PMqCHeHay25gIMtWLWMzNhxrmh-DLYD4r",
-  character: "https://discord.com/api/webhooks/1522262318363181086/VnGPkai2LSZm7SVGvnJNGOREDG6gEdyRo2AyDRv1UvKSTGele_PIxN1cwoxMdTCbCGaD",
+  incident: "https://discord.com/api/webhooks/1559298420051542190/I6H79Q0A0Qn9C445iTl2MVv5izSy6AgVMs-Ts4RdQqoFSuXGBj_YsAScMJ1cy7hgkbNC",
+  character: "https://discord.com/api/webhooks/1559297416258392256/uQa9XzL0Oc6ogBWGuHgOeD-Z4qCXs-tTJlS036Rrw69nLD8xQ245Mdec7BCoFPncFpIS",
   arrest: "https://discord.com/api/webhooks/1524885469022912642/-YPmfTUQ8h2_VvF_E1hwXc79wZ0pyn8m6n16X1DVTxKdnJ_b0PQq19rTKk_4-SCrZSmP",
   fine: "https://discord.com/api/webhooks/1520733812001210458/85wg66oMWahaLU9MGc-p__ebvrqPv90-rXynmxTILUtbb1Yf-UuFu4Jyc0ENpSBmWVn-",
-  license: "https://discord.com/api/webhooks/1466065185088471273/l4G1ClfOUAi8uFEhxbMVkcgIjOhMSDpvpk8PMqCHeHay25gIMtWLWMzNhxrmh-DLYD4r",
-  security: "https://discordapp.com/api/webhooks/1531348144724639748/O3oIhfj7aM-XwLUxW8cIjy8n_eKeVFnAtTkvGMh6qdMDdWLD7Ajf1ZgkpKOGEE0dD4Eh",
+  license: "https://discord.com/api/webhooks/1559298420051542190/I6H79Q0A0Qn9C445iTl2MVv5izSy6AgVMs-Ts4RdQqoFSuXGBj_YsAScMJ1cy7hgkbNC",
+  security: "https://discord.com/api/webhooks/1533626963023888477/f81fV7CyDyU2CEPjygsSwPwxQd4l67uCGoHT8GlGr95sPrelOHD-cQu_-AzbUr6lMDEg",
 };
 
 function hrpGetSiteOrigin() {
