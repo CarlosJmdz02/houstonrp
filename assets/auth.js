@@ -1812,15 +1812,14 @@ document.addEventListener('click', (e) => {
 // Solo roles autorizados. La tabla police_members NO otorga acceso:
 // es un registro historico, no una fuente de autorizacion.
 // =============================
+// MDT: SOLO el rol de Policia. Nadie mas entra.
 const HRP_MDT_ROLES = [
-  '1431255106212335686', // Policia (MDT)
-  '1502940318092366056', // Dispatch
+  '1431255106212335686', // Policia
+];
+// ITMDT es otro sistema (horas/incidentes de Bomberos y HDOT).
+const HRP_ITMDT_ROLES = [
   '1414695837258485780', // HFD
   '1414695846552801421', // HDOT
-  '1364729666128314418', // HPD
-  '1364729668569137172', // HCSO
-  '1310839129252298802', // ICE
-  '1310839295988334612', // TPH
 ];
 const HRP_POLICE_ROLE_ID = '1431255106212335686';
 
@@ -1869,13 +1868,38 @@ async function hrpHasPoliceRole() {
   return false;
 }
 
-// Oculta el link del MDT a civiles en TODAS las paginas que cargan auth.js.
-document.addEventListener('DOMContentLoaded', function () {
-  const links = document.querySelectorAll('a[href="mdt.html"], a[href="itmdt.html"]');
-  if (!links.length) return;
-  hrpHasMdtAccess().then(function (ok) {
-    if (!ok) links.forEach(function (a) { a.style.display = 'none'; });
-  }).catch(function () {});
+// Oculta los links de MDT/ITMDT a quien no tenga su rol, en TODAS las
+// paginas que cargan auth.js. Cada link se evalua con su propio rol.
+async function _hrpHasAnyRole(roleIds) {
+  const session = typeof hrpGetSession === "function" ? hrpGetSession() : null;
+  if (!session || !session.id) return false;
+  try {
+    if (typeof hrpFetchGuildMember === "function") {
+      const member = await hrpFetchGuildMember();
+      if (member && Array.isArray(member.roles) && member.roles.some(r => roleIds.includes(r))) return true;
+    }
+  } catch (_) {}
+  for (const roleId of roleIds) {
+    try {
+      const r = await hrpCallCheckPoliceRole({ discord_id: session.id, username: session.username || "Unknown", role_id: roleId });
+      if (r && r.allowed === true) return true;
+    } catch (_) {}
+  }
+  return false;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const jobs = [
+    { sel: "a[href=\"mdt.html\"]",   roles: HRP_MDT_ROLES },
+    { sel: "a[href=\"itmdt.html\"]", roles: HRP_ITMDT_ROLES },
+  ];
+  jobs.forEach(function (job) {
+    const links = document.querySelectorAll(job.sel);
+    if (!links.length) return;
+    _hrpHasAnyRole(job.roles).then(function (ok) {
+      if (!ok) links.forEach(function (a) { a.style.display = "none"; });
+    }).catch(function () {});
+  });
 });
 
 // =============================

@@ -1941,7 +1941,8 @@
   //  - limited: rol de HFD o HDOT → solo iniciar/terminar turno (registrar horas).
   async function resolveMdtAccess() {
     if (!session || !session.id) return { level: null, roles: new Set() };
-    const fullRoles = [MDT_ACCESS_ROLE, DISPATCH_ROLE];
+    // Solo el rol de Policia. Dispatch y demas no entran al MDT.
+  const fullRoles = [MDT_ACCESS_ROLE];
 
     // 1) Edge function: chequeo autoritativo con bot de Discord (rol exacto).
     for (const roleId of fullRoles) {
