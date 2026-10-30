@@ -147,6 +147,15 @@
     display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px;
     padding: 8px 18px 10px;
     border-top: 1px solid rgba(34,49,78,0.55);
+    max-height: 340px; overflow: hidden;
+    transition: max-height .26s ease, opacity .2s ease, padding .2s ease;
+  }
+
+  /* Al bajar en el contenido el panel de turno se pliega y no estorba.
+     Vuelve al tope en cuanto el usuario sube. */
+  .control-dock.dock-collapsed {
+    max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0;
+    border-top-color: transparent; overflow: hidden; pointer-events: none;
   }
 
   .cs-row { display: flex; align-items: center; gap: 8px; }
@@ -404,7 +413,11 @@
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   .fade-in { animation: fadeIn 0.3s ease both; }
 
-  /* ═══ OPERATIONS MODULES ═══ */
+  /* ═══ 
+
+
+
+OPERATIONS MODULES ═══ */
   .mods-head { display: flex; align-items: center; justify-content: space-between; margin: 8px 0 16px; }
   .mods-head .page-eyebrow { margin-bottom: 0; }
 
@@ -1429,6 +1442,22 @@
           <p>Conectando con el servidor…</p>
         </div>
       </div>
+    </div>
+
+
+    <!-- ==== INCIDENCIAS - FORMULARIO EMbebido (siempre visible) ==== -->
+    <div class="incident-inline" style="margin-top:20px;">
+      <div class="calls-head" style="border-radius:12px 12px 0 0;border-bottom:none;">
+        <div class="calls-head-title">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#f87171" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span class="page-title" style="font-size:19px;">Crear <span>Incidente</span></span>
+        </div>
+        <div class="calls-head-right">
+          <span class="calls-stamp">Listo para registrar</span>
+        </div>
+      </div>
+      <iframe id="incident-inline-frame" src="incident-report.html" title="Crear incidente"
+        style="display:block;width:100%;height:min(880px,88vh);border:0;border-radius:0 0 12px 12px;background:#0d1424;"></iframe>
     </div>
 
     <!-- ── OPERATIONS MODULES ── -->
@@ -3271,6 +3300,23 @@
       body.style.display = body.style.display === 'none' ? 'block' : (body.style.display === 'block' ? 'none' : 'block');
     }
   }
+
+  // El panel de turno se pliega al bajar para no tapar el contenido
+  // (en ventanas bajas estorbaba y no dejaba trabajar).
+  (function () {
+    function bindDockScroll() {
+      const main = document.getElementById('tablet-main');
+      const dock = document.querySelector('.control-dock');
+      if (!main || !dock || dock._bound) return;
+      dock._bound = true;
+      main.addEventListener('scroll', function () {
+        if (main.scrollTop > 70) dock.classList.add('dock-collapsed');
+        else dock.classList.remove('dock-collapsed');
+      }, { passive: true });
+    }
+    document.addEventListener('DOMContentLoaded', bindDockScroll);
+    bindDockScroll();
+  })();
 
   function copyRobloxUser(user) {
     navigator.clipboard.writeText(user).then(() => showToast('✅ Usuario copiado'));
