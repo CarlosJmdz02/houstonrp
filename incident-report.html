@@ -157,7 +157,28 @@
 <link rel="stylesheet" href="assets/hrp-dock.css">
 <link rel="stylesheet" href="assets/mdt-cad.css">
 <link rel="stylesheet" href="assets/hrp-theme.css">
-</head>
+    /* ===== VISTA EMBEBIDA (iframe dentro del MDT) =====
+       Sin sidebar ni topbar: solo el formulario, a ancho completo.
+       Se activa con la clase .embedded que pone el script de abajo. */
+    html.embedded .sidebar,
+    html.embedded .topbar { display: none !important; }
+    html.embedded .main {
+      margin-left: 0 !important;
+      height: auto !important;
+      min-height: 100vh;
+      overflow: visible !important;
+    }
+    html.embedded .content {
+      padding: 26px clamp(18px, 4vw, 44px) 40px !important;
+      overflow: visible !important;
+      max-width: 940px;
+      margin: 0 auto;
+    }
+    html.embedded body { overflow-y: auto !important; background: #0d1424; }
+
+    /* Un poco de aire cuando esta embebido */
+    html.embedded .content > * { animation: none !important; }
+    </head>
 <body>
 
 <!-- SIDEBAR -->
@@ -596,6 +617,20 @@ try {
   document.readyState === 'loading'
     ? document.addEventListener('DOMContentLoaded', init)
     : init();
+</script>
+<script>
+  // Dentro del MDT (iframe) se oculta la barra lateral y la cabecera
+  // para que solo se vea el formulario. Fuera del iframe todo sigue igual.
+  (function () {
+    try {
+      if (window.self !== window.top) {
+        document.documentElement.classList.add('embedded');
+      }
+    } catch (_) {
+      // Sin acceso al padre (X-Frame-Options): igualmente embebido.
+      document.documentElement.classList.add('embedded');
+    }
+  })();
 </script>
 </body>
 </html>
