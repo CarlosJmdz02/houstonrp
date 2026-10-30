@@ -1817,6 +1817,22 @@
   </div>
 </div>
 
+<!-- Modal: Nota / Advertencia -->
+<div id="warning-modal" style="display:none;position:fixed;inset:0;z-index:100001;background:rgba(6,10,20,.96);align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;">
+  <div style="width:100%;max-width:520px;background:#131d2f;border:1px solid #263552;border-radius:14px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.6);">
+    <div style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:#e6a868;margin-bottom:4px;">Agregar Nota / Advertencia</div>
+    <div id="warning-target" style="font-size:13px;color:#8a93a7;margin-bottom:16px;"></div>
+
+    <label style="display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4c5a72;margin-bottom:6px;">Nota para el expediente</label>
+    <textarea id="warning-text" rows="4" maxlength="400" placeholder="Ej: Advertido por conduccion imprudente. Se le informo las consecuencias." style="width:100%;background:#0d1424;border:1px solid #263552;border-radius:8px;color:#e4e7ee;padding:12px;font-family:Inter,sans-serif;font-size:14px;resize:vertical;"></textarea>
+
+    <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end;">
+      <button id="warning-cancel" style="padding:10px 20px;border-radius:8px;border:1px solid #263552;background:transparent;color:#8a93a7;font-weight:600;cursor:pointer;">Cancelar</button>
+      <button id="warning-save" style="padding:10px 22px;border-radius:8px;border:1px solid #e6a868;background:#e6a868;color:#0d1424;font-weight:700;cursor:pointer;">Guardar Nota</button>
+    </div>
+    <div id="warning-msg" style="font-size:12.5px;margin-top:10px;min-height:16px;color:#e54850;"></div>
+  </div>
+</div>
 <script src="assets/auth.js"></script>
 <script src="assets/payroll.js"></script>
 <script src="assets/criminal-codes.js"></script>
@@ -2678,6 +2694,7 @@
       <button class="btn btn-danger" onclick='openRecordDrawer("arrest", "${n}", "${r}")'>🚔 Registrar Arresto</button>
       <button class="btn btn-warning" onclick='openRecordDrawer("fine", "${n}", "${r}")'>💰 Registrar Multa</button>
       <button class="btn btn-outline" onclick="scrollToHistory()">📜 Ver Historial</button>
+      <button class="btn btn-outline" onclick='openWarningModal("${n}", "${r}")'>&#128203; Agregar Nota</button>
       <button class="btn btn-outline" onclick="copyRobloxUser('${esc(robloxUsername)}')">📋 Copiar Usuario</button>`;
   }
 
@@ -2903,7 +2920,7 @@
           </div>
           <div style="flex:1;min-width:180px;">
             <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--accent-cyan);">📋 ${esc(displayName)} ${activeBolos.length > 0 ? `<span style="display:inline-flex;align-items:center;gap:5px;margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(239,68,68,.9);border:1px solid rgba(239,68,68,.9);padding:3px 10px;border-radius:999px;">🔴 Buscado${activeBolos.length > 1 ? ' ×' + activeBolos.length : ''}</span>` : ''}</div>
-            <div style="font-size:12px;color:var(--text-dim);margin-top:2px;">🎮 ${esc(q)} — ${arrests.length} arrestos · ${fines.length} multas · ${(licenses||[]).length} licencias</div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:2px;">🎮 ${esc(q)} — ${arrests.length} arrestos · ${fines.length} multas · ${(licenses||[]).length} licencias ${(function(){var w=(records||[]).filter(function(r){return r.type==='warning';});if(!w.length)return '';return '<span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:rgba(230,168,104,.18);border:1px solid rgba(230,168,104,.45);color:#e6a868;font-weight:700;font-size:10.5px;">&#9888; '+w.length+' nota(s)</span>';})()}</div>
             ${summary ? `<div style="font-size:11.5px;color:var(--text-secondary);margin-top:5px;">${esc(summary)}</div>` : ''}
           </div>
           <button class="btn btn-primary" onclick="openProfile('${esc(q)}')" style="font-size:12px;padding:9px 18px;">Ver Perfil →</button>
@@ -3013,7 +3030,20 @@
             <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${esc(activeBolos[0].oficial_name || 'Oficial')} emitió el BOLO: ${esc(activeBolos[0].motivo || 'BOLO activo')}</div>
           </div>
         </div>` : ''}
-        <div class="profile-actions">${citizenActions(displayName, robloxUsername)}</div>`;
+        <div class="profile-actions">${citizenActions(displayName, robloxUsername)}</div>
+        ${(function(){
+  var w = (records||[]).filter(function(r){ return r.type === 'warning'; });
+  if(!w.length) return '';
+  var rows = w.map(function(x){
+    return '<div style="padding:9px 0;border-top:1px solid rgba(230,168,104,.16);font-size:13px;line-height:1.6;color:#e4e7ee;">'
+         + '<span style="color:#8a93a7;font-size:11.5px;">' + esc(new Date(x.created_at).toLocaleDateString()) + ' &#183; ' + esc(x.officer_name||'Oficial') + '</span><br>'
+         + esc(x.reason||'') + '</div>';
+  }).join('');
+  return '<div style="margin:0 0 14px;padding:14px 16px;border-radius:10px;background:rgba(230,168,104,.08);border:1px solid rgba(230,168,104,.4);">'
+       + '<div style="font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#e6a868;margin-bottom:9px;">'
+       + '&#9888; Advertencias en el expediente (' + w.length + ')</div>'
+       + rows + '</div>';
+})()}`;
 
       $('profile-stats').innerHTML = `
         <div class="stat-box">
@@ -3316,6 +3346,69 @@
 
   window.openRecordDrawer = openRecordDrawer;
   window.closeRecordDrawer = closeRecordDrawer;
+  // ===== NOTAS / ADVERTENCIAS (type = 'warning' en police_records) =====
+  let warningTarget = null;
+  window.openWarningModal = function (displayName, robloxUsername) {
+    warningTarget = { name: decodeURIComponent(displayName || ''), roblox: decodeURIComponent(robloxUsername || '') };
+    const el = document.getElementById('warning-modal');
+    if (!el) return;
+    document.getElementById('warning-target').textContent =
+      warningTarget.roblox + (warningTarget.name ? '  Â·  ' + warningTarget.name : '');
+    document.getElementById('warning-text').value = '';
+    document.getElementById('warning-msg').textContent = '';
+    el.style.display = 'flex';
+    setTimeout(function () { const t = document.getElementById('warning-text'); if (t) t.focus(); }, 60);
+  };
+  function closeWarningModal() {
+    const el = document.getElementById('warning-modal');
+    if (el) el.style.display = 'none';
+    warningTarget = null;
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'warning-cancel') closeWarningModal();
+    if (e.target && e.target.id === 'warning-modal') closeWarningModal();
+  });
+
+  async function saveWarning() {
+    const txt = (document.getElementById('warning-text').value || '').trim();
+    const msg = document.getElementById('warning-msg');
+    if (!warningTarget) return;
+    if (txt.length < 5) { msg.textContent = 'Escribe una nota de al menos 5 caracteres.'; return; }
+    if (!(await hrpHasPoliceRole())) { msg.textContent = 'Solo la Policia puede agregar notas.'; return; }
+
+    const btn = document.getElementById('warning-save');
+    btn.disabled = true; btn.textContent = 'Guardando...';
+    try {
+      await hrpInsertPoliceRecord({
+        type: 'warning',
+        target_name: warningTarget.name || warningTarget.roblox,
+        target_discord: warningTarget.roblox,
+        officer_name: userName || 'Oficial',
+        officer_discord: userId,
+        reason: txt,
+        amount: 0,
+        created_at: new Date().toISOString(),
+      });
+      const roblox = warningTarget.roblox;
+      closeWarningModal();
+      showToast('Nota agregada al expediente');
+      loadHistoryWarnings();
+      if (currentProfile && currentProfile.robloxUsername === roblox) openProfile(roblox);
+    } catch (err) {
+      msg.textContent = 'Error al guardar: ' + (err && err.message ? err.message : 'intenta de nuevo');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Guardar Nota';
+    }
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'warning-save') saveWarning();
+  });
+
+  function warningsOf(records) {
+    return (records || []).filter(function (r) { return r.type === 'warning'; });
+  }
+  window.openWarningModal = window.openWarningModal;
+  async function loadHistoryWarnings() { if (currentProfile) { try { await openProfile(currentProfile.robloxUsername); } catch (_) {} } }
 
   // Escucha avisos del iframe (arrests.html / fines.html) cuando guardan un registro.
   window.addEventListener('message', function (ev) {
