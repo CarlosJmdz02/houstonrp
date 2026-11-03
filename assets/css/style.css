@@ -124,13 +124,13 @@ a { text-decoration: none; color: inherit; }
 /* ?????? HEADER ?????? */
 .header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(10,16,32,0.78);
+  background: rgba(30,30,30,0.85);
   backdrop-filter: blur(10px) saturate(160%);
   -webkit-backdrop-filter: blur(10px) saturate(160%);
-  border-bottom: 1px solid rgba(59,130,246,0.15);
+  border-bottom: 1px solid rgba(100,100,100,0.2);
   transition: var(--transition);
 }
-.header.scrolled { background: rgba(11,18,32,0.9); border-bottom-color: rgba(59,130,246,0.2); }
+.header.scrolled { background: rgba(25,25,25,0.95); border-bottom-color: rgba(100,100,100,0.3); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
 .header-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: 1px; }
 .header-logo svg { width: 32px; height: 32px; }
