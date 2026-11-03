@@ -35,6 +35,7 @@
 
   body {
     background: #121212 !important;
+    background-color: #121212 !important;
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     display: flex;
@@ -246,7 +247,7 @@
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
 
   /* ΓòÉΓòÉΓòÉ SCROLLING MAIN ΓòÉΓòÉΓòÉ */
-  .tablet-main { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 22px 18px 40px; }
+  .tablet-main { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 22px 18px 40px; background: #121212 !important; }
 
   .page-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
   .page-title { font-family: 'Rajdhani', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: 1px; color: var(--text-primary); }
@@ -2596,15 +2597,15 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     const el = $('code-current');
     if (!el) return;
     el.innerHTML = '<span style="font-family:JetBrains Mono,monospace;font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Estado</span>';
-    if (!currentStatusCode) {
-      el.innerHTML = '<span style="color:var(--text-dim);">Sin c├│digo</span>';
-      return;
-    }
-    const found = TEN_CODES.find(c => c.code === currentStatusCode);
-    if (!found) {
-      el.innerHTML = '<span style="color:var(--text-dim);">Sin c├│digo</span>';
-      return;
-    }
+     if (!currentStatusCode) {
+       el.innerHTML = '<span style="color:var(--text-dim);">Sin código</span>';
+       return;
+     }
+     const found = TEN_CODES.find(c => c.code === currentStatusCode);
+     if (!found) {
+       el.innerHTML = '<span style="color:var(--text-dim);">Sin código</span>';
+       return;
+     }
     el.innerHTML = `<span class="cd-dot" style="width:9px;height:9px;border-radius:50%;background:${found.color};box-shadow:0 0 8px ${found.color};display:inline-block;flex-shrink:0;"></span>
       <span class="cc-code" style="color:${found.color};">${found.code}</span>
       <span class="cc-desc">${found.label}</span>`;
