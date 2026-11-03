@@ -273,6 +273,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ?????? GFX CARDS ?????? */
 .gfx-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.gfx-grid .gfx-card:only-child { grid-column: 2; max-width: 380px; justify-self: center; }
 .gfx-card {
   position: relative; border-radius: var(--radius); overflow: hidden;
   aspect-ratio: 3/4; cursor: pointer;
