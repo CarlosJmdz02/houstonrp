@@ -33,15 +33,15 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-     background: transparent;
+   body {
+     background: transparent !important;
      color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
-    height: 100vh;
-    display: flex;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+     font-family: 'Inter', sans-serif;
+     height: auto;
+     display: flex;
+     overflow-x: hidden;
+     overflow-y: auto;
+   }
 
    body::after {
      display: none;
@@ -164,7 +164,11 @@
     html.embedded body { overflow-y: auto !important; background: #0d1424; }
 
     /* Un poco de aire cuando esta embebido */
-    html.embedded .content > * { animation: none !important; }
+     html.embedded .content > * { animation: none !important; }
+   
+   /* FORCE ALL BACKGROUNDS TRANSPARENT FOR IFRAME */
+   *, *::before, *::after { background: transparent !important; }
+   body, .main, .content, .topbar, .panel { background: transparent !important; }
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
