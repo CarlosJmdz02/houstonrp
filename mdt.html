@@ -958,7 +958,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     .radio-roster-box { flex: 1 1 auto; border-left: none; border-top: 1px solid var(--border); }
     .radio-roster { max-height: 110px; }
   }
-  /* ΓöÇΓöÇ Qui⌐n estí al aire en el roster ΓöÇΓöÇ */
+  /* ΓöÇΓöÇ Quién estí al aire en el roster ΓöÇΓöÇ */
   .roster-row.talking { background: rgba(33,197,93,.14); }
   .roster-row.talking .roster-dot {
     background: var(--accent-green);
@@ -1200,7 +1200,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     <div class="top-user">
       <div class="user-avatar" id="user-avatar">?</div>
       <div class="user-info">
-        <div class="user-name" id="user-name">CargandoΓÇª</div>
+        <div class="user-name" id="user-name">CargandoΓÇ</div>
         <div class="user-role idle" id="user-role">Off Duty</div>
       </div>
     </div>
@@ -1214,7 +1214,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <div class="balance-label">Tus horas</div>
         <div class="balance-value hours-value" id="user-hours">--h --m</div>
       </div>
-      <div class="live-indicator" id="conn-indicator" title="Estado de conexi│n con el servidor"><span class="live-dot"></span>En l¡nea</div>
+      <div class="live-indicator" id="conn-indicator" title="Estado de conexi│n con el servidor"><span class="live-dot"></span>En lánea</div>
       <div class="top-clock" id="clock">--:--:--</div>
         <button class="btn-radio" id="radio-toggle" type="button" onclick="HRPRadio.toggle()" title="Mostrar / ocultar la radio tíctica">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.9 19.1a10 10 0 0 1 0-14.2"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/></svg>
@@ -1259,9 +1259,9 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14"/></svg>
         Terminar turno
       </button>
-      <select id="bodycam-src" class="bc-src" disabled title="Qu⌐ muestra la bodycam (bajo uso de CPU / FPS)" onclick="event.stopPropagation()">
-        <option value="screen">≡ƒûÑ∩╕Å Pantalla (Roblox)</option>
-        <option value="camera">≡ƒô╖ Címara</option>
+      <select id="bodycam-src" class="bc-src" disabled title="Qué muestra la bodycam (bajo uso de CPU / FPS)" onclick="event.stopPropagation()">
+        <option value="screen">Pantalla (Roblox)</option>
+        <option value="camera">Cámara</option>
       </select>
       <button id="btn-bodycam" class="sbtn bodycam" disabled onclick="handleBodycamToggle()" title="Transmitir tu pantalla o címara al despacho a 15 FPS">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
@@ -1301,7 +1301,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     <div class="access-icon denied"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
     <div class="access-title" id="denied-title">Acceso Denegado</div>
     <div class="access-desc" id="denied-desc">
-      <strong>Γ¥î No tienes el rol "En Departamento"</strong><br><br>
+      <strong>Γî No tienes el rol "En Departamento"</strong><br><br>
       Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br>
       <strong>Soluci│n:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.
     </div>
@@ -1373,14 +1373,14 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in">
             <div class="section-header" onclick="toggleSection('char')">
-              <h3>≡ƒ¬¬ Ficha del Ciudadano<span class="qtag">ID</span></h3>
+              <h3><span class="qtag">ID</span></h3>
             </div>
             <div class="section-body" id="char-body"></div>
           </div>
 
           <div class="profile-section fade-in">
             <div class="section-header" onclick="toggleSection('licenses')">
-              <h3>≡ƒ¢í∩╕Å Licencias y Permisos<span class="qtag">DL / CCW</span></h3>
+              <h3><span class="qtag">DL / CCW</span></h3>
               <span class="section-count" id="licenses-count">0</span>
             </div>
             <div class="section-body" id="licenses-body"></div>
@@ -1388,7 +1388,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in" style="animation-delay:0.05s;">
             <div class="section-header" onclick="toggleSection('arrests')">
-              <h3>≡ƒÜö Historial de Arrestos</h3>
+              <h3></h3>
               <span class="section-count" id="arrests-count">0</span>
             </div>
             <div class="section-body" id="arrests-body"></div>
@@ -1396,7 +1396,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in" style="animation-delay:0.1s;">
             <div class="section-header" onclick="toggleSection('fines')">
-              <h3>≡ƒÆ░ Historial de Multas</h3>
+              <h3></h3>
               <span class="section-count" id="fines-count">0</span>
             </div>
             <div class="section-body" id="fines-body"></div>
@@ -1404,7 +1404,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in" style="animation-delay:0.15s;">
             <div class="section-header" onclick="toggleSection('vehicles')">
-              <h3>≡ƒÜù Veh¡culos Registrados<span class="qtag">REG</span></h3>
+              <h3><span class="qtag">REG</span></h3>
               <span class="section-count" id="vehicles-count">0</span>
             </div>
             <div class="section-body" id="vehicles-body"></div>
@@ -1412,7 +1412,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in" style="animation-delay:0.2s;">
             <div class="section-header" onclick="toggleSection('bolo')">
-              <h3>≡ƒÜ¿ Estado BOLO</h3>
+              <h3></h3>
               <span class="section-count" id="bolo-count">0</span>
             </div>
             <div class="section-body" id="bolo-body"></div>
@@ -1447,7 +1447,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       <div class="calls-grid" id="calls-grid">
         <div class="calls-empty">
           <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <p>Conectando con el servidorΓÇª</p>
+          <p>Conectando con el servidorΓÇ</p>
         </div>
       </div>
     </div>
@@ -1618,7 +1618,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <div class="bolo-form-row" style="margin-bottom:12px;">
           <div class="bolo-field">
             <label class="bolo-form-label">Buscar Ciudadano (Roblox / Nombre)</label>
-            <input class="bolo-input" id="bolo-search" type="text" placeholder="Escrib¡ el nombre de usuario o nombre real..." autocomplete="off" spellcheck="false">
+            <input class="bolo-input" id="bolo-search" type="text" placeholder="Escribá el nombre de usuario o nombre real..." autocomplete="off" spellcheck="false">
           </div>
         </div>
         <div id="bolo-search-result"></div>
@@ -1627,7 +1627,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             <div class="bolo-avatar" id="bolo-pick-avatar">?</div>
             <div>
               <div class="bolo-person-name" id="bolo-pick-name">ΓÇö</div>
-              <div class="bolo-person-user" id="bolo-pick-user">≡ƒÄ« ΓÇö</div>
+              <div class="bolo-person-user" id="bolo-pick-user"></div>
             </div>
             <button class="bolo-btn-x" onclick="clearBoloPick()" title="Quitar">Γ£ò</button>
           </div>
@@ -1636,7 +1636,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <div class="bolo-form-row" style="margin-top:14px;">
           <div class="bolo-field">
             <label class="bolo-form-label">Motivo del BOLO *</label>
-            <textarea class="bolo-input" id="bolo-motivo" maxlength="500" placeholder="Describ¡ el motivo detallado del aviso de vigilancia..."></textarea>
+            <textarea class="bolo-input" id="bolo-motivo" maxlength="500" placeholder="Describá el motivo detallado del aviso de vigilancia..."></textarea>
           </div>
         </div>
         <div class="bolo-form-row">
@@ -1647,14 +1647,14 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <div class="bolo-field">
             <label class="bolo-form-label">Prioridad</label>
             <select class="bolo-input" id="bolo-prio">
-              <option value="alta">≡ƒö┤ Alta</option>
-              <option value="media" selected>≡ƒƒí Media</option>
-              <option value="baja">≡ƒƒó Baja</option>
+              <option value="alta"></option>
+              <option value="media" selected></option>
+              <option value="baja"></option>
             </select>
           </div>
         </div>
         <div class="bolo-form-row" style="margin-top:14px;">
-          <button class="btn btn-bolo" id="btn-bolo-save" onclick="saveBolo()">≡ƒÜ¿ Emitir BOLO</button>
+          <button class="btn btn-bolo" id="btn-bolo-save" onclick="saveBolo()"></button>
         </div>
         <div class="bolo-form-error" id="bolo-form-msg"></div>
       </div>
@@ -1682,7 +1682,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 <!-- ΓòÉΓòÉΓòÉ BOLO EDIT MODAL (outside mdt-content, always accessible) ΓòÉΓòÉΓòÉ -->
 <div class="bolo-edit-modal" id="bolo-edit-modal">
   <div class="bolo-edit-box">
-    <h3>Γ£Å∩╕Å Editar BOLO</h3>
+    <h3>Γ£Å</h3>
     <div class="bolo-form-row">
       <div class="bolo-field">
         <label class="bolo-form-label">Motivo *</label>
@@ -1697,9 +1697,9 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       <div class="bolo-field">
         <label class="bolo-form-label">Prioridad</label>
         <select class="bolo-input" id="bolo-edit-prio">
-          <option value="alta">≡ƒö┤ Alta</option>
-          <option value="media">≡ƒƒí Media</option>
-          <option value="baja">≡ƒƒó Baja</option>
+          <option value="alta"></option>
+          <option value="media"></option>
+          <option value="baja"></option>
         </select>
       </div>
     </div>
@@ -1721,7 +1721,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   <div class="tac-gate" id="radio-gate">
     <div class="tac-gate-badge">RADIO TüCTICA HPD</div>
     <div class="tac-gate-title">Selecciona canal</div>
-    <div class="tac-gate-sub">Escrib¡ un nmero del <b>1 al 5</b> para entrar a la radio</div>
+    <div class="tac-gate-sub">Escribá un nmero del <b>1 al 5</b> para entrar a la radio</div>
     <div class="tac-gate-row">
       <input type="text" inputmode="numeric" maxlength="1" id="radio-gate-input" placeholder="1"
              onkeydown="if(event.key==='Enter'){HRPRadio.join(this.value)}">
@@ -1789,7 +1789,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       </div>
     </div>
 
-    <button class="radio-mic" id="radio-mic" type="button" onclick="HRPRadio.enableMic()">≡ƒÄñ Activar micr│fono</button>
+    <button class="radio-mic" id="radio-mic" type="button" onclick="HRPRadio.enableMic()"></button>
 
     <button id="radio-ptt" class="tac-ptt" type="button"
             onpointerdown="event.preventDefault(); try{this.setPointerCapture(event.pointerId);}catch(e){}; HRPRadio.press();"
@@ -1830,7 +1830,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeRecordDrawer()"></div>
 <div class="drawer" id="record-drawer" aria-hidden="true">
   <div class="drawer-head" id="drawer-head">
-    <div class="drawer-icon" id="drawer-icon">≡ƒÜö</div>
+    <div class="drawer-icon" id="drawer-icon"></div>
     <div class="drawer-title">
       <strong id="drawer-title">Registrar Arresto</strong>
       <span id="drawer-sub">Completando arresto para el ciudadano...</span>
@@ -1863,7 +1863,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 <script src="assets/auth.js"></script>
 <script src="assets/payroll.js"></script>
 <script src="assets/criminal-codes.js"></script>
-<!-- supabase-js LOCAL (sin CDN): hace que la librer¡a de bodycam siempre cargue -->
+<!-- supabase-js LOCAL (sin CDN): hace que la libreráa de bodycam siempre cargue -->
 <script src="assets/supabase-js.umd.js"></script>
 <script src="assets/bodycam-app.js"></script>
 <script src="assets/radio-app.js"></script>
@@ -1884,7 +1884,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   let startShiftInProgress = false;
   let currentStatusCode = null;
 
-  const MAX_SHIFT_SECONDS = 10 * 60 * 60; // 10 horas (l¡mite firme por turno)
+  const MAX_SHIFT_SECONDS = 10 * 60 * 60; // 10 horas (lámite firme por turno)
   const PRESENCE_FAIL_THRESHOLD = 3;      // 3 chequeos seguidos sin estar en ER:LC = fin de turno
   const PAYROLL_DEPTS = ['hpd', 'hcso', 'tph'];
   let presenceInterval = null;
@@ -1933,7 +1933,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     { code: '10-8',   color: '#4acf8f', label: 'En servicio', bg: 'rgba(74,204,143,0.12)' },
     { code: '10-5',   color: '#4acf8f', label: 'Vigilancia', bg: 'rgba(74,204,143,0.12)' },
     { code: '10-11',  color: '#4acf8f', label: 'Detenci│n de trífico', bg: 'rgba(74,204,143,0.12)' },
-    { code: '10-100', color: '#ef4444', label: 'Oficial ca¡do', bg: 'rgba(239,68,68,0.15)' },
+    { code: '10-100', color: '#ef4444', label: 'Oficial caádo', bg: 'rgba(239,68,68,0.15)' },
     { code: '10-99',  color: '#ff8c42', label: 'Oficial en apuros', bg: 'rgba(255,140,66,0.12)' },
     { code: '10-97',  color: '#ff8c42', label: 'En camino', bg: 'rgba(255,140,66,0.12)' },
     { code: '10-50',  color: '#4acf8f', label: 'Accidente grave', bg: 'rgba(74,204,143,0.12)' },
@@ -2037,57 +2037,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
      // 2) Validaci│n por bot de Discord (Supabase fallback)
      for (const roleId of fullRoles) {
        if (Date.now() - startTime > timeoutMs) {
-         console.warn('ΓÅ▒∩╕Å MDT access check timeout despu⌐s de', Date.now() - startTime, 'ms');
-         break;
-       }
-       
-       try {
-         if (typeof hrpCallCheckPoliceRole === 'function') {
-           const result = await Promise.race([
-             hrpCallCheckPoliceRole({
-               discord_id: session.id,
-               username: session.username || 'Unknown',
-               role_id: roleId,
-             }),
-             timeoutPromise
-           ]);
-           console.log('Bot check result:', result);
-           if (result && !result.timedOut && result.allowed === true) {
-             console.log('Γ£à ACCESO CONCEDIDO (Bot)');
-             // Guardar en cache
-             try {
-               localStorage.setItem('hrp_mdt_access_' + session.id, JSON.stringify({
-                 level: 'full',
-                 timestamp: Date.now()
-               }));
-             } catch (e) { }
-             return { level: 'full', roles: null };
-           }
-         }
-       } catch (e) { console.log('Bot check failed:', e); }
-     }
-     
-     console.log('Γ¥î ACCESO DENEGADO - No se encontr│ rol vílido');
-     return { level: null, roles };
-  }
-
-  async function checkAccess() {
-    session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
-    if (!session || !session.id) {
-      const _p=window.location.pathname.split('/').pop()||'index.html'; if(_p!=='index.html'){ try { localStorage.setItem('hrp_redirect',_p); } catch(e) {} }
-      window.location.href = 'index.html';
-      return false;
-    }
-
-    userId = session.id;
-    userName = session.username || 'Oficial';
-
-    // Animar barra de progreso
-      let progress = 0;
-      const progressBar = $('access-progress-bar');
-      const progressText = $('access-progress-text');
-      const progressInterval = setInterval(() => {
-        if (progress < 90) progress += Math.random() * 40;
+         console.warn('ΓÅ▒< 90) progress += Math.random() * 40;
         if (progress > 90) progress = 90;
         progressBar.style.width = progress + '%';
         progressText.textContent = Math.floor(progress) + '%';
@@ -2110,7 +2060,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             $('access-loading').classList.add('hidden');
             $('access-denied').classList.remove('hidden');
             $('denied-title').textContent = 'Acceso Denegado';
-            $('denied-desc').innerHTML = '<strong>Γ¥î No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Soluci│n:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
+            $('denied-desc').innerHTML = '<strong>Γî No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Soluci│n:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
           }, 500);
           return false;
         }
@@ -2126,7 +2076,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         $('access-loading').classList.add('hidden');
         $('access-denied').classList.remove('hidden');
         $('denied-title').textContent = 'Acceso Denegado';
-        $('denied-desc').innerHTML = '<strong>Γ¥î No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Soluci│n:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
+        $('denied-desc').innerHTML = '<strong>Γî No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Soluci│n:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
         return false;
       }
   }
@@ -2211,7 +2161,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     const on = navigator.onLine !== false;
     if (on === _connState) return;
     _connState = on;
-    el.innerHTML = '<span class="live-dot"></span>' + (on ? 'En l¡nea' : 'Sin conexi│n');
+    el.innerHTML = '<span class="live-dot"></span>' + (on ? 'En lánea' : 'Sin conexi│n');
     el.classList.toggle('offline', !on);
   }
   window.addEventListener('online', function () { _connState = null; syncConnIndicator(); });
@@ -2243,7 +2193,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
   function buildDeptBar() {
     // Departamentos del usuario (del cache de Discord), siempre acotados a los del MDT.
-    // Si el cache viene vac¡o pero el usuario YA tiene acceso al MDT (estí en esta pígina),
+    // Si el cache viene vacáo pero el usuario YA tiene acceso al MDT (estí en esta pígina),
     // se asumen todos los departamentos del MDT (HPD, HCSO, ICE, THP) para que el panel
     // nunca quede en "Sin departamentos asignados".
     let userDepts = (typeof hrpGetCachedDepartments === 'function' ? hrpGetCachedDepartments() : [])
@@ -2324,121 +2274,25 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     if (!robloxId) {
       const id = await getRobloxId();
       if (!id) {
-        showToast('No ten⌐s una cuenta de Roblox vinculada. Creí un personaje en Characters.', 'error');
+        showToast('No tenés una cuenta de Roblox vinculada. Creí un personaje en Characters.', 'error');
         return false;
       }
     }
     // Bloqueamos el inicio de turno si la API confirma que NO estís en el servidor.
     // Si la API no estí disponible (null) no bloqueamos, para no dejar a nadie afuera.
     // El equipo se verifica igual, pero solo se AVISA (no bloquea): permite
-    // iniciar desde el tel⌐fono mientras se juega en PC / consola.
+    // iniciar desde el teléfono mientras se juega en PC / consola.
     const result = await checkRobloxPresence();
     if (result.inServer === null) return true;
     if (result.inServer !== true) {
       playSound(audioConectate);
-      showToast('Γ¢ö No estís en el servidor de ER:LC. Con⌐ctate al servidor para poder iniciar tu turno.', 'error');
+      showToast('Γö No estís en el servidor de ER:LC. Conéctate al servidor para poder iniciar tu turno.', 'error');
       return false;
     }
     const requiredTeam = DEPT_TEAM_MAP[selectedDept];
     if (requiredTeam && result.team !== requiredTeam) {
       const deptLabel = (DEPT_NAMES[selectedDept] || selectedDept || '').replace(/<[^>]+>/g, '').toUpperCase();
-      showToast('ΓÜá∩╕Å Estís en el equipo ' + (result.team || 'otro') + ', pero para ' + deptLabel + ' el equipo esperado es ' + requiredTeam + '. Si estís en consola o el equipo an no carga, pod⌐s iniciar igual.', 'warn');
-    }
-    return true;
-  }
-
-  // ΓöÇΓöÇ SHIFT LOCAL STATE (shared with police.html) ΓöÇΓöÇ
-  function saveLocalState() {
-    const state = { shiftId: currentShift?.id, startTime: shiftStartTime, breakAccumulated, breakStartTime };
-    localStorage.setItem('hrp_shift_state', JSON.stringify(state));
-  }
-  function clearLocalState() {
-    localStorage.removeItem('hrp_shift_state');
-  }
-
-  // ΓöÇΓöÇ TOTAL ACUMULADO (historia de horas del usuario, visible sin botones) ΓöÇΓöÇ
-  async function loadAccumulatedHours() {
-    const el = $('shift-accum');
-    const hoursEl = $('user-hours');
-    if (!userId) return;
-    try {
-      const [shifts, adjustments] = await Promise.all([
-        supaSelect('police_shift_sessions', 'total_seconds', { discord_id: `eq.${userId}`, status: 'eq.completed' }).catch(() => []),
-        supaSelect('police_hours_adjustments', 'adjustment_seconds', { discord_id: `eq.${userId}` }).catch(() => []),
-      ]);
-      let total = 0;
-      (shifts || []).forEach(s => { total += (s.total_seconds || 0); });
-      (adjustments || []) .forEach(a => { total += (a.adjustment_seconds || 0); });
-      const h = Math.floor(total / 3600);
-      const m = Math.floor((total % 3600) / 60);
-      const yrs = total >= 36000 ? ' ┬╖ alcanzaste las 10h' : '';
-      const txt = 'Total acumulado: ' + h + 'h ' + m + 'm';
-      if (el) el.textContent = txt;
-      if (hoursEl) {
-        hoursEl.textContent = h + 'h ' + m + 'm';
-        hoursEl.title = txt + yrs;
-        if (total >= 36000) hoursEl.classList.add('hours-max');
-      }
-    } catch (_) {
-      if (el) el.textContent = 'Total acumulado: --';
-      if (hoursEl) hoursEl.textContent = '--h --m';
-    }
-  }
-
-  // ΓöÇΓöÇ PRESENCIA EN ER:LC (auto-fin al salir del servidor / cambiar dispositivo) ΓöÇΓöÇ
-  function startPresencePolling() {
-    stopPresencePolling();
-    presenceFailCount = 0;
-    presenceTeamFailCount = 0;
-    presenceInterval = setInterval(async () => {
-      if (!currentShift) { stopPresencePolling(); return; }
-      if (!robloxId) {
-        try { await getRobloxId(); } catch (_) {}
-        if (!robloxId) return; // sin Roblox vinculado no podemos verificar
-      }
-      const result = await checkRobloxPresence();
-      if (result.inServer === null) {
-        presenceFailCount = 0;       // API no disponible: no penalizar
-        presenceTeamFailCount = 0;
-      } else if (result.inServer === false) {
-        presenceFailCount++;
-        presenceTeamFailCount = 0;
-        if (presenceFailCount >= PRESENCE_FAIL_THRESHOLD) {
-          _autoEndShiftServerLeft();
-        }
-      } else {
-        // Estís en el servidor: tambi⌐n exigimos seguir en el equipo del
-        // departamento del turno activo (salir del departamento = fin de turno).
-        presenceFailCount = 0;
-        const requiredTeam = DEPT_TEAM_MAP[currentShift.department];
-        if (requiredTeam && (!result.team || result.team !== requiredTeam)) {
-          presenceTeamFailCount++;
-          if (presenceTeamFailCount >= PRESENCE_FAIL_THRESHOLD) {
-            _autoEndShiftLeftDept(result.team || 'otro', requiredTeam);
-          }
-        } else {
-          presenceTeamFailCount = 0;
-        }
-      }
-    }, 5000);
-  }
-
-  function stopPresencePolling() {
-    if (presenceInterval) {
-      clearInterval(presenceInterval);
-      presenceInterval = null;
-    }
-  }
-
-  // ΓöÇΓöÇ AUTO-FIN DE TURNO (corte limpio con horas correctas) ΓöÇΓöÇ
-  async function _autoEndShift(finalStatus, reason) {
-    if (_autoEndRunning || !currentShift) return;
-    _autoEndRunning = true;
-    const shift = currentShift;
-    const startMs = new Date(shift.start_time).getTime();
-    let elapsed = Math.max(0, Math.floor((Date.now() - startMs) / 1000) - (breakAccumulated || 0));
-    if (breakStartTime) elapsed -= Math.floor((Date.now() - breakStartTime) / 1000);
-    if (elapsed < 0) elapsed = 0;
+      showToast('ΓÜá< 0) elapsed = 0;
     const totalSeconds = finalStatus === 'completed' ? Math.min(elapsed, MAX_SHIFT_SECONDS) : 0;
 
     stopPresencePolling();
@@ -2468,109 +2322,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   }
 
   function _autoEndShiftOver10h() {
-    _autoEndShift('completed', 'ΓÅ▒∩╕Å L¡mite de 10 horas alcanzado. El turno se cort│ y se registraron solo 10 horas.');
-  }
-
-  function _autoEndShiftServerLeft() {
-    playSound(audioFinaliza);
-    _autoEndShift('completed', '≡ƒÜ¬ Saliste de ER:LC (o cambiaste de dispositivo). El turno se cerr│ automíticamente.');
-  }
-
-  function _autoEndShiftLeftDept(currentTeam, requiredTeam) {
-    playSound(audioFinaliza);
-    _autoEndShift('completed', '≡ƒÜö Cambiaste al equipo ' + currentTeam + ' y abandonaste el departamento (' + requiredTeam + '). El turno se cerr│ automíticamente.');
-  }
-
-  function setLoading(btnId, loading, text) {
-    const btn = $(btnId);
-    if (!btn) return;
-    if (loading) {
-      btn._orig = btn.innerHTML;
-      btn.innerHTML = (text || 'Procesando...');
-      btn.disabled = true;
-    } else {
-      btn.innerHTML = btn._orig || btn.innerHTML;
-    }
-  }
-
-  // ΓöÇΓöÇ UI STATES ΓöÇΓöÇ
-  function displayDept() {
-    $('info-dept').innerHTML = currentShift ? (DEPT_NAMES[currentShift.department] || currentShift.department) : 'ΓÇö';
-  }
-
-  function renderState() {
-    const dot = $('shift-dot');
-    const status = $('shift-status');
-    const timer = $('shift-timer');
-    const lbStart = $('limited-btn-start');
-    const lbEnd = $('limited-btn-end');
-    const lbStatus = $('limited-shift-status');
-    if (!currentShift) {
-      dot.className = 'cs-dot idle';
-      status.className = 'cs-status idle';
-      status.textContent = 'Sin turno activo';
-      timer.textContent = '00:00:00';
-      $('btn-start').disabled = false;
-      $('btn-break').disabled = true;
-      $('btn-resume').disabled = true;
-      $('btn-end').disabled = true;
-      const bcBtnIdle = $('btn-bodycam');
-      if (bcBtnIdle) bcBtnIdle.disabled = true;
-      const bcSrcIdle = $('bodycam-src');
-      if (bcSrcIdle) bcSrcIdle.disabled = true;
-      if (lbStart) lbStart.disabled = false;
-      if (lbEnd) lbEnd.disabled = true;
-      if (lbStatus) lbStatus.textContent = 'Sin turno activo. Eleg¡ tu departamento e inicií el turno para registrar horas.';
-      currentStatusCode = null;
-      updateCurrentCodeDisplay();
-      highlightActiveCode();
-      updateRoleLabel();
-      return;
-    }
-    if (currentShift.status === 'break') {
-      dot.className = 'cs-dot break';
-      status.className = 'cs-status break';
-      status.textContent = 'En descanso';
-    } else {
-      dot.className = 'cs-dot active';
-      status.className = 'cs-status active';
-      status.textContent = 'En servicio';
-    }
-    $('btn-start').disabled = true;
-    $('btn-break').disabled = currentShift.status === 'break';
-    $('btn-resume').disabled = currentShift.status !== 'break';
-    $('btn-end').disabled = false;
-    const bcBtn = $('btn-bodycam');
-    if (bcBtn) bcBtn.disabled = false;
-    const bcSrc = $('bodycam-src');
-    if (bcSrc) bcSrc.disabled = !!bodycamServer || bodycamStarting;
-    if (lbStart) lbStart.disabled = true;
-    if (lbEnd) lbEnd.disabled = false;
-    if (lbStatus) lbStatus.textContent = 'Turno activo ┬╖ ' + (DEPT_NAMES[currentShift.department] || currentShift.department) + ' ┬╖ ' + (currentShift.status === 'break' ? 'En descanso' : 'En servicio');
-    currentStatusCode = currentShift.status_code || null;
-    updateCurrentCodeDisplay();
-    highlightActiveCode();
-    updateRoleLabel();
-  }
-
-  // ΓöÇΓöÇ TIMER ΓöÇΓöÇ
-  function startTimer() {
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = setInterval(updateTimer, 1000);
-    updateTimer();
-  }
-  function stopTimer() {
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
-    $('shift-timer').textContent = '00:00:00';
-  }
-  function updateTimer() {
-    if (!shiftStartTime) { $('shift-timer').textContent = '00:00:00'; return; }
-    let elapsed = Math.floor((Date.now() - shiftStartTime) / 1000) - breakAccumulated;
-    if (breakStartTime) elapsed -= Math.floor((Date.now() - breakStartTime) / 1000);
-    if (elapsed < 0) elapsed = 0;
+    _autoEndShift('completed', 'ΓÅ▒< 0) elapsed = 0;
     $('shift-timer').textContent = formatTime(elapsed);
     // Corte firme: el turno nunca puede pasar de 10 horas de servicio.
     if (elapsed >= MAX_SHIFT_SECONDS && !_over10hTriggered) {
@@ -2643,184 +2395,12 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       highlightActiveCode();
       updateCurrentCodeDisplay();
       playSound(audioPanic);
-      showToast('≡ƒÜ¿ ┬íALERTA DE PüNICO ENVIADA!', 'error');
-    } catch (e) {
-      console.warn('Failed to activate panic:', e);
-      showToast('Error al enviar alerta de pínico', 'error');
-    }
-  };
-
-  // ΓöÇΓöÇ PANIC POLLING (10-100 de otros oficiales) ΓöÇΓöÇ
-  function startPanicPolling() {
-    stopPanicPolling();
-    panicInterval = setInterval(async () => {
-      try {
-        const data = await supaSelect('police_shift_sessions', 'id,username,status_code', { status_code: 'eq.10-100', status: 'in.(active,break)' });
-        const panicShifts = Array.isArray(data) ? data : [];
-        const currentIds = new Set(panicShifts.map(s => s.id));
-        for (const s of panicShifts) {
-          if (currentShift && s.id === currentShift.id) continue;
-          if (!processedPanics.has(s.id)) {
-            processedPanics.add(s.id);
-            playSound(audioPanic);
-            showToast('≡ƒÜ¿ 10-100 PüNICO ΓÇö ' + (s.username || 'Oficial'), 'error');
-          }
-        }
-        for (const id of processedPanics) {
-          if (!currentIds.has(id)) processedPanics.delete(id);
-        }
-      } catch (_) {}
-    }, 3000);
-  }
-
-  function stopPanicPolling() {
-    if (panicInterval) {
-      clearInterval(panicInterval);
-      panicInterval = null;
-    }
-  }
-
-  // ΓöÇΓöÇ SHIFT HANDLERS ΓöÇΓöÇ
-  async function _handleStartShift() {
-    if (startShiftInProgress) return;
-    if (typeof hrpStartShift !== 'function' || typeof supaSelect !== 'function') {
-      showToast('La sesi│n an no carg│. Recargí la pígina e intentí de nuevo.', 'error');
-      return;
-    }
-    if (currentShift) {
-      showToast('Ya ten⌐s un turno activo. Finalizalo antes de iniciar uno nuevo.', 'warn');
-      return;
-    }
-    if (!selectedDept) {
-      showToast('Seleccioní un departamento primero', 'error');
-      return;
-    }
-    if (!userId) {
-      showToast('No hay sesi│n activa. Inicií sesi│n con Discord de nuevo.', 'error');
-      return;
-    }
-    startShiftInProgress = true;
-    setLoading('btn-start', true, 'Iniciando...');
-    try {
-      const canStart = await requireRobloxPresence();
-      if (!canStart) return;
-      const result = await hrpStartShift(userId, userName, selectedDept);
-      if (result) {
-        currentShift = result;
-        shiftStartTime = new Date(result.start_time).getTime();
-        breakAccumulated = result.break_duration || 0;
-        breakStartTime = (result.status === 'break' && result.break_start) ? new Date(result.break_start).getTime() : null;
-        renderState();
-        startTimer();
-        startPresencePolling();
-        playSound(audioCentral);
-        saveLocalState();
-        if (typeof hrpPayStart === 'function' && result.department) {
-          hrpPayStart(userId, userName, result.department).catch(function(){});
-        }
-        if (result.start_time && new Date(result.start_time).getTime() < Date.now() - 60 * 1000) {
-          showToast('≡ƒöü Ya ten¡as un turno iniciado; se reanud│.', 'warn');
-        } else {
-          showToast('Servicio iniciado correctamente');
-        }
-      } else {
-        showToast('Error al iniciar servicio. Revisa la consola (F12).', 'error');
-      }
-    } catch (err) {
-      console.error('Start shift error:', err);
-      showToast('Error al iniciar servicio: ' + (err && err.message ? err.message : 'intenta de nuevo'), 'error');
-    } finally {
-      setLoading('btn-start', false);
-      startShiftInProgress = false;
-    }
-  }
-
-  async function _handleStartBreak() {
-    if (typeof hrpStartBreak !== 'function' || !currentShift) return;
-    setLoading('btn-break', true, 'Cargando...');
-    const ok = await hrpStartBreak(currentShift.id);
-    setLoading('btn-break', false);
-    if (ok) {
-      breakStartTime = Date.now();
-      currentShift.status = 'break';
-      renderState();
-      saveLocalState();
-      showToast('Descanso iniciado');
-    } else {
-      showToast('Error al iniciar descanso', 'error');
-    }
-  }
-
-  async function _handleEndBreak() {
-    if (typeof hrpEndBreak !== 'function' || !currentShift || !breakStartTime) return;
-    setLoading('btn-resume', true, 'Cargando...');
-    const ok = await hrpEndBreak(currentShift.id, new Date(breakStartTime).toISOString());
-    setLoading('btn-resume', false);
-    if (ok) {
-      const breakSec = Math.floor((Date.now() - breakStartTime) / 1000);
-      breakAccumulated += breakSec;
-      breakStartTime = null;
-      currentShift.status = 'active';
-      renderState();
-      saveLocalState();
-      showToast('Descanso terminado');
-    } else {
-      showToast('Error al terminar descanso', 'error');
-    }
-  }
-
-  async function _handleEndShift() {
-    if (typeof hrpEndShift !== 'function' || !currentShift) return;
-    stopPresencePolling();
-    if (bodycamServer) stopBodycamLocal();
-    setLoading('btn-end', true, 'Finalizando...');
-    const ok = await hrpEndShift(currentShift.id, currentShift.start_time, breakAccumulated);
-    setLoading('btn-end', false);
-    if (ok) {
-      const endDept = currentShift ? currentShift.department : null;
-      stopTimer();
-      currentShift = null;
-      shiftStartTime = null;
-      breakStartTime = null;
-      breakAccumulated = 0;
-      clearLocalState();
-      renderState();
-      loadOnlineOfficers();
-      loadAccumulatedHours();
-      if (typeof hrpPayEnd === 'function') hrpPayEnd(userId).catch(function(){});
-      loadBalance();
-      showToast('Servicio finalizado. Horas guardadas.');
-    } else {
-      showToast('Error al finalizar servicio', 'error');
-    }
-  }
-
-  // ΓöÇΓöÇ DATABASE SEARCH (same connections as database-search.html) ΓöÇΓöÇ
-  let currentProfile = null;
-
-  async function fetchRobloxAvatar(username) {
-    try {
-      // Tope de 3 s: si el servicio de Roblox se cuelga, la bsqueda no
-      // puede quedarse esperando (se muestra la inicial y listo).
-      const ctrl = new AbortController();
-      const to = setTimeout(() => ctrl.abort(), 3000);
-      const res = await fetch(`/.netlify/functions/roblox-avatar/by-username/${encodeURIComponent(username)}`, { signal: ctrl.signal });
-      clearTimeout(to);
-      if (!res.ok) return null;
-      const data = await res.json();
-      return data.url || null;
-    } catch { return null; }
-  }
-
-  function citizenActions(displayName, robloxUsername) {
-    const n = encodeURIComponent(displayName);
-    const r = encodeURIComponent(robloxUsername);
-    return `
-      <button class="btn btn-danger" onclick='openRecordDrawer("arrest", "${n}", "${r}")'>≡ƒÜö Registrar Arresto</button>
-      <button class="btn btn-warning" onclick='openRecordDrawer("fine", "${n}", "${r}")'>≡ƒÆ░ Registrar Multa</button>
-      <button class="btn btn-outline" onclick="scrollToHistory()">≡ƒô£ Ver Historial</button>
+      showToast('< Date.now() - 60 * 1000) {
+          showToast('<button class="btn btn-danger" onclick='openRecordDrawer("arrest", "${n}", "${r}")'></button>
+      <button class="btn btn-warning" onclick='openRecordDrawer("fine", "${n}", "${r}")'></button>
+      <button class="btn btn-outline" onclick="scrollToHistory()"></button>
       <button class="btn btn-outline" onclick='openWarningModal("${n}", "${r}")'>&#128203; Agregar Nota</button>
-      <button class="btn btn-outline" onclick="copyRobloxUser('${esc(robloxUsername)}')">≡ƒôï Copiar Usuario</button>`;
+      <button class="btn btn-outline" onclick="copyRobloxUser('${esc(robloxUsername)}')"></button>`;
   }
 
   window.scrollToHistory = function() {
@@ -2878,7 +2458,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   // ΓöÇΓöÇ MODO DE BÜSQUEDA (personas) ΓöÇΓöÇ
   function setSearchMode() {
     const input = $('db-person');
-    if (input) input.placeholder = 'Escrib¡ el nombre de usuario Roblox...';
+    if (input) input.placeholder = 'Escribá el nombre de usuario Roblox...';
     const res = $('db-person-result');
     if (res) res.innerHTML = '';
     if (input) input.focus();
@@ -2886,12 +2466,12 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
   function dbSearch() {
     // En paralelo: si lo que escribiste es una placa/modelo/due▒o, arriba
-    // aparecen los veh¡culos; si es una persona, se abre su ficha.
+    // aparecen los veháculos; si es una persona, se abre su ficha.
     dbSearchVehicles();
     return dbSearchPerson();
   }
 
-  // ΓöÇΓöÇ Veh¡culos: BD local + servidor EN VIVO de ER:LC ΓöÇΓöÇ
+  // ΓöÇΓöÇ Veháculos: BD local + servidor EN VIVO de ER:LC ΓöÇΓöÇ
   let _erlcCache = { at: 0, data: null };
   async function fetchErlcLive() {
     const now = Date.now();
@@ -2909,13 +2489,13 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     } catch (_) { return null; }
   }
 
-  /** Bsqueda de veh¡culos por placa / modelo / due▒o. */
+  /** Bsqueda de veháculos por placa / modelo / due▒o. */
   async function dbSearchVehicles() {
     const box = document.getElementById('vehicle-result');
     if (!box) return;
     const raw = ($('db-person') ? $('db-person').value : '').trim();
-    // Sanitizamos: PostgREST arma el filtro "or" y una coma o par⌐ntesis
-    // dentro del texto romper¡a la query.
+    // Sanitizamos: PostgREST arma el filtro "or" y una coma o paréntesis
+    // dentro del texto romperáa la query.
     const q = raw.replace(/[,'"()\\*]/g, ' ').replace(/\s+/g, ' ').trim();
     if (q.length < 2) { box.innerHTML = ''; return; }
     const ql = q.toLowerCase();
@@ -2967,31 +2547,13 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         plate: v.plate, model: v.model, color: v.color,
         ownerLabel: v.owner || 'ΓÇö', ownerKey: v.owner || '',
         live: true,
-        where: place ? '≡ƒôì ' + place : '',
-        wanted: p ? p.wanted : 0,
-      });
-    });
-
-    // 2) registrados en la BD local
-    local.forEach(v => {
-      const k = String(v.plate || '').toUpperCase();
-      if (k && seen[k]) return;
-      if (k) seen[k] = 1;
-      const rb = robloxByDiscord[v.owner_discord] || '';
-      rows.push({
-        plate: v.plate, model: v.model, color: v.color,
-        ownerLabel: v.owner_name || 'ΓÇö', ownerKey: rb || v.owner_discord || '',
-        live: false, where: '', wanted: 0,
-      });
-    });
-
-    box.innerHTML = `<div class="veh-block">
-      <div class="veh-title">≡ƒÜù Veh¡culos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO ┬╖ ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
+        where: place ? '<div class="veh-block">
+      <div class="veh-title"><span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO ┬╖ ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
       ${rows.map(v => `<div class="veh-card">
         <div class="veh-plate">${esc(v.plate || 'ΓÇö')}</div>
         <div class="veh-info">
           <div class="veh-model">${esc(v.model || 'ΓÇö')}${v.color ? ' ┬╖ ' + esc(v.color) : ''}${v.live ? ' <span class="veh-flag">ΓùÅ EN VIVO</span>' : ''}</div>
-          <div class="veh-owner">≡ƒæñ ${esc(v.ownerLabel)}${v.where ? ' &nbsp; ' + esc(v.where) : ''}${v.wanted > 0 ? ` <span class="veh-wanted">ΓÜá ${v.wanted}</span>` : ''}</div>
+          <div class="veh-owner"><span class="veh-wanted">ΓÜá ${v.wanted}</span>` : ''}</div>
         </div>
         ${v.ownerKey ? `<button class="btn btn-primary" onclick="openProfile('${esc(v.ownerKey)}')" style="font-size:12px;padding:7px 14px;flex-shrink:0;">Ver ficha ΓåÆ</button>` : ''}
       </div>`).join('')}
@@ -3001,14 +2563,14 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   async function dbSearchPerson() {
     const q = $('db-person').value.trim();
     const r = $('db-person-result');
-    if (!q) { r.innerHTML = '<div class="search-result not-found">ΓÜá∩╕Å Ingresa un nombre de usuario de Roblox o un nmero de caso</div>'; return; }
+    if (!q) { r.innerHTML = '<div class="search-result not-found">ΓÜá</div>'; return; }
     const caseRe = /^(caso\s+)?[a-z]{1,2}-\d{3,}$/i;
     if (caseRe.test(q)) {
       r.innerHTML = '';
       openCaseById(q.replace(/^caso\s+/i, ''));
       return;
     }
-    r.innerHTML = '<div style="padding:12px;color:var(--text-dim);font-size:13px;">≡ƒöì Buscando en la base de datos...</div>';
+    r.innerHTML = '<div style="padding:12px;color:var(--text-dim);font-size:13px;"></div>';
     $('btn-search').disabled = true;
 
     try {
@@ -3044,40 +2606,22 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             ${avatarUrl ? `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;" alt="${esc(q)}">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:Rajdhani,sans-serif;font-weight:700;font-size:20px;color:#fff;">${esc(q.charAt(0).toUpperCase())}</div>`}
           </div>
           <div style="flex:1;min-width:180px;">
-            <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--accent-cyan);">≡ƒôï ${esc(displayName)} ${activeBolos.length > 0 ? `<span style="display:inline-flex;align-items:center;gap:5px;margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(239,68,68,.9);border:1px solid rgba(239,68,68,.9);padding:3px 10px;border-radius:999px;">≡ƒö┤ Buscado${activeBolos.length > 1 ? ' ù' + activeBolos.length : ''}</span>` : ''}</div>
-            <div style="font-size:12px;color:var(--text-dim);margin-top:2px;">≡ƒÄ« ${esc(q)} ΓÇö ${arrests.length} arrestos ┬╖ ${fines.length} multas ┬╖ ${(licenses||[]).length} licencias ${(function(){var w=(records||[]).filter(function(r){return r.type==='warning';});if(!w.length)return '';return '<span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:rgba(230,168,104,.18);border:1px solid rgba(230,168,104,.45);color:#e6a868;font-weight:700;font-size:10.5px;">&#9888; '+w.length+' nota(s)</span>';})()}</div>
+            <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--accent-cyan);"><span style="display:inline-flex;align-items:center;gap:5px;margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(239,68,68,.9);border:1px solid rgba(239,68,68,.9);padding:3px 10px;border-radius:999px;"></span>` : ''}</div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:2px;"><span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:rgba(230,168,104,.18);border:1px solid rgba(230,168,104,.45);color:#e6a868;font-weight:700;font-size:10.5px;">&#9888; '+w.length+' nota(s)</span>';})()}</div>
             ${summary ? `<div style="font-size:11.5px;color:var(--text-secondary);margin-top:5px;">${esc(summary)}</div>` : ''}
           </div>
           <button class="btn btn-primary" onclick="openProfile('${esc(q)}')" style="font-size:12px;padding:9px 18px;">Ver Perfil ΓåÆ</button>
         </div>
       </div>`;
     } catch (err) {
-      r.innerHTML = '<div class="search-result not-found">Γ¥î Error: ' + (err.message || 'desconocido') + '</div>';
+      r.innerHTML = '<div class="search-result not-found">Γî Error: ' + (err.message || 'desconocido') + '</div>';
     }
     $('btn-search').disabled = false;
   }
 
   // ΓöÇΓöÇ DEPARTAMENTOS (etiqueta para el perfil / unidades) ΓöÇΓöÇ
   const DEPT_HERO = {
-    hpd:  { icon: '≡ƒÜö', code: 'HPD',  name: 'Polic¡a de Houston' },
-    hcso: { icon: 'Γ¡É', code: 'HCSO', name: 'Sheriff del Condado Harris' },
-    tph:  { icon: '≡ƒ¢ú∩╕Å', code: 'TPH',  name: 'Patrulla Estatal' },
-    ice:  { icon: '≡ƒ¢í∩╕Å', code: 'ICE',  name: 'Immigration & Customs' },
-    hfd:  { icon: '≡ƒÜÆ', code: 'HFD',  name: 'Bomberos de Houston' },
-    dot:  { icon: '≡ƒöº', code: 'HDOT', name: 'Transporte (HDOT)' },
-    ems:  { icon: '≡ƒÜæ', code: 'EMS',  name: 'Emergencias M⌐dicas' },
-    dc:   { icon: '≡ƒÅó', code: 'DC',   name: 'Departamento Central' },
-  };
-  function deptHeroLabel(code) {
-    const k = String(code || '').toLowerCase();
-    return DEPT_HERO[k] || { icon: '≡ƒÅ¢∩╕Å', code: String(code || '').toUpperCase() || 'ΓÇö', name: 'Departamento' };
-  }
-
-  async function openProfile(robloxUsername) {
-    $('search-view').style.display = 'none';
-    $('profile-view').classList.add('active');
-    $('case-view').style.display = 'none';
-    $('profile-hero').innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-dim);">Cargando perfil...</div>';
+    hpd:  { icon: '<div style="padding:40px;text-align:center;color:var(--text-dim);">Cargando perfil...</div>';
     $('profile-stats').innerHTML = '';
     $('char-body').innerHTML = '';
     $('licenses-body').innerHTML = '';
@@ -3109,7 +2653,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       }
 
       // ┬┐Es miembro de un departamento y estí fuera de servicio?
-      // Si es as¡, en el hero NO se muestra el nombre asignado (solo el depto).
+      // Si es asá, en el hero NO se muestra el nombre asignado (solo el depto).
       let deptInfo = null;
       if (discordIds.length > 0) {
         const idsOr = `(${discordIds.map(id => `discord_id.eq.${id}`).join(',')})`;
@@ -3135,11 +2679,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       const dh = masked ? deptHeroLabel(deptInfo.department) : null;
       const heroName = dh ? `${dh.icon} ${dh.code} ΓÇö ${dh.name}` : esc(displayName);
       const heroSub = dh
-        ? `≡ƒÄ« ${esc(robloxUsername)} ┬╖ ≡ƒæ« Fuera de servicio`
-        : `≡ƒÄ« ${esc(robloxUsername)}`;
-
-      $('profile-hero').innerHTML = `
-        <div class="profile-header">
+        ? `<div class="profile-header">
           <div class="profile-avatar">
             ${avatarUrl ? `<img src="${avatarUrl}" alt="${esc(robloxUsername)}">` : esc(robloxUsername.charAt(0).toUpperCase())}
           </div>
@@ -3149,7 +2689,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           </div>
         </div>
         ${activeBolos.length > 0 ? `<div style="margin:12px 0;padding:12px 16px;border:1px solid rgba(239,68,68,0.55);background:rgba(239,68,68,0.12);border-radius:12px;display:flex;align-items:center;gap:12px;">
-          <span style="font-size:24px;">≡ƒÜ¿</span>
+          <span style="font-size:24px;"></span>
           <div style="flex:1;min-width:0;">
             <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:var(--accent-red);text-transform:uppercase;letter-spacing:1px;">ΓÜá Persona Buscada${activeBolos.length > 1 ? ' ΓÇö ' + activeBolos.length + ' BOLOs activos' : ''}</div>
             <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${esc(activeBolos[0].oficial_name || 'Oficial')} emiti│ el BOLO: ${esc(activeBolos[0].motivo || 'BOLO activo')}</div>
@@ -3189,7 +2729,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         </div>
         <div class="stat-box">
           <div class="stat-num" style="color:var(--accent-green);">${(currentProfile.vehicles || []).length}</div>
-          <div class="stat-label">Veh¡culos</div>
+          <div class="stat-label">Veháculos</div>
         </div>`;
 
       $('licenses-count').textContent = (currentProfile.licenses || []).length;
@@ -3197,32 +2737,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         $('licenses-body').innerHTML = '<div class="no-records">No se encontraron licencias registradas</div>';
       } else {
         const LIC_TYPES = {
-          drivers:   { name: 'Licencia de Conducir', icon: '≡ƒÜù', order: 1 },
-          weapons:   { name: 'Permiso de Armas',     icon: '≡ƒö½', order: 2 },
-          insurance: { name: 'Seguro de Veh¡culo',   icon: '≡ƒ¢í∩╕Å', order: 3 },
-        };
-        // 1 fila por tipo: si qued│ una vencida + una vigente (renovaciones
-        // antiguas), se muestra solo la vigente.
-        const nowMs = Date.now();
-        const isAlive = l => l.status === 'active' && (!l.expires_at || new Date(l.expires_at).getTime() >= nowMs);
-        const bestByType = {};
-        (currentProfile.licenses || []).forEach(l => {
-          const k = l.type || 'otra';
-          const prev = bestByType[k];
-          const better = !prev
-            || (isAlive(l) && !isAlive(prev))
-            || (isAlive(l) === isAlive(prev) && new Date(l.expires_at || 0) > new Date(prev.expires_at || 0));
-          if (better) bestByType[k] = l;
-        });
-        const licList = Object.keys(bestByType)
-          .map(k => bestByType[k])
-          .sort((a, b) => ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
-        $('licenses-body').innerHTML = licList.map(l => {
-          const meta = LIC_TYPES[l.type] || { name: 'Licencia', icon: '≡ƒôä' };
-          const icon = meta.icon;
-          const typeName = meta.name;
-          const now = Date.now();
-          const expired = l.expires_at && new Date(l.expires_at).getTime() < now;
+          drivers:   { name: 'Licencia de Conducir', icon: '< now;
           const status = expired ? 'expired' : l.status;
           const statusClass = status === 'active' ? 'badge-active' : status === 'pending' ? 'badge-pending' : 'badge-expired';
           const statusText = status === 'active' ? 'Activa' : status === 'pending' ? 'Pendiente' : 'Expirada';
@@ -3251,10 +2766,10 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           const crimeName = parts[1] || r.reason || 'ΓÇö';
           return `<div class="record-item" ${r.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(r.case_id)}')"` : ''}>
             <div class="record-left">
-              <div class="record-icon arrest">≡ƒÜö</div>
+              <div class="record-icon arrest"></div>
               <div class="record-info">
                 <div class="record-title">${esc(crimeName)} ${r.case_id ? '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(r.case_id) + '</span>' : ''}</div>
-                <div class="record-sub">≡ƒæ« ${esc(r.officer_name || 'ΓÇö')} ${code ? '┬╖ <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
+                <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
               </div>
             </div>
             <div class="record-right">
@@ -3275,10 +2790,10 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           const crimeName = parts[1] || r.reason || 'ΓÇö';
           return `<div class="record-item" ${r.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(r.case_id)}')"` : ''}>
             <div class="record-left">
-              <div class="record-icon fine">≡ƒÆ░</div>
+              <div class="record-icon fine"></div>
               <div class="record-info">
                 <div class="record-title">${esc(crimeName)} ${r.case_id ? '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(r.case_id) + '</span>' : ''}</div>
-                <div class="record-sub">≡ƒæ« ${esc(r.officer_name || 'ΓÇö')} ${code ? '┬╖ <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
+                <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
               </div>
             </div>
             <div class="record-right">
@@ -3291,12 +2806,12 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
       $('vehicles-count').textContent = (currentProfile.vehicles || []).length;
       if (currentProfile.vehicles.length === 0) {
-        $('vehicles-body').innerHTML = '<div class="no-records">No hay veh¡culos registrados</div>';
+        $('vehicles-body').innerHTML = '<div class="no-records">No hay veháculos registrados</div>';
       } else {
         $('vehicles-body').innerHTML = currentProfile.vehicles.map(v => `
           <div class="record-item">
             <div class="record-left">
-              <div class="record-icon vehicle">≡ƒÜù</div>
+              <div class="record-icon vehicle"></div>
               <div class="record-info">
                 <div class="record-title">${esc(v.model || 'ΓÇö')}</div>
                 <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;color:var(--accent-cyan);">${esc(v.plate || 'ΓÇö')}</span> ┬╖ Color: ${esc(v.color || 'ΓÇö')}</div>
@@ -3309,7 +2824,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       loadProfileBolos(robloxUsername, discordIds);
 
     } catch (err) {
-      $('profile-hero').innerHTML = `<div style="padding:40px;text-align:center;color:var(--accent-red);">Γ¥î Error cargando perfil: ${esc(err.message || '')}</div>`;
+      $('profile-hero').innerHTML = `<div style="padding:40px;text-align:center;color:var(--accent-red);">Γî Error cargando perfil: ${esc(err.message || '')}</div>`;
     }
   }
 
@@ -3331,7 +2846,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       const rows = await supaSelect('police_records', '*', { or: `(case_id.ilike.*${caseId}*,case_id.eq.${caseId})`, order: 'created_at.desc', limit: '20' }).catch(() => []);
       if (!rows || rows.length === 0) {
         content.innerHTML = `<div class="case-empty">
-          <div style="font-size:40px;margin-bottom:10px;">≡ƒôª</div>
+          <div style="font-size:40px;margin-bottom:10px;"></div>
           <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:17px;color:var(--text-body);">Expediente no encontrado</div>
           <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">No existe un caso con el nmero "${esc(caseId)}"</div>
         </div>`;
@@ -3339,46 +2854,38 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       }
       const r = rows[0];
       const avatarUrl = await fetchRobloxAvatar(r.target_discord || r.target_name).catch(() => null);
-      const typeIcon = r.type === 'jail' ? 'Γ¢ô∩╕Å' : r.type === 'fine' ? '≡ƒÆ░' : '≡ƒÜö';
-      const typeLabel = r.type === 'jail' ? 'Encarcelamiento' : r.type === 'fine' ? 'Infracci│n / Multa' : 'Arresto / Incidente';
-      const caseStatus = (r.case_status || 'abierta').toLowerCase();
-      const statusText = r.paid ? 'Pagada' : caseStatus === 'resuelta' ? 'Resuelta' : caseStatus === 'cerrada' ? 'Cerrada' : 'Abierta';
-      const statusColor = statusText === 'Pagada' || statusText === 'Resuelta' ? 'var(--accent-green)' : statusText === 'Abierta' ? 'var(--accent-gold)' : 'var(--accent-blue)';
-      const otherRows = rows.length > 1 ? rows.slice(1) : [];
-
-      content.innerHTML = `
-        <div class="case-card">
+      const typeIcon = r.type === 'jail' ? 'Γô<div class="case-card">
           <div class="case-top">
             <div class="case-badge">${typeIcon} ${typeLabel}</div>
             <span class="case-status" style="background:${statusColor}1a;color:${statusColor};border:1px solid ${statusColor}44;">${statusText}</span>
           </div>
-          <div class="case-title">≡ƒùé∩╕Å ${esc(r.case_id || 'Sin nmero de caso')}</div>
+          <div class="case-title"></div>
           <div class="case-target">
             <div class="profile-avatar" style="width:56px;height:56px;flex-shrink:0;">
               ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : (r.target_name ? r.target_name.charAt(0).toUpperCase() : '?')}
             </div>
             <div>
               <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--text-body);">${esc(r.target_name || 'ΓÇö')}</div>
-              <div class="record-sub">≡ƒÄ« ${esc(r.target_discord || 'ΓÇö')}</div>
+              <div class="record-sub"></div>
             </div>
           </div>
           <div class="case-facts">
-            <div class="case-fact"><span>≡ƒæ« Oficial a cargo</span><b>${esc(r.officer_name || 'ΓÇö')}</b></div>
-            <div class="case-fact"><span>≡ƒôà Fecha</span><b>${r.created_at ? new Date(r.created_at).toLocaleString() : 'ΓÇö'}</b></div>
-            ${r.incident_type ? `<div class="case-fact"><span>≡ƒôï Tipo de incidente</span><b>${esc(r.incident_type)}</b></div>` : ''}
-            ${r.type === 'jail' ? `<div class="case-fact"><span>ΓÅ▒∩╕Å Pena</span><b>${(r.amount || 0)} minutos</b></div>` : `<div class="case-fact"><span>${r.type === 'fine' ? '≡ƒÆ╡ Monto' : '≡ƒÆ╡ Fianza'}</span><b>$${(r.amount || 0).toLocaleString()}</b></div>`}
+            <div class="case-fact"><span></span><b>${esc(r.officer_name || 'ΓÇö')}</b></div>
+            <div class="case-fact"><span></span><b>${r.created_at ? new Date(r.created_at).toLocaleString() : 'ΓÇö'}</b></div>
+            ${r.incident_type ? `<div class="case-fact"><span></span><b>${esc(r.incident_type)}</b></div>` : ''}
+            ${r.type === 'jail' ? `<div class="case-fact"><span>ΓÅ▒</span><b>${(r.amount || 0)} minutos</b></div>` : `<div class="case-fact"><span>${r.type === 'fine' ? '</span><b>$${(r.amount || 0).toLocaleString()}</b></div>`}
           </div>
           <div class="case-desc">
-            <div class="case-desc-label">≡ƒôä Descripci│n del oficial</div>
+            <div class="case-desc-label"></div>
             <div class="case-desc-body">${esc(r.officer_description || r.reason || 'Sin descripci│n registrada')}</div>
           </div>
           <div class="case-actions">
             <button class="btn btn-outline" onclick="openProfile('${esc(r.target_discord || r.target_name)}')">Ver Perfil del Ciudadano ΓåÆ</button>
           </div>
         </div>
-        ${otherRows.length > 0 ? `<div class="case-related"><div class="section-header"><h3>Expedientes coincidentes</h3><span class="section-count">${otherRows.length}</span></div>${otherRows.map(o => `<div class="record-item" ${o.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(o.case_id)}')"` : ''}><div class="record-left"><div class="record-icon ${o.type === 'fine' ? 'fine' : 'arrest'}">${o.type === 'fine' ? '≡ƒÆ░' : '≡ƒÜö'}</div><div class="record-info"><div class="record-title">${esc(o.case_id || (o.reason || '').split(' ΓÇö ')[1] || o.reason || 'ΓÇö')} ${o.paid ? '<span class="badge badge-active" style="font-size:9px;">Pagada</span>' : ''}</div><div class="record-sub">${esc(o.target_name || 'ΓÇö')} ┬╖ ${new Date(o.created_at).toLocaleDateString()}</div></div></div></div>`).join('')}</div>` : ''}`;
+        ${otherRows.length > 0 ? `<div class="case-related"><div class="section-header"><h3>Expedientes coincidentes</h3><span class="section-count">${otherRows.length}</span></div>${otherRows.map(o => `<div class="record-item" ${o.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(o.case_id)}')"` : ''}><div class="record-left"><div class="record-icon ${o.type === 'fine' ? 'fine' : 'arrest'}">${o.type === 'fine' ? '</div><div class="record-info"><div class="record-title">${esc(o.case_id || (o.reason || '').split(' ΓÇö ')[1] || o.reason || 'ΓÇö')} ${o.paid ? '<span class="badge badge-active" style="font-size:9px;">Pagada</span>' : ''}</div><div class="record-sub">${esc(o.target_name || 'ΓÇö')} ┬╖ ${new Date(o.created_at).toLocaleDateString()}</div></div></div></div>`).join('')}</div>` : ''}`;
     } catch (err) {
-      content.innerHTML = `<div class="case-empty" style="color:var(--accent-red);">Γ¥î Error al abrir el expediente: ${esc(err.message || 'desconocido')}</div>`;
+      content.innerHTML = `<div class="case-empty" style="color:var(--accent-red);">Γî Error al abrir el expediente: ${esc(err.message || 'desconocido')}</div>`;
     }
   }
 
@@ -3437,85 +2944,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
     drawer.classList.remove('wide');
     head.classList.toggle('fine', !isArrest);
-    icon.textContent = isArrest ? '≡ƒÜö' : '≡ƒÆ░';
-    title.textContent = isArrest ? 'Registrar Arresto' : 'Registrar Multa';
-    sub.textContent = (isArrest ? 'Cargando formulario de arresto...' : 'Cargando formulario de multa...') + (displayName ? ' ┬╖ ' + displayName : '');
-
-    frame.src = (isArrest ? 'arrests.html' : 'fines.html') + '?name=' + n + '&roblox=' + r;
-
-    overlay.classList.add('active');
-    drawer.classList.add('active');
-    drawer.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeRecordDrawer() {
-    const overlay = $('drawer-overlay');
-    const drawer = $('record-drawer');
-    const frame = $('record-frame');
-    if (!overlay || !drawer) return;
-    overlay.classList.remove('active');
-    drawer.classList.remove('active', 'wide');
-    drawer.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    if (frame) setTimeout(() => { frame.src = 'about:blank'; }, 320);
-  }
-
-  // Reportar incidencias dentro del MDT (incident-report.html en el mismo drawer).
-  function openIncidentDrawer() {
-    const overlay = $('drawer-overlay');
-    const drawer = $('record-drawer');
-    const head = $('drawer-head');
-    const icon = $('drawer-icon');
-    const title = $('drawer-title');
-    const sub = $('drawer-sub');
-    const frame = $('record-frame');
-    if (!overlay || !drawer || !frame) return;
-
-    head.classList.remove('fine');
-    icon.textContent = '≡ƒÜ¿';
-    title.textContent = 'Incidencias';
-    sub.textContent = 'Reportar incidentes ┬╖ HOUSTON RP';
-    drawer.classList.add('wide');
-    frame.src = 'incident-report.html';
-
-    overlay.classList.add('active');
-    drawer.classList.add('active');
-    drawer.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-  window.openIncidentDrawer = openIncidentDrawer;
-
-  window.openRecordDrawer = openRecordDrawer;
-  window.closeRecordDrawer = closeRecordDrawer;
-  // ===== NOTAS / ADVERTENCIAS (type = 'warning' en police_records) =====
-  let warningTarget = null;
-  window.openWarningModal = function (displayName, robloxUsername) {
-    warningTarget = { name: decodeURIComponent(displayName || ''), roblox: decodeURIComponent(robloxUsername || '') };
-    const el = document.getElementById('warning-modal');
-    if (!el) return;
-    document.getElementById('warning-target').textContent =
-      warningTarget.roblox + (warningTarget.name ? '  é┬╖  ' + warningTarget.name : '');
-    document.getElementById('warning-text').value = '';
-    document.getElementById('warning-msg').textContent = '';
-    el.style.display = 'flex';
-    setTimeout(function () { const t = document.getElementById('warning-text'); if (t) t.focus(); }, 60);
-  };
-  function closeWarningModal() {
-    const el = document.getElementById('warning-modal');
-    if (el) el.style.display = 'none';
-    warningTarget = null;
-  }
-  document.addEventListener('click', function (e) {
-    if (e.target && e.target.id === 'warning-cancel') closeWarningModal();
-    if (e.target && e.target.id === 'warning-modal') closeWarningModal();
-  });
-
-  async function saveWarning() {
-    const txt = (document.getElementById('warning-text').value || '').trim();
-    const msg = document.getElementById('warning-msg');
-    if (!warningTarget) return;
-    if (txt.length < 5) { msg.textContent = 'Escribe una nota de al menos 5 caracteres.'; return; }
+    icon.textContent = isArrest ? '< 5) { msg.textContent = 'Escribe una nota de al menos 5 caracteres.'; return; }
     if (!(await hrpHasPoliceRole())) { msg.textContent = 'Solo la Policia puede agregar notas.'; return; }
 
     const btn = document.getElementById('warning-save');
@@ -3645,7 +3074,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         const reasons = (r.reason || '').split(';').map(s => s.trim()).filter(Boolean);
         const mainReason = reasons[0] || r.reason || 'Sin detalle';
         return `<div class="history-record" style="--rec-color:var(--accent-amber);">
-          <div class="history-rec-icon fine">≡ƒÆ░</div>
+          <div class="history-rec-icon fine"></div>
           <div class="history-rec-body">
             <div class="history-rec-top">
               <span class="history-rec-badge fine">Multa</span>
@@ -3654,7 +3083,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             </div>
             <div class="history-rec-reason" title="${esc(r.reason || '')}">${esc(mainReason)}</div>
             <div class="history-rec-meta">
-              <span>≡ƒæ« ${esc(r.officer_name || 'ΓÇö')}</span>
+              <span></span>
               ${r.case_id ? `<span class="history-rec-case">${esc(r.case_id)}</span>` : ''}
             </div>
           </div>
@@ -3709,7 +3138,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         const reasons = (r.reason || '').split(';').map(s => s.trim()).filter(Boolean);
         const mainReason = reasons[0] || r.reason || 'Sin detalle';
         return `<div class="history-record" style="--rec-color:var(--accent-red);">
-          <div class="history-rec-icon arrest">≡ƒÜö</div>
+          <div class="history-rec-icon arrest"></div>
           <div class="history-rec-body">
             <div class="history-rec-top">
               <span class="history-rec-badge arrest">Arresto</span>
@@ -3717,7 +3146,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             </div>
             <div class="history-rec-reason" title="${esc(r.reason || '')}">${esc(mainReason)}</div>
             <div class="history-rec-meta">
-              <span>≡ƒæ« ${esc(r.officer_name || 'ΓÇö')}</span>
+              <span></span>
               ${r.case_id ? `<span class="history-rec-case">${esc(r.case_id)}</span>` : ''}
             </div>
           </div>
@@ -3771,7 +3200,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     return map[c] || ['#94a3b8', String(code || 'S/D').toUpperCase()];
   }
 
-  // ΓöÇΓöÇ Etiquetas de rango reales (payroll_salaries) ΓÇö cach⌐ 5 min ΓöÇΓöÇ
+  // ΓöÇΓöÇ Etiquetas de rango reales (payroll_salaries) ΓÇö caché 5 min ΓöÇΓöÇ
   let _rankLabels = null;
   let _rankLabelsAt = 0;
   async function getRankLabels() {
@@ -3847,7 +3276,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             <div class="on-duty-name">${esc(shownName)}
               <span class="unit-state ${isBreak ? 'brk' : 'on'}">${isBreak ? 'Pausa' : 'En servicio'}</span>
             </div>
-            ${robLabel ? `<div class="on-duty-roblox">≡ƒÄ« ${esc(robLabel)}</div>` : ''}
+            ${robLabel ? `<div class="on-duty-roblox"></div>` : ''}
             <div class="on-duty-meta"><span class="on-duty-dept" style="color:${col}">${dept}</span>${rankLabel ? ' ┬╖ ' + esc(rankLabel) : ''}</div>
             <div class="unit-tags">
               ${code ? `<span class="unit-tag code">${esc(code)}</span>` : ''}
@@ -3875,7 +3304,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
   // ΓöÇΓöÇ BOLO: storage layer ΓöÇΓöÇ
   // Los BOLOs se guardan en la tabla `radio_messages` con type='bolo' y el
-  // contenido serializado como JSON en `message`. As¡ la funci│n de BOLO
+  // contenido serializado como JSON en `message`. Asá la funci│n de BOLO
   // funciona sin depender de la tabla `bolos` (an no creada en el proyecto).
   const BOLO_STORE_TYPE = 'bolo';
   function boloRowToObj(row) {
@@ -3934,22 +3363,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   }
 
   function boloPriorityData(p) {
-    if (p === 'alta') return { cls: 'alta', color: 'var(--accent-red)', label: 'Alta', icon: '≡ƒö┤' };
-    if (p === 'baja') return { cls: 'baja', color: 'var(--accent-green)', label: 'Baja', icon: '≡ƒƒó' };
-    return { cls: 'media', color: 'var(--accent-amber)', label: 'Media', icon: '≡ƒƒí' };
-  }
-
-  function boloStatusData(s) {
-    if (s === 'cerrado') return { cls: 'cerrado', color: 'var(--accent-amber)', label: 'Cerrado' };
-    if (s === 'eliminado') return { cls: 'eliminado', color: 'var(--text-dim)', label: 'Eliminado' };
-    return { cls: 'activo', color: 'var(--accent-green)', label: 'Activo' };
-  }
-
-  function populateBoloSelect(selId, val) {
-    const sel = $(selId);
-    if (!sel) return;
-    const crimes = (window.HRP_CRIMES || {});
-    sel.innerHTML = '<option value="">ΓÇö Sin c│digo penal ΓÇö</option>';
+    if (p === 'alta') return { cls: 'alta', color: 'var(--accent-red)', label: 'Alta', icon: '<option value="">ΓÇö Sin c│digo penal ΓÇö</option>';
     const cats = {};
     Object.keys(crimes).forEach(k => { const c = crimes[k]; (cats[c.cat] = cats[c.cat] || []).push(k); });
     Object.keys(cats).sort().forEach(cat => {
@@ -4069,23 +3483,23 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <div class="bolo-avatar">${b.roblox_id ? `<img src="https://www.roblox.com/headshot-thumbnail/image?userId=${encodeURIComponent(b.roblox_id)}&width=100&height=100&format=png" onerror="this.parentNode.textContent='${initial}';">` : initial}</div>
           <div>
             <div class="bolo-person-name">${esc(b.target_name || 'ΓÇö')}</div>
-            <div class="bolo-person-user">≡ƒÄ« ${esc(b.roblox_user || 'ΓÇö')}</div>
+            <div class="bolo-person-user"></div>
           </div>
           <span class="bolo-status ${st.cls}" style="margin-left:auto;">ΓùÅ ${st.label}</span>
         </div>
         <div class="bolo-motivo">${esc(b.motivo || 'ΓÇö')}</div>
-        ${code ? `<div class="bolo-code">ΓÜû∩╕Å ${esc(code)} ΓÇö ${esc(penalLabel || '')}</div>` : ''}
+        ${code ? `<div class="bolo-code">ΓÜ</div>` : ''}
         <div class="bolo-meta">
-          <span>≡ƒæ« ${esc(b.oficial_name || 'ΓÇö')}</span>
-          <span style="color:${col};">≡ƒÅ¢∩╕Å ${dept}</span>
-          <span>≡ƒòÉ ${dateStr}</span>
-          ${b.closed_at ? `<span>≡ƒùâ∩╕Å Cerrado: ${new Date(b.closed_at).toLocaleString('es-ES', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</span>` : ''}
+          <span></span>
+          <span style="color:${col};"></span>
+          <span></span>
+          ${b.closed_at ? `<span></span>` : ''}
         </div>
         <div class="bolo-actions">
-          <button class="btn btn-outline" onclick="editBoloPopup(${b.id})">Γ£Å∩╕Å Editar</button>
-          ${canClose ? `<button class="btn btn-warning" onclick="closeBoloById(${b.id})">≡ƒÜ½ Cerrar</button>` : ''}
-          <button class="btn btn-danger" style="font-size:11px;padding:6px 12px;" onclick="removeBoloById(${b.id})">≡ƒùæ∩╕Å Eliminar</button>
-          ${b.estado === 'cerrado' ? '<button class="btn btn-bolo" onclick="reopenBoloById(' + b.id + ')">Γƒ│ Reabrir</button>' : ''}
+          <button class="btn btn-outline" onclick="editBoloPopup(${b.id})">Γ£Å</button>
+          ${canClose ? `<button class="btn btn-warning" onclick="closeBoloById(${b.id})"></button>` : ''}
+          <button class="btn btn-danger" style="font-size:11px;padding:6px 12px;" onclick="removeBoloById(${b.id})"></button>
+          ${b.estado === 'cerrado' ? '<button class="btn btn-bolo" onclick="reopenBoloById(' + b.id + ')">Γ</button>' : ''}
         </div>
       </div>`;
     }).join('');
@@ -4097,7 +3511,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     const r = $('bolo-search-result');
     if (!r) return;
     if (!q) { r.innerHTML = ''; return; }
-    r.innerHTML = '<div style="padding:8px;color:var(--text-dim);font-size:12px;">≡ƒöì Buscando...</div>';
+    r.innerHTML = '<div style="padding:8px;color:var(--text-dim);font-size:12px;"></div>';
     try {
       const [avatarUrl, characters, records] = await Promise.all([
         fetchRobloxAvatar(q).catch(() => null),
@@ -4120,14 +3534,14 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             </div>
             <div style="flex:1;min-width:150px;">
               <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;color:var(--text-primary);">${esc(displayName)}</div>
-              <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">≡ƒÄ« ${esc(robloxUser)}</div>
+              <div style="font-size:11px;color:var(--text-dim);margin-top:2px;"></div>
               ${summary ? `<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">${esc(summary)}</div>` : ''}
             </div>
             <button class="btn btn-bolo" onclick="pickBoloPerson('${esc(robloxUser)}','${esc(displayName)}','${esc(avatarUrl || '')}','${esc(robloxId)}')">Seleccionar</button>
           </div>
         </div>`;
     } catch (err) {
-      r.innerHTML = '<div class="search-result not-found" style="border-radius:8px;margin-top:10px;">Γ¥î Error: ' + (err.message || 'desconocido') + '</div>';
+      r.innerHTML = '<div class="search-result not-found" style="border-radius:8px;margin-top:10px;">Γî Error: ' + (err.message || 'desconocido') + '</div>';
     }
   }
 
@@ -4142,151 +3556,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       nav.innerHTML = avatarUrl ? `<img src="${avatarUrl}" alt="">` : ((displayName || '?').charAt(0).toUpperCase());
     }
     const nn = $('bolo-pick-name'); if (nn) nn.textContent = displayName || 'ΓÇö';
-    const uu = $('bolo-pick-user'); if (uu) uu.textContent = '≡ƒÄ« ' + (robloxUser || 'ΓÇö');
-  }
-
-  function clearBoloPick() {
-    boloPick = null;
-    const picked = $('bolo-picked');
-    if (picked) picked.classList.add('bolo-hidden');
-    const s = $('bolo-search'); if (s) s.value = '';
-  }
-
-  function getBoloDept() {
-    return (selectedDept || (currentShift && currentShift.department) || localStorage.getItem('hrp_selected_dept') || 'hpd').toLowerCase();
-  }
-
-  async function saveBolo() {
-    const msg = $('bolo-form-msg');
-    if (msg) msg.textContent = '';
-    if (!boloPick) { if (msg) msg.textContent = 'ΓÜá∩╕Å Seleccioní un ciudadano antes de emitir el BOLO.'; return; }
-    const motivo = ($('bolo-motivo') ? $('bolo-motivo').value : '').trim();
-    if (!motivo) { if (msg) msg.textContent = 'ΓÜá∩╕Å Escrib¡ un motivo detallado.'; return; }
-    const penalCode = $('bolo-penal') ? $('bolo-penal').value : '';
-    const penalName = penalCode && (window.HRP_CRIMES || {})[penalCode] ? (window.HRP_CRIMES)[penalCode].name : '';
-    const prioridad = $('bolo-prio') ? $('bolo-prio').value : 'media';
-    const btn = $('btn-bolo-save');
-    if (btn) btn.disabled = true;
-
-    const payload = {
-      roblox_id: (boloPick.robloxId || '').toString(),
-      roblox_user: boloPick.robloxUser || '',
-      target_name: boloPick.displayName || boloPick.robloxUser || '',
-      motivo,
-      penal_code: penalCode,
-      penal_name: penalName,
-      prioridad,
-      estado: 'activo',
-      oficial_id: userId || '',
-      oficial_name: userName || 'Oficial',
-      departamento: getBoloDept()
-    };
-    try {
-      await supaInsert('radio_messages', { user_id: payload.oficial_id, username: payload.oficial_name, message: boloObjToMessage(payload), type: BOLO_STORE_TYPE });
-      if (msg) msg.textContent = 'Γ£à BOLO emitido correctamente.';
-      ($('bolo-motivo') && ($('bolo-motivo').value = ''));
-      ($('bolo-penal') && ($('bolo-penal').value = ''));
-      ($('bolo-prio') && ($('bolo-prio').value = 'media'));
-      clearBoloPick();
-      loadBolos(true);
-      loadHistoryBolos(true);
-    } catch (err) {
-      if (msg) msg.textContent = 'Γ¥î Error al guardar: ' + (err.message || 'desconocido');
-    }
-    if (btn) btn.disabled = false;
-  }
-
-  // ΓöÇΓöÇ BOLO: edit / close / delete / reopen ΓöÇΓöÇ
-  function editBoloPopup(id) {
-    const b = boloCache.find(x => String(x.id) === String(id));
-    if (!b) return;
-    boloEditingId = id;
-    populateBoloSelect('bolo-edit-penal', b.penal_code || '');
-    const m = $('bolo-edit-motivo'); if (m) m.value = b.motivo || '';
-    const p = $('bolo-edit-prio'); if (p) p.value = b.prioridad || 'media';
-    const modal = $('bolo-edit-modal');
-    if (modal) modal.classList.add('active');
-  }
-  function closeBoloEdit() {
-    const modal = $('bolo-edit-modal');
-    if (modal) modal.classList.remove('active');
-    boloEditingId = null;
-  }
-  async function confirmEditBolo() {
-    if (!boloEditingId) return;
-    const motivo = ($('bolo-edit-motivo') ? $('bolo-edit-motivo').value : '').trim();
-    if (!motivo) { showToast('ΓÜá∩╕Å El motivo no puede quedar vac¡o', 'error'); return; }
-    const penalCode = $('bolo-edit-penal') ? $('bolo-edit-penal').value : '';
-    const penalName = penalCode && (window.HRP_CRIMES || {})[penalCode] ? (window.HRP_CRIMES)[penalCode].name : '';
-    const prioridad = $('bolo-edit-prio') ? $('bolo-edit-prio').value : 'media';
-    try {
-      const existing = boloCache.find(x => String(x.id) === String(boloEditingId)) || {};
-      await boloUpdateMessage(boloEditingId, Object.assign({}, existing, { motivo, penal_code: penalCode, penal_name: penalName, prioridad, updated_at: new Date().toISOString() }));
-      closeBoloEdit();
-      showToast('Γ£à BOLO actualizado');
-      loadBolos(true);
-      loadHistoryBolos(true);
-    } catch (err) {
-      showToast('Γ¥î Error al actualizar: ' + (err.message || 'desconocido'), 'error');
-    }
-  }
-
-  async function closeBoloById(id) {
-    if (!confirm('┬┐Cerrar este BOLO? Se mantendrí en el historial.')) return;
-    try {
-      const b = boloCache.find(x => String(x.id) === String(id)) || {};
-      await boloUpdateMessage(id, Object.assign({}, b, { estado: 'cerrado', closed_by: (userName || ''), closed_at: new Date().toISOString(), updated_at: new Date().toISOString() }));
-      showToast('Γ£à BOLO cerrado');
-      loadBolos(true);
-      loadHistoryBolos(true);
-    } catch (err) {
-      showToast('Γ¥î Error: ' + (err.message || 'desconocido'), 'error');
-    }
-  }
-
-  async function removeBoloById(id) {
-    if (!confirm('┬┐Eliminar definitivamente este BOLO? Esta acci│n no se puede deshacer.')) return;
-    try {
-      await supaDelete('radio_messages', { id: `eq.${id}` });
-      boloCache = boloCache.filter(x => String(x.id) !== String(id));
-      showToast('≡ƒùæ∩╕Å BOLO eliminado');
-      renderBoloList();
-      updateBoloCardBadge();
-      loadHistoryBolos(true);
-    } catch (err) {
-      showToast('Γ¥î Error: ' + (err.message || 'desconocido'), 'error');
-      loadBolos(true);
-    }
-  }
-
-  async function reopenBoloById(id) {
-    try {
-      const b = boloCache.find(x => String(x.id) === String(id)) || {};
-      await boloUpdateMessage(id, Object.assign({}, b, { estado: 'activo', closed_by: '', closed_at: null, updated_at: new Date().toISOString() }));
-      showToast('Γƒ│ BOLO reactivado');
-      loadBolos(true);
-      loadHistoryBolos(true);
-    } catch (err) {
-      showToast('Γ¥î Error: ' + (err.message || 'desconocido'), 'error');
-    }
-  }
-
-  // ΓöÇΓöÇ BOLO: profile "Estado BOLO" ΓöÇΓöÇ
-  async function loadProfileBolos(robloxUsername, discordIds) {
-    const body = $('bolo-body');
-    const countEl = $('bolo-count');
-    if (!body) return;
-    try {
-      const names = [robloxUsername].concat(discordIds || []).filter(Boolean);
-      const allBolos = await boloFetchAll(100);
-      const rows = (allBolos || []).filter(b => {
-        if (b.estado === 'eliminado') return false;
-        const hay = [b.roblox_user, b.target_name, (b.roblox_id || '').toString()].filter(Boolean);
-        return names.some(n => n && hay.some(h => String(h).toLowerCase().includes(String(n).toLowerCase())));
-      });
-      if (countEl) countEl.textContent = rows.length;
-      if (!rows || rows.length === 0) {
-        body.innerHTML = '<div class="no-records">No hay BOLOs asociados a este ciudadano</div>';
+    const uu = $('bolo-pick-user'); if (uu) uu.textContent = '<div class="no-records">No hay BOLOs asociados a este ciudadano</div>';
         return;
       }
       body.innerHTML = rows.map(b => {
@@ -4295,7 +3565,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         const dateStr = new Date(b.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
         return `<div class="record-item" style="${b.estado === 'activo' ? 'border-color:rgba(239,68,68,0.4);' : ''}">
           <div class="record-left">
-            <div class="record-icon arrest">≡ƒÜ¿</div>
+            <div class="record-icon arrest"></div>
             <div class="record-info">
               <div class="record-title">${prio.icon} BOLO ${prio.label}</div>
               <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">${esc(b.penal_code || '')}</span> ${esc(b.motivo || '')}</div>
@@ -4344,7 +3614,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
         const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
         return `<div class="history-record" style="--rec-color:${prio.color};">
-          <div class="history-rec-icon arrest">≡ƒÜ¿</div>
+          <div class="history-rec-icon arrest"></div>
           <div class="history-rec-body">
             <div class="history-rec-top">
               <span class="history-rec-badge arrest">BOLO</span>
@@ -4353,7 +3623,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             </div>
             <div class="history-rec-reason" title="${esc(b.motivo || '')}">${prio.icon} ${esc((b.motivo || '').split(/[.;]/)[0] || b.motivo || 'ΓÇö')}</div>
             <div class="history-rec-meta">
-              <span>≡ƒæ« ${esc(b.oficial_name || 'ΓÇö')}</span>
+              <span></span>
               <span class="bolo-status ${st.cls}">ΓùÅ ${st.label}</span>
             </div>
           </div>
@@ -4372,7 +3642,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   // ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ LLAMADAS 911 (mini-mapa) ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
   // El juego manda las llamadas con X/Z y el motivo, pero SIN calle ni
   // postal. Para poder mostrarlas, buscamos al jugador vivo mís cercano
-  // que s¡ tenga StreetName/PostalCode y lo usamos como referencia.
+  // que sá tenga StreetName/PostalCode y lo usamos como referencia.
   let callsTimer = null;
   let callsCache = [];
   let callsPlayers = [];
@@ -4406,7 +3676,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       const res = await fetch(CALLS_PROXY, { cache: 'no-store' });
       const data = await res.json();
       callsPlayers = data.Players || [];
-      // El MDT es de law enforcement: solo Polic¡a/Sheriff. Las llamadas
+      // El MDT es de law enforcement: solo Policáa/Sheriff. Las llamadas
       // de Fire/EMS (y las sin equipo) se muestran en el ITMDT.
       const LE_TEAMS = { Police: 1, Sheriff: 1 };
       callsCache = (data.EmergencyCalls || []).filter(c => LE_TEAMS[c.Team] !== undefined);
@@ -4491,7 +3761,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   }
 
   // La secci│n vive en la pantalla principal (bajo Consulta de Personas),
-  // as¡ que se sondea sola desde init() y se corta al salir de la pígina.
+  // asá que se sondea sola desde init() y se corta al salir de la pígina.
   function startCallsLive() {
     loadCalls();
     if (callsTimer) clearInterval(callsTimer);
@@ -4516,7 +3786,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     } else if (mode === 'starting') {
       btn.classList.remove('live');
       btn.disabled = true;
-      btn.innerHTML = 'Activando bodycamΓÇª';
+      btn.innerHTML = 'Activando bodycamΓÇ';
     } else {
       btn.classList.remove('live');
       btn.disabled = !currentShift;
@@ -4561,7 +3831,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     unpublishBodycam();
   }
 
-  // Si el navegador rechaza algn l¡mite (OverconstrainedError) volvemos a
+  // Si el navegador rechaza algn lámite (OverconstrainedError) volvemos a
   // intentar sin las restricciones duras, para no quedarnos sin bodycam.
   async function captureFallback(fn, constraints) {
     try {
@@ -4635,179 +3905,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     // Ya activa ΓåÆ apagar
     if (bodycamServer) {
       stopBodycamLocal();
-      showToast('≡ƒô╣ Bodycam desactivada.');
-      return;
-    }
-    if (!currentShift) {
-      showToast('Inicií un turno antes de activar la bodycam.', 'warn');
-      return;
-    }
-    if (!window.HRPBC) {
-      showToast('La librer¡a de bodycam no se carg│. Recargí la pígina.', 'error');
-      return;
-    }
-
-    bodycamStarting = true;
-    setBodycamBtn('starting');
-
-    // Espera (con reintento) a que la se▒alizaci│n est⌐ lista: antes de esto
-    // el MDT directamente bloqueaba con "la librer¡a an no carg│".
-    try {
-      await window.HRPBC.ready(15000);
-    } catch (_) {
-      bodycamStarting = false;
-      setBodycamBtn('off');
-      showToast('No se pudo conectar con el servicio de bodycam. Reintentí en unos segundos.', 'error');
-      return;
-    }
-
-    try {
-      bodycamStream = await acquireBodycamStream();
-    } catch (err) {
-      bodycamStarting = false;
-      setBodycamBtn('off');
-      const name = err && err.name ? err.name : '';
-      showToast(
-        name === 'NotAllowedError'
-          ? 'Permit¡ el acceso a la pantalla/címara para activar la bodycam.'
-          : 'No se pudo iniciar la captura: ' + (name || 'error desconocido'),
-        'error'
-      );
-      return;
-    }
-
-    bodycamServer = window.HRPBC.startServer({
-      stream: bodycamStream,
-      userId: userId,
-      userName: userName || 'Oficial',
-      onStart: function (peerId) {
-        bodycamStarting = false;
-        setBodycamBtn('live');
-        publishBodycam(peerId);
-        showToast('≡ƒô╣ Bodycam ACTIVA ΓÇö el despacho ya puede verla en su panel.');
-      },
-      onError: function (msg) {
-        bodycamStarting = false;
-        stopBodycamLocal();
-        showToast('Bodycam: ' + (msg || 'error de conexi│n'), 'error');
-      },
-      onStop: function () {
-        bodycamServer = null;
-        try {
-          if (bodycamStream) bodycamStream.getTracks().forEach(t => t.stop());
-        } catch (_) {}
-        bodycamStream = null;
-        setBodycamBtn('off');
-        unpublishBodycam();
-      },
-    });
-  }
-  window.handleBodycamToggle = handleBodycamToggle;
-
-  // ΓöÇΓöÇ EXPORT HANDLERS ΓöÇΓöÇ
-  window.handleStartShift = async function() { await _handleStartShift(); };
-  window.handleStartBreak = async function() { await _handleStartBreak(); };
-  window.handleEndBreak = async function() { await _handleEndBreak(); };
-  window.handleEndShift = async function() { await _handleEndShift(); };
-  window.dbSearchPerson = dbSearchPerson;
-  window.dbSearch = dbSearch;
-  window.setSearchMode = setSearchMode;
-  window.openProfile = openProfile;
-  window.backToSearch = backToSearch;
-  window.toggleSection = toggleSection;
-  window.copyRobloxUser = copyRobloxUser;
-  window.openCaseById = openCaseById;
-  window.backFromCase = backFromCase;
-  window.openHistoryPanel = openHistoryPanel;
-  window.closeHistoryPanel = closeHistoryPanel;
-  window.switchHistoryTab = switchHistoryTab;
-  window.openBoloPanel = openBoloPanel;
-  window.closeBoloPanel = closeBoloPanel;
-  window.setBoloFilter = setBoloFilter;
-
-  // ΓöÇΓöÇ Acceso Dispatch: se oculta la tarjeta salvo rol exacto ΓöÇΓöÇ
-  async function gateDispatchCard() {
-    const card = document.querySelector('a.mod-card[href="dispatch.html"]');
-    if (!card) return;
-    if (!session || !session.id) { card.style.display = 'none'; return; }
-    try {
-      const ok = (typeof hrpHasRole === 'function')
-        ? await hrpHasRole(DISPATCH_ROLE, session.id)
-        : false;
-      if (!ok) card.style.display = 'none';
-    } catch (e) {
-      card.style.display = 'none';
-    }
-  }
-  window.boloSearchPerson = boloSearchPerson;
-  window.pickBoloPerson = pickBoloPerson;
-  window.clearBoloPick = clearBoloPick;
-  window.saveBolo = saveBolo;
-  window.editBoloPopup = editBoloPopup;
-  window.closeBoloEdit = closeBoloEdit;
-  window.confirmEditBolo = confirmEditBolo;
-  window.closeBoloById = closeBoloById;
-  window.removeBoloById = removeBoloById;
-  window.reopenBoloById = reopenBoloById;
-
-  // ΓöÇΓöÇ INIT ΓöÇΓöÇ
-  async function init() {
-    loadUser();
-    session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
-    if (session) {
-      userId = session.id;
-      userName = session.username || 'Oficial';
-    }
-    gateDispatchCard();
-    const hasAccess = await checkAccess();
-    if (!hasAccess) return;
-
-    tick();
-    setInterval(tick, 1000);
-
-    loadBalance();
-    buildCodeGrid();
-    renderState();
-
-    loadOnlineOfficers();
-    setInterval(loadOnlineOfficers, 3000);
-
-    startPanicPolling();
-    startCallsLive();
-
-    loadBolos(false);
-    updateBoloCardBadge();
-
-    const boloInput = $('bolo-search');
-    if (boloInput) {
-      let debounce = null;
-      boloInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter') { e.preventDefault(); boloSearchPerson(); }
-      });
-      boloInput.addEventListener('input', () => {
-        clearTimeout(debounce);
-        debounce = setTimeout(boloSearchPerson, 450);
-      });
-    }
-
-    const dbInput = $('db-person');
-    let dbDebounce = null;
-    if (dbInput) {
-      dbInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter') { clearTimeout(dbDebounce); dbSearch(); }
-        if (e.key === 'Escape') {
-          clearTimeout(dbDebounce);
-          dbInput.value = '';
-          const r0 = $('db-person-result');
-          if (r0) r0.innerHTML = '';
-          dbInput.blur();
-        }
-      });
-      dbInput.addEventListener('input', () => {
-        clearTimeout(dbDebounce);
-        const v = dbInput.value.trim();
-        const r0 = $('db-person-result');
-        if (v.length < 2) { if (r0) r0.innerHTML = ''; return; }
+      showToast('< 2) { if (r0) r0.innerHTML = ''; return; }
         dbDebounce = setTimeout(dbSearch, 300);
       });
       setTimeout(() => dbInput.focus(), 350);
