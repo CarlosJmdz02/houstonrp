@@ -34,7 +34,7 @@
   html, body { height: 100%; }
 
   body {
-    background: #121212;
+    background: #121212 !important;
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     display: flex;
@@ -1287,6 +1287,14 @@ OPERATIONS MODULES ═══ */
     <div class="access-icon loading"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
     <div class="access-title">Verificando acceso...</div>
     <div class="access-desc">Comprobando tu rol en el servidor de Discord.</div>
+    
+    <!-- BARRA DE CARGA -->
+    <div style="width: 100%; max-width: 300px; margin-top: 30px;">
+      <div style="background: rgba(59,130,246,0.2); border: 1px solid rgba(59,130,246,0.5); border-radius: 12px; height: 8px; overflow: hidden; margin-bottom: 12px;">
+        <div id="access-progress-bar" style="height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); width: 0%; transition: width 0.2s ease; border-radius: 12px;"></div>
+      </div>
+      <div id="access-progress-text" style="text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #60a5fa; font-weight: 700;">0%</div>
+    </div>
   </div>
 
   <div id="access-denied" class="access-overlay hidden">
@@ -1971,10 +1979,39 @@ OPERATIONS MODULES ═══ */
    //  - full: rol de MDT o Dispatch → todas las funciones.
    //  - limited: rol de HFD o HDOT → solo iniciar/terminar turno (registrar horas).
    async function resolveMdtAccess() {
-     if (!session || !session.id) return { level: 'full', roles: new Set() };
-     // TEMPORAL: Permitir acceso a todos con sesión activa
-     // TODO: Restaurar validación de rol cuando Supabase funcione
-     return { level: 'full', roles: new Set() };
+     if (!session || !session.id) return { level: null, roles: new Set() };
+     
+     const fullRoles = [MDT_ACCESS_ROLE];
+     const startTime = Date.now();
+     const timeoutMs = 10000; // 10 segundos máximo
+     
+     // 1) Validación por OAuth (Discord)
+     try {
+       const roles = await getMdtRoleSet();
+       if (fullRoles.some(r => roles.has(r))) return { level: 'full', roles };
+     } catch (e) { console.log('OAuth check failed:', e); }
+     
+     // 2) Validación por bot de Discord (Supabase fallback)
+     for (const roleId of fullRoles) {
+       // Verificar timeout
+       if (Date.now() - startTime > timeoutMs) {
+         console.warn('MDT access check timeout');
+         break;
+       }
+       
+       try {
+         if (typeof hrpCallCheckPoliceRole === 'function') {
+           const result = await hrpCallCheckPoliceRole({
+             discord_id: session.id,
+             username: session.username || 'Unknown',
+             role_id: roleId,
+           });
+           if (result && result.allowed === true) return { level: 'full', roles: null };
+         }
+       } catch (e) { console.log('Bot check failed:', e); }
+     }
+     
+     return { level: null, roles };
   }
 
   async function checkAccess() {
@@ -1988,19 +2025,40 @@ OPERATIONS MODULES ═══ */
     userId = session.id;
     userName = session.username || 'Oficial';
 
-    const { level, roles } = await resolveMdtAccess();
-    if (!level) {
-      $('access-loading').classList.add('hidden');
-      $('access-denied').classList.remove('hidden');
-      $('denied-title').innerHTML = 'Sin autorización';
-      $('denied-desc').innerHTML = 'Solo los miembros con el rol de acceso al MDT pueden usar el sistema.';
-      return false;
-    }
-
-    $('access-loading').classList.add('hidden');
-
-    $('mdt-content').style.display = 'block';
-    return true;
+    // Animar barra de progreso
+      let progress = 0;
+      const progressBar = $('access-progress-bar');
+      const progressText = $('access-progress-text');
+      const progressInterval = setInterval(() => {
+        if (progress < 90) progress += Math.random() * 40;
+        if (progress > 90) progress = 90;
+        progressBar.style.width = progress + '%';
+        progressText.textContent = Math.floor(progress) + '%';
+      }, 100);
+      
+      const { level, roles } = await resolveMdtAccess();
+      
+      // Completar la barra
+      clearInterval(progressInterval);
+      progress = 100;
+      progressBar.style.width = '100%';
+      progressText.textContent = '100%';
+      
+      if (!level) {
+        setTimeout(() => {
+          $('access-loading').classList.add('hidden');
+          $('access-denied').classList.remove('hidden');
+          $('denied-title').innerHTML = 'Sin autorizaciA3n';
+          $('denied-desc').innerHTML = 'Solo los miembros con el rol de acceso al MDT pueden usar el sistema.';
+        }, 500);
+        return false;
+      }
+  
+      setTimeout(() => {
+        $('access-loading').classList.add('hidden');
+        $('mdt-content').style.display = 'block';
+      }, 500);
+      return true;
   }
 
   // ── USER ──
