@@ -1200,7 +1200,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     <div class="top-user">
       <div class="user-avatar" id="user-avatar">?</div>
       <div class="user-info">
-        <div class="user-name" id="user-name">CargandoΓÇª</div>
+         <div class="user-name" id="user-name">Cargando...</div>
         <div class="user-role idle" id="user-role">Off Duty</div>
       </div>
     </div>
@@ -1214,9 +1214,9 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <div class="balance-label">Tus horas</div>
         <div class="balance-value hours-value" id="user-hours">--h --m</div>
       </div>
-      <div class="live-indicator" id="conn-indicator" title="Estado de conexi├│n con el servidor"><span class="live-dot"></span>En l├¡nea</div>
+       <div class="live-indicator" id="conn-indicator" title="Estado de conexión con el servidor"><span class="live-dot"></span>En línea</div>
       <div class="top-clock" id="clock">--:--:--</div>
-        <button class="btn-radio" id="radio-toggle" type="button" onclick="HRPRadio.toggle()" title="Mostrar / ocultar la radio t├íctica">
+         <button class="btn-radio" id="radio-toggle" type="button" onclick="HRPRadio.toggle()" title="Mostrar / ocultar la radio táctica">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.9 19.1a10 10 0 0 1 0-14.2"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/></svg>
           Radio
         </button>
@@ -1259,11 +1259,11 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14"/></svg>
         Terminar turno
       </button>
-      <select id="bodycam-src" class="bc-src" disabled title="Qu├⌐ muestra la bodycam (bajo uso de CPU / FPS)" onclick="event.stopPropagation()">
-        <option value="screen">≡ƒûÑ∩╕Å Pantalla (Roblox)</option>
-        <option value="camera">≡ƒô╖ C├ímara</option>
+       <select id="bodycam-src" class="bc-src" disabled title="Qué muestra la bodycam (bajo uso de CPU / FPS)" onclick="event.stopPropagation()">
+         <option value="screen">📺 Pantalla (Roblox)</option>
+         <option value="camera">📷 Cámara</option>
       </select>
-      <button id="btn-bodycam" class="sbtn bodycam" disabled onclick="handleBodycamToggle()" title="Transmitir tu pantalla o c├ímara al despacho a 15 FPS">
+       <button id="btn-bodycam" class="sbtn bodycam" disabled onclick="handleBodycamToggle()" title="Transmitir tu pantalla o cámara al despacho a 15 FPS">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
         Activar Bodycam
       </button>
@@ -1271,9 +1271,9 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
     <div class="codes-bar" id="codes-bar" style="width:100%;">
       <div class="codes-label">
-        <div class="code-current" id="code-current">
-          <span style="color:var(--text-dim);">Sin c├│digo</span>
-        </div>
+         <div class="code-current" id="code-current">
+           <span style="color:var(--text-dim);">Sin código</span>
+         </div>
       </div>
       <div class="codes-row" id="code-grid"></div>
     </div>
@@ -1350,7 +1350,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       <div class="tab-body">
         <div id="search-view">
           <div class="search-box">
-            <input id="db-person" type="text" placeholder="Buscar por placa, modelo o ciudadano: matr├║cula, nombre, Discord o #casoΓÇª" autocomplete="off" spellcheck="false">
+            <input id="db-person" type="text" placeholder="Buscar por placa, modelo o ciudadano: matrícula, nombre, Discord o #caso..." autocomplete="off" spellcheck="false">
             <button class="btn btn-primary" onclick="dbSearch()" id="btn-search">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               Buscar
@@ -1373,14 +1373,14 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in">
             <div class="section-header" onclick="toggleSection('char')">
-              <h3>≡ƒ¬¬ Ficha del Ciudadano<span class="qtag">ID</span></h3>
+              <h3>👤 Ficha del Ciudadano<span class="qtag">ID</span></h3>
             </div>
             <div class="section-body" id="char-body"></div>
           </div>
 
           <div class="profile-section fade-in">
             <div class="section-header" onclick="toggleSection('licenses')">
-              <h3>≡ƒ¢í∩╕Å Licencias y Permisos<span class="qtag">DL / CCW</span></h3>
+              <h3>🎫 Licencias y Permisos<span class="qtag">DL / CCW</span></h3>
               <span class="section-count" id="licenses-count">0</span>
             </div>
             <div class="section-body" id="licenses-body"></div>
@@ -1388,7 +1388,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in" style="animation-delay:0.05s;">
             <div class="section-header" onclick="toggleSection('arrests')">
-              <h3>≡ƒÜö Historial de Arrestos</h3>
+              <h3>🔒 Historial de Arrestos</h3>
               <span class="section-count" id="arrests-count">0</span>
             </div>
             <div class="section-body" id="arrests-body"></div>
@@ -1396,7 +1396,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in" style="animation-delay:0.1s;">
             <div class="section-header" onclick="toggleSection('fines')">
-              <h3>≡ƒÆ░ Historial de Multas</h3>
+              <h3>🚨 Historial de Multas</h3>
               <span class="section-count" id="fines-count">0</span>
             </div>
             <div class="section-body" id="fines-body"></div>
@@ -1404,7 +1404,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in" style="animation-delay:0.15s;">
             <div class="section-header" onclick="toggleSection('vehicles')">
-              <h3>≡ƒÜù Veh├¡culos Registrados<span class="qtag">REG</span></h3>
+              <h3>🚗 Vehículos Registrados<span class="qtag">REG</span></h3>
               <span class="section-count" id="vehicles-count">0</span>
             </div>
             <div class="section-body" id="vehicles-body"></div>
@@ -1412,7 +1412,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
           <div class="profile-section fade-in" style="animation-delay:0.2s;">
             <div class="section-header" onclick="toggleSection('bolo')">
-              <h3>≡ƒÜ¿ Estado BOLO</h3>
+              <h3>🚨 Estado BOLO</h3>
               <span class="section-count" id="bolo-count">0</span>
             </div>
             <div class="section-body" id="bolo-body"></div>
@@ -2520,7 +2520,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       if (bcSrcIdle) bcSrcIdle.disabled = true;
       if (lbStart) lbStart.disabled = false;
       if (lbEnd) lbEnd.disabled = true;
-      if (lbStatus) lbStatus.textContent = 'Sin turno activo. Eleg├¡ tu departamento e inici├í el turno para registrar horas.';
+      if (lbStatus) lbStatus.textContent = 'Sin turno activo. Elige tu departamento e inicia el turno para registrar horas.';
       currentStatusCode = null;
       updateCurrentCodeDisplay();
       highlightActiveCode();
@@ -2617,7 +2617,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   }
 
   window.selectStatusCode = async function(code) {
-    if (!currentShift) { showToast('Inici├í un turno para cambiar el c├│digo', 'warn'); return; }
+    if (!currentShift) { showToast('Inicia un turno para cambiar el código', 'warn'); return; }
     if (code === '10-100') {
       handlePanic();
       return;
@@ -2635,7 +2635,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   };
 
   window.handlePanic = async function() {
-    if (!currentShift) { showToast('Inici├í un turno antes de enviar p├ínico', 'warn'); return; }
+    if (!currentShift) { showToast('Inicia un turno antes de enviar pánico', 'warn'); return; }
     try {
       await supaUpdate('police_shift_sessions', { status_code: '10-100' }, { id: `eq.${currentShift.id}` });
       currentStatusCode = '10-100';
@@ -2643,10 +2643,10 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       highlightActiveCode();
       updateCurrentCodeDisplay();
       playSound(audioPanic);
-      showToast('≡ƒÜ¿ ┬íALERTA DE P├üNICO ENVIADA!', 'error');
+      showToast('🚨 ¡ALERTA DE PÁNICO ENVIADA!', 'error');
     } catch (e) {
       console.warn('Failed to activate panic:', e);
-      showToast('Error al enviar alerta de p├ínico', 'error');
+       showToast('Error al enviar alerta de pánico', 'error');
     }
   };
 
