@@ -1259,11 +1259,12 @@
           ? `<img src="https://cdn.discordapp.com/avatars/${session.id}/${session.avatar}.png">`
           : (userName.charAt(0) || '?').toUpperCase();
       }
-      $('user-name').textContent = userName;
-      $('user-sub').textContent = '@' + userName;
+       $('user-name').textContent = userName;
+       $('user-sub').textContent = '@' + userName;
 
-      loadBalance();
-      loadMyLicenses();
+       await expireOldLicenses();
+       loadBalance();
+       loadMyLicenses();
     }
 
     async function loadBalance() {
