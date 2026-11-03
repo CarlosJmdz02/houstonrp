@@ -12,10 +12,10 @@
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
-    --bg-void:       #0d1424;
-    --bg-panel:      #131d2f;
-    --bg-card:       #17223a;
-    --bg-hover:      #1f304f;
+     --bg-void:       #121212;
+     --bg-panel:      #1a1a1a;
+     --bg-card:       #1f1f1f;
+     --bg-hover:      #252525;
     --accent-blue:   #3b6fb6;
     --accent-cyan:   #3b6fb6;
     --accent-gold:   #e6a868;
@@ -24,8 +24,8 @@
     --text-primary:  #e4e7ee;
     --text-secondary:#8a93a7;
     --text-dim:      #4c5a72;
-    --border:        #263552;
-    --border-glow:   #314466;
+     --border:        #2a2a2a;
+     --border-glow:   #333333;
     --glow-blue:     rgba(59,111,182,0.15);
     --glow-cyan:     rgba(59,111,182,0.12);
     --sidebar-w:     260px;
@@ -33,12 +33,9 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--bg-void);
-    background-image:
-      radial-gradient(ellipse at 20% 0%, rgba(59,111,182,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 100%, rgba(59,111,182,0.05) 0%, transparent 50%);
-    color: var(--text-primary);
+   body {
+     background: #121212;
+     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     height: 100vh;
     display: flex;
@@ -1058,10 +1055,10 @@
       <div class="logo-shield">
         <img src="images/logo.png" alt="Houston RP" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 8px var(--accent-cyan));">
       </div>
-      <div class="logo-text">
-        <div class="logo-title">HOUSTON RP</div>
-        <div class="logo-sub">Dashboard</div>
-      </div>
+       <div class="logo-text">
+         <div class="logo-title">HOUSTON RP</div>
+         <div class="logo-sub">DMV/CCW</div>
+       </div>
     </div>
   </div>
 
@@ -1073,11 +1070,11 @@
     </div>
   </div>
 
-  <nav class="sidebar-nav">
-    <div class="nav-section-label">General</div>
-    <a class="nav-item active" href="dashboard.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><span class="nav-label">Dashboard</span></a>
-    <a class="nav-item" href="app.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="nav-label">Characters</span></a>
-    <a class="nav-item" href="licencias.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">DMV/CCW</span></a>
+   <nav class="sidebar-nav">
+     <div class="nav-section-label">General</div>
+     <a class="nav-item" href="dashboard.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><span class="nav-label">Dashboard</span></a>
+     <a class="nav-item" href="app.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="nav-label">Characters</span></a>
+     <a class="nav-item active" href="licencias.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="nav-label">DMV/CCW</span></a>
     <div class="nav-section-label">Economy</div>
     
     <a class="nav-item" href="marketplace.html"><div class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div><span class="nav-label">Marketplace</span></a>
