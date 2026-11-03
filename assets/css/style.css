@@ -292,16 +292,17 @@ a { text-decoration: none; color: inherit; }
 .gfx-overlay h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 4px; }
 .gfx-overlay p { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
 .gfx-btn {
-  display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
-  padding: 10px 24px; border-radius: var(--radius-sm);
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+  padding: 12px 32px; border-radius: 12px;
   background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
-  color: #fff; font-size: 13px; font-weight: 600; font-family: inherit;
-  border: 1px solid rgba(59,130,246,0.3); cursor: pointer;
+  color: #fff; font-size: 14px; font-weight: 700; font-family: inherit;
+  border: 2px solid rgba(59,130,246,0.5); cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 0 20px rgba(37,99,235,0.15);
+  box-shadow: 0 0 30px rgba(37,99,235,0.3);
+  letter-spacing: 0.5px;
 }
-.gfx-btn:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(37,99,235,0.35); }
-.gfx-btn:active { transform: translateY(0); }
+.gfx-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(37,99,235,0.5); border-color: rgba(59,130,246,0.8); }
+.gfx-btn:active { transform: translateY(-1px); }
 .gfx-btn svg { width: 16px; height: 16px; transition: var(--transition); }
 .gfx-btn:hover svg { transform: translateX(3px); }
 .discord-btn { background: linear-gradient(135deg, #5865f2, #4752c4) !important; border-color: rgba(88,101,242,0.3) !important; box-shadow: 0 0 20px rgba(88,101,242,0.15) !important; }
