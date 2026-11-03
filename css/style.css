@@ -66,17 +66,26 @@ html, body {
 
 /* --- Scrollbar personalizada --- */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(20, 30, 48, 0.5);
+  border-radius: 8px;
+  margin: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(230, 168, 104, 0.3);
-  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(59, 111, 182, 0.6), rgba(230, 168, 104, 0.4));
+  border-radius: 8px;
+  border: 2px solid rgba(13, 20, 36, 0.8);
+  box-shadow: 0 0 10px rgba(59, 111, 182, 0.3);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(230, 168, 104, 0.5);
+  background: linear-gradient(180deg, rgba(59, 111, 182, 0.9), rgba(230, 168, 104, 0.7));
+  box-shadow: 0 0 16px rgba(59, 111, 182, 0.6);
+}
+::-webkit-scrollbar-corner {
+  background: rgba(13, 20, 36, 0.5);
 }
 
 /* --- Pantalla de carga --- */
@@ -648,7 +657,10 @@ html, body {
 .players-list {
   flex: 1;
   overflow-y: auto;
-  padding: 8px;
+  overflow-x: hidden;
+  padding: 10px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .call-card {
@@ -1095,15 +1107,18 @@ html, body {
 }
 
 .dispatch-log {
-  max-height: 220px;
+  max-height: 260px;
   overflow-y: auto;
+  overflow-x: hidden;
   font-family: var(--font-mono), monospace;
   font-size: 10.5px;
-  line-height: 1.55;
-  padding: 4px 2px;
-  border-left: 2px solid rgba(74,204,143,0.25);
+  line-height: 1.6;
+  padding: 8px 6px;
+  border-left: 3px solid rgba(74,204,143,0.4);
   margin-left: 2px;
   scrollbar-width: thin;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 .log-entry {
   display: flex;
@@ -1733,7 +1748,10 @@ html, body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 8px;
+  overflow-x: hidden;
+  padding: 10px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 .bc-roster .empty-state { padding: 14px 8px; font-size: 11.5px; }
 
