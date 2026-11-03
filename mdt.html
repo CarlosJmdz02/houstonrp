@@ -68,15 +68,15 @@
   .top-user { display: flex; align-items: center; gap: 10px; margin-left: 4px; }
 
   /* ── CAD UNIT STRIP ── */
-  .cad-strip {
-    display: flex;
-    align-items: stretch;
-    background: rgba(6,10,20,0.8);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    flex-wrap: wrap;
-  }
+   .cad-strip {
+     display: flex;
+     align-items: stretch;
+     background: #1a1a1a;
+     border: 1px solid var(--border);
+     border-radius: 8px;
+     overflow: hidden;
+     flex-wrap: wrap;
+   }
   .cad-cell { display: flex; flex-direction: column; gap: 2px; padding: 5px 12px; border-right: 1px solid var(--border); }
   .cad-k { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; }
   .cad-v { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 500; color: var(--accent-amber); letter-spacing: .5px; white-space: nowrap; }
@@ -1844,14 +1844,14 @@ OPERATIONS MODULES ═══ */
   </div>
 </div>
 
-<!-- Modal: Nota / Advertencia -->
-<div id="warning-modal" style="display:none;position:fixed;inset:0;z-index:100001;background:rgba(6,10,20,.96);align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;">
-  <div style="width:100%;max-width:520px;background:#131d2f;border:1px solid #263552;border-radius:14px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.6);">
-    <div style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:#e6a868;margin-bottom:4px;">Agregar Nota / Advertencia</div>
+  <!-- Modal: Nota / Advertencia -->
+   <div id="warning-modal" style="display:none;position:fixed;inset:0;z-index:100001;background:#121212;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;">
+     <div style="width:100%;max-width:520px;background:#1a1a1a;border:1px solid #263552;border-radius:14px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.6);">
+       <div style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:#e6a868;margin-bottom:4px;">Agregar Nota / Advertencia</div>
     <div id="warning-target" style="font-size:13px;color:#8a93a7;margin-bottom:16px;"></div>
 
     <label style="display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4c5a72;margin-bottom:6px;">Nota para el expediente</label>
-    <textarea id="warning-text" rows="4" maxlength="400" placeholder="Ej: Advertido por conduccion imprudente. Se le informo las consecuencias." style="width:100%;background:#0d1424;border:1px solid #263552;border-radius:8px;color:#e4e7ee;padding:12px;font-family:Inter,sans-serif;font-size:14px;resize:vertical;"></textarea>
+     <textarea id="warning-text" rows="4" maxlength="400" placeholder="Ej: Advertido por conduccion imprudente. Se le informo las consecuencias." style="width:100%;background:#252525;border:1px solid #263552;border-radius:8px;color:#e4e7ee;padding:12px;font-family:Inter,sans-serif;font-size:14px;resize:vertical;"></textarea>
 
     <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end;">
       <button id="warning-cancel" style="padding:10px 20px;border-radius:8px;border:1px solid #263552;background:transparent;color:#8a93a7;font-weight:600;cursor:pointer;">Cancelar</button>
