@@ -144,27 +144,31 @@
 
   .section-title { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; color: var(--accent-cyan); letter-spacing: .5px; text-transform: uppercase; margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
   .section-title:first-of-type { margin-top: 0; }
-    /* ===== VISTA EMBEBIDA (iframe dentro del MDT) =====
-       Sin sidebar ni topbar: solo el formulario, a ancho completo.
-       Se activa con la clase .embedded que pone el script de abajo. */
-    html.embedded .sidebar,
-    html.embedded .topbar { display: none !important; }
-    html.embedded .main {
-      margin-left: 0 !important;
-      height: auto !important;
-      min-height: 100vh;
-      overflow: visible !important;
-    }
-    html.embedded .content {
-      padding: 26px clamp(18px, 4vw, 44px) 40px !important;
-      overflow: visible !important;
-      max-width: 940px;
-      margin: 0 auto;
-    }
-    html.embedded body { overflow-y: auto !important; background: #0d1424; }
+     /* ===== VISTA EMBEBIDA (iframe dentro del MDT) =====
+        Sin sidebar ni topbar: solo el formulario, a ancho completo.
+        Se activa con la clase .embedded que pone el script de abajo. */
+     html.embedded .sidebar,
+     html.embedded .topbar { display: none !important; }
+     html.embedded .main {
+       margin-left: 0 !important;
+       height: auto !important;
+       min-height: 100vh;
+       overflow: visible !important;
+     }
+     html.embedded .content {
+       padding: 0 !important;
+       overflow: visible !important;
+       max-width: 100%;
+       margin: 0 auto;
+     }
+     html.embedded .panel {
+       padding: 28px !important;
+       max-width: 100%;
+     }
+     html.embedded body { overflow-y: auto !important; background: #121212 !important; }
 
-    /* Un poco de aire cuando esta embebido */
-     html.embedded .content > * { animation: none !important; }
+     /* Un poco de aire cuando esta embebido */
+      html.embedded .content > * { animation: none !important; }
    
    /* FORCE ALL BACKGROUNDS TRANSPARENT FOR IFRAME */
    *, *::before, *::after { background: transparent !important; }
