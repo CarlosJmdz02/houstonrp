@@ -13,30 +13,45 @@
         }
 
         :root {
-            --primary: #1e40af;
-            --primary-dark: #1e3a8a;
-            --primary-light: #3b82f6;
-            --danger: #dc2626;
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --danger: #ef4444;
             --warning: #f59e0b;
             --success: #10b981;
-            --dark: #0f172a;
-            --gray: #64748b;
-            --light: #f1f5f9;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--primary-dark) 100%);
-            color: #e2e8f0;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f35 100%);
+            color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
+        }
+
+        /* Particles Background */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
         }
 
         /* Header */
         header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            padding: 2rem 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 3rem 0;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -44,39 +59,43 @@
 
         header h1 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: white;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
         }
 
         header p {
             text-align: center;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1rem;
+            font-weight: 500;
         }
 
         /* Navegación */
         nav {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 2rem auto 0;
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            padding: 2rem 1rem;
+            gap: 1rem;
+            padding: 0 1rem;
             flex-wrap: wrap;
         }
 
         nav button {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
+            padding: 0.9rem 1.8rem;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 1rem;
             transition: all 0.3s ease;
-            font-weight: 600;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
         }
 
         nav button:hover,
@@ -84,13 +103,13 @@
             background: white;
             color: var(--primary);
             border-color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         /* Contenedor principal */
         .container {
-            max-width: 1100px;
+            max-width: 1150px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }
@@ -98,17 +117,17 @@
         /* Secciones */
         .section {
             display: none;
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeInUp 0.6s ease-out;
         }
 
         .section.active {
             display: block;
         }
 
-        @keyframes fadeIn {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -117,187 +136,218 @@
         }
 
         .section h2 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
             color: var(--primary-light);
-            border-bottom: 3px solid var(--primary);
-            padding-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
+            font-weight: 800;
         }
 
         .section h2 i {
-            font-size: 2.5rem;
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Grid de reglas */
         .rules-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 3rem;
         }
 
-        /* Tarjeta de regla */
+        /* Tarjeta de regla - MEJORADA */
         .rule-card {
-            background: linear-gradient(135deg, rgba(30, 64, 175, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
             border: 2px solid var(--primary);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rule-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
         }
 
         .rule-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(30, 64, 175, 0.3);
+            transform: translateY(-12px);
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.25);
             border-color: var(--primary-light);
-            background: linear-gradient(135deg, rgba(30, 64, 175, 0.3) 0%, rgba(59, 130, 246, 0.2) 100%);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
         }
 
         .rule-header {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            align-items: flex-start;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
         }
 
         .rule-icon {
-            font-size: 2rem;
-            color: var(--primary-light);
-            min-width: 40px;
-        }
-
-        .rule-title {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 2.5rem;
+            min-width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px;
             color: white;
         }
 
+        .rule-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
         .rule-code {
-            font-size: 0.85rem;
-            color: var(--gray);
-            font-family: 'Courier New', monospace;
-            margin-top: 0.25rem;
-        }
-
-        .rule-description {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-
-        .rule-sanction {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            color: var(--primary-light);
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-weight: 600;
+            margin-top: 0.3rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .sanction-perma {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-            color: white;
+        .rule-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.3rem;
+            line-height: 1.7;
         }
 
-        .sanction-long {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
+        .rule-sanction {
+            display: inline-block;
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'Monaco', monospace;
         }
 
-        .sanction-medium {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-            color: white;
-        }
-
-        .sanction-short {
-            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
-            color: #000;
-        }
-
+        /* Sanciones - Colores */
         .sanction-kick {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
         }
 
         .sanction-warn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .sanction-ban {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+        }
+
+        .sanction-antirol {
             background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
         }
 
-        /* Sección de importancia */
-        .important-section {
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
-            border-left: 5px solid #dc2626;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 2rem 0;
+        .sanction-perma {
+            background: linear-gradient(135deg, #000000 0%, #262626 100%);
+            color: #ef4444;
+            border: 2px solid #ef4444;
         }
 
-        .important-section h3 {
+        /* Sección de advertencia */
+        .alert-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%);
+            border-left: 5px solid #ef4444;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .alert-box h3 {
             color: #fca5a5;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
+            font-weight: 800;
+            font-size: 1.2rem;
         }
 
-        .important-section p {
-            color: #cbd5e1;
+        .alert-box p {
+            color: var(--text-secondary);
             line-height: 1.8;
         }
 
         /* Footer */
         footer {
-            background: var(--primary-dark);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #1e3a8a 100%);
             text-align: center;
-            padding: 2rem 1rem;
-            color: rgba(255, 255, 255, 0.7);
+            padding: 2.5rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
             margin-top: 4rem;
             border-top: 2px solid var(--primary);
         }
 
         footer p {
             margin: 0.5rem 0;
+            font-weight: 500;
         }
 
         /* Botón volver */
         .back-btn {
-            display: inline-block;
-            background: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
+            padding: 1rem 1.8rem;
+            border-radius: 10px;
             text-decoration: none;
             margin-bottom: 2rem;
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
         }
 
         .back-btn:hover {
-            background: var(--primary-light);
-            transform: translateX(-5px);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            transform: translateX(-8px);
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.3);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             header h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
 
             nav {
-                gap: 1rem;
+                gap: 0.5rem;
             }
 
             nav button {
-                padding: 0.6rem 1rem;
+                padding: 0.7rem 1.2rem;
                 font-size: 0.9rem;
             }
 
@@ -306,7 +356,12 @@
             }
 
             .section h2 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
+                gap: 1rem;
+            }
+
+            .section h2 i {
+                font-size: 2rem;
             }
         }
     </style>
@@ -315,11 +370,6 @@
     <header>
         <h1>⚖️ REGLAS HOUSTON RP</h1>
         <p>ERLC - Emergency Response: Liberty County</p>
-    </header>
-
-    <div class="container">
-        <button class="back-btn" onclick="window.location.href='index.html'">← Volver al inicio</button>
-
         <nav>
             <button class="tab-btn active" onclick="switchTab('roleplay')">
                 <i class="fas fa-theater-masks"></i> Roleplay
@@ -328,18 +378,24 @@
                 <i class="fab fa-discord"></i> Discord
             </button>
         </nav>
+    </header>
+
+    <div class="container">
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <i class="fas fa-arrow-left"></i> Volver al inicio
+        </button>
 
         <!-- SECCIÓN ROLEPLAY -->
         <div id="roleplay" class="section active">
             <h2><i class="fas fa-theater-masks"></i> Reglas de Roleplay</h2>
 
-            <div class="important-section">
+            <div class="alert-box">
                 <h3><i class="fas fa-exclamation-triangle"></i> AVISO IMPORTANTE</h3>
-                <p>El servidor de Houston RP es un servidor de <strong>Roleplay serio</strong>. Se espera que todos los jugadores mantengan el inmersionismo y sigan estas reglas en todo momento. Las violaciones repetidas resultarán en sanciones progresivas.</p>
+                <p>Bienvenido a <strong>Houston RP</strong>, un servidor de roleplay serio. Se espera que todos los jugadores mantengan el inmersionismo y sigan estas reglas. Las violaciones repetidas resultarán en sanciones progresivas.</p>
             </div>
 
-            <!-- RDM -->
             <div class="rules-grid">
+                <!-- RDM -->
                 <div class="rule-card">
                     <div class="rule-header">
                         <div class="rule-icon"><i class="fas fa-gun"></i></div>
@@ -348,8 +404,8 @@
                             <div class="rule-code">Random Death Match</div>
                         </div>
                     </div>
-                    <p class="rule-description">Matar a un jugador sin una razón válida de roleplay. Esto incluye matar por diversión, venganza personal fuera del RP o sin contexto de la historia.</p>
-                    <span class="rule-sanction sanction-long">BAN 30 DÍAS</span>
+                    <p class="rule-description">Matar a un jugador sin una razón válida de roleplay. Está prohibido matar por diversión, venganza personal o sin contexto.</p>
+                    <span class="rule-sanction sanction-kick">KICK</span>
                 </div>
 
                 <!-- VDM -->
@@ -361,8 +417,8 @@
                             <div class="rule-code">Vehicle Death Match</div>
                         </div>
                     </div>
-                    <p class="rule-description">Usar un vehículo para matar a jugadores sin razón roleplay. Golpear, atropellar o usar el coche como arma de forma deliberada.</p>
-                    <span class="rule-sanction sanction-long">BAN 30 DÍAS</span>
+                    <p class="rule-description">Usar un vehículo para golpear, atropellar o matar jugadores sin razón roleplay válida.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
 
                 <!-- MG -->
@@ -374,8 +430,8 @@
                             <div class="rule-code">Metagaming</div>
                         </div>
                     </div>
-                    <p class="rule-description">Usar información fuera del juego (Discord, chat de texto, etc.) para beneficiarte en el roleplay. Tu personaje no debe saber cosas que solo tú sabes.</p>
-                    <span class="rule-sanction sanction-perma">BAN PERMANENTE</span>
+                    <p class="rule-description">Usar información fuera del juego (Discord, chat OOC) para beneficiarte en roleplay. Tu personaje no debe saber cosas que solo tú sabes.</p>
+                    <span class="rule-sanction sanction-ban">BANNED</span>
                 </div>
 
                 <!-- PG -->
@@ -387,8 +443,8 @@
                             <div class="rule-code">Powergaming</div>
                         </div>
                     </div>
-                    <p class="rule-description">Realizar acciones sin dejar oportunidad a otros de responder. Ej: "/me dispara 5 veces" sin que otros puedan reaccionar. Tus acciones deben ser realistas y permitir respuesta.</p>
-                    <span class="rule-sanction sanction-long">BAN 14 DÍAS</span>
+                    <p class="rule-description">Realizar acciones sin dar oportunidad a otros de responder. Las acciones deben ser realistas y permitir reacción.</p>
+                    <span class="rule-sanction sanction-kick">KICK</span>
                 </div>
 
                 <!-- CK -->
@@ -400,8 +456,8 @@
                             <div class="rule-code">Character Kill</div>
                         </div>
                     </div>
-                    <p class="rule-description">Matar permanentemente el personaje de otro jugador sin su consentimiento. Se requiere acuerdo previo y staff presente. Esto elimina el personaje de forma permanente.</p>
-                    <span class="rule-sanction sanction-perma">BAN PERMANENTE (sin consentimiento)</span>
+                    <p class="rule-description">Matar permanentemente el personaje de otro sin consentimiento. Se requiere acuerdo previo y staff presente.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
 
                 <!-- NLR -->
@@ -413,8 +469,8 @@
                             <div class="rule-code">New Life Rule</div>
                         </div>
                     </div>
-                    <p class="rule-description">Después de morir, tu personaje pierde toda memoria de los eventos anteriores. No puedes vengarte, buscar al asesino o recordar lo que pasó antes de morir. Espera 30 minutos antes de interactuar con el mismo lugar.</p>
-                    <span class="rule-sanction sanction-long">BAN 14 DÍAS</span>
+                    <p class="rule-description">Después de morir, tu personaje pierde toda memoria de eventos anteriores. No puedes vengarte ni recordar quién te mató.</p>
+                    <span class="rule-sanction sanction-kick">KICK</span>
                 </div>
 
                 <!-- Fail RP -->
@@ -426,8 +482,8 @@
                             <div class="rule-code">Roleplay Fallido</div>
                         </div>
                     </div>
-                    <p class="rule-description">No actuar de forma realista ante situaciones. Ej: ignorar una pistola en tu cabeza, actuar como si no estuvieras herido, no respetar órdenes válidas de autoridad.</p>
-                    <span class="rule-sanction sanction-medium">BAN 7 DÍAS</span>
+                    <p class="rule-description">No actuar de forma realista ante situaciones. Ignorar una pistola en la cabeza, fingir no estar herido, etc.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
 
                 <!-- ERP -->
@@ -440,7 +496,7 @@
                         </div>
                     </div>
                     <p class="rule-description">Todo contenido sexual, erótico o explícito está terminantemente prohibido. Esto incluye texto, voz o acciones de naturaleza sexual.</p>
-                    <span class="rule-sanction sanction-perma">BAN PERMANENTE</span>
+                    <span class="rule-sanction sanction-perma">BANNED PERMANENTE</span>
                 </div>
 
                 <!-- Troll RP -->
@@ -452,73 +508,47 @@
                             <div class="rule-code">Comportamiento Disruptivo</div>
                         </div>
                     </div>
-                    <p class="rule-description">Jugar con la intención de molestar o arruinar la experiencia de otros jugadores. Usar nombres ofensivos, spamear, hacer RP absurdo o impedir que otros disfruten.</p>
-                    <span class="rule-sanction sanction-perma">BAN PERMANENTE</span>
+                    <p class="rule-description">Jugar con intención de molestar o arruinar la experiencia de otros. Nombres ofensivos, spam, RP absurdo.</p>
+                    <span class="rule-sanction sanction-perma">BANNED PERMANENTE</span>
                 </div>
 
-                <!-- Combat Logging -->
+                <!-- No rolelear en choque -->
                 <div class="rule-card">
                     <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-sign-out-alt"></i></div>
+                        <div class="rule-icon"><i class="fas fa-exclamation-circle"></i></div>
                         <div>
-                            <div class="rule-title">COMBAT LOGGING</div>
-                            <div class="rule-code">Desconexión en Combate</div>
+                            <div class="rule-title">SIN ROLEPLAY EN CHOQUE</div>
+                            <div class="rule-code">Conducta Realista</div>
                         </div>
                     </div>
-                    <p class="rule-description">Desconectarse del servidor durante un combate o situación RP para evitar consecuencias. Debes esperar a que la situación termine de forma natural.</p>
-                    <span class="rule-sanction sanction-long">BAN 30 DÍAS</span>
+                    <p class="rule-description">Si tienes un accidente, debes roleplayer como si realmente estuvieras en shock o asustado. Actúa como lo haría una persona real.</p>
+                    <span class="rule-sanction sanction-kick">KICK</span>
                 </div>
 
-                <!-- OOC en RP -->
+                <!-- Más de 150 MPH -->
                 <div class="rule-card">
                     <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-comments"></i></div>
+                        <div class="rule-icon"><i class="fas fa-tachometer-alt"></i></div>
                         <div>
-                            <div class="rule-title">OOC EN RP</div>
-                            <div class="rule-code">Fuera del Personaje</div>
+                            <div class="rule-title">ANTIROL: VELOCIDAD</div>
+                            <div class="rule-code">&gt; 150 MPH</div>
                         </div>
                     </div>
-                    <p class="rule-description">No usar chat OOC (()) para resolver conflictos de RP o dar órdenes en el juego. El OOC es solo para cosas técnicas. Las órdenes deben ser RP.</p>
-                    <span class="rule-sanction sanction-warn">ADVERTENCIA</span>
+                    <p class="rule-description">Conducir a más de 150 MPH es antirol a menos que sea una situación de emergencia de police/fire/ems con razón válida.</p>
+                    <span class="rule-sanction sanction-antirol">ANTIROL</span>
                 </div>
 
-                <!-- Abuso de Staff -->
+                <!-- No valora su vida -->
                 <div class="rule-card">
                     <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="rule-icon"><i class="fas fa-heart"></i></div>
                         <div>
-                            <div class="rule-title">ABUSO DE STAFF</div>
-                            <div class="rule-code">Uso Incorrecto de Poderes</div>
+                            <div class="rule-title">NO VALORA SU VIDA</div>
+                            <div class="rule-code">Fear RP</div>
                         </div>
                     </div>
-                    <p class="rule-description">Si eres staff, usar poderes administrativos para beneficio personal, para ayudar amigos o para hacer RP. Los poderes son solo para mantener el orden.</p>
-                    <span class="rule-sanction sanction-perma">BAN PERMANENTE + Removal de Staff</span>
-                </div>
-
-                <!-- Prop Block -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-cube"></i></div>
-                        <div>
-                            <div class="rule-title">PROP BLOCK</div>
-                            <div class="rule-code">Bloqueo con Objetos</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Usar objetos o props para bloquear a otros jugadores, vehículos o áreas de forma malintencionada. Obstruyendo el paso sin razón RP válida.</p>
-                    <span class="rule-sanction sanction-short">KICK</span>
-                </div>
-
-                <!-- Copcat RP -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-copy"></i></div>
-                        <div>
-                            <div class="rule-title">COPCAT RP</div>
-                            <div class="rule-code">Copia de Historias</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Copiar la historia, nombre o acciones de otro jugador sin permiso. Debes crear tu propio personaje original e historia única.</p>
-                    <span class="rule-sanction sanction-medium">BAN 7 DÍAS</span>
+                    <p class="rule-description">Debes actuar como si tu vida tuviera valor. Si hay armas contra ti, debes mostrar miedo o sumisión realista.</p>
+                    <span class="rule-sanction sanction-antirol">ANTIROL / WARN</span>
                 </div>
 
                 <!-- Exploits -->
@@ -530,34 +560,60 @@
                             <div class="rule-code">Abuso de Fallos</div>
                         </div>
                     </div>
-                    <p class="rule-description">Usar fallos o bugs del juego para obtener ventaja. Si encuentras un bug, reporta inmediatamente al staff. No lo uses en tu beneficio.</p>
-                    <span class="rule-sanction sanction-long">BAN 30 DÍAS</span>
+                    <p class="rule-description">Usar bugs o fallos del juego para obtener ventaja. Si encuentras uno, reporta al staff inmediatamente. Se reporta automáticamente por PRC.</p>
+                    <span class="rule-sanction sanction-perma">BANNED PERMANENTE</span>
                 </div>
 
-                <!-- No Roleplay de Trabajo -->
+                <!-- Bad Driving -->
                 <div class="rule-card">
                     <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-briefcase"></i></div>
+                        <div class="rule-icon"><i class="fas fa-warning"></i></div>
                         <div>
-                            <div class="rule-title">NO JOB RP</div>
-                            <div class="rule-code">Sin Roleplay de Trabajo</div>
+                            <div class="rule-title">BAD DRIVING</div>
+                            <div class="rule-code">Conducción Peligrosa</div>
                         </div>
                     </div>
-                    <p class="rule-description">Si tienes un trabajo, debes hacer roleplay de él. Un policía no puede ignorar crímenes. Un médico debe atender. Debes interactuar con tu rol.</p>
-                    <span class="rule-sanction sanction-short">KICK</span>
+                    <p class="rule-description">Conducir de forma irresponsable, chocando constantemente o ignorando las reglas viales sin razón roleplay.</p>
+                    <span class="rule-sanction sanction-kick">KICK</span>
                 </div>
 
-                <!-- Insultos y Respeto -->
+                <!-- Sin verificar -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <div class="rule-icon"><i class="fas fa-check-circle"></i></div>
+                        <div>
+                            <div class="rule-title">SIN VERIFICAR</div>
+                            <div class="rule-code">Verificación de Edad</div>
+                        </div>
+                    </div>
+                    <p class="rule-description">Debes verificar tu edad en el servidor. Si no lo haces, serás expulsado automáticamente.</p>
+                    <span class="rule-sanction sanction-kick">KICK AUTOMÁTICO</span>
+                </div>
+
+                <!-- Carro VIP sin permiso -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <div class="rule-icon"><i class="fas fa-car"></i></div>
+                        <div>
+                            <div class="rule-title">CARRO VIP NO AUTORIZADO</div>
+                            <div class="rule-code">Vehículos Exclusivos</div>
+                        </div>
+                    </div>
+                    <p class="rule-description">Usar un carro VIP sin tener permisos. Solo usuarios verificados con VIP pueden usar estos vehículos.</p>
+                    <span class="rule-sanction sanction-kick">KICK AUTOMÁTICO</span>
+                </div>
+
+                <!-- Respeto IC/OOC -->
                 <div class="rule-card">
                     <div class="rule-header">
                         <div class="rule-icon"><i class="fas fa-handshake"></i></div>
                         <div>
-                            <div class="rule-title">RESPETO</div>
+                            <div class="rule-title">RESPETO IC / OOC</div>
                             <div class="rule-code">Tolerancia Cero</div>
                         </div>
                     </div>
-                    <p class="rule-description">Sin insultos racistas, homófobos, sexistas o discriminatorios. Sin bullying. Respeta a todos los jugadores en todo momento, incluso fuera del RP.</p>
-                    <span class="rule-sanction sanction-perma">BAN PERMANENTE</span>
+                    <p class="rule-description">Respeta a todos en In-Character y Out-of-Character. Sin insultos racistas, sexistas, homófobos o discriminatorios.</p>
+                    <span class="rule-sanction sanction-ban">BANNED</span>
                 </div>
             </div>
         </div>
@@ -566,9 +622,9 @@
         <div id="discord" class="section">
             <h2><i class="fab fa-discord"></i> Reglas de Discord</h2>
 
-            <div class="important-section">
+            <div class="alert-box">
                 <h3><i class="fas fa-exclamation-triangle"></i> AVISO IMPORTANTE</h3>
-                <p>El servidor de Discord es una extensión del servidor de juego. Las mismas reglas de respeto y comportamiento se aplican aquí. El personal de Discord tiene autoridad para tomar decisiones moderadas.</p>
+                <p>El servidor de Discord es una extensión del servidor de juego. Las mismas reglas de respeto se aplican aquí. El staff de Discord tiene autoridad para tomar decisiones moderadas.</p>
             </div>
 
             <div class="rules-grid">
@@ -581,8 +637,8 @@
                             <div class="rule-code">Mensajes Repetitivos</div>
                         </div>
                     </div>
-                    <p class="rule-description">No spamear mensajes, emojis o menciones. No repetir el mismo mensaje varias veces. Mantén el chat limpio y legible para todos.</p>
-                    <span class="rule-sanction sanction-short">MUTE 24H</span>
+                    <p class="rule-description">No spamear mensajes, emojis o menciones. Mantén el chat limpio y legible para todos.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
 
                 <!-- Contenido Adulto -->
@@ -594,8 +650,8 @@
                             <div class="rule-code">NSFW Prohibido</div>
                         </div>
                     </div>
-                    <p class="rule-description">Sin contenido sexual, gore, violencia gráfica o imágenes ofensivas. Esto incluye memes inapropiados o links a sitios adultos.</p>
-                    <span class="rule-sanction sanction-perma">BAN PERMANENTE</span>
+                    <p class="rule-description">Sin contenido sexual, gore o imágenes ofensivas. Esto incluye memes inapropiados o links adultos.</p>
+                    <span class="rule-sanction sanction-ban">BANNED</span>
                 </div>
 
                 <!-- Publicidad -->
@@ -607,47 +663,8 @@
                             <div class="rule-code">Sin Autopromoción</div>
                         </div>
                     </div>
-                    <p class="rule-description">No hacer publicidad a otros servidores, videos, streams o productos sin permiso del staff. Solo los administradores pueden publicar contenido oficial.</p>
-                    <span class="rule-sanction sanction-long">BAN 7 DÍAS</span>
-                </div>
-
-                <!-- Fake News -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-newspaper"></i></div>
-                        <div>
-                            <div class="rule-title">FAKE NEWS</div>
-                            <div class="rule-code">Información Falsa</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No difundir información falsa, rumores o noticias fake sobre el servidor o jugadores. Verifica antes de compartir información importante.</p>
-                    <span class="rule-sanction sanction-warn">ADVERTENCIA</span>
-                </div>
-
-                <!-- Flood -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-water"></i></div>
-                        <div>
-                            <div class="rule-title">FLOOD</div>
-                            <div class="rule-code">Inundación de Mensajes</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No enviar muchos mensajes cortos seguidos. Combina tus mensajes en uno solo. Usa respuestas en threads para no desorganizar el chat.</p>
-                    <span class="rule-sanction sanction-short">MUTE 1H</span>
-                </div>
-
-                <!-- Menciones Excesivas -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-at"></i></div>
-                        <div>
-                            <div class="rule-title">MENCIONES</div>
-                            <div class="rule-code">Sin Abusar @</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No mencionar a staff o moderadores constantemente. No usar @everyone o @here sin razón válida. Respeta el tiempo de otros.</p>
-                    <span class="rule-sanction sanction-warn">ADVERTENCIA</span>
+                    <p class="rule-description">No hacer publicidad a otros servidores sin permiso del staff. Solo administradores pueden publicar contenido oficial.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
 
                 <!-- Lenguaje Tóxico -->
@@ -659,8 +676,34 @@
                             <div class="rule-code">Insultos y Odio</div>
                         </div>
                     </div>
-                    <p class="rule-description">Sin insultos, palabritas ofensivas dirigidas a otros, discriminación o comportamiento tóxico. Sé respetuoso incluso cuando discrepas de alguien.</p>
-                    <span class="rule-sanction sanction-long">BAN 14 DÍAS</span>
+                    <p class="rule-description">Sin insultos, palabritas ofensivas, discriminación o comportamiento tóxico. Sé respetuoso siempre.</p>
+                    <span class="rule-sanction sanction-ban">BANNED</span>
+                </div>
+
+                <!-- Flood -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <div class="rule-icon"><i class="fas fa-water"></i></div>
+                        <div>
+                            <div class="rule-title">FLOOD</div>
+                            <div class="rule-code">Inundación de Mensajes</div>
+                        </div>
+                    </div>
+                    <p class="rule-description">No enviar muchos mensajes cortos seguidos. Combina tus mensajes en uno solo.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
+                </div>
+
+                <!-- Menciones Excesivas -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <div class="rule-icon"><i class="fas fa-at"></i></div>
+                        <div>
+                            <div class="rule-title">MENCIONES</div>
+                            <div class="rule-code">Sin Abusar @</div>
+                        </div>
+                    </div>
+                    <p class="rule-description">No mencionar constantemente a staff. Respeta el tiempo de otros. Usa @channel solo si es urgente.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
 
                 <!-- Off-Topic -->
@@ -672,8 +715,8 @@
                             <div class="rule-code">Tema del Canal</div>
                         </div>
                     </div>
-                    <p class="rule-description">Usa los canales para su propósito. No hagas spam en #general de juegos no relacionados. Cada canal tiene un tema específico, respétalo.</p>
-                    <span class="rule-sanction sanction-warn">ADVERTENCIA</span>
+                    <p class="rule-description">Usa los canales para su propósito. Cada canal tiene un tema específico, respétalo.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
 
                 <!-- Impersonación -->
@@ -685,34 +728,8 @@
                             <div class="rule-code">Hacerse Pasar por Otro</div>
                         </div>
                     </div>
-                    <p class="rule-description">No pretender ser staff, desarrollador o administrador. No cambiar tu nombre para impersonar a otros jugadores o causar confusión.</p>
-                    <span class="rule-sanction sanction-long">BAN 30 DÍAS</span>
-                </div>
-
-                <!-- Spoilers -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-book"></i></div>
-                        <div>
-                            <div class="rule-title">SPOILERS</div>
-                            <div class="rule-code">Revelación de Información</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No revelés información importante del RP sin avisar. Usa spoiler tags con ||texto|| para información sensible. Respeta a quienes no han visto eventos.</p>
-                    <span class="rule-sanction sanction-warn">ADVERTENCIA</span>
-                </div>
-
-                <!-- Botting -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-robot"></i></div>
-                        <div>
-                            <div class="rule-title">BOTS NO PERMITIDOS</div>
-                            <div class="rule-code">Sin Scripts Automáticos</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No usar bots personales o scripts para automatizar mensajes, farms de reacciones o spam. Los únicos bots permitidos son los oficiales del servidor.</p>
-                    <span class="rule-sanction sanction-perma">BAN PERMANENTE</span>
+                    <p class="rule-description">No pretender ser staff, admin o impersonar a otros jugadores. No cambies tu nombre para causar confusión.</p>
+                    <span class="rule-sanction sanction-ban">BANNED</span>
                 </div>
 
                 <!-- Respeto a Staff -->
@@ -724,8 +741,8 @@
                             <div class="rule-code">Autoridad</div>
                         </div>
                     </div>
-                    <p class="rule-description">Respeta las decisiones del staff. Si desacuerdas, apela de forma respetuosa en privado. No cuestionés en público o hagas posts dramáticos.</p>
-                    <span class="rule-sanction sanction-long">BAN 7 DÍAS</span>
+                    <p class="rule-description">Respeta las decisiones del staff. Si desacuerdas, apela de forma respetuosa en privado.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
 
                 <!-- Política y Religión -->
@@ -737,8 +754,8 @@
                             <div class="rule-code">Temas Sensibles</div>
                         </div>
                     </div>
-                    <p class="rule-description">Evita debates sobre política, religión o temas controvertidos que causen división. El servidor no es el lugar para esto. Respeta las creencias de otros.</p>
-                    <span class="rule-sanction sanction-warn">ADVERTENCIA</span>
+                    <p class="rule-description">Evita debates sobre política, religión o temas que causen división. Respeta las creencias de otros.</p>
+                    <span class="rule-sanction sanction-warn">WARN</span>
                 </div>
             </div>
         </div>
@@ -747,24 +764,19 @@
     <footer>
         <p><strong>Houston RP</strong> - ERLC Server</p>
         <p>Última actualización: Noviembre 2026</p>
-        <p>Por violar estas reglas, tu cuenta será sancionada. Juega limpio, respeta a todos.</p>
+        <p>⚖️ Por violar estas reglas, tu cuenta será sancionada. Juega limpio, respeta a todos.</p>
     </footer>
 
     <script>
         function switchTab(tabName) {
-            // Ocultar todas las secciones
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
-
-            // Mostrar sección seleccionada
             document.getElementById(tabName).classList.add('active');
-
-            // Actualizar botones
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            event.target.closest('.tab-btn').classList.add('active');
         }
     </script>
 </body>
