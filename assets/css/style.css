@@ -21,7 +21,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(160deg, #0a1428 0%, #1a2847 30%, #1a2f5a 60%, #0b1220 100%);
+  background: linear-gradient(160deg, #121212 0%, #1a2847 30%, #1a2f5a 60%, #121212 100%);
   color: var(--white);
   overflow-x: hidden;
   min-height: 100vh;
