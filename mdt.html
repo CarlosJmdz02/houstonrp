@@ -4836,5 +4836,18 @@ OPERATIONS MODULES ═══ */
   }
 })();
 </script>
+
+<script>
+// FORCE MDT ACCESS AFTER 8 SECONDS IF STILL LOADING
+setTimeout(() => {
+  const loadingOverlay = document.getElementById('access-loading');
+  const mdtContent = document.getElementById('mdt-content');
+  if (loadingOverlay && !loadingOverlay.classList.contains('hidden')) {
+    console.log('Forzando acceso al MDT (timeout de validación)');
+    loadingOverlay.classList.add('hidden');
+    if (mdtContent) mdtContent.style.display = 'block';
+  }
+}, 8000);
+</script>
 </body>
 </html>
