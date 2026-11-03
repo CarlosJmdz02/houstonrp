@@ -4388,17 +4388,23 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     return { x: x, z: z, street: p.Location.StreetName || '', postal: p.Location.PostalCode || '' };
   }
 
-  function callsNearestStreet(x, z) {
-    let best = null, bestD = Infinity;
-    for (const p of callsPlayers) {
-      const loc = callsLocationOf(p);
-      if (!loc || !loc.street) continue;
-      const dx = loc.x - x, dz = loc.z - z;
-      const d = dx * dx + dz * dz;
-      if (d < bestD) { bestD = d; best = loc; }
-    }
-    return best ? { street: best.street, postal: best.postal, dist: Math.sqrt(bestD) } : null;
-  }
+   function callsNearestStreet(x, z) {
+     let best = null, bestD = Infinity;
+     let veryClose = null, veryCloseD = Infinity;
+     for (const p of callsPlayers) {
+       const loc = callsLocationOf(p);
+       if (!loc || !loc.street) continue;
+       const dx = loc.x - x, dz = loc.z - z;
+       const d = dx * dx + dz * dz;
+       // Buscar el más cercano en general
+       if (d < bestD) { bestD = d; best = loc; }
+       // Preferir jugadores muy cercanos (< 100 unidades) para mayor precisión
+       if (d < 10000 && d < veryCloseD) { veryCloseD = d; veryClose = loc; }
+     }
+     // Priorizar jugadores muy cercanos si existen
+     return (veryClose ? { street: veryClose.street, postal: veryClose.postal, dist: Math.sqrt(veryCloseD) } : 
+             best ? { street: best.street, postal: best.postal, dist: Math.sqrt(bestD) } : null);
+   }
 
   const CALLS_TEAM_COLOR = { Police: '#3b6fb6', Sheriff: '#d4a017', Fire: '#e54850', EMS: '#9b72cf' };
 
@@ -4441,13 +4447,13 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       if (Array.isArray(c.Position) && c.Position.length >= 2) { x = +c.Position[0]; z = +c.Position[1]; }
       else if (c.Location && isFinite(+c.Location.LocationX)) { x = +c.Location.LocationX; z = +c.Location.LocationZ; }
 
-      const near = (x !== null) ? callsNearestStreet(x, z) : null;
-      let street = c.PositionDescriptor || c.Location || (near && near.street) || '';
-      if (typeof street === 'object') street = street.StreetName || '';
-      const streetTxt = street ? esc(street) : 'Ubicaci├│n exacta no disponible';
-      const nearTag = (near && near.street && !c.PositionDescriptor && near.dist < 450)
-        ? ' <em class="call-mini-near">┬╖ cerca</em>' : '';
-      const postal = near && near.postal ? esc(near.postal) : '';
+       const near = (x !== null) ? callsNearestStreet(x, z) : null;
+       let street = c.PositionDescriptor || (c.Location && c.Location.StreetName) || (near && near.street) || '';
+       if (typeof street === 'object') street = street.StreetName || '';
+       const streetTxt = street ? esc(street) : (x !== null ? 'Ubicación registrada en mapa' : 'Ubicación no disponible');
+       const nearTag = (near && near.street && !c.PositionDescriptor && near.dist < 450)
+         ? ' <em class="call-mini-near">· cerca</em>' : '';
+       const postal = (c.Location && c.Location.PostalCode) || (near && near.postal) ? esc((c.Location && c.Location.PostalCode) || (near && near.postal)) : '';
 
       const t = c.StartedAt ? new Date(c.StartedAt * (c.StartedAt < 1e12 ? 1000 : 1)) : null;
       const timeTxt = t ? t.toLocaleTimeString() : 'ΓÇö';
