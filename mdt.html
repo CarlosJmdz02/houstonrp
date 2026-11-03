@@ -1985,6 +1985,19 @@ OPERATIONS MODULES ═══ */
    async function resolveMdtAccess() {
      if (!session || !session.id) return { level: null, roles: new Set() };
      
+     // Verificar si ya fue validado recientemente (cache de 30 minutos)
+     try {
+       const cached = localStorage.getItem('hrp_mdt_access_' + session.id);
+       if (cached) {
+         const { level, timestamp } = JSON.parse(cached);
+         const ageMs = Date.now() - timestamp;
+         if (ageMs < 30 * 60 * 1000) { // 30 minutos
+           console.log('✅ Usando acceso cacheado (', Math.floor(ageMs / 1000), 's)');
+           return { level, roles: null };
+         }
+       }
+     } catch (e) { console.log('Cache check failed:', e); }
+     
      const fullRoles = [MDT_ACCESS_ROLE];
      const startTime = Date.now();
      const timeoutMs = 5000; // 5 segundos máximo
@@ -2009,6 +2022,13 @@ OPERATIONS MODULES ═══ */
          
          if (fullRoles.some(r => roles.has(r))) {
            console.log('✅ ACCESO CONCEDIDO (OAuth)');
+           // Guardar en cache
+           try {
+             localStorage.setItem('hrp_mdt_access_' + session.id, JSON.stringify({
+               level: 'full',
+               timestamp: Date.now()
+             }));
+           } catch (e) { }
            return { level: 'full', roles };
          }
        }
@@ -2034,6 +2054,13 @@ OPERATIONS MODULES ═══ */
            console.log('Bot check result:', result);
            if (result && !result.timedOut && result.allowed === true) {
              console.log('✅ ACCESO CONCEDIDO (Bot)');
+             // Guardar en cache
+             try {
+               localStorage.setItem('hrp_mdt_access_' + session.id, JSON.stringify({
+                 level: 'full',
+                 timestamp: Date.now()
+               }));
+             } catch (e) { }
              return { level: 'full', roles: null };
            }
          }
