@@ -960,7 +960,7 @@
                 <th>Acciones</th>
               </tr>
             </thead>
-            <tbody id="users-tbody">
+            <tbody id="users-tbo
               <tr>
                 <td colspan="5">
                   <div class="empty-state">
@@ -1018,7 +1018,7 @@
                 <th>Acciones</th>
               </tr>
             </thead>
-            <tbody id="rank-members-tbody">
+            <tbody id="rank-members-tbo
               <tr><td colspan="5"><div class="empty-state"><div class="e-text">Cargando rangos...</div></div></td></tr>
             </tbody>
           </table>
@@ -1389,7 +1389,7 @@ async function loadUsers() {
   }
 
   function renderUsers(users) {
-    const tbody = $('users-tbody');
+    const tbody = $('users-tbo
 
     if (!users || users.length === 0) {
       tbody.innerHTML = `<tr><td colspan="6">
@@ -1634,7 +1634,7 @@ async function loadUsers() {
   window.onRankDeptChange = onRankDeptChange;
 
   function renderRankMembers(list) {
-    const tbody = $('rank-members-tbody');
+    const tbody = $('rank-members-tbo
     if (!tbody) return;
     if (!list || !list.length) {
       tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="e-text">Aún no hay rangos asignados</div></div></td></tr>';

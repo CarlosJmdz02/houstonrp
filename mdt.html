@@ -1345,7 +1345,7 @@ OPERATIONS MODULES ═══ */
         </div>
       </div>
 
-      <div class="tab-body">
+      <div class="tab-bo
         <div id="search-view">
           <div class="search-box">
             <input id="db-person" type="text" placeholder="Buscar por placa, modelo o ciudadano: matrúcula, nombre, Discord o #caso…" autocomplete="off" spellcheck="false">
@@ -1373,7 +1373,7 @@ OPERATIONS MODULES ═══ */
             <div class="section-header" onclick="toggleSection('char')">
               <h3>🪪 Ficha del Ciudadano<span class="qtag">ID</span></h3>
             </div>
-            <div class="section-body" id="char-body"></div>
+            <div class="section-bo id="char-bodiv>
           </div>
 
           <div class="profile-section fade-in">
@@ -1381,7 +1381,7 @@ OPERATIONS MODULES ═══ */
               <h3>🛡️ Licencias y Permisos<span class="qtag">DL / CCW</span></h3>
               <span class="section-count" id="licenses-count">0</span>
             </div>
-            <div class="section-body" id="licenses-body"></div>
+            <div class="section-bo id="licenses-bodiv>
           </div>
 
           <div class="profile-section fade-in" style="animation-delay:0.05s;">
@@ -1389,7 +1389,7 @@ OPERATIONS MODULES ═══ */
               <h3>🚔 Historial de Arrestos</h3>
               <span class="section-count" id="arrests-count">0</span>
             </div>
-            <div class="section-body" id="arrests-body"></div>
+            <div class="section-bo id="arrests-bodiv>
           </div>
 
           <div class="profile-section fade-in" style="animation-delay:0.1s;">
@@ -1397,7 +1397,7 @@ OPERATIONS MODULES ═══ */
               <h3>💰 Historial de Multas</h3>
               <span class="section-count" id="fines-count">0</span>
             </div>
-            <div class="section-body" id="fines-body"></div>
+            <div class="section-bo id="fines-bodiv>
           </div>
 
           <div class="profile-section fade-in" style="animation-delay:0.15s;">
@@ -1405,7 +1405,7 @@ OPERATIONS MODULES ═══ */
               <h3>🚗 Vehículos Registrados<span class="qtag">REG</span></h3>
               <span class="section-count" id="vehicles-count">0</span>
             </div>
-            <div class="section-body" id="vehicles-body"></div>
+            <div class="section-bo id="vehicles-bodiv>
           </div>
 
           <div class="profile-section fade-in" style="animation-delay:0.2s;">
@@ -1413,7 +1413,7 @@ OPERATIONS MODULES ═══ */
               <h3>🚨 Estado BOLO</h3>
               <span class="section-count" id="bolo-count">0</span>
             </div>
-            <div class="section-body" id="bolo-body"></div>
+            <div class="section-bo id="bolo-bodiv>
           </div>
         </div>
 
@@ -1727,7 +1727,7 @@ OPERATIONS MODULES ═══ */
     <div class="tac-gate-err" id="radio-gate-err"></div>
   </div>
 
-  <div class="tac-body">
+  <div class="tac-bo
     <div class="tac-ant a"></div>
     <div class="tac-ant b"></div>
 
@@ -1829,7 +1829,7 @@ OPERATIONS MODULES ═══ */
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
-  <div class="drawer-body">
+  <div class="drawer-bo
     <iframe id="record-frame" title="Registro" src="about:blank"></iframe>
   </div>
 </div>
@@ -2837,7 +2837,7 @@ OPERATIONS MODULES ═══ */
   }
 
   function renderCharInfo(character) {
-    const body = $('char-body');
+    const body = $('char-bo
     if (!body) return;
     if (!character) {
       body.innerHTML = '<div class="char-empty">Sin ficha de personaje registrada.</div>';
@@ -3069,12 +3069,12 @@ OPERATIONS MODULES ═══ */
     $('case-view').style.display = 'none';
     $('profile-hero').innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-dim);">Cargando perfil...</div>';
     $('profile-stats').innerHTML = '';
-    $('char-body').innerHTML = '';
-    $('licenses-body').innerHTML = '';
-    $('arrests-body').innerHTML = '';
-    $('fines-body').innerHTML = '';
-    $('vehicles-body').innerHTML = '';
-    $('bolo-body').innerHTML = '';
+    $('char-boinnerHTML = '';
+    $('licenses-boinnerHTML = '';
+    $('arrests-boinnerHTML = '';
+    $('fines-boinnerHTML = '';
+    $('vehicles-boinnerHTML = '';
+    $('bolo-boinnerHTML = '';
     $('bolo-count').textContent = '0';
 
     try {
@@ -3184,7 +3184,7 @@ OPERATIONS MODULES ═══ */
 
       $('licenses-count').textContent = (currentProfile.licenses || []).length;
       if (currentProfile.licenses.length === 0) {
-        $('licenses-body').innerHTML = '<div class="no-records">No se encontraron licencias registradas</div>';
+        $('licenses-boinnerHTML = '<div class="no-records">No se encontraron licencias registradas</div>';
       } else {
         const LIC_TYPES = {
           drivers:   { name: 'Licencia de Conducir', icon: '🚗', order: 1 },
@@ -3207,7 +3207,7 @@ OPERATIONS MODULES ═══ */
         const licList = Object.keys(bestByType)
           .map(k => bestByType[k])
           .sort((a, b) => ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
-        $('licenses-body').innerHTML = licList.map(l => {
+        $('licenses-boinnerHTML = licList.map(l => {
           const meta = LIC_TYPES[l.type] || { name: 'Licencia', icon: '📄' };
           const icon = meta.icon;
           const typeName = meta.name;
@@ -3233,9 +3233,9 @@ OPERATIONS MODULES ═══ */
 
       $('arrests-count').textContent = arrests.length;
       if (arrests.length === 0) {
-        $('arrests-body').innerHTML = '<div class="no-records">No hay arrestos registrados</div>';
+        $('arrests-boinnerHTML = '<div class="no-records">No hay arrestos registrados</div>';
       } else {
-        $('arrests-body').innerHTML = arrests.map(r => {
+        $('arrests-boinnerHTML = arrests.map(r => {
           const parts = (r.reason || '').split(' — ');
           const code = parts[0] || '';
           const crimeName = parts[1] || r.reason || '—';
@@ -3257,9 +3257,9 @@ OPERATIONS MODULES ═══ */
 
       $('fines-count').textContent = fines.length;
       if (fines.length === 0) {
-        $('fines-body').innerHTML = '<div class="no-records">No hay multas registradas</div>';
+        $('fines-boinnerHTML = '<div class="no-records">No hay multas registradas</div>';
       } else {
-        $('fines-body').innerHTML = fines.map(r => {
+        $('fines-boinnerHTML = fines.map(r => {
           const parts = (r.reason || '').split(' — ');
           const code = parts[0] || '';
           const crimeName = parts[1] || r.reason || '—';
@@ -3281,9 +3281,9 @@ OPERATIONS MODULES ═══ */
 
       $('vehicles-count').textContent = (currentProfile.vehicles || []).length;
       if (currentProfile.vehicles.length === 0) {
-        $('vehicles-body').innerHTML = '<div class="no-records">No hay vehículos registrados</div>';
+        $('vehicles-boinnerHTML = '<div class="no-records">No hay vehículos registrados</div>';
       } else {
-        $('vehicles-body').innerHTML = currentProfile.vehicles.map(v => `
+        $('vehicles-boinnerHTML = currentProfile.vehicles.map(v => `
           <div class="record-item">
             <div class="record-left">
               <div class="record-icon vehicle">🚗</div>
@@ -3360,7 +3360,7 @@ OPERATIONS MODULES ═══ */
           </div>
           <div class="case-desc">
             <div class="case-desc-label">📄 Descripción del oficial</div>
-            <div class="case-desc-body">${esc(r.officer_description || r.reason || 'Sin descripción registrada')}</div>
+            <div class="case-desc-boesc(r.officer_description || r.reason || 'Sin descripción registrada')}</div>
           </div>
           <div class="case-actions">
             <button class="btn btn-outline" onclick="openProfile('${esc(r.target_discord || r.target_name)}')">Ver Perfil del Ciudadano →</button>
@@ -3381,7 +3381,7 @@ OPERATIONS MODULES ═══ */
   }
 
   function toggleSection(section) {
-    const body = $(section + '-body');
+    const body = $(section + '-bo
     if (body) {
       body.style.display = body.style.display === 'none' ? 'block' : (body.style.display === 'block' ? 'none' : 'block');
     }
@@ -3636,7 +3636,7 @@ OPERATIONS MODULES ═══ */
         const mainReason = reasons[0] || r.reason || 'Sin detalle';
         return `<div class="history-record" style="--rec-color:var(--accent-amber);">
           <div class="history-rec-icon fine">💰</div>
-          <div class="history-rec-body">
+          <div class="history-rec-bo
             <div class="history-rec-top">
               <span class="history-rec-badge fine">Multa</span>
               ${esc(r.target_name || '—')}
@@ -3700,7 +3700,7 @@ OPERATIONS MODULES ═══ */
         const mainReason = reasons[0] || r.reason || 'Sin detalle';
         return `<div class="history-record" style="--rec-color:var(--accent-red);">
           <div class="history-rec-icon arrest">🚔</div>
-          <div class="history-rec-body">
+          <div class="history-rec-bo
             <div class="history-rec-top">
               <span class="history-rec-badge arrest">Arresto</span>
               ${esc(r.target_name || '—')}
@@ -4263,7 +4263,7 @@ OPERATIONS MODULES ═══ */
 
   // ── BOLO: profile "Estado BOLO" ──
   async function loadProfileBolos(robloxUsername, discordIds) {
-    const body = $('bolo-body');
+    const body = $('bolo-bo
     const countEl = $('bolo-count');
     if (!body) return;
     try {
@@ -4335,7 +4335,7 @@ OPERATIONS MODULES ═══ */
         const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
         return `<div class="history-record" style="--rec-color:${prio.color};">
           <div class="history-rec-icon arrest">🚨</div>
-          <div class="history-rec-body">
+          <div class="history-rec-bo
             <div class="history-rec-top">
               <span class="history-rec-badge arrest">BOLO</span>
               ${esc(b.target_name || '—')}
@@ -4450,7 +4450,7 @@ OPERATIONS MODULES ═══ */
             (postal ? '<span class="call-mini-postal">postal ' + postal + '</span>' : '<span class="call-mini-postal" style="opacity:.5">postal —</span>') +
           '</div>' +
         '</div>' +
-        '<div class="call-mini-body">' +
+        '<div class="call-mini-bo +
           '<div class="call-mini-reason">' +
             '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
             '<span>' + reason + '</span>' +

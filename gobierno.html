@@ -559,7 +559,7 @@ body::after {
             <div class="panel-title"><span class="ico">📢</span> Avisos del Gobierno</div>
             <span class="panel-badge info">Oficial</span>
           </div>
-          <div class="panel-body" id="announcements-container">
+          <div class="panel-bo id="announcements-container">
             <div class="loading-spinner"><div class="spinner"></div>Cargando avisos...</div>
           </div>
         </div>
@@ -570,7 +570,7 @@ body::after {
             <div class="panel-title"><span class="ico">⛓️</span> Historial de Arrestos</div>
             <span class="panel-badge" style="background:rgba(229,72,80,.12);color:var(--accent-red);border:1px solid rgba(229,72,80,.25);">Récord</span>
           </div>
-          <div class="panel-body" id="arrests-container">
+          <div class="panel-bo id="arrests-container">
             <div class="loading-spinner"><div class="spinner"></div>Cargando arrestos...</div>
           </div>
         </div>
@@ -590,7 +590,7 @@ body::after {
             <input id="alias-input" type="text" placeholder="🔎 Si no ves tus multas, escribí tu usuario de Roblox…" autocomplete="off" spellcheck="false">
             <button class="alias-btn" onclick="saveAlias()">Buscar</button>
           </div>
-          <div class="panel-body" id="fines-container">
+          <div class="panel-bo id="fines-container">
             <div class="loading-spinner"><div class="spinner"></div>Cargando multas...</div>
           </div>
         </div>
@@ -601,7 +601,7 @@ body::after {
             <div class="panel-title"><span class="ico">✅</span> Pagos Realizados</div>
             <span class="panel-badge success">Historial</span>
           </div>
-          <div class="panel-body" id="payments-container">
+          <div class="panel-bo id="payments-container">
             <div class="empty-state">
               <div class="big-icon">💳</div>
               <p>No hay pagos registrados</p>
@@ -616,7 +616,7 @@ body::after {
             <div class="panel-title"><span class="ico">🏛️</span> Historial de Nómina</div>
             <span class="panel-badge info">Depósitos</span>
           </div>
-          <div class="panel-body" id="payroll-history-container">
+          <div class="panel-bo id="payroll-history-container">
             <div class="empty-state">
               <div class="big-icon">💵</div>
               <p>Sin depósitos de nómina</p>
@@ -1202,7 +1202,7 @@ async function loadDocuments(){
         <div class="panel-title"><span class="ico">📁</span> Tus Documentos</div>
         <span class="panel-badge info">ID · Pasaporte</span>
       </div>
-      <div class="panel-body">
+      <div class="panel-bo
         <div class="empty-state"><div class="big-icon">📁</div>
           <p>Aún no tenés documentos</p>
           <div class="sub">Creá tu personaje para generar tu ID de Texas y tu Pasaporte</div>
@@ -1216,7 +1216,7 @@ async function loadDocuments(){
       <div class="panel-title"><span class="ico">📁</span> Tus Documentos</div>
       <span class="panel-badge ${dlActive?'success':'info'}">${chars.length} Personaje(s) · ID + Pasaporte</span>
     </div>
-    <div class="panel-body">
+    <div class="panel-bo
       <div class="doc-duo-grid">${chars.map(function(c,i){
         return `<div class="doc-duo-cell">
           ${txIDCardHTML(c,i,dlLic,dlActive)}
@@ -1241,7 +1241,7 @@ function passpCardHTML(c, idx){
       <div class="passp-title">PASAPORTE</div>
       <div class="passp-country">Estados Unidos de América</div>
     </div>
-    <div class="passp-body">
+    <div class="passp-bo
       <div class="passp-photo"><img id="passp-photo-${idx}" alt="Foto Pasaporte"><span class="passp-initials">${esc(initials)}</span></div>
       <div class="passp-fields">
         <div class="passp-field"><div class="lbl">Nombre</div><div class="val">${esc(fullName)}</div></div>
@@ -1284,7 +1284,7 @@ async function loadPassports(){
         <div class="panel-title"><span class="ico">🛂</span> Tu Pasaporte</div>
         <span class="panel-badge info">Documento</span>
       </div>
-      <div class="panel-body">
+      <div class="panel-bo
         <div class="empty-state"><div class="big-icon">🛂</div>
           <p>Aún no tenés pasaporte</p>
           <div class="sub">Creá tu personaje para generar tu pasaporte</div>
@@ -1298,7 +1298,7 @@ async function loadPassports(){
       <div class="panel-title"><span class="ico">🛂</span> Tu Pasaporte</div>
       <span class="panel-badge success">${chars.length} Documento(s) · Siempre Válido</span>
     </div>
-    <div class="panel-body">
+    <div class="panel-bo
       <div class="passp-grid">${chars.map(passpCardHTML).join('')}</div>
     </div>
   </div>`;

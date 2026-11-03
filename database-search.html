@@ -434,7 +434,7 @@
           <h3>🛡️ Licencias y Permisos</h3>
           <span class="section-count" id="licenses-count">0</span>
         </div>
-        <div class="section-body" id="licenses-body"></div>
+        <div class="section-bo id="licenses-bodiv>
       </div>
 
       <!-- Arrests Section -->
@@ -443,7 +443,7 @@
           <h3>🚔 Historial de Arrestos</h3>
           <span class="section-count" id="arrests-count">0</span>
         </div>
-        <div class="section-body" id="arrests-body"></div>
+        <div class="section-bo id="arrests-bodiv>
       </div>
 
       <!-- Fines Section -->
@@ -452,7 +452,7 @@
           <h3>💰 Historial de Multas</h3>
           <span class="section-count" id="fines-count">0</span>
         </div>
-        <div class="section-body" id="fines-body"></div>
+        <div class="section-bo id="fines-bodiv>
       </div>
 
       <!-- Vehicles Section -->
@@ -461,7 +461,7 @@
           <h3>🚗 Vehículos Registrados</h3>
           <span class="section-count" id="vehicles-count">0</span>
         </div>
-        <div class="section-body" id="vehicles-body"></div>
+        <div class="section-bo id="vehicles-bodiv>
       </div>
     </div>
   </div>
@@ -661,10 +661,10 @@
     $('profile-view').classList.add('active');
     $('profile-hero').innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-dim);">Cargando perfil...</div>';
     $('profile-stats').innerHTML = '';
-    $('licenses-body').innerHTML = '';
-    $('arrests-body').innerHTML = '';
-    $('fines-body').innerHTML = '';
-    $('vehicles-body').innerHTML = '';
+    $('licenses-boinnerHTML = '';
+    $('arrests-boinnerHTML = '';
+    $('fines-boinnerHTML = '';
+    $('vehicles-boinnerHTML = '';
 
     try {
       const [avatarUrl, characters, records, vehicles] = await Promise.all([
@@ -735,7 +735,7 @@
       // ── LICENSES ──
       $('licenses-count').textContent = (currentProfile.licenses || []).length;
       if (currentProfile.licenses.length === 0) {
-        $('licenses-body').innerHTML = '<div class="no-records">No se encontraron licencias registradas</div>';
+        $('licenses-boinnerHTML = '<div class="no-records">No se encontraron licencias registradas</div>';
       } else {
         const LIC_TYPES = {
           drivers:   { name: 'Licencia de Conducir', icon: '🚗', order: 1 },
@@ -758,7 +758,7 @@
         const licList = Object.keys(bestByType)
           .map(k => bestByType[k])
           .sort((a, b) => ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
-        $('licenses-body').innerHTML = licList.map(l => {
+        $('licenses-boinnerHTML = licList.map(l => {
           const meta = LIC_TYPES[l.type] || { name: 'Licencia', icon: '📄' };
           const icon = meta.icon;
           const typeName = meta.name;
@@ -785,9 +785,9 @@
       // ── ARRESTS ──
       $('arrests-count').textContent = arrests.length;
       if (arrests.length === 0) {
-        $('arrests-body').innerHTML = '<div class="no-records">No hay arrestos registrados</div>';
+        $('arrests-boinnerHTML = '<div class="no-records">No hay arrestos registrados</div>';
       } else {
-        $('arrests-body').innerHTML = arrests.map(r => {
+        $('arrests-boinnerHTML = arrests.map(r => {
           const parts = (r.reason || '').split(' — ');
           const code = parts[0] || '';
           const crimeName = parts[1] || r.reason || '—';
@@ -810,9 +810,9 @@
       // ── FINES ──
       $('fines-count').textContent = fines.length;
       if (fines.length === 0) {
-        $('fines-body').innerHTML = '<div class="no-records">No hay multas registradas</div>';
+        $('fines-boinnerHTML = '<div class="no-records">No hay multas registradas</div>';
       } else {
-        $('fines-body').innerHTML = fines.map(r => {
+        $('fines-boinnerHTML = fines.map(r => {
           const parts = (r.reason || '').split(' — ');
           const code = parts[0] || '';
           const crimeName = parts[1] || r.reason || '—';
@@ -835,9 +835,9 @@
       // ── VEHICLES ──
       $('vehicles-count').textContent = (currentProfile.vehicles || []).length;
       if (currentProfile.vehicles.length === 0) {
-        $('vehicles-body').innerHTML = '<div class="no-records">No hay vehículos registrados</div>';
+        $('vehicles-boinnerHTML = '<div class="no-records">No hay vehículos registrados</div>';
       } else {
-        $('vehicles-body').innerHTML = currentProfile.vehicles.map(v => `
+        $('vehicles-boinnerHTML = currentProfile.vehicles.map(v => `
           <div class="record-item">
             <div class="record-left">
               <div class="record-icon vehicle">🚗</div>
@@ -862,7 +862,7 @@
   }
 
   function toggleSection(section) {
-    const body = $(section + '-body');
+    const body = $(section + '-bo
     if (body) {
       body.style.display = body.style.display === 'none' ? 'block' : (body.style.display === 'block' ? 'none' : 'block');
     }

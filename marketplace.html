@@ -1521,7 +1521,7 @@
       <div class="mb-icon">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
       </div>
-      <div class="mb-body">
+      <div class="mb-bo
         <div class="mb-title">Marketplace en mantenimiento</div>
         <div class="mb-desc">
           Estamos actualizando las propiedades al nuevo <strong>update de ERLC 2026</strong>, por lo que todas las casas están <strong>no disponibles</strong> temporalmente. En este momento <strong>no se pueden comprar propiedades</strong>; la <strong>Tienda</strong> de abajo sí funciona con normalidad.
@@ -1597,7 +1597,7 @@
       </div>
       <button class="modal-close" id="modal-close">✕</button>
     </div>
-<div class="modal-body">
+<div class="modal-bo
       <div class="modal-price" id="modal-price">$0</div>
       <div class="modal-address" id="modal-address">—</div>
       <div class="modal-details">
@@ -2685,7 +2685,7 @@ const PER_PAGE = 10;
           </div></div>
           <span class="prop-status available">Disponible</span>
         </div>
-        <div class="prop-body">
+        <div class="prop-bo
           <div class="prop-price">$${it.price}</div>
           <div class="prop-address">${esc(it.name)}</div>
           <button class="btn-view shop-buy-grid" onclick="buyShopItem('${it.id}')">🛒 Comprar</button>
@@ -2769,7 +2769,7 @@ list.forEach(prop => {
           <span class="prop-status ${isMine ? 'sold' : 'unavailable'}">${isMine ? 'Comprada' : 'No disponible'}</span>
           ${isBusiness ? '<span class="prop-status business">Negocio</span>' : ''}
         </div>
-        <div class="prop-body">
+        <div class="prop-bo
           <div class="prop-price">$${prop.price.toLocaleString()}</div>
           <div class="prop-address">${title}</div>
           <button class="btn-view ${isMine ? 'btn-sell' : ''}" data-id="${prop.id}">
@@ -3117,7 +3117,7 @@ const title = prop.name || ('Propiedad #' + prop.id);
     g.innerHTML = SHOP_ITEMS.map(it => `
       <div class="shop-card">
         <div class="shop-img"><img src="${it.image}" alt="${it.name}" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.style.display='none';"></div>
-        <div class="shop-body">
+        <div class="shop-bo
           <div class="shop-name">${it.name}</div>
           <div class="shop-price">$${it.price}</div>
           <button class="shop-buy" onclick="buyShopItem('${it.id}')">🛒 Comprar</button>
