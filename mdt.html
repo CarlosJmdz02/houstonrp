@@ -277,7 +277,7 @@
   .icon-link:hover { border-color: var(--border-strong); color: var(--text-primary); }
 
   .tab-body { padding: 18px; }
-  .search-box { display: flex; gap: 10px; max-width: 720px; }
+   .search-box { display: flex; gap: 10px; max-width: 100%; width: 100%; }
   .search-box input {
     flex: 1; padding: 13px 16px;
     background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px;
@@ -1351,7 +1351,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       <div class="tab-body">
         <div id="search-view">
           <div class="search-box">
-            <input id="db-person" type="text" placeholder="Buscar por placa, modelo o ciudadano: matrícula, nombre, Discord o #caso..." autocomplete="off" spellcheck="false">
+             <input id="db-person" type="text" placeholder="Buscar por matrícula o ciudadano" autocomplete="off" spellcheck="false">
             <button class="btn btn-primary" onclick="dbSearch()" id="btn-search">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               Buscar
