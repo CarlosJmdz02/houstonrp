@@ -1300,7 +1300,11 @@ OPERATIONS MODULES ═══ */
   <div id="access-denied" class="access-overlay hidden">
     <div class="access-icon denied"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
     <div class="access-title" id="denied-title">Acceso Denegado</div>
-    <div class="access-desc" id="denied-desc">No tienes el rol de Policía necesario para acceder a este panel. Si crees que es un error, contacta con el staff.</div>
+    <div class="access-desc" id="denied-desc">
+      <strong>❌ No tienes el rol "En Departamento"</strong><br><br>
+      Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br>
+      <strong>Solución:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.
+    </div>
     <button id="reauth-btn" class="btn btn-primary hidden" onclick="hrpForceReauth()">Re-conectar con Discord</button>
     <a href="dashboard.html" class="btn btn-primary">Volver al Dashboard</a>
   </div>
@@ -1985,10 +1989,20 @@ OPERATIONS MODULES ═══ */
      const startTime = Date.now();
      const timeoutMs = 10000; // 10 segundos máximo
      
+     // Crear promise de timeout
+     const timeoutPromise = new Promise((resolve) => {
+       setTimeout(() => resolve({ timedOut: true }), timeoutMs);
+     });
+     
      // 1) Validación por OAuth (Discord)
      try {
-       const roles = await getMdtRoleSet();
-       if (fullRoles.some(r => roles.has(r))) return { level: 'full', roles };
+       const roles = await Promise.race([
+         getMdtRoleSet(),
+         timeoutPromise
+       ]);
+       if (roles && !roles.timedOut && fullRoles.some(r => roles.has(r))) {
+         return { level: 'full', roles };
+       }
      } catch (e) { console.log('OAuth check failed:', e); }
      
      // 2) Validación por bot de Discord (Supabase fallback)
@@ -2001,12 +2015,17 @@ OPERATIONS MODULES ═══ */
        
        try {
          if (typeof hrpCallCheckPoliceRole === 'function') {
-           const result = await hrpCallCheckPoliceRole({
-             discord_id: session.id,
-             username: session.username || 'Unknown',
-             role_id: roleId,
-           });
-           if (result && result.allowed === true) return { level: 'full', roles: null };
+           const result = await Promise.race([
+             hrpCallCheckPoliceRole({
+               discord_id: session.id,
+               username: session.username || 'Unknown',
+               role_id: roleId,
+             }),
+             timeoutPromise
+           ]);
+           if (result && !result.timedOut && result.allowed === true) {
+             return { level: 'full', roles: null };
+           }
          }
        } catch (e) { console.log('Bot check failed:', e); }
      }
@@ -2048,8 +2067,8 @@ OPERATIONS MODULES ═══ */
         setTimeout(() => {
           $('access-loading').classList.add('hidden');
           $('access-denied').classList.remove('hidden');
-          $('denied-title').innerHTML = 'Sin autorizaciA3n';
-          $('denied-desc').innerHTML = 'Solo los miembros con el rol de acceso al MDT pueden usar el sistema.';
+          $('denied-title').textContent = 'Acceso Denegado';
+          $('denied-desc').innerHTML = '<strong>❌ No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Solución:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
         }, 500);
         return false;
       }
