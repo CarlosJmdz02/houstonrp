@@ -1507,8 +1507,8 @@
           }
         }
 
-        const base = (target.expires_at && new Date(target.expires_at).getTime() > now) ? new Date(target.expires_at).getTime() : now;
-        const newExp = new Date(base + meta.period).toISOString();
+         // Renovar SIEMPRE desde HOY (now), no desde la fecha anterior
+         const newExp = new Date(now + meta.period).toISOString();
         await supaUpdate('licenses', { expires_at: newExp, status: 'active' }, { id: `eq.${target.id}` });
 
         // Renovación: elimina el resto de filas de este tipo (vencidas o
