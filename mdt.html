@@ -1987,29 +1987,37 @@ OPERATIONS MODULES ═══ */
      
      const fullRoles = [MDT_ACCESS_ROLE];
      const startTime = Date.now();
-     const timeoutMs = 10000; // 10 segundos máximo
+     const timeoutMs = 5000; // 5 segundos máximo
      
      // Crear promise de timeout
      const timeoutPromise = new Promise((resolve) => {
        setTimeout(() => resolve({ timedOut: true }), timeoutMs);
      });
      
-     // 1) Validación por OAuth (Discord)
+     // 1) Validación por OAuth (Discord) - PRIMERA Y MÁS CONFIABLE
      try {
        const roles = await Promise.race([
          getMdtRoleSet(),
          timeoutPromise
        ]);
-       if (roles && !roles.timedOut && fullRoles.some(r => roles.has(r))) {
-         return { level: 'full', roles };
+       console.log('OAuth roles:', roles);
+       if (roles && !roles.timedOut && roles instanceof Set) {
+         const rolesArray = Array.from(roles);
+         console.log('Roles encontrados:', rolesArray);
+         console.log('Buscando rol:', MDT_ACCESS_ROLE);
+         console.log('¿Tiene el rol?', rolesArray.includes(MDT_ACCESS_ROLE));
+         
+         if (fullRoles.some(r => roles.has(r))) {
+           console.log('✅ ACCESO CONCEDIDO (OAuth)');
+           return { level: 'full', roles };
+         }
        }
      } catch (e) { console.log('OAuth check failed:', e); }
      
      // 2) Validación por bot de Discord (Supabase fallback)
      for (const roleId of fullRoles) {
-       // Verificar timeout
        if (Date.now() - startTime > timeoutMs) {
-         console.warn('MDT access check timeout');
+         console.warn('⏱️ MDT access check timeout después de', Date.now() - startTime, 'ms');
          break;
        }
        
@@ -2023,13 +2031,16 @@ OPERATIONS MODULES ═══ */
              }),
              timeoutPromise
            ]);
+           console.log('Bot check result:', result);
            if (result && !result.timedOut && result.allowed === true) {
+             console.log('✅ ACCESO CONCEDIDO (Bot)');
              return { level: 'full', roles: null };
            }
          }
        } catch (e) { console.log('Bot check failed:', e); }
      }
      
+     console.log('❌ ACCESO DENEGADO - No se encontró rol válido');
      return { level: null, roles };
   }
 
