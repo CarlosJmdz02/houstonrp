@@ -1177,7 +1177,12 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   .call-mini-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
   .calls-empty { text-align: center; padding: 34px 20px; color: var(--text-dim); font-size: 13px; grid-column: 1/-1; border: 1px dashed var(--border); border-radius: 14px; }
   .calls-empty svg { margin-bottom: 8px; opacity: .4; }
-  @media (max-width: 100%) { .calls-grid { grid-template-columns: 1fr; } }</style>
+  @media (max-width: 100%) { .calls-grid { grid-template-columns: 1fr; } }
+  /* FORCE ALL BACKGROUNDS TO #121212 */
+  html, body, main, .tablet-main, .sidebar, .main-content { background: #121212 !important; }
+  .tablet-top { background: #121212 !important; }
+  * { background-image: none !important; }
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap
