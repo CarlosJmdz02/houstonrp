@@ -51,8 +51,8 @@
   /* ═══ FIXED TOP BAR (always visible) ═══ */
    .tablet-top {
      flex-shrink: 0;
-     background: linear-gradient(180deg, #1a1a1a, #121212);
-     border-bottom: 1px solid var(--border);
+     background: #121212;
+     border-bottom: 1px solid #2a2a2a;
      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
      z-index: 80;
      position: sticky;
@@ -276,8 +276,8 @@
   .icon-link { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); text-decoration: none; font-size: 12px; font-weight: 600; transition: all 0.2s; }
   .icon-link:hover { border-color: var(--border-strong); color: var(--text-primary); }
 
-  .tab-body { padding: 18px; }
-  .search-box { display: flex; gap: 10px; max-width: 720px; }
+  .tab-body { padding: 18px; max-width: 100%; }
+  .search-box { display: flex; gap: 10px; max-width: 100%; width: 100%; }
   .search-box input {
     flex: 1; padding: 13px 16px;
     background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px;
@@ -287,12 +287,12 @@
   .search-box input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
   .search-box input::placeholder { color: var(--text-dim); }
   .search-hint {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    max-width: 720px;
-    margin-top: 8px;
+     display: flex;
+     align-items: center;
+     gap: 6px;
+     flex-wrap: wrap;
+     max-width: 100%;
+     margin-top: 8px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: .4px;
@@ -1217,10 +1217,7 @@ OPERATIONS MODULES ═══ */
       </div>
       <div class="live-indicator" id="conn-indicator" title="Estado de conexión con el servidor"><span class="live-dot"></span>En línea</div>
       <div class="top-clock" id="clock">--:--:--</div>
-        <button class="btn-radio" id="radio-toggle" type="button" onclick="HRPRadio.toggle()" title="Mostrar / ocultar la radio táctica">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.9 19.1a10 10 0 0 1 0-14.2"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/></svg>
-          Radio
-        </button>
+
         <a class="btn-dash" href="dashboard.html">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
         Dashboard
@@ -1455,7 +1452,7 @@ OPERATIONS MODULES ═══ */
 
 
     <!-- ==== INCIDENCIAS - FORMULARIO EMbebido (siempre visible) ==== -->
-    <div class="incident-inline" style="margin-top:20px;">
+    <div class="incident-inline" style="margin-top:20px;background:#121212;">
       <div class="calls-head" style="border-radius:12px 12px 0 0;border-bottom:none;">
         <div class="calls-head-title">
           <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#f87171" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
@@ -1716,7 +1713,7 @@ OPERATIONS MODULES ═══ */
 <audio id="radio-ptt-off" src="audios/MicOff.mp3" data-gain="0.6" preload="auto"></audio>
 <div id="radio-voices" style="display:none;"></div>
 
-<div id="radio-panel" class="radio-panel tac hidden">
+<div id="radio-panel" class="radio-panel tac hidden" style="display:none!important;">
 
   <!-- Puerta de entrada: hay que indicar el canal (1-5) para conectar -->
   <div class="tac-gate" id="radio-gate">
