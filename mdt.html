@@ -2086,7 +2086,7 @@ OPERATIONS MODULES ═══ */
       try {
         const { level, roles } = await Promise.race([
           resolveMdtAccess(),
-          new Promise((resolve) => setTimeout(() => resolve({ level: null, roles: null }), 10000))
+          new Promise((resolve) => setTimeout(() => resolve({ level: null, roles: null, timedOut: true }), 5000))
         ]);
         
         // Completar la barra
