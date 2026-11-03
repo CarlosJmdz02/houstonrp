@@ -1028,12 +1028,16 @@
     transform: translateX(2px);
   }
 .panel-header {
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+     padding: 18px 20px;
+     border-bottom: 1px solid var(--border);
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+   }
+
+   /* FORCE BACKGROUND TO #121212 */
+   body, html, .main { background: #121212 !important; }
+   .ambient-bg { display: none !important; }
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
