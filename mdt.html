@@ -2095,7 +2095,7 @@ OPERATIONS MODULES ═══ */
         progressBar.style.width = '100%';
         progressText.textContent = '100%';
         
-        if (!level) {
+        if (!level || level === null) {
           setTimeout(() => {
             $('access-loading').classList.add('hidden');
             $('access-denied').classList.remove('hidden');
