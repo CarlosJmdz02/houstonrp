@@ -2055,29 +2055,42 @@ OPERATIONS MODULES ═══ */
         progressText.textContent = Math.floor(progress) + '%';
       }, 100);
       
-      const { level, roles } = await resolveMdtAccess();
-      
-      // Completar la barra
-      clearInterval(progressInterval);
-      progress = 100;
-      progressBar.style.width = '100%';
-      progressText.textContent = '100%';
-      
-      if (!level) {
+      try {
+        const { level, roles } = await Promise.race([
+          resolveMdtAccess(),
+          new Promise((resolve) => setTimeout(() => resolve({ level: null, roles: null }), 10000))
+        ]);
+        
+        // Completar la barra
+        clearInterval(progressInterval);
+        progress = 100;
+        progressBar.style.width = '100%';
+        progressText.textContent = '100%';
+        
+        if (!level) {
+          setTimeout(() => {
+            $('access-loading').classList.add('hidden');
+            $('access-denied').classList.remove('hidden');
+            $('denied-title').textContent = 'Acceso Denegado';
+            $('denied-desc').innerHTML = '<strong>❌ No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Solución:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
+          }, 500);
+          return false;
+        }
+    
         setTimeout(() => {
           $('access-loading').classList.add('hidden');
-          $('access-denied').classList.remove('hidden');
-          $('denied-title').textContent = 'Acceso Denegado';
-          $('denied-desc').innerHTML = '<strong>❌ No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Solución:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
+          $('mdt-content').style.display = 'block';
         }, 500);
+        return true;
+      } catch (e) {
+        console.error('Access check error:', e);
+        clearInterval(progressInterval);
+        $('access-loading').classList.add('hidden');
+        $('access-denied').classList.remove('hidden');
+        $('denied-title').textContent = 'Acceso Denegado';
+        $('denied-desc').innerHTML = '<strong>❌ No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Solución:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
         return false;
       }
-  
-      setTimeout(() => {
-        $('access-loading').classList.add('hidden');
-        $('mdt-content').style.display = 'block';
-      }, 500);
-      return true;
   }
 
   // ── USER ──
