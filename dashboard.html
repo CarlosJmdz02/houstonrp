@@ -12,10 +12,10 @@
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
   :root {
-    --bg-void:       #0d1424;
-    --bg-panel:      #131d2f;
-    --bg-card:       #17223a;
-    --bg-hover:      #1f304f;
+     --bg-void:       #121212;
+     --bg-panel:      #1a1a1a;
+     --bg-card:       #1f1f1f;
+     --bg-hover:      #252525;
     --accent-blue:   #3b6fb6;
     --accent-cyan:   #3b6fb6;
     --accent-gold:   #e6a868;
@@ -23,21 +23,18 @@
     --text-primary:  #e4e7ee;
     --text-secondary:#8a93a7;
     --text-dim:      #4c5a72;
-    --border:        #263552;
-    --border-glow:   #314466;
-    --sidebar-w:     260px;
-    --glow-blue:     rgba(59,111,182,0.15);
-    --glow-cyan:     rgba(230,168,104,0.12);
+     --border:        #2a2a2a;
+     --border-glow:   #333333;
+     --sidebar-w:     260px;
+     --glow-blue:     rgba(96,165,250,0.15);
+     --glow-cyan:     rgba(96,165,250,0.12);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--bg-void);
-    background-image:
-      radial-gradient(ellipse at 20% 0%, rgba(59,111,182,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 100%, rgba(230,168,104,0.05) 0%, transparent 50%);
-    color: var(--text-primary);
+   body {
+     background: #121212;
+     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     height: 100vh;
     display: flex;
