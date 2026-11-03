@@ -1471,7 +1471,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     <!-- ΓöÇΓöÇ OPERATIONS MODULES ΓöÇΓöÇ -->
     <div class="mods-head">
       <div>
-        <div class="page-title" style="font-size:24px;">M├│dulos de <span>Operaciones</span></div>
+        <div class="page-title" style="font-size:24px;">Otras <span>Operaciones</span></div>
       </div>
     </div>
 
@@ -1511,7 +1511,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
         <div class="mod-card-info">
-          <div class="mod-card-title">Aplicaci├│n</div>
+           <div class="mod-card-title">Aplicación</div>
           <div class="mod-card-label">App y soporte</div>
         </div>
       </a>
@@ -1932,12 +1932,12 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     { code: '10-7',   color: '#2d2d3d', label: 'Fuera de servicio', bg: 'rgba(45,45,61,0.15)' },
     { code: '10-8',   color: '#4acf8f', label: 'En servicio', bg: 'rgba(74,204,143,0.12)' },
     { code: '10-5',   color: '#4acf8f', label: 'Vigilancia', bg: 'rgba(74,204,143,0.12)' },
-    { code: '10-11',  color: '#4acf8f', label: 'Detenci├│n de tr├ífico', bg: 'rgba(74,204,143,0.12)' },
-    { code: '10-100', color: '#ef4444', label: 'Oficial ca├¡do', bg: 'rgba(239,68,68,0.15)' },
+    { code: '10-11',  color: '#4acf8f', label: 'Detención de tráfico', bg: 'rgba(74,204,143,0.12)' },
+    { code: '10-100', color: '#ef4444', label: 'Oficial caído', bg: 'rgba(239,68,68,0.15)' },
     { code: '10-99',  color: '#ff8c42', label: 'Oficial en apuros', bg: 'rgba(255,140,66,0.12)' },
     { code: '10-97',  color: '#ff8c42', label: 'En camino', bg: 'rgba(255,140,66,0.12)' },
     { code: '10-50',  color: '#4acf8f', label: 'Accidente grave', bg: 'rgba(74,204,143,0.12)' },
-    { code: '10-23',  color: '#4acf8f', label: 'Lleg├│ a la escena', bg: 'rgba(74,204,143,0.12)' },
+    { code: '10-23',  color: '#4acf8f', label: 'Llegó a la escena', bg: 'rgba(74,204,143,0.12)' },
     { code: '10-15',  color: '#4acf8f', label: 'Persona bajo custodia', bg: 'rgba(74,204,143,0.12)' },
   ];
 
@@ -2211,7 +2211,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     const on = navigator.onLine !== false;
     if (on === _connState) return;
     _connState = on;
-    el.innerHTML = '<span class="live-dot"></span>' + (on ? 'En l├¡nea' : 'Sin conexi├│n');
+    el.innerHTML = '<span class="live-dot"></span>' + (on ? 'Conectado' : 'Desconectado');
     el.classList.toggle('offline', !on);
   }
   window.addEventListener('online', function () { _connState = null; syncConnIndicator(); });
@@ -2663,7 +2663,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           if (!processedPanics.has(s.id)) {
             processedPanics.add(s.id);
             playSound(audioPanic);
-            showToast('≡ƒÜ¿ 10-100 P├üNICO ΓÇö ' + (s.username || 'Oficial'), 'error');
+             showToast('🚨 10-100 PÁNICO — ' + (s.username || 'Oficial'), 'error');
           }
         }
         for (const id of processedPanics) {
