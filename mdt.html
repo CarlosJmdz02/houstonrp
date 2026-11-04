@@ -2808,16 +2808,16 @@ OPERATIONS MODULES òÉòÉòÉ */
  } catch { return null; }
  }
 
- function citizenActions(displayName, robloxUsername) {
- const n = encodeURIComponent(displayName);
- const r = encodeURIComponent(robloxUsername);
- return `
- <button class="btn btn-danger" onclick='openRecordDrawer("arrest", "${n}", "${r}")'>Üö Registrar Arresto</button>
- <button class="btn btn-warning" onclick='openRecordDrawer("fine", "${n}", "${r}")'>Æ░ Registrar Multa</button>
- <button class="btn btn-outline" onclick="scrollToHistory()">ô£ Ver Historial</button>
- <button class="btn btn-outline" onclick='openWarningModal("${n}", "${r}")'>&#128203; Agregar Nota</button>
- <button class="btn btn-outline" onclick="copyRobloxUser('${esc(robloxUsername)}')">ôï Copiar Usuario</button>`;
- }
+  function citizenActions(displayName, robloxUsername) {
+  const n = encodeURIComponent(displayName);
+  const r = encodeURIComponent(robloxUsername);
+  return `
+  <button class="btn btn-danger" onclick='openRecordDrawer("arrest", "${n}", "${r}")'>🚔 Registrar Arresto</button>
+  <button class="btn btn-warning" onclick='openRecordDrawer("fine", "${n}", "${r}")'>💰 Registrar Multa</button>
+  <button class="btn btn-outline" onclick="scrollToHistory()">📋 Ver Historial</button>
+  <button class="btn btn-outline" onclick='openWarningModal("${n}", "${r}")'>📝 Agregar Nota</button>
+  <button class="btn btn-outline" onclick="copyRobloxUser('${esc(robloxUsername)}')">📋 Copiar Usuario</button>`;
+  }
 
  window.scrollToHistory = function() {
  const main = $('tablet-main');
@@ -4073,15 +4073,15 @@ OPERATIONS MODULES òÉòÉòÉ */
  ${code ? `<div class="bolo-code">Üû╕Å ${esc(code)} - ${esc(penalLabel || '')}</div>` : ''}
  <div class="bolo-meta">
  <span>æ« ${esc(b.oficial_name || '-')}</span>
- <span style="color:${col};">Å¢╕Å ${dept}</span>
- <span>òÉ ${dateStr}</span>
- ${b.closed_at ? `<span>ùâ╕Å Cerrado: ${new Date(b.closed_at).toLocaleString('es-ES', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</span>` : ''}
- </div>
- <div class="bolo-actions">
- <button class="btn btn-outline" onclick="editBoloPopup(${b.id})">£Å╕Å Editar</button>
- ${canClose ? `<button class="btn btn-warning" onclick="closeBoloById(${b.id})">Ü½ Cerrar</button>` : ''}
- <button class="btn btn-danger" style="font-size:11px;padding:6px 12px;" onclick="removeBoloById(${b.id})">ùæ╕Å Eliminar</button>
- ${b.estado === 'cerrado' ? '<button class="btn btn-bolo" onclick="reopenBoloById(' + b.id + ')">ƒ│ Reabrir</button>' : ''}
+  <span style="color:${col};">🏢 ${dept}</span>
+  <span>📅 ${dateStr}</span>
+  ${b.closed_at ? `<span>✅ Cerrado: ${new Date(b.closed_at).toLocaleString('es-ES', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</span>` : ''}
+  </div>
+  <div class="bolo-actions">
+  <button class="btn btn-outline" onclick="editBoloPopup(${b.id})">✏️ Editar</button>
+  ${canClose ? `<button class="btn btn-warning" onclick="closeBoloById(${b.id})">🛑 Cerrar</button>` : ''}
+  <button class="btn btn-danger" style="font-size:11px;padding:6px 12px;" onclick="removeBoloById(${b.id})">🗑️ Eliminar</button>
+  ${b.estado === 'cerrado' ? '<button class="btn btn-bolo" onclick="reopenBoloById(' + b.id + ')">🔄 Reabrir</button>' : ''}
  </div>
  </div>`;
  }).join('');
