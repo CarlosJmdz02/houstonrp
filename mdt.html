@@ -1405,7 +1405,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div class="profile-section fade-in" style="animation-delay:0.15s;">
  <div class="section-header" onclick="toggleSection('vehicles')">
- <h3>🚗 Vehículos Registrados<span class="qtag">REG</span></h3>
+ <h3>🚗 Vehiculos Registrados<span class="qtag">REG</span></h3>
  <span class="section-count" id="vehicles-count">0</span>
  </div>
  <div class="section-body" id="vehicles-body"></div>
@@ -1614,7 +1614,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="bolo-form-row" style="margin-bottom:12px;">
  <div class="bolo-field">
  <label class="bolo-form-label">Buscar Ciudadano (Roblox / Nombre)</label>
- <input class="bolo-input" id="bolo-search" type="text" placeholder="Escribii el nombre de usuario o nombre real..." autocomplete="off" spellcheck="false">
+ <input class="bolo-input" id="bolo-search" type="text" placeholder="Escribiel nombre de usuario o nombre real..." autocomplete="off" spellcheck="false">
  </div>
  </div>
  <div id="bolo-search-result"></div>
@@ -1632,7 +1632,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="bolo-form-row" style="margin-top:14px;">
  <div class="bolo-field">
  <label class="bolo-form-label">Motivo del BOLO *</label>
- <textarea class="bolo-input" id="bolo-motivo" maxlength="500" placeholder="Describiii el motivo detallado del aviso de vigilancia..."></textarea>
+ <textarea class="bolo-input" id="bolo-motivo" maxlength="500" placeholder="Describi el motivo detallado del aviso de vigilancia..."></textarea>
  </div>
  </div>
  <div class="bolo-form-row">
@@ -1717,7 +1717,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="tac-gate" id="radio-gate">
  <div class="tac-gate-badge">RADIO TüCTICA HPD</div>
  <div class="tac-gate-title">Selecciona canal</div>
- <div class="tac-gate-sub">Escribii un n║mero del <b>1 al 5</b> para entrar a la radio</div>
+ <div class="tac-gate-sub">Escribiun n║mero del <b>1 al 5</b> para entrar a la radio</div>
  <div class="tac-gate-row">
  <input type="text" inputmode="numeric" maxlength="1" id="radio-gate-input" placeholder="1"
  onkeydown="if(event.key==='Enter'){HRPRadio.join(this.value)}">
@@ -2838,7 +2838,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (_cv(character.nacionalidad)) parts.push('Nacionalidad: ' + _cv(character.nacionalidad));
  if (_cv(character.altura) || _cv(character.peso)) parts.push('Estatura/Peso: ' + [_cv(character.altura), _cv(character.peso)].filter(Boolean).join(' / '));
  if (_cv(character.ojos) || _cv(character.cabello)) parts.push('Ojos/Cabello: ' + [_cv(character.ojos), _cv(character.cabello)].filter(Boolean).join(' / '));
- if (_cv(character.direccion)) parts.push('Direcci│n: ' + _cv(character.direccion));
+ if (_cv(character.direccion)) parts.push('Direccion: ' + _cv(character.direccion));
  return parts.join(' • ');
  }
 
@@ -2862,7 +2862,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  ['Estatura / Peso', pair(character.altura, character.peso)],
  ['Ojos / Cabello', pair(character.ojos, character.cabello)],
  ['Nacionalidad', _cv(character.nacionalidad) || '-'],
- ['Direcci│n', dir],
+ ['Direccion', dir],
  ['Roblox', robloxId ? roblox + ' (ID: ' + robloxId + ')' : roblox],
  ['Discord ID', _cv(character.user_discord) || '-'],
  ];
@@ -2874,20 +2874,20 @@ OPERATIONS MODULES òÉòÉòÉ */
  // öÇöÇ MODO DE BÜSQUEDA (personas) öÇöÇ
  function setSearchMode() {
  const input = $('db-person');
- if (input) input.placeholder = 'Escribii el nombre de usuario Roblox...';
+ if (input) input.placeholder = 'Escribiel nombre de usuario Roblox...';
  const res = $('db-person-result');
  if (res) res.innerHTML = '';
  if (input) input.focus();
  }
 
  function dbSearch() {
- // En paralelo: si lo que Escribiiste es una placa/modelo/due▒o, arriba
+ // En paralelo: si lo que Escribite es una placa/modelo/due▒o, arriba
  // aparecen los veh¡culos; si es una persona, se abre su ficha.
  dbSearchVehicles();
  return dbSearchPerson();
  }
 
- // öÇöÇ Veh¡culos: BD local + servidor EN VIVO de ER:LC öÇöÇ
+ // öÇöÇ Vehiculos: BD local + servidor EN VIVO de ER:LC öÇöÇ
  let _erlcCache = { at: 0, data: null };
  async function fetchErlcLive() {
  const now = Date.now();
@@ -2982,7 +2982,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  });
 
  box.innerHTML = `<div class="veh-block">
- <div class="veh-title">Üù Veh¡culos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO • ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
+ <div class="veh-title">Üù Vehiculos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO • ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
  ${rows.map(v => `<div class="veh-card">
  <div class="veh-plate">${esc(v.plate || '-')}</div>
  <div class="veh-info">
@@ -3185,7 +3185,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="stat-box">
  <div class="stat-num" style="color:var(--accent-green);">${(currentProfile.vehicles || []).length}</div>
- <div class="stat-label">Veh¡culos</div>
+ <div class="stat-label">Vehiculos</div>
  </div>`;
 
  $('licenses-count').textContent = (currentProfile.licenses || []).length;
@@ -3511,7 +3511,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const txt = (document.getElementById('warning-text').value || '').trim();
  const msg = document.getElementById('warning-msg');
  if (!warningTarget) return;
- if (txt.length < 5) { msg.textContent = 'Escribie una nota de al menos 5 caracteres.'; return; }
+ if (txt.length < 5) { msg.textContent = 'Escribiuna nota de al menos 5 caracteres.'; return; }
  if (!(await hrpHasPoliceRole())) { msg.textContent = 'Solo la Policia puede agregar notas.'; return; }
 
  const btn = document.getElementById('warning-save');
@@ -4157,7 +4157,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (msg) msg.textContent = '';
  if (!boloPick) { if (msg) msg.textContent = 'Üá╕Å Seleccioní un ciudadano antes de emitir el BOLO.'; return; }
  const motivo = ($('bolo-motivo') ? $('bolo-motivo').value : '').trim();
- if (!motivo) { if (msg) msg.textContent = 'Üá╕Å Escribii un motivo detallado.'; return; }
+ if (!motivo) { if (msg) msg.textContent = 'Üá╕Å Escribiun motivo detallado.'; return; }
  const penalCode = $('bolo-penal') ? $('bolo-penal').value : '';
  const penalName = penalCode && (window.HRP_CRIMES || {})[penalCode] ? (window.HRP_CRIMES)[penalCode].name : '';
  const prioridad = $('bolo-prio') ? $('bolo-prio').value : 'media';
@@ -4408,7 +4408,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const res = await fetch(CALLS_PROXY, { cache: 'no-store' });
  const data = await res.json();
  callsPlayers = data.Players || [];
- // El MDT es de law enforcement: solo Polic¡a/Sheriff. Las llamadas
+ // El MDT es de law enforcement: solo Policia/Sheriff. Las llamadas
  // de Fire/EMS (y las sin equipo) se muestran en el ITMDT.
  const LE_TEAMS = { Police: 1, Sheriff: 1 };
  callsCache = (data.EmergencyCalls || []).filter(c => LE_TEAMS[c.Team] !== undefined);
