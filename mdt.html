@@ -1472,7 +1472,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </a>
 
-  <button class="mod-card" onclick="openAdminPasswordModal()" style="--mc:#fbbf24; border:none; cursor:pointer; background:none; text-decoration:none;">
+  <a class="mod-card" href="manage-shift.html" style="--mc:#fbbf24;">
   <div class="mod-card-icon">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
   </div>
@@ -1480,7 +1480,7 @@ OPERATIONS MODULES òÉòÉòÉ */
   <div class="mod-card-title">Manage Shifts</div>
   <div class="mod-card-label">Administrar turnos</div>
   </div>
-  </button>
+  </a>
 
  <a class="mod-card" href="enmiendas.html" style="--mc:#3b82f6;">
  <div class="mod-card-icon">
@@ -4705,114 +4705,6 @@ OPERATIONS MODULES òÉòÉòÉ */
  });
  }
  window.handleBodycamToggle = handleBodycamToggle;
-
- // ?? ADMIN PASSWORD MODAL ??
- function openAdminPasswordModal() {
-   const modal = document.createElement('div');
-   modal.id = 'admin-password-modal';
-   modal.style.cssText = `
-     position: fixed;
-     top: 0;
-     left: 0;
-     right: 0;
-     bottom: 0;
-     background: rgba(0,0,0,0.8);
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     z-index: 1000;
-   `;
-   
-   const dialog = document.createElement('div');
-   dialog.style.cssText = `
-     background: #1a1a1a;
-     border: 1px solid #33507e;
-     border-radius: 12px;
-     padding: 32px;
-     max-width: 400px;
-     width: 90%;
-     box-shadow: 0 30px 70px rgba(0,0,0,0.8);
-   `;
-   
-   dialog.innerHTML = `
-     <div style="font-family: Rajdhani, sans-serif; font-size: 18px; font-weight: 700; color: #e8ecf4; margin-bottom: 16px;">
-       🔐 Acceso Administrativo
-     </div>
-     <div style="font-size: 13px; color: #94a3b8; margin-bottom: 24px;">
-       Ingresa el código de acceso para continuar
-     </div>
-     <input type="password" id="admin-code-input" placeholder="Código de acceso" style="
-       width: 100%;
-       padding: 12px;
-       background: #0d1424;
-       border: 1px solid #243a63;
-       border-radius: 8px;
-       color: #e8ecf4;
-       font-family: JetBrains Mono, monospace;
-       margin-bottom: 20px;
-       box-sizing: border-box;
-     ">
-     <div style="display: flex; gap: 12px;">
-       <button onclick="closeAdminPasswordModal()" style="
-         flex: 1;
-         padding: 12px;
-         background: #243a63;
-         border: 1px solid #33507e;
-         border-radius: 8px;
-         color: #94a3b8;
-         cursor: pointer;
-         font-family: Rajdhani, sans-serif;
-         font-weight: 600;
-       ">Cancelar</button>
-       <button onclick="verifyAdminCode()" style="
-         flex: 1;
-         padding: 12px;
-         background: #3b82f6;
-         border: 1px solid #3b82f6;
-         border-radius: 8px;
-         color: #fff;
-         cursor: pointer;
-         font-family: Rajdhani, sans-serif;
-         font-weight: 600;
-       ">Ingresar</button>
-     </div>
-   `;
-   
-   modal.appendChild(dialog);
-   document.body.appendChild(modal);
-   
-   setTimeout(() => {
-     const input = document.getElementById('admin-code-input');
-     if (input) {
-       input.focus();
-       input.addEventListener('keypress', function(e) {
-         if (e.key === 'Enter') verifyAdminCode();
-       });
-     }
-   }, 100);
- }
- 
- function closeAdminPasswordModal() {
-   const modal = document.getElementById('admin-password-modal');
-   if (modal) modal.remove();
- }
- 
- function verifyAdminCode() {
-   const input = document.getElementById('admin-code-input');
-   const code = input ? input.value : '';
-   
-   if (code === 'AR2026') {
-     closeAdminPasswordModal();
-     localStorage.setItem('hrp_admin_verified', 'true');
-     window.location.href = 'manage-shift.html';
-   } else {
-     if (input) input.style.borderColor = '#f04438';
-     showToast('❌ Código incorrecto', 'error');
-   }
- }
- window.openAdminPasswordModal = openAdminPasswordModal;
- window.verifyAdminCode = verifyAdminCode;
- window.closeAdminPasswordModal = closeAdminPasswordModal;
 
  // ?? EXPORT HANDLERS ??
  window.handleStartShift = async function() { await _handleStartShift(); };
