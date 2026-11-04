@@ -4061,18 +4061,18 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="bolo-card-title">${prio.icon} BOLO</div>
  <span class="bolo-prio ${prio.cls}">${prio.label}</span>
  </div>
- <div class="bolo-person">
- <div class="bolo-avatar">${b.roblox_id ? `<img src="https://www.roblox.com/headshot-thumbnail/image?userId=${encodeURIComponent(b.roblox_id)}&width=100&height=100&format=png" onerror="this.parentNode.textContent='${initial}';">` : initial}</div>
- <div>
- <div class="bolo-person-name">${esc(b.target_name || '-')}</div>
- <div class="bolo-person-user">Ä« ${esc(b.roblox_user || '-')}</div>
- </div>
- <span class="bolo-status ${st.cls}" style="margin-left:auto;">ùÅ ${st.label}</span>
- </div>
- <div class="bolo-motivo">${esc(b.motivo || '-')}</div>
- ${code ? `<div class="bolo-code">Üû╕Å ${esc(code)} - ${esc(penalLabel || '')}</div>` : ''}
- <div class="bolo-meta">
- <span>æ« ${esc(b.oficial_name || '-')}</span>
+  <div class="bolo-person">
+  <div class="bolo-avatar">${b.roblox_id ? `<img src="https://www.roblox.com/headshot-thumbnail/image?userId=${encodeURIComponent(b.roblox_id)}&width=100&height=100&format=png" onerror="this.parentNode.textContent='${initial}';">` : initial}</div>
+  <div>
+  <div class="bolo-person-name">${esc(b.target_name || '-')}</div>
+  <div class="bolo-person-user">👤 ${esc(b.roblox_user || '-')}</div>
+  </div>
+  <span class="bolo-status ${st.cls}" style="margin-left:auto;">🎯 ${st.label}</span>
+  </div>
+  <div class="bolo-motivo">${esc(b.motivo || '-')}</div>
+  ${code ? `<div class="bolo-code">⚖️ ${esc(code)} - ${esc(penalLabel || '')}</div>` : ''}
+  <div class="bolo-meta">
+  <span>👮 ${esc(b.oficial_name || '-')}</span>
   <span style="color:${col};">🏢 ${dept}</span>
   <span>📅 ${dateStr}</span>
   ${b.closed_at ? `<span>✅ Cerrado: ${new Date(b.closed_at).toLocaleString('es-ES', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</span>` : ''}
