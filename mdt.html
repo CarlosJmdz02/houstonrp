@@ -1488,7 +1488,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="mod-card-info">
  <div class="mod-card-title">Enmiendas</div>
- <div class="mod-card-label">Constituci│n y leyes</div>
+ <div class="mod-card-label">Constitución y leyes</div>
  </div>
  </a>
 
@@ -1826,7 +1826,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeRecordDrawer()"></div>
 <div class="drawer" id="record-drawer" aria-hidden="true">
  <div class="drawer-head" id="drawer-head">
- <div class="drawer-icon" id="drawer-icon">Üö</div>
+ <div class="drawer-icon" id="drawer-icon">👮</div>
  <div class="drawer-title">
  <strong id="drawer-title">Registrar Arresto</strong>
  <span id="drawer-sub">Completando arresto para el ciudadano...</span>
@@ -2474,7 +2474,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  function _autoEndShiftLeftDept(currentTeam, requiredTeam) {
  playSound(audioFinaliza);
- _autoEndShift('completed', 'Üö Cambiaste al equipo ' + currentTeam + ' y abandonaste el departamento (' + requiredTeam + '). El turno se cerr│ automíticamente.');
+ _autoEndShift('completed', '👮 Cambiaste al equipo ' + currentTeam + ' y abandonaste el departamento (' + requiredTeam + '). El turno se cerr│ automíticamente.');
  }
 
  function setLoading(btnId, loading, text) {
@@ -2982,11 +2982,11 @@ OPERATIONS MODULES òÉòÉòÉ */
  });
 
  box.innerHTML = `<div class="veh-block">
- <div class="veh-title">Üù Vehiculos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO • ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
+ <div class="veh-title">Ü Vehiculos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO • ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
  ${rows.map(v => `<div class="veh-card">
  <div class="veh-plate">${esc(v.plate || '-')}</div>
  <div class="veh-info">
- <div class="veh-model">${esc(v.model || '-')}${v.color ? ' • ' + esc(v.color) : ''}${v.live ? ' <span class="veh-flag">ùÅ EN VIVO</span>' : ''}</div>
+ <div class="veh-model">${esc(v.model || '-')}${v.color ? ' • ' + esc(v.color) : ''}${v.live ? ' <span class="veh-flag">Å EN VIVO</span>' : ''}</div>
  <div class="veh-owner">æñ ${esc(v.ownerLabel)}${v.where ? ' &nbsp; ' + esc(v.where) : ''}${v.wanted > 0 ? ` <span class="veh-wanted">Üá ${v.wanted}</span>` : ''}</div>
  </div>
  ${v.ownerKey ? `<button class="btn btn-primary" onclick="openProfile('${esc(v.ownerKey)}')" style="font-size:12px;padding:7px 14px;flex-shrink:0;">Ver ficha åÆ</button>` : ''}
@@ -3131,7 +3131,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const dh = masked ? deptHeroLabel(deptInfo.department) : null;
  const heroName = dh ? `${dh.icon} ${dh.code} - ${dh.name}` : esc(displayName);
  const heroSub = dh
- ? `Ä« ${esc(robloxUsername)} • æ« Fuera de servicio`
+ ? `Ä« ${esc(robloxUsername)} • 👮 Fuera de servicio`
  : `Ä« ${esc(robloxUsername)}`;
 
  $('profile-hero').innerHTML = `
@@ -3145,7 +3145,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </div>
  ${activeBolos.length > 0 ? `<div style="margin:12px 0;padding:12px 16px;border:1px solid rgba(239,68,68,0.55);background:rgba(239,68,68,0.12);border-radius:12px;display:flex;align-items:center;gap:12px;">
- <span style="font-size:24px;">Ü¿</span>
+ <span style="font-size:24px;">🟢</span>
  <div style="flex:1;min-width:0;">
  <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:var(--accent-red);text-transform:uppercase;letter-spacing:1px;">Üá Persona Buscada${activeBolos.length > 1 ? ' - ' + activeBolos.length + ' BOLOs activos' : ''}</div>
  <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${esc(activeBolos[0].oficial_name || 'Oficial')} emiti│ el BOLO: ${esc(activeBolos[0].motivo || 'BOLO activo')}</div>
@@ -3247,10 +3247,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  const crimeName = parts[1] || r.reason || '-';
  return `<div class="record-item" ${r.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(r.case_id)}')"` : ''}>
  <div class="record-left">
- <div class="record-icon arrest">Üö</div>
+ <div class="record-icon arrest">👮</div>
  <div class="record-info">
  <div class="record-title">${esc(crimeName)} ${r.case_id ? '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(r.case_id) + '</span>' : ''}</div>
- <div class="record-sub">æ« ${esc(r.officer_name || '-')} ${code ? ' • <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
+ <div class="record-sub">👮 ${esc(r.officer_name || '-')} ${code ? ' • <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
  </div>
  </div>
  <div class="record-right">
@@ -3271,10 +3271,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  const crimeName = parts[1] || r.reason || '-';
  return `<div class="record-item" ${r.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(r.case_id)}')"` : ''}>
  <div class="record-left">
- <div class="record-icon fine">Æ░</div>
+ <div class="record-icon fine">👮</div>
  <div class="record-info">
  <div class="record-title">${esc(crimeName)} ${r.case_id ? '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(r.case_id) + '</span>' : ''}</div>
- <div class="record-sub">æ« ${esc(r.officer_name || '-')} ${code ? ' • <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
+ <div class="record-sub">👮 ${esc(r.officer_name || '-')} ${code ? ' • <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
  </div>
  </div>
  <div class="record-right">
@@ -3292,7 +3292,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  $('vehicles-body').innerHTML = currentProfile.vehicles.map(v => `
  <div class="record-item">
  <div class="record-left">
- <div class="record-icon vehicle">Üù</div>
+ <div class="record-icon vehicle">Ü</div>
  <div class="record-info">
  <div class="record-title">${esc(v.model || '-')}</div>
  <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;color:var(--accent-cyan);">${esc(v.plate || '-')}</span> • Color: ${esc(v.color || '-')}</div>
@@ -3335,7 +3335,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  const r = rows[0];
  const avatarUrl = await fetchRobloxAvatar(r.target_discord || r.target_name).catch(() => null);
- const typeIcon = r.type === 'jail' ? '¢ô╕Å' : r.type === 'fine' ? 'Æ░' : 'Üö';
+ const typeIcon = r.type === 'jail' ? '¢ô╕Å' : r.type === 'fine' ? '👮' : '👮';
  const typeLabel = r.type === 'jail' ? 'Encarcelamiento' : r.type === 'fine' ? 'Infracci│n / Multa' : 'Arresto / Incidente';
  const caseStatus = (r.case_status || 'abierta').toLowerCase();
  const statusText = r.paid ? 'Pagada' : caseStatus === 'resuelta' ? 'Resuelta' : caseStatus === 'cerrada' ? 'Cerrada' : 'Abierta';
@@ -3348,7 +3348,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="case-badge">${typeIcon} ${typeLabel}</div>
  <span class="case-status" style="background:${statusColor}1a;color:${statusColor};border:1px solid ${statusColor}44;">${statusText}</span>
  </div>
- <div class="case-title">ùé╕Å ${esc(r.case_id || 'Sin n║mero de caso')}</div>
+ <div class="case-title">é╕Å ${esc(r.case_id || 'Sin n║mero de caso')}</div>
  <div class="case-target">
  <div class="profile-avatar" style="width:56px;height:56px;flex-shrink:0;">
  ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : (r.target_name ? r.target_name.charAt(0).toUpperCase() : '?')}
@@ -3359,7 +3359,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </div>
  <div class="case-facts">
- <div class="case-fact"><span>æ« Oficial a cargo</span><b>${esc(r.officer_name || '-')}</b></div>
+ <div class="case-fact"><span>👮 Oficial a cargo</span><b>${esc(r.officer_name || '-')}</b></div>
  <div class="case-fact"><span>ôà Fecha</span><b>${r.created_at ? new Date(r.created_at).toLocaleString() : '-'}</b></div>
  ${r.incident_type ? `<div class="case-fact"><span>ôï Tipo de incidente</span><b>${esc(r.incident_type)}</b></div>` : ''}
  ${r.type === 'jail' ? `<div class="case-fact"><span>Å▒╕Å Pena</span><b>${(r.amount || 0)} minutos</b></div>` : `<div class="case-fact"><span>${r.type === 'fine' ? 'Æ╡ Monto' : 'Æ╡ Fianza'}</span><b>$${(r.amount || 0).toLocaleString()}</b></div>`}
@@ -3372,7 +3372,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <button class="btn btn-outline" onclick="openProfile('${esc(r.target_discord || r.target_name)}')">Ver Perfil del Ciudadano åÆ</button>
  </div>
  </div>
- ${otherRows.length > 0 ? `<div class="case-related"><div class="section-header"><h3>Expedientes coincidentes</h3><span class="section-count">${otherRows.length}</span></div>${otherRows.map(o => `<div class="record-item" ${o.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(o.case_id)}')"` : ''}><div class="record-left"><div class="record-icon ${o.type === 'fine' ? 'fine' : 'arrest'}">${o.type === 'fine' ? 'Æ░' : 'Üö'}</div><div class="record-info"><div class="record-title">${esc(o.case_id || (o.reason || '').split(' - ')[1] || o.reason || '-')} ${o.paid ? '<span class="badge badge-active" style="font-size:9px;">Pagada</span>' : ''}</div><div class="record-sub">${esc(o.target_name || '-')} • ${new Date(o.created_at).toLocaleDateString()}</div></div></div></div>`).join('')}</div>` : ''}`;
+ ${otherRows.length > 0 ? `<div class="case-related"><div class="section-header"><h3>Expedientes coincidentes</h3><span class="section-count">${otherRows.length}</span></div>${otherRows.map(o => `<div class="record-item" ${o.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(o.case_id)}')"` : ''}><div class="record-left"><div class="record-icon ${o.type === 'fine' ? 'fine' : 'arrest'}">${o.type === 'fine' ? '👮' : '👮'}</div><div class="record-info"><div class="record-title">${esc(o.case_id || (o.reason || '').split(' - ')[1] || o.reason || '-')} ${o.paid ? '<span class="badge badge-active" style="font-size:9px;">Pagada</span>' : ''}</div><div class="record-sub">${esc(o.target_name || '-')} • ${new Date(o.created_at).toLocaleDateString()}</div></div></div></div>`).join('')}</div>` : ''}`;
  } catch (err) {
  content.innerHTML = `<div class="case-empty" style="color:var(--accent-red);">¥î Error al abrir el expediente: ${esc(err.message || 'desconocido')}</div>`;
  }
@@ -3433,7 +3433,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  drawer.classList.remove('wide');
  head.classList.toggle('fine', !isArrest);
- icon.textContent = isArrest ? 'Üö' : 'Æ░';
+ icon.textContent = isArrest ? '👮' : '👮';
  title.textContent = isArrest ? 'Registrar Arresto' : 'Registrar Multa';
  sub.textContent = (isArrest ? 'Cargando formulario de arresto...' : 'Cargando formulario de multa...') + (displayName ? ' • ' + displayName : '');
 
@@ -3641,7 +3641,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const reasons = (r.reason || '').split(';').map(s => s.trim()).filter(Boolean);
  const mainReason = reasons[0] || r.reason || 'Sin detalle';
  return `<div class="history-record" style="--rec-color:var(--accent-amber);">
- <div class="history-rec-icon fine">Æ░</div>
+ <div class="history-rec-icon fine">👮</div>
  <div class="history-rec-body">
  <div class="history-rec-top">
  <span class="history-rec-badge fine">Multa</span>
@@ -3650,7 +3650,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="history-rec-reason" title="${esc(r.reason || '')}">${esc(mainReason)}</div>
  <div class="history-rec-meta">
- <span>æ« ${esc(r.officer_name || '-')}</span>
+ <span>👮 ${esc(r.officer_name || '-')}</span>
  ${r.case_id ? `<span class="history-rec-case">${esc(r.case_id)}</span>` : ''}
  </div>
  </div>
@@ -3705,7 +3705,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const reasons = (r.reason || '').split(';').map(s => s.trim()).filter(Boolean);
  const mainReason = reasons[0] || r.reason || 'Sin detalle';
  return `<div class="history-record" style="--rec-color:var(--accent-red);">
- <div class="history-rec-icon arrest">Üö</div>
+ <div class="history-rec-icon arrest">👮</div>
  <div class="history-rec-body">
  <div class="history-rec-top">
  <span class="history-rec-badge arrest">Arresto</span>
@@ -3713,7 +3713,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="history-rec-reason" title="${esc(r.reason || '')}">${esc(mainReason)}</div>
  <div class="history-rec-meta">
- <span>æ« ${esc(r.officer_name || '-')}</span>
+ <span>👮 ${esc(r.officer_name || '-')}</span>
  ${r.case_id ? `<span class="history-rec-case">${esc(r.case_id)}</span>` : ''}
  </div>
  </div>
@@ -3848,7 +3848,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="unit-tags">
  ${code ? `<span class="unit-tag code">${esc(code)}</span>` : ''}
  <span class="unit-tag time">Å▒ ${elapsedSec >= 0 ? formatTime(elapsedSec) : '-'}</span>
- ${camOn ? '<span class="unit-tag cam">ùÅ REC</span>' : ''}
+ ${camOn ? '<span class="unit-tag cam">Å REC</span>' : ''}
  </div>
  </div>
  <span class="on-duty-status ${isBreak ? 'break' : 'live'}"></span>
@@ -4245,7 +4245,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  try {
  await supaDelete('radio_messages', { id: `eq.${id}` });
  boloCache = boloCache.filter(x => String(x.id) !== String(id));
- showToast('ùæ╕Å BOLO eliminado');
+ showToast('æ╕Å BOLO eliminado');
  renderBoloList();
  updateBoloCardBadge();
  loadHistoryBolos(true);
@@ -4291,7 +4291,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const dateStr = new Date(b.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
  return `<div class="record-item" style="${b.estado === 'activo' ? 'border-color:rgba(239,68,68,0.4);' : ''}">
  <div class="record-left">
- <div class="record-icon arrest">Ü¿</div>
+ <div class="record-icon arrest">🟢</div>
  <div class="record-info">
  <div class="record-title">${prio.icon} BOLO ${prio.label}</div>
  <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">${esc(b.penal_code || '')}</span> ${esc(b.motivo || '')}</div>
@@ -4340,7 +4340,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
  const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
  return `<div class="history-record" style="--rec-color:${prio.color};">
- <div class="history-rec-icon arrest">Ü¿</div>
+ <div class="history-rec-icon arrest">🟢</div>
  <div class="history-rec-body">
  <div class="history-rec-top">
  <span class="history-rec-badge arrest">BOLO</span>
@@ -4349,8 +4349,8 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="history-rec-reason" title="${esc(b.motivo || '')}">${prio.icon} ${esc((b.motivo || '').split(/[.;]/)[0] || b.motivo || '-')}</div>
  <div class="history-rec-meta">
- <span>æ« ${esc(b.oficial_name || '-')}</span>
- <span class="bolo-status ${st.cls}">ùÅ ${st.label}</span>
+ <span>👮 ${esc(b.oficial_name || '-')}</span>
+ <span class="bolo-status ${st.cls}">Å ${st.label}</span>
  </div>
  </div>
  <div class="history-rec-right">
@@ -4855,6 +4855,8 @@ OPERATIONS MODULES òÉòÉòÉ */
 
 
 <!-- Cache Bust: 20261103230140 -->
+
+
 
 
 
