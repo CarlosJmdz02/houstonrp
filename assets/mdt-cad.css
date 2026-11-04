@@ -846,3 +846,497 @@ body.mdt-page main.tablet-main {
   background: rgba(240,68,56,.16); border: 1px solid rgba(240,68,56,.45);
   color: var(--accent-red);
 }
+
+/* ─────────────────────────────────────────────
+   17. DISPATCH — Mejoras de paneles y scrolls
+   ───────────────────────────────────────────── */
+
+/* Main container layout para dispatch */
+#main-container {
+  display: flex;
+  gap: 12px;
+  height: calc(100vh - 280px);
+  padding: 12px;
+  background: var(--bg-deep);
+  overflow: hidden;
+}
+
+/* Paneles laterales con mejor scrolling */
+#side-panel {
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(47,129,247,.4) rgba(6,13,28,.5);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+#side-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+#side-panel::-webkit-scrollbar-track {
+  background: rgba(6,13,28,.5);
+  border-radius: 8px;
+}
+
+#side-panel::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent-blue), var(--accent-cyan));
+  border-radius: 8px;
+  border: 2px solid rgba(6,13,28,.8);
+  min-height: 40px;
+}
+
+#side-panel::-webkit-scrollbar-thumb:hover {
+  filter: brightness(1.2);
+  background: linear-gradient(180deg, var(--accent-cyan), var(--accent-blue));
+}
+
+/* Panel sections mejorados */
+.panel-section {
+  background: linear-gradient(160deg, rgba(15,28,51,.96), rgba(11,21,38,.96));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+  animation: cadRise .28s ease both;
+}
+
+.panel-section:not(:last-child) {
+  flex-shrink: 0;
+}
+
+.panel-section.bc-roster-section {
+  margin-top: auto;
+}
+
+/* Headers mejorados */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: rgba(6,13,28,.72);
+  border-bottom: 1px solid var(--border);
+  border-radius: 11px 11px 0 0;
+}
+
+.panel-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+/* Listas con scroll mejorado */
+.calls-list, .players-list, .dispatch-log, .bc-roster {
+  flex: 1 1 auto;
+  min-height: 100px;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(6,13,28,.55);
+  border: 1px solid var(--border);
+  border-radius: 0 0 11px 11px;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(47,129,247,.35) rgba(6,13,28,.3);
+  scroll-behavior: smooth;
+}
+
+.calls-list::-webkit-scrollbar,
+.players-list::-webkit-scrollbar,
+.dispatch-log::-webkit-scrollbar,
+.bc-roster::-webkit-scrollbar {
+  width: 6px;
+}
+
+.calls-list::-webkit-scrollbar-track,
+.players-list::-webkit-scrollbar-track,
+.dispatch-log::-webkit-scrollbar-track,
+.bc-roster::-webkit-scrollbar-track {
+  background: rgba(6,13,28,.3);
+  border-radius: 6px;
+}
+
+.calls-list::-webkit-scrollbar-thumb,
+.players-list::-webkit-scrollbar-thumb,
+.dispatch-log::-webkit-scrollbar-thumb,
+.bc-roster::-webkit-scrollbar-thumb {
+  background: rgba(47,129,247,.35);
+  border-radius: 6px;
+  border: 1px solid rgba(6,13,28,.7);
+  min-height: 30px;
+}
+
+.calls-list::-webkit-scrollbar-thumb:hover,
+.players-list::-webkit-scrollbar-thumb:hover,
+.dispatch-log::-webkit-scrollbar-thumb:hover,
+.bc-roster::-webkit-scrollbar-thumb:hover {
+  background: rgba(47,129,247,.55);
+}
+
+/* Items en listas */
+.calls-list > div, .players-list > div, .bc-roster > div {
+  margin-bottom: 8px;
+  padding: 8px;
+  background: rgba(15,28,51,.6);
+  border: 1px solid rgba(47,129,247,.2);
+  border-radius: 8px;
+  transition: all .16s ease;
+}
+
+.calls-list > div:hover, .players-list > div:hover, .bc-roster > div:hover {
+  background: rgba(15,28,51,.8);
+  border-color: rgba(47,129,247,.4);
+  transform: translateX(2px);
+}
+
+.empty-state {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* Mapa centrado y responsive */
+#map-container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: linear-gradient(160deg, rgba(15,28,51,.96), rgba(11,21,38,.96));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+  min-width: 300px;
+}
+
+#map-canvas-container {
+  flex: 1 1 auto;
+  position: relative;
+  background: linear-gradient(135deg, #0a1929 0%, #132d5c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+#map-canvas {
+  max-width: 100%;
+  max-height: 100%;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+}
+
+/* Controles del mapa */
+#map-controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 20;
+}
+
+.map-btn {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15,28,51,.95);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .16s ease;
+}
+
+.map-btn:hover {
+  border-color: rgba(47,129,247,.6);
+  color: var(--accent-cyan);
+  transform: translateY(-1px);
+  background: rgba(15,28,51,.99);
+}
+
+.map-btn:active {
+  transform: translateY(0);
+}
+
+.map-btn-sep {
+  width: 38px;
+  height: 1px;
+  background: var(--border);
+  margin: 3px 0;
+}
+
+/* Leyenda del mapa mejorada */
+.map-legend {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: rgba(6,13,28,.88);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+  padding: 10px 12px;
+  z-index: 20;
+  max-width: calc(100% - 24px);
+}
+
+.lg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.call-dot {
+  border: 2px solid currentColor;
+  background: transparent;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* Información de coordenadas y calibración */
+.map-coords, .map-cal-info, .map-follow {
+  position: absolute;
+  background: rgba(6,13,28,.9);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  z-index: 20;
+}
+
+.map-coords {
+  top: 12px;
+  left: 12px;
+}
+
+.map-cal-info {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.map-follow {
+  bottom: 12px;
+  right: 12px;
+}
+
+.map-tooltip {
+  position: absolute;
+  background: linear-gradient(160deg, rgba(15,28,51,.99), rgba(6,13,28,.99));
+  border: 1px solid rgba(47,129,247,.5);
+  border-radius: 10px;
+  box-shadow: 0 14px 34px rgba(0,0,0,.6);
+  padding: 10px 12px;
+  font-size: 11px;
+  max-width: 200px;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* Panel derecho con mejor scrolling */
+#right-panel {
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(47,129,247,.4) rgba(6,13,28,.5);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+#right-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+#right-panel::-webkit-scrollbar-track {
+  background: rgba(6,13,28,.5);
+  border-radius: 8px;
+}
+
+#right-panel::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent-blue), var(--accent-cyan));
+  border-radius: 8px;
+  border: 2px solid rgba(6,13,28,.8);
+  min-height: 40px;
+}
+
+#right-panel::-webkit-scrollbar-thumb:hover {
+  filter: brightness(1.2);
+  background: linear-gradient(180deg, var(--accent-cyan), var(--accent-blue));
+}
+
+#status-list {
+  flex: 1 1 auto;
+  min-height: 100px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: rgba(6,13,28,.55);
+  border: 1px solid var(--border);
+  border-radius: 0 0 11px 11px;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(47,129,247,.35) rgba(6,13,28,.3);
+}
+
+#status-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#status-list::-webkit-scrollbar-track {
+  background: rgba(6,13,28,.3);
+  border-radius: 6px;
+}
+
+#status-list::-webkit-scrollbar-thumb {
+  background: rgba(47,129,247,.35);
+  border-radius: 6px;
+  border: 1px solid rgba(6,13,28,.7);
+  min-height: 30px;
+}
+
+#status-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(47,129,247,.55);
+}
+
+#status-list.collapsed {
+  max-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.dispatch-log {
+  max-height: 250px;
+}
+
+.dispatch-log > div {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-secondary);
+  padding: 6px;
+  border-bottom: 1px solid var(--border);
+  word-break: break-word;
+  white-space: normal;
+}
+
+.dispatch-log > div:last-child {
+  border-bottom: none;
+}
+
+/* Responsividad */
+@media (max-width: 1440px) {
+  #main-container {
+    height: calc(100vh - 260px);
+  }
+
+  #side-panel, #right-panel {
+    flex: 0 0 300px;
+  }
+}
+
+@media (max-width: 1024px) {
+  #main-container {
+    flex-direction: column;
+    height: auto;
+    max-height: calc(100vh - 260px);
+  }
+
+  #side-panel, #right-panel {
+    flex: 0 0 auto;
+    max-height: 40vh;
+  }
+
+  #map-container {
+    flex: 1 1 auto;
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  #main-container {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  #side-panel, #right-panel {
+    flex: 1 1 auto;
+    max-height: 35vh;
+  }
+
+  .panel-section {
+    flex-shrink: 1;
+  }
+
+  .calls-list, .players-list, .dispatch-log, .bc-roster {
+    max-height: 200px;
+  }
+
+  #map-container {
+    min-height: 250px;
+  }
+
+  #map-controls {
+    top: 8px;
+    right: 8px;
+  }
+
+  .map-legend {
+    bottom: 8px;
+    left: 8px;
+    font-size: 8px;
+  }
+
+  .map-coords {
+    top: 8px;
+    left: 8px;
+    font-size: 9px;
+  }
+
+  .map-follow {
+    bottom: 8px;
+    right: 8px;
+    font-size: 9px;
+  }
+}
