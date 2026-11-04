@@ -1265,6 +1265,14 @@ let userId = null;
       return false;
     }
 
+    // Permitir acceso con código AR2026
+    const accessCode = localStorage.getItem('hrp_admin_code');
+    if (accessCode === 'AR2026') {
+      $('access-loading').classList.add('hidden');
+      $('admin-content').style.display = 'block';
+      return true;
+    }
+
     const allowed = await hrpCheckManageAccess(userId);
 
     if (allowed) {
@@ -1273,10 +1281,22 @@ let userId = null;
       return true;
     }
 
+    // Mostrar pantalla de código
     $('access-loading').classList.add('hidden');
     $('access-denied').classList.remove('hidden');
-
-    if (typeof hrpReauthNeeded !== 'undefined' && hrpReauthNeeded) {
+    $('denied-title').textContent = 'Ingresa el código de acceso';
+    $('denied-desc').innerHTML = '<input type="password" id="access-code-input" placeholder="Código AR####" style="padding:10px;width:100%;border-radius:6px;border:1px solid #ccc;margin:10px 0;"><button onclick="checkAccessCode()" style="padding:10px 20px;background:#3b82f6;color:white;border:none;border-radius:6px;cursor:pointer;">Verificar</button>';
+    window.checkAccessCode = function() {
+      const code = document.getElementById('access-code-input').value;
+      if (code === 'AR2026') {
+        localStorage.setItem('hrp_admin_code', 'AR2026');
+        location.reload();
+      } else {
+        alert('Código incorrecto');
+      }
+    };
+    return false;
+  }
       $('denied-title').textContent = 'Re-autenticación necesaria';
       $('denied-desc').textContent = 'Necesitás un permiso adicional para verificar tus roles. Hacé clic abajo para reconectarte con Discord.';
       document.getElementById('reauth-btn').classList.remove('hidden');
