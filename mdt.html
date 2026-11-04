@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿»¿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -49,7 +49,7 @@
  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
  ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
 
- /* òÉòÉòÉ FIXED TOP BAR (always visible) òÉòÉòÉ */
+ /* ²²² FIXED TOP BAR (always visible) ²²² */
  .tablet-top {
  flex-shrink: 0;
  background: linear-gradient(180deg, #1a1a1a, #121212);
@@ -68,7 +68,7 @@
 
  .top-user { display: flex; align-items: center; gap: 10px; margin-left: 4px; }
 
- /* öÇöÇ CAD UNIT STRIP öÇöÇ */
+ /* ¶¶ CAD UNIT STRIP ¶¶ */
  .cad-strip {
  display: flex;
  align-items: stretch;
@@ -85,7 +85,7 @@
  .cad-led.on { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); animation: cadPulse 1.6s ease-in-out infinite; }
  @keyframes cadPulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
 
- /* öÇöÇ QUERY TAGS (etiquetas de consulta tipo CAD) öÇöÇ */
+ /* ¶¶ QUERY TAGS (etiquetas de consulta tipo CAD) ¶¶ */
  .qtag {
  display: inline-flex;
  align-items: center;
@@ -246,7 +246,7 @@
 
  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
 
- /* òÉòÉòÉ SCROLLING MAIN òÉòÉòÉ */
+ /* ²²² SCROLLING MAIN ²²² */
  .tablet-main { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 22px 18px 40px; background: #121212 !important; }
 
  .page-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
@@ -254,7 +254,7 @@
  .page-title span { color: var(--accent-amber); }
  .page-head { margin-bottom: 18px; }
 
- /* òÉòÉòÉ DATABASE TABLET òÉòÉòÉ */
+ /* ²²² DATABASE TABLET ²²² */
  .tab-panel {
  background: linear-gradient(180deg, #1f1f1f, #1a1a1a);
  border: 1px solid var(--border-strong);
@@ -410,11 +410,11 @@
  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
  .fade-in { animation: fadeIn 0.3s ease both; }
 
- /* òÉòÉòÉ 
+ /* ²²² 
 
 
 
-OPERATIONS MODULES òÉòÉòÉ */
+OPERATIONS MODULES ²²² */
  .mods-head { display: flex; align-items: center; justify-content: space-between; margin: 8px 0 16px; }
  .mods-head .page-eyebrow { margin-bottom: 0; }
 
@@ -434,7 +434,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .mod-card-title { font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.4px; color: var(--text-primary); }
  .mod-card-label { font-size: 11px; color: var(--text-dim); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
- /* òÉòÉòÉ ACCESS OVERLAY òÉòÉòÉ */
+ /* ²²² ACCESS OVERLAY ²²² */
  .access-overlay { position: fixed; inset: 0; z-index: 99999; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 40px; }
  .access-overlay.hidden { display: none; }
  .access-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -444,13 +444,13 @@ OPERATIONS MODULES òÉòÉòÉ */
  .access-desc { font-size: 14px; color: var(--text-secondary); text-align: center; max-width: 420px; line-height: 1.5; }
  .access-overlay .btn { padding: 12px 30px; font-size: 14px; }
 
- /* öÇöÇ TOAST öÇöÇ */
+ /* ¶¶ TOAST ¶¶ */
  .toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(20px); display: flex; align-items: center; gap: 10px; padding: 13px 22px; background: var(--bg-card); border: 1px solid var(--accent-green); border-radius: 10px; color: var(--text-primary); font-size: 13px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); opacity: 0; transition: all 0.25s; z-index: 1000; pointer-events: none; max-width: 92vw; }
  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
  .toast.error { border-color: var(--accent-red); }
  .toast.warn { border-color: var(--accent-amber); }
 
- /* öÇöÇ OFFICERS ON SERVICE öÇöÇ */
+ /* ¶¶ OFFICERS ON SERVICE ¶¶ */
  .on-duty-panel { background: var(--bg-card); border: 1px solid rgba(56,189,248,0.22); border-radius: 14px; padding: 12px 16px 14px; margin-bottom: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.35); }
  .on-duty-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
  .on-duty-title { display: flex; align-items: center; gap: 8px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.04em; color: var(--text-primary); }
@@ -472,7 +472,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .on-duty-status.live { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
  .on-duty-status.break { background: var(--accent-amber); }
 
- /* öÇöÇ CASE VIEW öÇöÇ */
+ /* ¶¶ CASE VIEW ¶¶ */
  .case-container { display: none; }
  .case-loading, .case-empty { text-align: center; padding: 44px 16px; color: var(--text-dim); font-size: 13px; }
  .case-card { background: var(--bg-card); border: 1px solid rgba(56,189,248,0.22); border-radius: 14px; padding: 18px; margin-top: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.35); }
@@ -493,7 +493,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .case-related { margin-top: 12px; }
  .case-related .record-item { cursor: pointer; }
 
- /* òÉòÉòÉ RESPONSIVE òÉòÉòÉ */
+ /* ²²² RESPONSIVE ²²² */
 
  /* Tablet / notebook */
  @media (max-width: 900px) {
@@ -518,7 +518,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .search-hint { font-size: 9.5px; }
  }
 
- /* M│vil */
+ /* Mvil */
  @media (max-width: 640px) {
  .top-clock, .live-indicator { display: none; }
  .brand-name { font-size: 15px; }
@@ -570,7 +570,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .history-tabs { flex-wrap: wrap; }
  }
 
- /* M│viles muy peque▒os */
+ /* Mviles muy pequeos */
  @media (max-width: 400px) {
  .brand-sub { display: none; }
  .cad-led { display: none; }
@@ -580,7 +580,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .page-title { font-size: 21px; }
  }
 
- /* òÉòÉòÉ HISTORY PANEL òÉòÉòÉ */
+ /* ²²² HISTORY PANEL ²²² */
  #history-panel { display: none; }
  #history-panel.active { display: block; animation: fadeIn 0.3s ease both; }
 
@@ -717,7 +717,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .history-loading svg { animation: spin 1s linear infinite; }
  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
- /* òÉòÉòÉ BOLO (Be On the Lookout) òÉòÉòÉ */
+ /* ²²² BOLO (Be On the Lookout) ²²² */
  #bolo-panel { display: none; }
  #bolo-panel.active { display: block; animation: fadeIn 0.3s ease both; }
 
@@ -794,7 +794,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  .bolo-nav-badge { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 10px; background: rgba(239,68,68,0.2); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.4); padding: 1px 7px; border-radius: 20px; }
 
- /* òÉòÉòÉ RECORD DRAWER (Arresto / Multa dentro del MDT) òÉòÉòÉ */
+ /* ²²² RECORD DRAWER (Arresto / Multa dentro del MDT) ²²² */
  .drawer-overlay {
  position: fixed; inset: 0; background: rgba(4,8,16,0.6); backdrop-filter: blur(3px);
  opacity: 0; visibility: hidden; transition: opacity 0.28s ease, visibility 0.28s ease; z-index: 400;
@@ -842,7 +842,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .bolo-top { flex-direction: column; align-items: flex-start; }
  }
 
- /* òÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉ RADIO TüCTICA òÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉ */
+ /* ²²²²²²²²²²²²²² RADIO T¼CTICA ²²²²²²²²²²²²²² */
  .btn-radio {
  display: inline-flex; align-items: center; gap: 7px;
  padding: 9px 14px; border-radius: 10px; cursor: pointer;
@@ -910,7 +910,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .radio-hint { display: none; }
  .btn-radio { padding: 9px 12px; }
  }
- /* öÇöÇ Radio: layout de 2 columnas + mini sidebar de conectados öÇöÇ */
+ /* ¶¶ Radio: layout de 2 columnas + mini sidebar de conectados ¶¶ */
  .radio-main { display: flex; gap: 0; align-items: stretch; }
  .radio-controls { flex: 1 1 auto; min-width: 0; padding: 12px; display: flex; flex-direction: column; gap: 12px; }
  .radio-roster-box {
@@ -959,7 +959,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .radio-roster-box { flex: 1 1 auto; border-left: none; border-top: 1px solid var(--border); }
  .radio-roster { max-height: 110px; }
  }
- /* öÇöÇ Qui⌐n estí al aire en el roster öÇöÇ */
+ /* ¶¶ Quin est­ al aire en el roster ¶¶ */
  .roster-row.talking { background: rgba(33,197,93,.14); }
  .roster-row.talking .roster-dot {
  background: var(--accent-green);
@@ -972,7 +972,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  letter-spacing: .1em; text-transform: uppercase;
  color: var(--accent-green);
  }
- /* òÉòÉòÉòÉòÉòÉòÉòÉòÉ RADIO TüCTICA - look HPD TAC (compacta) òÉòÉòÉòÉòÉòÉòÉòÉòÉ */
+ /* ²²²²²²²²² RADIO T¼CTICA - look HPD TAC (compacta) ²²²²²²²²² */
  .radio-panel.tac {
  width: 364px;
  background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
@@ -1063,7 +1063,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .tac-controls { grid-template-columns: 1fr; }
  .tac-lcd-title { font-size: 18px; }
  }
- /* öÇöÇ Puerta de entrada: elegir canal 1-5 öÇöÇ */
+ /* ¶¶ Puerta de entrada: elegir canal 1-5 ¶¶ */
  .tac-gate {
  position: absolute; inset: 0; z-index: 20;
  background: linear-gradient(180deg, #1a1a1a, #121212);
@@ -1113,7 +1113,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .tac-gate-btns button:hover { background: rgba(59,130,246,.3); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59,130,246,.35); }
  .tac-gate-err { font-size: 11px; color: #f87171; min-height: 14px; font-family: 'JetBrains Mono', monospace; }
 
- /* öÇöÇ LLAMADAS 911 • secci│n en la pantalla principal öÇöÇ */
+ /* ¶¶ LLAMADAS 911 ¢ seccin en la pantalla principal ¶¶ */
  .calls-inline { margin: 22px 0 4px; }
  .calls-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
  .calls-head-title { display: flex; align-items: center; gap: 9px; }
@@ -1188,7 +1188,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 </head>
 <body class="mdt-page">
 
-<!-- òÉòÉòÉ FIXED TOP BAR òÉòÉòÉ -->
+<!-- ²²² FIXED TOP BAR ²²² -->
 <header class="tablet-top">
  <div class="top-main">
  <div class="top-brand">
@@ -1215,9 +1215,9 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="balance-label">Tus horas</div>
  <div class="balance-value hours-value" id="user-hours">--h --m</div>
  </div>
- <div class="live-indicator" id="conn-indicator" title="Estado de conexión con el servidor"><span class="live-dot"></span>En línea</div>
+ <div class="live-indicator" id="conn-indicator" title="Estado de conexi³n con el servidor"><span class="live-dot"></span>En l­nea</div>
  <div class="top-clock" id="clock">--:--:--</div>
- <button class="btn-radio" id="radio-toggle" type="button" onclick="HRPRadio.toggle()" title="Mostrar / ocultar la radio táctica">
+ <button class="btn-radio" id="radio-toggle" type="button" onclick="HRPRadio.toggle()" title="Mostrar / ocultar la radio t¡ctica">
  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.9 19.1a10 10 0 0 1 0-14.2"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/></svg>
  Radio
  </button>
@@ -1260,11 +1260,11 @@ OPERATIONS MODULES òÉòÉòÉ */
  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14"/></svg>
  Terminar turno
  </button>
- <select id="bodycam-src" class="bc-src" disabled title="Qué muestra la bodycam (bajo uso de CPU / FPS)" onclick="event.stopPropagation()">
- <option value="screen">📺 Pantalla (Roblox)</option>
- <option value="camera">📷 Cámara</option>
+ <select id="bodycam-src" class="bc-src" disabled title="Qu© muestra la bodycam (bajo uso de CPU / FPS)" onclick="event.stopPropagation()">
+ <option value="screen">º Pantalla (Roblox)</option>
+ <option value="camera">· C¡mara</option>
  </select>
- <button id="btn-bodycam" class="sbtn bodycam" disabled onclick="handleBodycamToggle()" title="Transmitir tu pantalla o cámara al despacho a 15 FPS">
+ <button id="btn-bodycam" class="sbtn bodycam" disabled onclick="handleBodycamToggle()" title="Transmitir tu pantalla o c¡mara al despacho a 15 FPS">
  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
  Activar Bodycam
  </button>
@@ -1281,7 +1281,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
 </header>
 
-<!-- òÉòÉòÉ SCROLLING MAIN òÉòÉòÉ -->
+<!-- ²²² SCROLLING MAIN ²²² -->
 <main class="tablet-main" id="tablet-main">
 
  <div id="access-loading" class="access-overlay">
@@ -1302,9 +1302,9 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="access-icon denied"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
  <div class="access-title" id="denied-title">Acceso Denegado</div>
  <div class="access-desc" id="denied-desc">
- <strong>¥î No tienes el rol "En Departamento"</strong><br><br>
+ <strong>¥® No tienes el rol "En Departamento"</strong><br><br>
  Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br>
- <strong>Soluci│n:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.
+ <strong>Solucin:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.
  </div>
  <button id="reauth-btn" class="btn btn-primary hidden" onclick="hrpForceReauth()">Re-conectar con Discord</button>
  <a href="dashboard.html" class="btn btn-primary">Volver al Dashboard</a>
@@ -1312,12 +1312,12 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div id="mdt-content" style="display:none;">
 
- <!-- öÇöÇ DATABASE: MAIN SCREEN öÇöÇ -->
+ <!-- ¶¶ DATABASE: MAIN SCREEN ¶¶ -->
  <div class="page-head">
  <div class="page-title">Base de <span>Datos</span> Policial</div>
  </div>
 
- <!-- öÇöÇ OFFICERS ON SERVICE (real-time) öÇöÇ -->
+ <!-- ¶¶ OFFICERS ON SERVICE (real-time) ¶¶ -->
  <div class="on-duty-panel" id="on-duty-panel">
  <div class="on-duty-head">
  <div class="on-duty-title">
@@ -1351,7 +1351,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="tab-body">
  <div id="search-view">
  <div class="search-box">
- <input id="db-person" type="text" placeholder="Buscar por matrícula o ciudadano" autocomplete="off" spellcheck="false">
+ <input id="db-person" type="text" placeholder="Buscar por matr­cula o ciudadano" autocomplete="off" spellcheck="false">
  <button class="btn btn-primary" onclick="dbSearch()" id="btn-search">
  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
  Buscar
@@ -1374,14 +1374,14 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div class="profile-section fade-in">
  <div class="section-header" onclick="toggleSection('char')">
- <h3>👤 Ficha del Ciudadano<span class="qtag">ID</span></h3>
+ <h3>¤ Ficha del Ciudadano<span class="qtag">ID</span></h3>
  </div>
  <div class="section-body" id="char-body"></div>
  </div>
 
  <div class="profile-section fade-in">
  <div class="section-header" onclick="toggleSection('licenses')">
- <h3>🎫 Licencias y Permisos<span class="qtag">DL / CCW</span></h3>
+ <h3>« Licencias y Permisos<span class="qtag">DL / CCW</span></h3>
  <span class="section-count" id="licenses-count">0</span>
  </div>
  <div class="section-body" id="licenses-body"></div>
@@ -1389,7 +1389,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div class="profile-section fade-in" style="animation-delay:0.05s;">
  <div class="section-header" onclick="toggleSection('arrests')">
- <h3>🔒 Historial de Arrestos</h3>
+ <h3> Historial de Arrestos</h3>
  <span class="section-count" id="arrests-count">0</span>
  </div>
  <div class="section-body" id="arrests-body"></div>
@@ -1397,7 +1397,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div class="profile-section fade-in" style="animation-delay:0.1s;">
  <div class="section-header" onclick="toggleSection('fines')">
- <h3>🚨 Historial de Multas</h3>
+ <h3>¨ Historial de Multas</h3>
  <span class="section-count" id="fines-count">0</span>
  </div>
  <div class="section-body" id="fines-body"></div>
@@ -1405,7 +1405,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div class="profile-section fade-in" style="animation-delay:0.15s;">
  <div class="section-header" onclick="toggleSection('vehicles')">
- <h3>🚗 Vehiculos Registrados<span class="qtag">REG</span></h3>
+ <h3> Vehiculos Registrados<span class="qtag">REG</span></h3>
  <span class="section-count" id="vehicles-count">0</span>
  </div>
  <div class="section-body" id="vehicles-body"></div>
@@ -1413,7 +1413,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div class="profile-section fade-in" style="animation-delay:0.2s;">
  <div class="section-header" onclick="toggleSection('bolo')">
- <h3>🚨 Estado BOLO</h3>
+ <h3>¨ Estado BOLO</h3>
  <span class="section-count" id="bolo-count">0</span>
  </div>
  <div class="section-body" id="bolo-body"></div>
@@ -1432,7 +1432,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </div>
 
- <!-- òÉòÉòÉ LLAMADAS 911 • EN VIVO (bajo Consulta de Personas) òÉòÉòÉ -->
+ <!-- ²²² LLAMADAS 911 ¢ EN VIVO (bajo Consulta de Personas) ²²² -->
  <div class="calls-inline">
  <div class="calls-head">
  <div class="calls-head-title">
@@ -1448,13 +1448,13 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="calls-grid" id="calls-grid">
  <div class="calls-empty">
  <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
- <p>Conectando con el servidorÇª</p>
+ <p>Conectando con el servidorª</p>
  </div>
  </div>
  </div>
 
 
- <!-- öÇöÇ OPERATIONS MODULES öÇöÇ -->
+ <!-- ¶¶ OPERATIONS MODULES ¶¶ -->
  <div class="mods-head">
  <div>
  <div class="page-title" style="font-size:24px;">Otras <span>Operaciones</span></div>
@@ -1488,7 +1488,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="mod-card-info">
  <div class="mod-card-title">Enmiendas</div>
- <div class="mod-card-label">Constituci│n y leyes</div>
+ <div class="mod-card-label">Constitucin y leyes</div>
  </div>
  </a>
 
@@ -1497,7 +1497,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
  </div>
  <div class="mod-card-info">
- <div class="mod-card-title">Aplicación</div>
+ <div class="mod-card-title">Aplicaci³n</div>
  <div class="mod-card-label">App y soporte</div>
  </div>
  </a>
@@ -1534,12 +1534,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </div>
 
- <!-- òÉòÉòÉ HISTORY PANEL òÉòÉòÉ -->
+ <!-- ²²² HISTORY PANEL ²²² -->
  <div id="history-panel">
  <div class="history-top">
  <div class="history-top-left">
  <div>
- <div class="page-title" style="font-size:26px;">Historial de <span>Operaciones</span><span class="qtag">Q-03 • Log</span></div>
+ <div class="page-title" style="font-size:26px;">Historial de <span>Operaciones</span><span class="qtag">Q-03 ¢ Log</span></div>
  </div>
  </div>
  <button class="history-close" onclick="closeHistoryPanel()">
@@ -1597,11 +1597,11 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </div>
 
- <!-- òÉòÉòÉ BOLO PANEL òÉòÉòÉ -->
+ <!-- ²²² BOLO PANEL ²²² -->
  <div id="bolo-panel">
  <div class="bolo-top">
  <div>
- <div class="page-title" style="font-size:26px;">BOLO • <span>Alerta de Vigilancia</span></div>
+ <div class="page-title" style="font-size:26px;">BOLO ¢ <span>Alerta de Vigilancia</span></div>
  </div>
  <button class="history-close" onclick="closeBoloPanel()">
  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1623,9 +1623,9 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="bolo-avatar" id="bolo-pick-avatar">?</div>
  <div>
  <div class="bolo-person-name" id="bolo-pick-name">-</div>
- <div class="bolo-person-user" id="bolo-pick-user">Ä« -</div>
+ <div class="bolo-person-user" id="bolo-pick-user">« -</div>
  </div>
- <button class="bolo-btn-x" onclick="clearBoloPick()" title="Quitar">£ò</button>
+ <button class="bolo-btn-x" onclick="clearBoloPick()" title="Quitar">£²</button>
  </div>
  </div>
 
@@ -1643,14 +1643,14 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="bolo-field">
  <label class="bolo-form-label">Prioridad</label>
  <select class="bolo-input" id="bolo-prio">
- <option value="alta">🔴 Alta</option>
- <option value="media" selected>🟡 Media</option>
- <option value="baja">🟢 Baja</option>
+ <option value="alta">´ Alta</option>
+ <option value="media" selected>¡ Media</option>
+ <option value="baja">¢ Baja</option>
  </select>
  </div>
  </div>
  <div class="bolo-form-row" style="margin-top:14px;">
- <button class="btn btn-bolo" id="btn-bolo-save" onclick="saveBolo()">🚨 Emitir BOLO</button>
+ <button class="btn btn-bolo" id="btn-bolo-save" onclick="saveBolo()">¨ Emitir BOLO</button>
  </div>
  <div class="bolo-form-error" id="bolo-form-msg"></div>
  </div>
@@ -1675,10 +1675,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
 </main>
 
-<!-- òÉòÉòÉ BOLO EDIT MODAL (outside mdt-content, always accessible) òÉòÉòÉ -->
+<!-- ²²² BOLO EDIT MODAL (outside mdt-content, always accessible) ²²² -->
 <div class="bolo-edit-modal" id="bolo-edit-modal">
  <div class="bolo-edit-box">
- <h3>£Å╕Å Editar BOLO</h3>
+ <h3>£ Editar BOLO</h3>
  <div class="bolo-form-row">
  <div class="bolo-field">
  <label class="bolo-form-label">Motivo *</label>
@@ -1693,9 +1693,9 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="bolo-field">
  <label class="bolo-form-label">Prioridad</label>
  <select class="bolo-input" id="bolo-edit-prio">
- <option value="alta">🔴 Alta</option>
- <option value="media">🟡 Media</option>
- <option value="baja">🟢 Baja</option>
+ <option value="alta">´ Alta</option>
+ <option value="media">¡ Media</option>
+ <option value="baja">¢ Baja</option>
  </select>
  </div>
  </div>
@@ -1706,7 +1706,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
 </div>
 
-<!-- òÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉ RADIO TüCTICA òÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉ -->
+<!-- ²²²²²²²²²²²²²²² RADIO T¼CTICA ²²²²²²²²²²²²²²² -->
 <audio id="radio-ptt-sound" src="audios/MicOn.mp3" preload="auto"></audio>
 <audio id="radio-ptt-off" src="audios/MicOff.mp3" data-gain="0.6" preload="auto"></audio>
 <div id="radio-voices" style="display:none;"></div>
@@ -1715,9 +1715,9 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <!-- Puerta de entrada: hay que indicar el canal (1-5) para conectar -->
  <div class="tac-gate" id="radio-gate">
- <div class="tac-gate-badge">RADIO TüCTICA HPD</div>
+ <div class="tac-gate-badge">RADIO T¼CTICA HPD</div>
  <div class="tac-gate-title">Selecciona canal</div>
- <div class="tac-gate-sub">Escribiun n║mero del <b>1 al 5</b> para entrar a la radio</div>
+ <div class="tac-gate-sub">Escribiun nmero del <b>1 al 5</b> para entrar a la radio</div>
  <div class="tac-gate-row">
  <input type="text" inputmode="numeric" maxlength="1" id="radio-gate-input" placeholder="1"
  onkeydown="if(event.key==='Enter'){HRPRadio.join(this.value)}">
@@ -1739,9 +1739,9 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div class="tac-brand">
  <span class="tac-led" id="tac-led"></span>
- <span class="tac-brand-txt">HOUSTON PD • RADIO</span>
+ <span class="tac-brand-txt">HOUSTON PD ¢ RADIO</span>
  <span class="tac-chip" id="radio-channel-label">CH 1</span>
- <button class="radio-close" type="button" onclick="HRPRadio.toggle()" title="Ocultar la radio">£ò</button>
+ <button class="radio-close" type="button" onclick="HRPRadio.toggle()" title="Ocultar la radio">£²</button>
  </div>
 
  <div class="tac-lcd">
@@ -1753,7 +1753,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <span id="screen-clock">00:00:00</span>
  </div>
 
- <div class="tac-lcd-title" id="screen-channel-title">CANAL 1 • PATRULLA</div>
+ <div class="tac-lcd-title" id="screen-channel-title">CANAL 1 ¢ PATRULLA</div>
  <div class="tac-lcd-sub" id="radio-status">-</div>
 
  <div class="tac-status" id="screen-status-box">
@@ -1772,11 +1772,11 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="tac-field">
  <label>Canal</label>
  <select id="radio-channel" class="radio-select">
- <option value="1">Canal 1 • Patrulla</option>
- <option value="2">Canal 2 • Despacho</option>
- <option value="3">Canal 3 • Trífico</option>
- <option value="4">Canal 4 • Investigaciones</option>
- <option value="5">Canal 5 • Emergencias</option>
+ <option value="1">Canal 1 ¢ Patrulla</option>
+ <option value="2">Canal 2 ¢ Despacho</option>
+ <option value="3">Canal 3 ¢ Tr­fico</option>
+ <option value="4">Canal 4 ¢ Investigaciones</option>
+ <option value="5">Canal 5 ¢ Emergencias</option>
  </select>
  </div>
  <div class="tac-field">
@@ -1785,7 +1785,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </div>
 
- <button class="radio-mic" id="radio-mic" type="button" onclick="HRPRadio.enableMic()">Äñ Activar micr│fono</button>
+ <button class="radio-mic" id="radio-mic" type="button" onclick="HRPRadio.enableMic()">± Activar micrfono</button>
 
  <button id="radio-ptt" class="tac-ptt" type="button"
  onpointerdown="event.preventDefault(); try{this.setPointerCapture(event.pointerId);}catch(e){}; HRPRadio.press();"
@@ -1796,7 +1796,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  <span class="radio-ptt-dot" id="radio-ptt-dot"></span>
  <span class="radio-ptt-text" id="radio-ptt-label">MANTENER PARA HABLAR</span>
  </span>
- <span class="tac-ptt-sub">TECLA [ <kbd class="radio-kbd" id="radio-ptt-key">R</kbd> ] • 
+ <span class="tac-ptt-sub">TECLA [ <kbd class="radio-kbd" id="radio-ptt-key">R</kbd> ] ¢ 
  <button class="radio-mini" type="button" onclick="event.stopPropagation(); HRPRadio.bindKey()">Re-asignar</button>
  </span>
  </button>
@@ -1813,7 +1813,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  <div class="tac-panel">
  <div class="tac-panel-head">
- <span>Consola tíctica</span>
+ <span>Consola t­ctica</span>
  <button class="radio-mini" type="button" onclick="HRPRadio.clearLog()">Limpiar</button>
  </div>
  <div class="radio-log" id="radio-log"></div>
@@ -1822,11 +1822,11 @@ OPERATIONS MODULES òÉòÉòÉ */
 </div>
 <div class="toast" id="toast"><span id="toast-text"></span></div>
 
-<!-- òÉòÉòÉ RECORD DRAWER (Registrar Arresto / Multa sin salir del MDT) òÉòÉòÉ -->
+<!-- ²²² RECORD DRAWER (Registrar Arresto / Multa sin salir del MDT) ²²² -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeRecordDrawer()"></div>
 <div class="drawer" id="record-drawer" aria-hidden="true">
  <div class="drawer-head" id="drawer-head">
- <div class="drawer-icon" id="drawer-icon">Üö</div>
+ <div class="drawer-icon" id="drawer-icon">¶</div>
  <div class="drawer-title">
  <strong id="drawer-title">Registrar Arresto</strong>
  <span id="drawer-sub">Completando arresto para el ciudadano...</span>
@@ -1891,12 +1891,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  let panicInterval = null;
  let processedPanics = new Set();
 
- // öÇöÇ BODYCAM (emisor) öÇöÇ
+ // ¶¶ BODYCAM (emisor) ¶¶
  let bodycamServer = null; // { peerId, stop() } de HRPBC.startServer
- let bodycamStream = null; // MediaStream de la címara
+ let bodycamStream = null; // MediaStream de la c­mara
  let bodycamStarting = false;
 
- // öÇöÇ AUDIO öÇöÇ
+ // ¶¶ AUDIO ¶¶
  const audioCentral = new Audio('audios/central.mp3');
  const audioConectate = new Audio('audios/conectate.mp3');
  const audioFinaliza = new Audio('audios/finaliza.mp3');
@@ -1928,12 +1928,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  { code: '10-7', color: '#2d2d3d', label: 'Fuera de servicio', bg: 'rgba(45,45,61,0.15)' },
  { code: '10-8', color: '#4acf8f', label: 'En servicio', bg: 'rgba(74,204,143,0.12)' },
  { code: '10-5', color: '#4acf8f', label: 'Vigilancia', bg: 'rgba(74,204,143,0.12)' },
- { code: '10-11', color: '#4acf8f', label: 'Detención de tráfico', bg: 'rgba(74,204,143,0.12)' },
- { code: '10-100', color: '#ef4444', label: 'Oficial caído', bg: 'rgba(239,68,68,0.15)' },
+ { code: '10-11', color: '#4acf8f', label: 'Detenci³n de tr¡fico', bg: 'rgba(74,204,143,0.12)' },
+ { code: '10-100', color: '#ef4444', label: 'Oficial ca­do', bg: 'rgba(239,68,68,0.15)' },
  { code: '10-99', color: '#ff8c42', label: 'Oficial en apuros', bg: 'rgba(255,140,66,0.12)' },
  { code: '10-97', color: '#ff8c42', label: 'En camino', bg: 'rgba(255,140,66,0.12)' },
  { code: '10-50', color: '#4acf8f', label: 'Accidente grave', bg: 'rgba(74,204,143,0.12)' },
- { code: '10-23', color: '#4acf8f', label: 'Llegó a la escena', bg: 'rgba(74,204,143,0.12)' },
+ { code: '10-23', color: '#4acf8f', label: 'Lleg³ a la escena', bg: 'rgba(74,204,143,0.12)' },
  { code: '10-15', color: '#4acf8f', label: 'Persona bajo custodia', bg: 'rgba(74,204,143,0.12)' },
  ];
 
@@ -1956,10 +1956,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
  }
 
- // öÇöÇ ACCESS (system untouched) öÇöÇ
+ // ¶¶ ACCESS (system untouched) ¶¶
  const MDT_ACCESS_ROLE = '1431255106212335686';
  const DISPATCH_ROLE = '1502940318092366056';
- // Departamentos que pertenecen al MDT original (HFD/HDOT solo estín en el ITMDT).
+ // Departamentos que pertenecen al MDT original (HFD/HDOT solo est­n en el ITMDT).
  const MDT_DEPTS = ['hpd', 'hcso', 'tph', 'ice'];
 
  // Roles de Discord del usuario (OAuth guilds.members.read).
@@ -1974,10 +1974,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  return roles;
  }
 
- // Verificaci│n del rol de acceso al MDT.
+ // Verificacin del rol de acceso al MDT.
  // Devuelve { level: 'full' | 'limited' | null, roles }.
- // - full: rol de MDT o Dispatch åÆ todas las funciones.
- // - limited: rol de HFD o HDOT åÆ solo iniciar/terminar turno (registrar horas).
+ // - full: rol de MDT o Dispatch ¥ todas las funciones.
+ // - limited: rol de HFD o HDOT ¥ solo iniciar/terminar turno (registrar horas).
  async function resolveMdtAccess() {
  if (!session || !session.id) return { level: null, roles: new Set() };
  
@@ -1988,7 +1988,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const { level, timestamp } = JSON.parse(cached);
  const ageMs = Date.now() - timestamp;
  if (ageMs < 30 * 60 * 1000) { // 30 minutos
- console.log('£à Usando acceso cacheado (', Math.floor(ageMs / 1000), 's)');
+ console.log('£  Usando acceso cacheado (', Math.floor(ageMs / 1000), 's)');
  return { level, roles: null };
  }
  }
@@ -1996,14 +1996,14 @@ OPERATIONS MODULES òÉòÉòÉ */
  
  const fullRoles = [MDT_ACCESS_ROLE];
  const startTime = Date.now();
- const timeoutMs = 5000; // 5 segundos míximo
+ const timeoutMs = 5000; // 5 segundos m­ximo
  
  // Crear promise de timeout
  const timeoutPromise = new Promise((resolve) => {
  setTimeout(() => resolve({ timedOut: true }), timeoutMs);
  });
  
- // 1) Validaci│n por OAuth (Discord) - PRIMERA Y MüS CONFIABLE
+ // 1) Validacin por OAuth (Discord) - PRIMERA Y M¼S CONFIABLE
  try {
  const roles = await Promise.race([
  getMdtRoleSet(),
@@ -2014,10 +2014,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  const rolesArray = Array.from(roles);
  console.log('Roles encontrados:', rolesArray);
  console.log('Buscando rol:', MDT_ACCESS_ROLE);
- console.log('┐Tiene el rol?', rolesArray.includes(MDT_ACCESS_ROLE));
+ console.log('Tiene el rol?', rolesArray.includes(MDT_ACCESS_ROLE));
  
  if (fullRoles.some(r => roles.has(r))) {
- console.log('£à ACCESO CONCEDIDO (OAuth)');
+ console.log('£  ACCESO CONCEDIDO (OAuth)');
  // Guardar en cache
  try {
  localStorage.setItem('hrp_mdt_access_' + session.id, JSON.stringify({
@@ -2030,10 +2030,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  } catch (e) { console.log('OAuth check failed:', e); }
  
- // 2) Validaci│n por bot de Discord (Supabase fallback)
+ // 2) Validacin por bot de Discord (Supabase fallback)
  for (const roleId of fullRoles) {
  if (Date.now() - startTime > timeoutMs) {
- console.warn('Å▒╕Å MDT access check timeout despu⌐s de', Date.now() - startTime, 'ms');
+ console.warn(' MDT access check timeout despus de', Date.now() - startTime, 'ms');
  break;
  }
  
@@ -2049,7 +2049,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  ]);
  console.log('Bot check result:', result);
  if (result && !result.timedOut && result.allowed === true) {
- console.log('£à ACCESO CONCEDIDO (Bot)');
+ console.log('£  ACCESO CONCEDIDO (Bot)');
  // Guardar en cache
  try {
  localStorage.setItem('hrp_mdt_access_' + session.id, JSON.stringify({
@@ -2063,7 +2063,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  } catch (e) { console.log('Bot check failed:', e); }
  }
  
- console.log('¥î ACCESO DENEGADO - No se encontr│ rol vílido');
+ console.log('¥® ACCESO DENEGADO - No se encontr rol v­lido');
  return { level: null, roles };
  }
 
@@ -2106,7 +2106,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  $('access-loading').classList.add('hidden');
  $('access-denied').classList.remove('hidden');
  $('denied-title').textContent = 'Acceso Denegado';
- $('denied-desc').innerHTML = '<strong>¥î No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Soluci│n:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
+ $('denied-desc').innerHTML = '<strong>¥® No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Solucin:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
  }, 500);
  return false;
  }
@@ -2122,12 +2122,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  $('access-loading').classList.add('hidden');
  $('access-denied').classList.remove('hidden');
  $('denied-title').textContent = 'Acceso Denegado';
- $('denied-desc').innerHTML = '<strong>¥î No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Soluci│n:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
+ $('denied-desc').innerHTML = '<strong>¥® No tienes el rol "En Departamento"</strong><br><br>Para ingresar al MDT necesitas tener el rol de acceso departamental.<br><br><strong>Solucin:</strong> Contacta con tu alto rango del departamento para solicitar el acceso al MDT.';
  return false;
  }
  }
 
- // öÇöÇ USER öÇöÇ
+ // ¶¶ USER ¶¶
  function loadUser() {
  session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
  if (session) {
@@ -2154,10 +2154,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  const now = new Date();
  $('clock').textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
  syncCadStrip();
- syncConnIndicator(); // la franja CAD ya no existe: la conexi│n se refresca ací
+ syncConnIndicator(); // la franja CAD ya no existe: la conexin se refresca ac­
  }
 
- // öÇöÇ CAD: barra de turno (solo presentaci│n) öÇöÇ
+ // ¶¶ CAD: barra de turno (solo presentacin) ¶¶
  function syncCadStrip() {
  const d0 = document.getElementById('cad-dept');
  if (!d0) return;
@@ -2173,7 +2173,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const code = codeEl ? codeEl.textContent.trim() : '';
  const st = ss ? ss.textContent.trim() : '';
  const stv = document.getElementById('cad-status');
- if (stv) stv.textContent = (code && !/^sin/i.test(code) ? code + ' • ' : '') + (st || 'Sin turno');
+ if (stv) stv.textContent = (code && !/^sin/i.test(code) ? code + ' ¢ ' : '') + (st || 'Sin turno');
 
  const t = document.getElementById('shift-timer');
  const ct = document.getElementById('cad-turn');
@@ -2199,7 +2199,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  syncConnIndicator();
  }
 
- // öÇöÇ Conexi│n real del navegador (online / offline) öÇöÇ
+ // ¶¶ Conexin real del navegador (online / offline) ¶¶
  let _connState = null;
  function syncConnIndicator() {
  const el = document.getElementById('conn-indicator');
@@ -2213,7 +2213,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  window.addEventListener('online', function () { _connState = null; syncConnIndicator(); });
  window.addEventListener('offline', function () { _connState = null; syncConnIndicator(); });
 
- // öÇöÇ FORMAT öÇöÇ
+ // ¶¶ FORMAT ¶¶
  function formatTime(seconds) {
  if (seconds < 0) seconds = 0;
  const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
@@ -2227,7 +2227,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  return d.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
  }
 
- // öÇöÇ DEPARTMENT SELECTOR öÇöÇ
+ // ¶¶ DEPARTMENT SELECTOR ¶¶
  function selectDepartment(dept) {
  selectedDept = dept;
  document.querySelectorAll('.dept-chip').forEach(b => {
@@ -2239,7 +2239,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  function buildDeptBar() {
  // Departamentos del usuario (del cache de Discord), siempre acotados a los del MDT.
- // Si el cache viene vac¡o pero el usuario YA tiene acceso al MDT (estí en esta pígina),
+ // Si el cache viene vac¡o pero el usuario YA tiene acceso al MDT (est­ en esta p­gina),
  // se asumen todos los departamentos del MDT (HPD, HCSO, ICE, THP) para que el panel
  // nunca quede en "Sin departamentos asignados".
  let userDepts = (typeof hrpGetCachedDepartments === 'function' ? hrpGetCachedDepartments() : [])
@@ -2275,7 +2275,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (currentShift) {
  const deptName = (selectedDept || currentShift.department || '').toUpperCase();
  el.className = 'user-role';
- el.textContent = 'On Duty • ' + deptName;
+ el.textContent = 'On Duty ¢ ' + deptName;
  } else {
  el.className = 'user-role idle';
  el.textContent = 'Off Duty';
@@ -2284,7 +2284,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
 
 
- // öÇöÇ ROBLOX PRESENCE (same checks as police.html) öÇöÇ
+ // ¶¶ ROBLOX PRESENCE (same checks as police.html) ¶¶
  async function getRobloxId() {
  try {
  const data = await supaSelect('characters', 'roblox_id', { user_discord: `eq.${userId}` });
@@ -2320,30 +2320,30 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (!robloxId) {
  const id = await getRobloxId();
  if (!id) {
- showToast('No ten⌐s una cuenta de Roblox vinculada. Creí un personaje en Characters.', 'error');
+ showToast('No tens una cuenta de Roblox vinculada. Cre­ un personaje en Characters.', 'error');
  return false;
  }
  }
- // Bloqueamos el inicio de turno si la API confirma que NO estís en el servidor.
- // Si la API no estí disponible (null) no bloqueamos, para no dejar a nadie afuera.
+ // Bloqueamos el inicio de turno si la API confirma que NO est­s en el servidor.
+ // Si la API no est­ disponible (null) no bloqueamos, para no dejar a nadie afuera.
  // El equipo se verifica igual, pero solo se AVISA (no bloquea): permite
- // iniciar desde el tel⌐fono mientras se juega en PC / consola.
+ // iniciar desde el telfono mientras se juega en PC / consola.
  const result = await checkRobloxPresence();
  if (result.inServer === null) return true;
  if (result.inServer !== true) {
  playSound(audioConectate);
- showToast('¢ö No estís en el servidor de ER:LC. Con⌐ctate al servidor para poder iniciar tu turno.', 'error');
+ showToast('¢¶ No est­s en el servidor de ER:LC. Conctate al servidor para poder iniciar tu turno.', 'error');
  return false;
  }
  const requiredTeam = DEPT_TEAM_MAP[selectedDept];
  if (requiredTeam && result.team !== requiredTeam) {
  const deptLabel = (DEPT_NAMES[selectedDept] || selectedDept || '').replace(/<[^>]+>/g, '').toUpperCase();
- showToast('Üá╕Å Estís en el equipo ' + (result.team || 'otro') + ', pero para ' + deptLabel + ' el equipo esperado es ' + requiredTeam + '. Si estís en consola o el equipo a║n no carga, pod⌐s iniciar igual.', 'warn');
+ showToast('¡ Est­s en el equipo ' + (result.team || 'otro') + ', pero para ' + deptLabel + ' el equipo esperado es ' + requiredTeam + '. Si est­s en consola o el equipo an no carga, pods iniciar igual.', 'warn');
  }
  return true;
  }
 
- // öÇöÇ SHIFT LOCAL STATE (shared with police.html) öÇöÇ
+ // ¶¶ SHIFT LOCAL STATE (shared with police.html) ¶¶
  function saveLocalState() {
  const state = { shiftId: currentShift?.id, startTime: shiftStartTime, breakAccumulated, breakStartTime };
  localStorage.setItem('hrp_shift_state', JSON.stringify(state));
@@ -2352,7 +2352,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  localStorage.removeItem('hrp_shift_state');
  }
 
- // öÇöÇ TOTAL ACUMULADO (historia de horas del usuario, visible sin botones) öÇöÇ
+ // ¶¶ TOTAL ACUMULADO (historia de horas del usuario, visible sin botones) ¶¶
  async function loadAccumulatedHours() {
  const el = $('shift-accum');
  const hoursEl = $('user-hours');
@@ -2367,7 +2367,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  (adjustments || []) .forEach(a => { total += (a.adjustment_seconds || 0); });
  const h = Math.floor(total / 3600);
  const m = Math.floor((total % 3600) / 60);
- const yrs = total >= 36000 ? ' • alcanzaste las 10h' : '';
+ const yrs = total >= 36000 ? ' ¢ alcanzaste las 10h' : '';
  const txt = 'Total acumulado: ' + h + 'h ' + m + 'm';
  if (el) el.textContent = txt;
  if (hoursEl) {
@@ -2381,7 +2381,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ PRESENCIA EN ER:LC (auto-fin al salir del servidor / cambiar dispositivo) öÇöÇ
+ // ¶¶ PRESENCIA EN ER:LC (auto-fin al salir del servidor / cambiar dispositivo) ¶¶
  function startPresencePolling() {
  stopPresencePolling();
  presenceFailCount = 0;
@@ -2403,7 +2403,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  _autoEndShiftServerLeft();
  }
  } else {
- // Estís en el servidor: tambi⌐n exigimos seguir en el equipo del
+ // Est­s en el servidor: tambin exigimos seguir en el equipo del
  // departamento del turno activo (salir del departamento = fin de turno).
  presenceFailCount = 0;
  const requiredTeam = DEPT_TEAM_MAP[currentShift.department];
@@ -2426,7 +2426,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ AUTO-FIN DE TURNO (corte limpio con horas correctas) öÇöÇ
+ // ¶¶ AUTO-FIN DE TURNO (corte limpio con horas correctas) ¶¶
  async function _autoEndShift(finalStatus, reason) {
  if (_autoEndRunning || !currentShift) return;
  _autoEndRunning = true;
@@ -2464,17 +2464,17 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
 
  function _autoEndShiftOver10h() {
- _autoEndShift('completed', 'Å▒╕Å L¡mite de 10 horas alcanzado. El turno se cort│ y se registraron solo 10 horas.');
+ _autoEndShift('completed', ' L¡mite de 10 horas alcanzado. El turno se cort y se registraron solo 10 horas.');
  }
 
  function _autoEndShiftServerLeft() {
  playSound(audioFinaliza);
- _autoEndShift('completed', 'Ü¬ Saliste de ER:LC (o cambiaste de dispositivo). El turno se cerr│ automíticamente.');
+ _autoEndShift('completed', '¬ Saliste de ER:LC (o cambiaste de dispositivo). El turno se cerr autom­ticamente.');
  }
 
  function _autoEndShiftLeftDept(currentTeam, requiredTeam) {
  playSound(audioFinaliza);
- _autoEndShift('completed', 'Üö Cambiaste al equipo ' + currentTeam + ' y abandonaste el departamento (' + requiredTeam + '). El turno se cerr│ automíticamente.');
+ _autoEndShift('completed', '¶ Cambiaste al equipo ' + currentTeam + ' y abandonaste el departamento (' + requiredTeam + '). El turno se cerr autom­ticamente.');
  }
 
  function setLoading(btnId, loading, text) {
@@ -2489,7 +2489,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ UI STATES öÇöÇ
+ // ¶¶ UI STATES ¶¶
  function displayDept() {
  $('info-dept').innerHTML = currentShift ? (DEPT_NAMES[currentShift.department] || currentShift.department) : '-';
  }
@@ -2542,14 +2542,14 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (bcSrc) bcSrc.disabled = !!bodycamServer || bodycamStarting;
  if (lbStart) lbStart.disabled = true;
  if (lbEnd) lbEnd.disabled = false;
- if (lbStatus) lbStatus.textContent = 'Turno activo • ' + (DEPT_NAMES[currentShift.department] || currentShift.department) + ' • ' + (currentShift.status === 'break' ? 'En descanso' : 'En servicio');
+ if (lbStatus) lbStatus.textContent = 'Turno activo ¢ ' + (DEPT_NAMES[currentShift.department] || currentShift.department) + ' ¢ ' + (currentShift.status === 'break' ? 'En descanso' : 'En servicio');
  currentStatusCode = currentShift.status_code || null;
  updateCurrentCodeDisplay();
  highlightActiveCode();
  updateRoleLabel();
  }
 
- // öÇöÇ TIMER öÇöÇ
+ // ¶¶ TIMER ¶¶
  function startTimer() {
  if (timerInterval) clearInterval(timerInterval);
  timerInterval = setInterval(updateTimer, 1000);
@@ -2575,7 +2575,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ 10-CODE UI (updates the same status_code column) öÇöÇ
+ // ¶¶ 10-CODE UI (updates the same status_code column) ¶¶
  function buildCodeGrid() {
  const grid = $('code-grid');
  if (!grid) return;
@@ -2631,7 +2631,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  };
 
  window.handlePanic = async function() {
- if (!currentShift) { showToast('Inicia un turno antes de enviar pánico', 'warn'); return; }
+ if (!currentShift) { showToast('Inicia un turno antes de enviar p¡nico', 'warn'); return; }
  try {
  await supaUpdate('police_shift_sessions', { status_code: '10-100' }, { id: `eq.${currentShift.id}` });
  currentStatusCode = '10-100';
@@ -2639,14 +2639,14 @@ OPERATIONS MODULES òÉòÉòÉ */
  highlightActiveCode();
  updateCurrentCodeDisplay();
  playSound(audioPanic);
- showToast('🚨 ¡ALERTA DE PÁNICO ENVIADA!', 'error');
+ showToast('¨ ¡ALERTA DE PNICO ENVIADA!', 'error');
  } catch (e) {
  console.warn('Failed to activate panic:', e);
- showToast('Error al enviar alerta de pánico', 'error');
+ showToast('Error al enviar alerta de p¡nico', 'error');
  }
  };
 
- // öÇöÇ PANIC POLLING (10-100 de otros oficiales) öÇöÇ
+ // ¶¶ PANIC POLLING (10-100 de otros oficiales) ¶¶
  function startPanicPolling() {
  stopPanicPolling();
  panicInterval = setInterval(async () => {
@@ -2659,7 +2659,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (!processedPanics.has(s.id)) {
  processedPanics.add(s.id);
  playSound(audioPanic);
- showToast('🚨 10-100 PÁNICO — ' + (s.username || 'Oficial'), 'error');
+ showToast('¨ 10-100 PNICO  ' + (s.username || 'Oficial'), 'error');
  }
  }
  for (const id of processedPanics) {
@@ -2676,23 +2676,23 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ SHIFT HANDLERS öÇöÇ
+ // ¶¶ SHIFT HANDLERS ¶¶
  async function _handleStartShift() {
  if (startShiftInProgress) return;
  if (typeof hrpStartShift !== 'function' || typeof supaSelect !== 'function') {
- showToast('La sesi│n a║n no carg│. Recargí la pígina e intentí de nuevo.', 'error');
+ showToast('La sesin an no carg. Recarg­ la p­gina e intent­ de nuevo.', 'error');
  return;
  }
  if (currentShift) {
- showToast('Ya ten⌐s un turno activo. Finalizalo antes de iniciar uno nuevo.', 'warn');
+ showToast('Ya tens un turno activo. Finalizalo antes de iniciar uno nuevo.', 'warn');
  return;
  }
  if (!selectedDept) {
- showToast('Seleccioní un departamento primero', 'error');
+ showToast('Seleccion­ un departamento primero', 'error');
  return;
  }
  if (!userId) {
- showToast('No hay sesi│n activa. Inicií sesi│n con Discord de nuevo.', 'error');
+ showToast('No hay sesin activa. Inici­ sesin con Discord de nuevo.', 'error');
  return;
  }
  startShiftInProgress = true;
@@ -2715,7 +2715,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  hrpPayStart(userId, userName, result.department).catch(function(){});
  }
  if (result.start_time && new Date(result.start_time).getTime() < Date.now() - 60 * 1000) {
- showToast('öü Ya ten¡as un turno iniciado; se reanud│.', 'warn');
+ showToast('¶¼ Ya ten¡as un turno iniciado; se reanud.', 'warn');
  } else {
  showToast('Servicio iniciado correctamente');
  }
@@ -2791,12 +2791,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ DATABASE SEARCH (same connections as database-search.html) öÇöÇ
+ // ¶¶ DATABASE SEARCH (same connections as database-search.html) ¶¶
  let currentProfile = null;
 
  async function fetchRobloxAvatar(username) {
  try {
- // Tope de 3 s: si el servicio de Roblox se cuelga, la b║squeda no
+ // Tope de 3 s: si el servicio de Roblox se cuelga, la bsqueda no
  // puede quedarse esperando (se muestra la inicial y listo).
  const ctrl = new AbortController();
  const to = setTimeout(() => ctrl.abort(), 3000);
@@ -2812,11 +2812,11 @@ OPERATIONS MODULES òÉòÉòÉ */
  const n = encodeURIComponent(displayName);
  const r = encodeURIComponent(robloxUsername);
  return `
- <button class="btn btn-danger" onclick='openRecordDrawer("arrest", "${n}", "${r}")'>Üö Registrar Arresto</button>
- <button class="btn btn-warning" onclick='openRecordDrawer("fine", "${n}", "${r}")'>Æ░ Registrar Multa</button>
- <button class="btn btn-outline" onclick="scrollToHistory()">ô£ Ver Historial</button>
+ <button class="btn btn-danger" onclick='openRecordDrawer("arrest", "${n}", "${r}")'>¶ Registrar Arresto</button>
+ <button class="btn btn-warning" onclick='openRecordDrawer("fine", "${n}", "${r}")'> Registrar Multa</button>
+ <button class="btn btn-outline" onclick="scrollToHistory()">´£ Ver Historial</button>
  <button class="btn btn-outline" onclick='openWarningModal("${n}", "${r}")'>&#128203; Agregar Nota</button>
- <button class="btn btn-outline" onclick="copyRobloxUser('${esc(robloxUsername)}')">ôï Copiar Usuario</button>`;
+ <button class="btn btn-outline" onclick="copyRobloxUser('${esc(robloxUsername)}')">´¯ Copiar Usuario</button>`;
  }
 
  window.scrollToHistory = function() {
@@ -2826,7 +2826,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
  };
 
- // öÇöÇ FICHA DEL CIUDADANO (datos cargados al crear el personaje) öÇöÇ
+ // ¶¶ FICHA DEL CIUDADANO (datos cargados al crear el personaje) ¶¶
  function _cv(v) { return (v === undefined || v === null || String(v).trim() === '') ? '' : String(v).trim(); }
 
  function charSummary(character) {
@@ -2839,7 +2839,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (_cv(character.altura) || _cv(character.peso)) parts.push('Estatura/Peso: ' + [_cv(character.altura), _cv(character.peso)].filter(Boolean).join(' / '));
  if (_cv(character.ojos) || _cv(character.cabello)) parts.push('Ojos/Cabello: ' + [_cv(character.ojos), _cv(character.cabello)].filter(Boolean).join(' / '));
  if (_cv(character.direccion)) parts.push('Direccion: ' + _cv(character.direccion));
- return parts.join(' • ');
+ return parts.join(' ¢ ');
  }
 
  function renderCharInfo(character) {
@@ -2871,7 +2871,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }).join('') + '</div>';
  }
 
- // öÇöÇ MODO DE BÜSQUEDA (personas) öÇöÇ
+ // ¶¶ MODO DE BSQUEDA (personas) ¶¶
  function setSearchMode() {
  const input = $('db-person');
  if (input) input.placeholder = 'Escribiel nombre de usuario Roblox...';
@@ -2881,13 +2881,13 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
 
  function dbSearch() {
- // En paralelo: si lo que Escribite es una placa/modelo/due▒o, arriba
+ // En paralelo: si lo que Escribite es una placa/modelo/dueo, arriba
  // aparecen los veh¡culos; si es una persona, se abre su ficha.
  dbSearchVehicles();
  return dbSearchPerson();
  }
 
- // öÇöÇ Vehiculos: BD local + servidor EN VIVO de ER:LC öÇöÇ
+ // ¶¶ Vehiculos: BD local + servidor EN VIVO de ER:LC ¶¶
  let _erlcCache = { at: 0, data: null };
  async function fetchErlcLive() {
  const now = Date.now();
@@ -2905,12 +2905,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  } catch (_) { return null; }
  }
 
- /** B║squeda de veh¡culos por placa / modelo / due▒o. */
+ /** Bsqueda de veh¡culos por placa / modelo / dueo. */
  async function dbSearchVehicles() {
  const box = document.getElementById('vehicle-result');
  if (!box) return;
  const raw = ($('db-person') ? $('db-person').value : '').trim();
- // Sanitizamos: PostgREST arma el filtro "or" y una coma o par⌐ntesis
+ // Sanitizamos: PostgREST arma el filtro "or" y una coma o parntesis
  // dentro del texto romper¡a la query.
  const q = raw.replace(/[,'"()\\*]/g, ' ').replace(/\s+/g, ' ').trim();
  if (q.length < 2) { box.innerHTML = ''; return; }
@@ -2933,7 +2933,7 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  if (!local.length && !liveVeh.length) { box.innerHTML = ''; return; }
 
- // Due▒o registrado åÆ usuario de Roblox, para abrir la ficha
+ // Dueo registrado ¥ usuario de Roblox, para abrir la ficha
  const owners = [...new Set((local || []).map(v => v.owner_discord).filter(Boolean))];
  const robloxByDiscord = {};
  if (owners.length) {
@@ -2963,7 +2963,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  plate: v.plate, model: v.model, color: v.color,
  ownerLabel: v.owner || '-', ownerKey: v.owner || '',
  live: true,
- where: place ? 'ôì ' + place : '',
+ where: place ? '´¬ ' + place : '',
  wanted: p ? p.wanted : 0,
  });
  });
@@ -2982,14 +2982,14 @@ OPERATIONS MODULES òÉòÉòÉ */
  });
 
  box.innerHTML = `<div class="veh-block">
- <div class="veh-title">Üù Vehiculos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO • ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
+ <div class="veh-title">¹ Vehiculos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO ¢ ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
  ${rows.map(v => `<div class="veh-card">
  <div class="veh-plate">${esc(v.plate || '-')}</div>
  <div class="veh-info">
- <div class="veh-model">${esc(v.model || '-')}${v.color ? ' • ' + esc(v.color) : ''}${v.live ? ' <span class="veh-flag">ùÅ EN VIVO</span>' : ''}</div>
- <div class="veh-owner">æñ ${esc(v.ownerLabel)}${v.where ? ' &nbsp; ' + esc(v.where) : ''}${v.wanted > 0 ? ` <span class="veh-wanted">Üá ${v.wanted}</span>` : ''}</div>
+ <div class="veh-model">${esc(v.model || '-')}${v.color ? ' ¢ ' + esc(v.color) : ''}${v.live ? ' <span class="veh-flag">¹ EN VIVO</span>' : ''}</div>
+ <div class="veh-owner">¦± ${esc(v.ownerLabel)}${v.where ? ' &nbsp; ' + esc(v.where) : ''}${v.wanted > 0 ? ` <span class="veh-wanted">¡ ${v.wanted}</span>` : ''}</div>
  </div>
- ${v.ownerKey ? `<button class="btn btn-primary" onclick="openProfile('${esc(v.ownerKey)}')" style="font-size:12px;padding:7px 14px;flex-shrink:0;">Ver ficha åÆ</button>` : ''}
+ ${v.ownerKey ? `<button class="btn btn-primary" onclick="openProfile('${esc(v.ownerKey)}')" style="font-size:12px;padding:7px 14px;flex-shrink:0;">Ver ficha ¥</button>` : ''}
  </div>`).join('')}
  </div>`;
  }
@@ -2997,14 +2997,14 @@ OPERATIONS MODULES òÉòÉòÉ */
  async function dbSearchPerson() {
  const q = $('db-person').value.trim();
  const r = $('db-person-result');
- if (!q) { r.innerHTML = '<div class="search-result not-found">Üá╕Å Ingresa un nombre de usuario de Roblox o un n║mero de caso</div>'; return; }
+ if (!q) { r.innerHTML = '<div class="search-result not-found">¡ Ingresa un nombre de usuario de Roblox o un nmero de caso</div>'; return; }
  const caseRe = /^(caso\s+)?[a-z]{1,2}-\d{3,}$/i;
  if (caseRe.test(q)) {
  r.innerHTML = '';
  openCaseById(q.replace(/^caso\s+/i, ''));
  return;
  }
- r.innerHTML = '<div style="padding:12px;color:var(--text-dim);font-size:13px;">öì Buscando en la base de datos...</div>';
+ r.innerHTML = '<div style="padding:12px;color:var(--text-dim);font-size:13px;">¶¬ Buscando en la base de datos...</div>';
  $('btn-search').disabled = true;
 
  try {
@@ -3041,7 +3041,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div style="flex:1;min-width:180px;">
  <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--accent-cyan);">${esc(displayName)} ${activeBolos.length > 0 ? `<span style="display:inline-flex;align-items:center;gap:5px;margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(239,68,68,.9);border:1px solid rgba(239,68,68,.9);padding:3px 10px;border-radius:999px;">BUSCADO${activeBolos.length > 1 ? ' x' + activeBolos.length : ''}</span>` : ''}</div>
- <div style="font-size:12px;color:var(--text-dim);margin-top:2px;">Usuario: ${esc(q)} - ${arrests.length} arrestos • ${fines.length} multas • ${(licenses||[]).length} licencias ${(function(){var w=(records||[]).filter(function(r){return r.type==='warning';});if(!w.length)return '';return '<span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:rgba(230,168,104,.18);border:1px solid rgba(230,168,104,.45);color:#e6a868;font-weight:700;font-size:10.5px;">Advertencias: '+w.length+'</span>';})()}</div>
+ <div style="font-size:12px;color:var(--text-dim);margin-top:2px;">Usuario: ${esc(q)} - ${arrests.length} arrestos ¢ ${fines.length} multas ¢ ${(licenses||[]).length} licencias ${(function(){var w=(records||[]).filter(function(r){return r.type==='warning';});if(!w.length)return '';return '<span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:rgba(230,168,104,.18);border:1px solid rgba(230,168,104,.45);color:#e6a868;font-weight:700;font-size:10.5px;">Advertencias: '+w.length+'</span>';})()}</div>
  ${summary ? `<div style="font-size:11.5px;color:var(--text-secondary);margin-top:5px;">${esc(summary)}</div>` : ''}
  </div>
  <button class="btn btn-primary" onclick="openProfile('${esc(q)}')" style="font-size:12px;padding:9px 18px;">Ver Perfil</button>
@@ -3055,18 +3055,18 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  // DEPARTAMENTOS (etiqueta para el perfil / unidades)
  const DEPT_HERO = {
- hpd: { icon: '👮', code: 'HPD', name: 'Policia de Houston' },
- hcso: { icon: '🛡️', code: 'HCSO', name: 'Sheriff del Condado Harris' },
- tph: { icon: '🚔', code: 'TPH', name: 'Patrulla Estatal' },
- ice: { icon: '📋', code: 'ICE', name: 'Immigration & Customs' },
- hfd: { icon: '🚒', code: 'HFD', name: 'Bomberos de Houston' },
- dot: { icon: '🚗', code: 'HDOT', name: 'Transporte (HDOT)' },
- ems: { icon: '🚑', code: 'EMS', name: 'Emergencias Medicas' },
- dc: { icon: '🏛️', code: 'DC', name: 'Departamento Central' },
+ hpd: { icon: '®', code: 'HPD', name: 'Policia de Houston' },
+ hcso: { icon: '¡¸', code: 'HCSO', name: 'Sheriff del Condado Harris' },
+ tph: { icon: '', code: 'TPH', name: 'Patrulla Estatal' },
+ ice: { icon: '', code: 'ICE', name: 'Immigration & Customs' },
+ hfd: { icon: '', code: 'HFD', name: 'Bomberos de Houston' },
+ dot: { icon: '', code: 'HDOT', name: 'Transporte (HDOT)' },
+ ems: { icon: '', code: 'EMS', name: 'Emergencias Medicas' },
+ dc: { icon: '¸', code: 'DC', name: 'Departamento Central' },
  };
  function deptHeroLabel(code) {
  const k = String(code || '').toLowerCase();
- return DEPT_HERO[k] || { icon: '📍', code: String(code || '').toUpperCase() || 'N/A', name: 'Departamento' };
+ return DEPT_HERO[k] || { icon: '', code: String(code || '').toUpperCase() || 'N/A', name: 'Departamento' };
  }
 
  async function openProfile(robloxUsername) {
@@ -3104,7 +3104,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  licenses = await supaSelect('licenses', '*', { or: orFilter }).catch(() => []);
  }
 
- // ┐Es miembro de un departamento y estí fuera de servicio?
+ // Es miembro de un departamento y est­ fuera de servicio?
  // Si es as¡, en el hero NO se muestra el nombre asignado (solo el depto).
  let deptInfo = null;
  if (discordIds.length > 0) {
@@ -3131,8 +3131,8 @@ OPERATIONS MODULES òÉòÉòÉ */
  const dh = masked ? deptHeroLabel(deptInfo.department) : null;
  const heroName = dh ? `${dh.icon} ${dh.code} - ${dh.name}` : esc(displayName);
  const heroSub = dh
- ? `Ä« ${esc(robloxUsername)} • æ« Fuera de servicio`
- : `Ä« ${esc(robloxUsername)}`;
+ ? `« ${esc(robloxUsername)} ¢ ¦« Fuera de servicio`
+ : `« ${esc(robloxUsername)}`;
 
  $('profile-hero').innerHTML = `
  <div class="profile-header">
@@ -3145,10 +3145,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </div>
  ${activeBolos.length > 0 ? `<div style="margin:12px 0;padding:12px 16px;border:1px solid rgba(239,68,68,0.55);background:rgba(239,68,68,0.12);border-radius:12px;display:flex;align-items:center;gap:12px;">
- <span style="font-size:24px;">Ü¿</span>
+ <span style="font-size:24px;">¿</span>
  <div style="flex:1;min-width:0;">
- <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:var(--accent-red);text-transform:uppercase;letter-spacing:1px;">Üá Persona Buscada${activeBolos.length > 1 ? ' - ' + activeBolos.length + ' BOLOs activos' : ''}</div>
- <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${esc(activeBolos[0].oficial_name || 'Oficial')} emiti│ el BOLO: ${esc(activeBolos[0].motivo || 'BOLO activo')}</div>
+ <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:var(--accent-red);text-transform:uppercase;letter-spacing:1px;">¡ Persona Buscada${activeBolos.length > 1 ? ' - ' + activeBolos.length + ' BOLOs activos' : ''}</div>
+ <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${esc(activeBolos[0].oficial_name || 'Oficial')} emiti el BOLO: ${esc(activeBolos[0].motivo || 'BOLO activo')}</div>
  </div>
  </div>` : ''}
  <div class="profile-actions">${citizenActions(displayName, robloxUsername)}</div>
@@ -3193,11 +3193,11 @@ OPERATIONS MODULES òÉòÉòÉ */
  $('licenses-body').innerHTML = '<div class="no-records">No se encontraron licencias registradas</div>';
  } else {
  const LIC_TYPES = {
- drivers: { name: 'Licencia de Conducir', icon: 'Üù', order: 1 },
- weapons: { name: 'Permiso de Armas', icon: 'ö½', order: 2 },
- insurance: { name: 'Seguro de Veh¡culo', icon: '¢í╕Å', order: 3 },
+ drivers: { name: 'Licencia de Conducir', icon: '¹', order: 1 },
+ weapons: { name: 'Permiso de Armas', icon: '¶½', order: 2 },
+ insurance: { name: 'Seguro de Veh¡culo', icon: '¢­', order: 3 },
  };
- // 1 fila por tipo: si qued│ una vencida + una vigente (renovaciones
+ // 1 fila por tipo: si qued una vencida + una vigente (renovaciones
  // antiguas), se muestra solo la vigente.
  const nowMs = Date.now();
  const isAlive = l => l.status === 'active' && (!l.expires_at || new Date(l.expires_at).getTime() >= nowMs);
@@ -3214,7 +3214,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  .map(k => bestByType[k])
  .sort((a, b) => ((LIC_TYPES[a.type] || {}).order || 9) - ((LIC_TYPES[b.type] || {}).order || 9));
  $('licenses-body').innerHTML = licList.map(l => {
- const meta = LIC_TYPES[l.type] || { name: 'Licencia', icon: 'ôä' };
+ const meta = LIC_TYPES[l.type] || { name: 'Licencia', icon: '´¤' };
  const icon = meta.icon;
  const typeName = meta.name;
  const now = Date.now();
@@ -3247,10 +3247,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  const crimeName = parts[1] || r.reason || '-';
  return `<div class="record-item" ${r.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(r.case_id)}')"` : ''}>
  <div class="record-left">
- <div class="record-icon arrest">Üö</div>
+ <div class="record-icon arrest">¶</div>
  <div class="record-info">
  <div class="record-title">${esc(crimeName)} ${r.case_id ? '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(r.case_id) + '</span>' : ''}</div>
- <div class="record-sub">æ« ${esc(r.officer_name || '-')} ${code ? ' • <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
+ <div class="record-sub">¦« ${esc(r.officer_name || '-')} ${code ? ' ¢ <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
  </div>
  </div>
  <div class="record-right">
@@ -3271,15 +3271,15 @@ OPERATIONS MODULES òÉòÉòÉ */
  const crimeName = parts[1] || r.reason || '-';
  return `<div class="record-item" ${r.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(r.case_id)}')"` : ''}>
  <div class="record-left">
- <div class="record-icon fine">Æ░</div>
+ <div class="record-icon fine"></div>
  <div class="record-info">
  <div class="record-title">${esc(crimeName)} ${r.case_id ? '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(r.case_id) + '</span>' : ''}</div>
- <div class="record-sub">æ« ${esc(r.officer_name || '-')} ${code ? ' • <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
+ <div class="record-sub">¦« ${esc(r.officer_name || '-')} ${code ? ' ¢ <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
  </div>
  </div>
  <div class="record-right">
  <div class="record-amount">$${(r.amount || 0).toLocaleString()}</div>
- <div class="record-date">${r.paid ? '£à Pagada' : new Date(r.created_at).toLocaleDateString()}</div>
+ <div class="record-date">${r.paid ? '£  Pagada' : new Date(r.created_at).toLocaleDateString()}</div>
  </div>
  </div>`;
  }).join('');
@@ -3292,10 +3292,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  $('vehicles-body').innerHTML = currentProfile.vehicles.map(v => `
  <div class="record-item">
  <div class="record-left">
- <div class="record-icon vehicle">Üù</div>
+ <div class="record-icon vehicle">¹</div>
  <div class="record-info">
  <div class="record-title">${esc(v.model || '-')}</div>
- <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;color:var(--accent-cyan);">${esc(v.plate || '-')}</span> • Color: ${esc(v.color || '-')}</div>
+ <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;color:var(--accent-cyan);">${esc(v.plate || '-')}</span> ¢ Color: ${esc(v.color || '-')}</div>
  </div>
  </div>
  </div>
@@ -3305,7 +3305,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  loadProfileBolos(robloxUsername, discordIds);
 
  } catch (err) {
- $('profile-hero').innerHTML = `<div style="padding:40px;text-align:center;color:var(--accent-red);">¥î Error cargando perfil: ${esc(err.message || '')}</div>`;
+ $('profile-hero').innerHTML = `<div style="padding:40px;text-align:center;color:var(--accent-red);">¥® Error cargando perfil: ${esc(err.message || '')}</div>`;
  }
  }
 
@@ -3327,16 +3327,16 @@ OPERATIONS MODULES òÉòÉòÉ */
  const rows = await supaSelect('police_records', '*', { or: `(case_id.ilike.*${caseId}*,case_id.eq.${caseId})`, order: 'created_at.desc', limit: '20' }).catch(() => []);
  if (!rows || rows.length === 0) {
  content.innerHTML = `<div class="case-empty">
- <div style="font-size:40px;margin-bottom:10px;">ôª</div>
+ <div style="font-size:40px;margin-bottom:10px;">´ª</div>
  <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:17px;color:var(--text-body);">Expediente no encontrado</div>
- <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">No existe un caso con el n║mero "${esc(caseId)}"</div>
+ <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">No existe un caso con el nmero "${esc(caseId)}"</div>
  </div>`;
  return;
  }
  const r = rows[0];
  const avatarUrl = await fetchRobloxAvatar(r.target_discord || r.target_name).catch(() => null);
- const typeIcon = r.type === 'jail' ? '¢ô╕Å' : r.type === 'fine' ? 'Æ░' : 'Üö';
- const typeLabel = r.type === 'jail' ? 'Encarcelamiento' : r.type === 'fine' ? 'Infracci│n / Multa' : 'Arresto / Incidente';
+ const typeIcon = r.type === 'jail' ? '¢´' : r.type === 'fine' ? '' : '¶';
+ const typeLabel = r.type === 'jail' ? 'Encarcelamiento' : r.type === 'fine' ? 'Infraccin / Multa' : 'Arresto / Incidente';
  const caseStatus = (r.case_status || 'abierta').toLowerCase();
  const statusText = r.paid ? 'Pagada' : caseStatus === 'resuelta' ? 'Resuelta' : caseStatus === 'cerrada' ? 'Cerrada' : 'Abierta';
  const statusColor = statusText === 'Pagada' || statusText === 'Resuelta' ? 'var(--accent-green)' : statusText === 'Abierta' ? 'var(--accent-gold)' : 'var(--accent-blue)';
@@ -3348,33 +3348,33 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="case-badge">${typeIcon} ${typeLabel}</div>
  <span class="case-status" style="background:${statusColor}1a;color:${statusColor};border:1px solid ${statusColor}44;">${statusText}</span>
  </div>
- <div class="case-title">ùé╕Å ${esc(r.case_id || 'Sin n║mero de caso')}</div>
+ <div class="case-title">¹© ${esc(r.case_id || 'Sin nmero de caso')}</div>
  <div class="case-target">
  <div class="profile-avatar" style="width:56px;height:56px;flex-shrink:0;">
  ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : (r.target_name ? r.target_name.charAt(0).toUpperCase() : '?')}
  </div>
  <div>
  <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--text-body);">${esc(r.target_name || '-')}</div>
- <div class="record-sub">Ä« ${esc(r.target_discord || '-')}</div>
+ <div class="record-sub">« ${esc(r.target_discord || '-')}</div>
  </div>
  </div>
  <div class="case-facts">
- <div class="case-fact"><span>æ« Oficial a cargo</span><b>${esc(r.officer_name || '-')}</b></div>
- <div class="case-fact"><span>ôà Fecha</span><b>${r.created_at ? new Date(r.created_at).toLocaleString() : '-'}</b></div>
- ${r.incident_type ? `<div class="case-fact"><span>ôï Tipo de incidente</span><b>${esc(r.incident_type)}</b></div>` : ''}
- ${r.type === 'jail' ? `<div class="case-fact"><span>Å▒╕Å Pena</span><b>${(r.amount || 0)} minutos</b></div>` : `<div class="case-fact"><span>${r.type === 'fine' ? 'Æ╡ Monto' : 'Æ╡ Fianza'}</span><b>$${(r.amount || 0).toLocaleString()}</b></div>`}
+ <div class="case-fact"><span>¦« Oficial a cargo</span><b>${esc(r.officer_name || '-')}</b></div>
+ <div class="case-fact"><span>´  Fecha</span><b>${r.created_at ? new Date(r.created_at).toLocaleString() : '-'}</b></div>
+ ${r.incident_type ? `<div class="case-fact"><span>´¯ Tipo de incidente</span><b>${esc(r.incident_type)}</b></div>` : ''}
+ ${r.type === 'jail' ? `<div class="case-fact"><span> Pena</span><b>${(r.amount || 0)} minutos</b></div>` : `<div class="case-fact"><span>${r.type === 'fine' ? '¡ Monto' : '¡ Fianza'}</span><b>$${(r.amount || 0).toLocaleString()}</b></div>`}
  </div>
  <div class="case-desc">
- <div class="case-desc-label">ôä Descripci│n del oficial</div>
- <div class="case-desc-body">${esc(r.officer_description || r.reason || 'Sin descripci│n registrada')}</div>
+ <div class="case-desc-label">´¤ Descripcin del oficial</div>
+ <div class="case-desc-body">${esc(r.officer_description || r.reason || 'Sin descripcin registrada')}</div>
  </div>
  <div class="case-actions">
- <button class="btn btn-outline" onclick="openProfile('${esc(r.target_discord || r.target_name)}')">Ver Perfil del Ciudadano åÆ</button>
+ <button class="btn btn-outline" onclick="openProfile('${esc(r.target_discord || r.target_name)}')">Ver Perfil del Ciudadano ¥</button>
  </div>
  </div>
- ${otherRows.length > 0 ? `<div class="case-related"><div class="section-header"><h3>Expedientes coincidentes</h3><span class="section-count">${otherRows.length}</span></div>${otherRows.map(o => `<div class="record-item" ${o.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(o.case_id)}')"` : ''}><div class="record-left"><div class="record-icon ${o.type === 'fine' ? 'fine' : 'arrest'}">${o.type === 'fine' ? 'Æ░' : 'Üö'}</div><div class="record-info"><div class="record-title">${esc(o.case_id || (o.reason || '').split(' - ')[1] || o.reason || '-')} ${o.paid ? '<span class="badge badge-active" style="font-size:9px;">Pagada</span>' : ''}</div><div class="record-sub">${esc(o.target_name || '-')} • ${new Date(o.created_at).toLocaleDateString()}</div></div></div></div>`).join('')}</div>` : ''}`;
+ ${otherRows.length > 0 ? `<div class="case-related"><div class="section-header"><h3>Expedientes coincidentes</h3><span class="section-count">${otherRows.length}</span></div>${otherRows.map(o => `<div class="record-item" ${o.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(o.case_id)}')"` : ''}><div class="record-left"><div class="record-icon ${o.type === 'fine' ? 'fine' : 'arrest'}">${o.type === 'fine' ? '' : '¶'}</div><div class="record-info"><div class="record-title">${esc(o.case_id || (o.reason || '').split(' - ')[1] || o.reason || '-')} ${o.paid ? '<span class="badge badge-active" style="font-size:9px;">Pagada</span>' : ''}</div><div class="record-sub">${esc(o.target_name || '-')} ¢ ${new Date(o.created_at).toLocaleDateString()}</div></div></div></div>`).join('')}</div>` : ''}`;
  } catch (err) {
- content.innerHTML = `<div class="case-empty" style="color:var(--accent-red);">¥î Error al abrir el expediente: ${esc(err.message || 'desconocido')}</div>`;
+ content.innerHTML = `<div class="case-empty" style="color:var(--accent-red);">¥® Error al abrir el expediente: ${esc(err.message || 'desconocido')}</div>`;
  }
  }
 
@@ -3411,10 +3411,10 @@ OPERATIONS MODULES òÉòÉòÉ */
  })();
 
  function copyRobloxUser(user) {
- navigator.clipboard.writeText(user).then(() => showToast('£à Usuario copiado'));
+ navigator.clipboard.writeText(user).then(() => showToast('£  Usuario copiado'));
  }
 
- // öÇöÇ RECORD DRAWER (Arresto / Multa integrados en el MDT) öÇöÇ
+ // ¶¶ RECORD DRAWER (Arresto / Multa integrados en el MDT) ¶¶
  let drawernCitizen = null;
  function openRecordDrawer(type, displayName, robloxUsername) {
  const overlay = $('drawer-overlay');
@@ -3433,9 +3433,9 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  drawer.classList.remove('wide');
  head.classList.toggle('fine', !isArrest);
- icon.textContent = isArrest ? 'Üö' : 'Æ░';
+ icon.textContent = isArrest ? '¶' : '';
  title.textContent = isArrest ? 'Registrar Arresto' : 'Registrar Multa';
- sub.textContent = (isArrest ? 'Cargando formulario de arresto...' : 'Cargando formulario de multa...') + (displayName ? ' • ' + displayName : '');
+ sub.textContent = (isArrest ? 'Cargando formulario de arresto...' : 'Cargando formulario de multa...') + (displayName ? ' ¢ ' + displayName : '');
 
  frame.src = (isArrest ? 'arrests.html' : 'fines.html') + '?name=' + n + '&roblox=' + r;
 
@@ -3469,7 +3469,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (!overlay || !drawer || !frame) return;
 
  head.classList.remove('fine');
- icon.textContent = '📋';
+ icon.textContent = '';
  title.textContent = 'Incidencias';
  sub.textContent = 'Reportar incidentes - HOUSTON RP';
  drawer.classList.add('wide');
@@ -3491,7 +3491,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const el = document.getElementById('warning-modal');
  if (!el) return;
  document.getElementById('warning-target').textContent =
- warningTarget.roblox + (warningTarget.name ? ' é • ' + warningTarget.name : '');
+ warningTarget.roblox + (warningTarget.name ? ' © ¢ ' + warningTarget.name : '');
  document.getElementById('warning-text').value = '';
  document.getElementById('warning-msg').textContent = '';
  el.style.display = 'flex';
@@ -3556,11 +3556,11 @@ OPERATIONS MODULES òÉòÉòÉ */
  loadHistoryFines();
  loadHistoryArrests();
  if (drawernCitizen) openProfile(drawernCitizen);
- showToast(ev.data.saved === 'arrest' || ev.data.saved === 'jail' ? '£à Arresto registrado' : '£à Multa registrada');
+ showToast(ev.data.saved === 'arrest' || ev.data.saved === 'jail' ? '£  Arresto registrado' : '£  Multa registrada');
  }
  });
 
- // öÇöÇ HISTORY PANEL öÇöÇ
+ // ¶¶ HISTORY PANEL ¶¶
  function openHistoryPanel() {
  const panel = $('history-panel');
  const content = $('mdt-content');
@@ -3641,7 +3641,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const reasons = (r.reason || '').split(';').map(s => s.trim()).filter(Boolean);
  const mainReason = reasons[0] || r.reason || 'Sin detalle';
  return `<div class="history-record" style="--rec-color:var(--accent-amber);">
- <div class="history-rec-icon fine">Æ░</div>
+ <div class="history-rec-icon fine"></div>
  <div class="history-rec-body">
  <div class="history-rec-top">
  <span class="history-rec-badge fine">Multa</span>
@@ -3650,13 +3650,13 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="history-rec-reason" title="${esc(r.reason || '')}">${esc(mainReason)}</div>
  <div class="history-rec-meta">
- <span>æ« ${esc(r.officer_name || '-')}</span>
+ <span>¦« ${esc(r.officer_name || '-')}</span>
  ${r.case_id ? `<span class="history-rec-case">${esc(r.case_id)}</span>` : ''}
  </div>
  </div>
  <div class="history-rec-right">
  <div class="history-rec-amount">$${(r.amount || 0).toLocaleString()}</div>
- <div class="history-rec-date">${dateStr} • ${timeStr}</div>
+ <div class="history-rec-date">${dateStr} ¢ ${timeStr}</div>
  </div>
  </div>`;
  }).join('');
@@ -3705,7 +3705,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const reasons = (r.reason || '').split(';').map(s => s.trim()).filter(Boolean);
  const mainReason = reasons[0] || r.reason || 'Sin detalle';
  return `<div class="history-record" style="--rec-color:var(--accent-red);">
- <div class="history-rec-icon arrest">Üö</div>
+ <div class="history-rec-icon arrest">¶</div>
  <div class="history-rec-body">
  <div class="history-rec-top">
  <span class="history-rec-badge arrest">Arresto</span>
@@ -3713,7 +3713,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="history-rec-reason" title="${esc(r.reason || '')}">${esc(mainReason)}</div>
  <div class="history-rec-meta">
- <span>æ« ${esc(r.officer_name || '-')}</span>
+ <span>¦« ${esc(r.officer_name || '-')}</span>
  ${r.case_id ? `<span class="history-rec-case">${esc(r.case_id)}</span>` : ''}
  </div>
  </div>
@@ -3728,7 +3728,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ ACTIVE SHIFT RESTORE öÇöÇ
+ // ¶¶ ACTIVE SHIFT RESTORE ¶¶
  async function loadActiveShift() {
  if (typeof hrpGetActiveShift !== 'function') return;
  currentShift = await hrpGetActiveShift(userId);
@@ -3758,7 +3758,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ OFFICERS ON SERVICE (real-time via polling) öÇöÇ
+ // ¶¶ OFFICERS ON SERVICE (real-time via polling) ¶¶
  let onDutyStatus = {};
 
  function deptCodeLabel(code) {
@@ -3767,7 +3767,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  return map[c] || ['#94a3b8', String(code || 'S/D').toUpperCase()];
  }
 
- // öÇöÇ Etiquetas de rango reales (payroll_salaries) - cach⌐ 5 min öÇöÇ
+ // ¶¶ Etiquetas de rango reales (payroll_salaries) - cach 5 min ¶¶
  let _rankLabels = null;
  let _rankLabelsAt = 0;
  async function getRankLabels() {
@@ -3843,12 +3843,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="on-duty-name">${esc(shownName)}
  <span class="unit-state ${isBreak ? 'brk' : 'on'}">${isBreak ? 'Pausa' : 'En servicio'}</span>
  </div>
- ${robLabel ? `<div class="on-duty-roblox">Ä« ${esc(robLabel)}</div>` : ''}
- <div class="on-duty-meta"><span class="on-duty-dept" style="color:${col}">${dept}</span>${rankLabel ? ' • ' + esc(rankLabel) : ''}</div>
+ ${robLabel ? `<div class="on-duty-roblox">« ${esc(robLabel)}</div>` : ''}
+ <div class="on-duty-meta"><span class="on-duty-dept" style="color:${col}">${dept}</span>${rankLabel ? ' ¢ ' + esc(rankLabel) : ''}</div>
  <div class="unit-tags">
  ${code ? `<span class="unit-tag code">${esc(code)}</span>` : ''}
- <span class="unit-tag time">Å▒ ${elapsedSec >= 0 ? formatTime(elapsedSec) : '-'}</span>
- ${camOn ? '<span class="unit-tag cam">ùÅ REC</span>' : ''}
+ <span class="unit-tag time"> ${elapsedSec >= 0 ? formatTime(elapsedSec) : '-'}</span>
+ ${camOn ? '<span class="unit-tag cam">¹ REC</span>' : ''}
  </div>
  </div>
  <span class="on-duty-status ${isBreak ? 'break' : 'live'}"></span>
@@ -3858,21 +3858,21 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (lastEl) lastEl.textContent = 'Actualizado ' + new Date().toLocaleTimeString();
  } catch (_) {
  if (countEl) countEl.textContent = '0';
- if (lastEl) lastEl.textContent = 'Sin conexi│n';
+ if (lastEl) lastEl.textContent = 'Sin conexin';
  }
  }
 
- // òÉòÉòÉ BOLO SYSTEM òÉòÉòÉ
+ // ²²² BOLO SYSTEM ²²²
  let boloPick = null; // { robloxUser, displayName, avatarUrl }
  let boloFilter = 'activos';
  let boloCache = [];
  let boloPollTimer = null;
  let boloEditingId = null;
 
- // öÇöÇ BOLO: storage layer öÇöÇ
+ // ¶¶ BOLO: storage layer ¶¶
  // Los BOLOs se guardan en la tabla `radio_messages` con type='bolo' y el
- // contenido serializado como JSON en `message`. As¡ la funci│n de BOLO
- // funciona sin depender de la tabla `bolos` (a║n no creada en el proyecto).
+ // contenido serializado como JSON en `message`. As¡ la funcin de BOLO
+ // funciona sin depender de la tabla `bolos` (an no creada en el proyecto).
  const BOLO_STORE_TYPE = 'bolo';
  function boloRowToObj(row) {
  let data = {};
@@ -3917,7 +3917,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  async function boloFetchAll(max) {
  // Solo las columnas que usa boloRowToObj: la tabla radio_messages es
- // grande y pedir '*' en cada b║squeda/refresh alentaba toda la MDT.
+ // grande y pedir '*' en cada bsqueda/refresh alentaba toda la MDT.
  const rows = await supaSelect('radio_messages', 'id,created_at,message,user_id,username', { type: `eq.${BOLO_STORE_TYPE}`, order: 'created_at.desc', limit: String(max || 100) }).catch(() => []);
  return (rows || []).map(boloRowToObj);
  }
@@ -3930,9 +3930,9 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
 
  function boloPriorityData(p) {
- if (p === 'alta') return { cls: 'alta', color: 'var(--accent-red)', label: 'Alta', icon: '🔴' };
- if (p === 'baja') return { cls: 'baja', color: 'var(--accent-green)', label: 'Baja', icon: '🟢' };
- return { cls: 'media', color: 'var(--accent-amber)', label: 'Media', icon: '🟡' };
+ if (p === 'alta') return { cls: 'alta', color: 'var(--accent-red)', label: 'Alta', icon: '´' };
+ if (p === 'baja') return { cls: 'baja', color: 'var(--accent-green)', label: 'Baja', icon: '¢' };
+ return { cls: 'media', color: 'var(--accent-amber)', label: 'Media', icon: '¡' };
  }
 
  function boloStatusData(s) {
@@ -4014,7 +4014,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (last) last.textContent = 'Actualizado ' + new Date().toLocaleTimeString();
  } catch (_) {
  const last = $('bolo-last');
- if (last) last.textContent = 'Sin conexi│n';
+ if (last) last.textContent = 'Sin conexin';
  }
  }
 
@@ -4065,35 +4065,35 @@ OPERATIONS MODULES òÉòÉòÉ */
  <div class="bolo-avatar">${b.roblox_id ? `<img src="https://www.roblox.com/headshot-thumbnail/image?userId=${encodeURIComponent(b.roblox_id)}&width=100&height=100&format=png" onerror="this.parentNode.textContent='${initial}';">` : initial}</div>
  <div>
  <div class="bolo-person-name">${esc(b.target_name || '-')}</div>
- <div class="bolo-person-user">Ä« ${esc(b.roblox_user || '-')}</div>
+ <div class="bolo-person-user">« ${esc(b.roblox_user || '-')}</div>
  </div>
- <span class="bolo-status ${st.cls}" style="margin-left:auto;">ùÅ ${st.label}</span>
+ <span class="bolo-status ${st.cls}" style="margin-left:auto;">¹ ${st.label}</span>
  </div>
  <div class="bolo-motivo">${esc(b.motivo || '-')}</div>
- ${code ? `<div class="bolo-code">Üû╕Å ${esc(code)} - ${esc(penalLabel || '')}</div>` : ''}
+ ${code ? `<div class="bolo-code">» ${esc(code)} - ${esc(penalLabel || '')}</div>` : ''}
  <div class="bolo-meta">
- <span>æ« ${esc(b.oficial_name || '-')}</span>
- <span style="color:${col};">Å¢╕Å ${dept}</span>
- <span>òÉ ${dateStr}</span>
- ${b.closed_at ? `<span>ùâ╕Å Cerrado: ${new Date(b.closed_at).toLocaleString('es-ES', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</span>` : ''}
+ <span>¦« ${esc(b.oficial_name || '-')}</span>
+ <span style="color:${col};">¢ ${dept}</span>
+ <span>² ${dateStr}</span>
+ ${b.closed_at ? `<span>¹¢ Cerrado: ${new Date(b.closed_at).toLocaleString('es-ES', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</span>` : ''}
  </div>
  <div class="bolo-actions">
- <button class="btn btn-outline" onclick="editBoloPopup(${b.id})">£Å╕Å Editar</button>
- ${canClose ? `<button class="btn btn-warning" onclick="closeBoloById(${b.id})">Ü½ Cerrar</button>` : ''}
- <button class="btn btn-danger" style="font-size:11px;padding:6px 12px;" onclick="removeBoloById(${b.id})">ùæ╕Å Eliminar</button>
- ${b.estado === 'cerrado' ? '<button class="btn btn-bolo" onclick="reopenBoloById(' + b.id + ')">ƒ│ Reabrir</button>' : ''}
+ <button class="btn btn-outline" onclick="editBoloPopup(${b.id})">£ Editar</button>
+ ${canClose ? `<button class="btn btn-warning" onclick="closeBoloById(${b.id})">½ Cerrar</button>` : ''}
+ <button class="btn btn-danger" style="font-size:11px;padding:6px 12px;" onclick="removeBoloById(${b.id})">¹¦ Eliminar</button>
+ ${b.estado === 'cerrado' ? '<button class="btn btn-bolo" onclick="reopenBoloById(' + b.id + ')"> Reabrir</button>' : ''}
  </div>
  </div>`;
  }).join('');
  }
 
- // öÇöÇ BOLO: search citizen (reuse citizen lookup) öÇöÇ
+ // ¶¶ BOLO: search citizen (reuse citizen lookup) ¶¶
  async function boloSearchPerson() {
  const q = ($('bolo-search').value || '').trim();
  const r = $('bolo-search-result');
  if (!r) return;
  if (!q) { r.innerHTML = ''; return; }
- r.innerHTML = '<div style="padding:8px;color:var(--text-dim);font-size:12px;">öì Buscando...</div>';
+ r.innerHTML = '<div style="padding:8px;color:var(--text-dim);font-size:12px;">¶¬ Buscando...</div>';
  try {
  const [avatarUrl, characters, records] = await Promise.all([
  fetchRobloxAvatar(q).catch(() => null),
@@ -4116,14 +4116,14 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div style="flex:1;min-width:150px;">
  <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;color:var(--text-primary);">${esc(displayName)}</div>
- <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">Ä« ${esc(robloxUser)}</div>
+ <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">« ${esc(robloxUser)}</div>
  ${summary ? `<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">${esc(summary)}</div>` : ''}
  </div>
  <button class="btn btn-bolo" onclick="pickBoloPerson('${esc(robloxUser)}','${esc(displayName)}','${esc(avatarUrl || '')}','${esc(robloxId)}')">Seleccionar</button>
  </div>
  </div>`;
  } catch (err) {
- r.innerHTML = '<div class="search-result not-found" style="border-radius:8px;margin-top:10px;">¥î Error: ' + (err.message || 'desconocido') + '</div>';
+ r.innerHTML = '<div class="search-result not-found" style="border-radius:8px;margin-top:10px;">¥® Error: ' + (err.message || 'desconocido') + '</div>';
  }
  }
 
@@ -4138,7 +4138,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  nav.innerHTML = avatarUrl ? `<img src="${avatarUrl}" alt="">` : ((displayName || '?').charAt(0).toUpperCase());
  }
  const nn = $('bolo-pick-name'); if (nn) nn.textContent = displayName || '-';
- const uu = $('bolo-pick-user'); if (uu) uu.textContent = 'Ä« ' + (robloxUser || '-');
+ const uu = $('bolo-pick-user'); if (uu) uu.textContent = '« ' + (robloxUser || '-');
  }
 
  function clearBoloPick() {
@@ -4155,9 +4155,9 @@ OPERATIONS MODULES òÉòÉòÉ */
  async function saveBolo() {
  const msg = $('bolo-form-msg');
  if (msg) msg.textContent = '';
- if (!boloPick) { if (msg) msg.textContent = 'Üá╕Å Seleccioní un ciudadano antes de emitir el BOLO.'; return; }
+ if (!boloPick) { if (msg) msg.textContent = '¡ Seleccion­ un ciudadano antes de emitir el BOLO.'; return; }
  const motivo = ($('bolo-motivo') ? $('bolo-motivo').value : '').trim();
- if (!motivo) { if (msg) msg.textContent = 'Üá╕Å Escribiun motivo detallado.'; return; }
+ if (!motivo) { if (msg) msg.textContent = '¡ Escribiun motivo detallado.'; return; }
  const penalCode = $('bolo-penal') ? $('bolo-penal').value : '';
  const penalName = penalCode && (window.HRP_CRIMES || {})[penalCode] ? (window.HRP_CRIMES)[penalCode].name : '';
  const prioridad = $('bolo-prio') ? $('bolo-prio').value : 'media';
@@ -4179,7 +4179,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  };
  try {
  await supaInsert('radio_messages', { user_id: payload.oficial_id, username: payload.oficial_name, message: boloObjToMessage(payload), type: BOLO_STORE_TYPE });
- if (msg) msg.textContent = '£à BOLO emitido correctamente.';
+ if (msg) msg.textContent = '£  BOLO emitido correctamente.';
  ($('bolo-motivo') && ($('bolo-motivo').value = ''));
  ($('bolo-penal') && ($('bolo-penal').value = ''));
  ($('bolo-prio') && ($('bolo-prio').value = 'media'));
@@ -4187,12 +4187,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  loadBolos(true);
  loadHistoryBolos(true);
  } catch (err) {
- if (msg) msg.textContent = '¥î Error al guardar: ' + (err.message || 'desconocido');
+ if (msg) msg.textContent = '¥® Error al guardar: ' + (err.message || 'desconocido');
  }
  if (btn) btn.disabled = false;
  }
 
- // öÇöÇ BOLO: edit / close / delete / reopen öÇöÇ
+ // ¶¶ BOLO: edit / close / delete / reopen ¶¶
  function editBoloPopup(id) {
  const b = boloCache.find(x => String(x.id) === String(id));
  if (!b) return;
@@ -4211,7 +4211,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  async function confirmEditBolo() {
  if (!boloEditingId) return;
  const motivo = ($('bolo-edit-motivo') ? $('bolo-edit-motivo').value : '').trim();
- if (!motivo) { showToast('Üá╕Å El motivo no puede quedar vac¡o', 'error'); return; }
+ if (!motivo) { showToast('¡ El motivo no puede quedar vac¡o', 'error'); return; }
  const penalCode = $('bolo-edit-penal') ? $('bolo-edit-penal').value : '';
  const penalName = penalCode && (window.HRP_CRIMES || {})[penalCode] ? (window.HRP_CRIMES)[penalCode].name : '';
  const prioridad = $('bolo-edit-prio') ? $('bolo-edit-prio').value : 'media';
@@ -4219,38 +4219,38 @@ OPERATIONS MODULES òÉòÉòÉ */
  const existing = boloCache.find(x => String(x.id) === String(boloEditingId)) || {};
  await boloUpdateMessage(boloEditingId, Object.assign({}, existing, { motivo, penal_code: penalCode, penal_name: penalName, prioridad, updated_at: new Date().toISOString() }));
  closeBoloEdit();
- showToast('£à BOLO actualizado');
+ showToast('£  BOLO actualizado');
  loadBolos(true);
  loadHistoryBolos(true);
  } catch (err) {
- showToast('¥î Error al actualizar: ' + (err.message || 'desconocido'), 'error');
+ showToast('¥® Error al actualizar: ' + (err.message || 'desconocido'), 'error');
  }
  }
 
  async function closeBoloById(id) {
- if (!confirm('┐Cerrar este BOLO? Se mantendrí en el historial.')) return;
+ if (!confirm('Cerrar este BOLO? Se mantendr­ en el historial.')) return;
  try {
  const b = boloCache.find(x => String(x.id) === String(id)) || {};
  await boloUpdateMessage(id, Object.assign({}, b, { estado: 'cerrado', closed_by: (userName || ''), closed_at: new Date().toISOString(), updated_at: new Date().toISOString() }));
- showToast('£à BOLO cerrado');
+ showToast('£  BOLO cerrado');
  loadBolos(true);
  loadHistoryBolos(true);
  } catch (err) {
- showToast('¥î Error: ' + (err.message || 'desconocido'), 'error');
+ showToast('¥® Error: ' + (err.message || 'desconocido'), 'error');
  }
  }
 
  async function removeBoloById(id) {
- if (!confirm('┐Eliminar definitivamente este BOLO? Esta acci│n no se puede deshacer.')) return;
+ if (!confirm('Eliminar definitivamente este BOLO? Esta accin no se puede deshacer.')) return;
  try {
  await supaDelete('radio_messages', { id: `eq.${id}` });
  boloCache = boloCache.filter(x => String(x.id) !== String(id));
- showToast('ùæ╕Å BOLO eliminado');
+ showToast('¹¦ BOLO eliminado');
  renderBoloList();
  updateBoloCardBadge();
  loadHistoryBolos(true);
  } catch (err) {
- showToast('¥î Error: ' + (err.message || 'desconocido'), 'error');
+ showToast('¥® Error: ' + (err.message || 'desconocido'), 'error');
  loadBolos(true);
  }
  }
@@ -4259,15 +4259,15 @@ OPERATIONS MODULES òÉòÉòÉ */
  try {
  const b = boloCache.find(x => String(x.id) === String(id)) || {};
  await boloUpdateMessage(id, Object.assign({}, b, { estado: 'activo', closed_by: '', closed_at: null, updated_at: new Date().toISOString() }));
- showToast('ƒ│ BOLO reactivado');
+ showToast(' BOLO reactivado');
  loadBolos(true);
  loadHistoryBolos(true);
  } catch (err) {
- showToast('¥î Error: ' + (err.message || 'desconocido'), 'error');
+ showToast('¥® Error: ' + (err.message || 'desconocido'), 'error');
  }
  }
 
- // öÇöÇ BOLO: profile "Estado BOLO" öÇöÇ
+ // ¶¶ BOLO: profile "Estado BOLO" ¶¶
  async function loadProfileBolos(robloxUsername, discordIds) {
  const body = $('bolo-body');
  const countEl = $('bolo-count');
@@ -4291,7 +4291,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const dateStr = new Date(b.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
  return `<div class="record-item" style="${b.estado === 'activo' ? 'border-color:rgba(239,68,68,0.4);' : ''}">
  <div class="record-left">
- <div class="record-icon arrest">Ü¿</div>
+ <div class="record-icon arrest">¿</div>
  <div class="record-info">
  <div class="record-title">${prio.icon} BOLO ${prio.label}</div>
  <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">${esc(b.penal_code || '')}</span> ${esc(b.motivo || '')}</div>
@@ -4308,7 +4308,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // öÇöÇ BOLO: history panel tab öÇöÇ
+ // ¶¶ BOLO: history panel tab ¶¶
  async function loadHistoryBolos(force) {
  const list = $('history-bolo-list');
  const stats = $('history-bolo-stats');
@@ -4340,7 +4340,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const dateStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
  const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
  return `<div class="history-record" style="--rec-color:${prio.color};">
- <div class="history-rec-icon arrest">Ü¿</div>
+ <div class="history-rec-icon arrest">¿</div>
  <div class="history-rec-body">
  <div class="history-rec-top">
  <span class="history-rec-badge arrest">BOLO</span>
@@ -4349,8 +4349,8 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  <div class="history-rec-reason" title="${esc(b.motivo || '')}">${prio.icon} ${esc((b.motivo || '').split(/[.;]/)[0] || b.motivo || '-')}</div>
  <div class="history-rec-meta">
- <span>æ« ${esc(b.oficial_name || '-')}</span>
- <span class="bolo-status ${st.cls}">ùÅ ${st.label}</span>
+ <span>¦« ${esc(b.oficial_name || '-')}</span>
+ <span class="bolo-status ${st.cls}">¹ ${st.label}</span>
  </div>
  </div>
  <div class="history-rec-right">
@@ -4365,9 +4365,9 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // òÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉ LLAMADAS 911 (mini-mapa) òÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉòÉ
+ // ²²²²²²²²²²²²²²²²²²² LLAMADAS 911 (mini-mapa) ²²²²²²²²²²²²²²²²²²²
  // El juego manda las llamadas con X/Z y el motivo, pero SIN calle ni
- // postal. Para poder mostrarlas, buscamos al jugador vivo mís cercano
+ // postal. Para poder mostrarlas, buscamos al jugador vivo m­s cercano
  // que s¡ tenga StreetName/PostalCode y lo usamos como referencia.
  let callsTimer = null;
  let callsCache = [];
@@ -4391,9 +4391,9 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (!loc || !loc.street) continue;
  const dx = loc.x - x, dz = loc.z - z;
  const d = dx * dx + dz * dz;
- // Buscar el más cercano en general
+ // Buscar el m¡s cercano en general
  if (d < bestD) { bestD = d; best = loc; }
- // Preferir jugadores muy cercanos (< 100 unidades) para mayor precisión
+ // Preferir jugadores muy cercanos (< 100 unidades) para mayor precisi³n
  if (d < 10000 && d < veryCloseD) { veryCloseD = d; veryClose = loc; }
  }
  // Priorizar jugadores muy cercanos si existen
@@ -4417,7 +4417,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const lEl = $('calls-last'); if (lEl) lEl.textContent = new Date().toLocaleTimeString();
  renderCalls();
  } catch (_) {
- const lEl = $('calls-last'); if (lEl) lEl.textContent = 'Sin conexi│n';
+ const lEl = $('calls-last'); if (lEl) lEl.textContent = 'Sin conexin';
  }
  }
 
@@ -4445,7 +4445,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const near = (x !== null) ? callsNearestStreet(x, z) : null;
  let street = c.PositionDescriptor || (c.Location && c.Location.StreetName) || (near && near.street) || '';
  if (typeof street === 'object') street = street.StreetName || '';
- const streetTxt = street ? esc(street) : (x !== null ? 'Ubicación registrada en mapa' : 'Ubicación no disponible');
+ const streetTxt = street ? esc(street) : (x !== null ? 'Ubicaci³n registrada en mapa' : 'Ubicaci³n no disponible');
  const nearTag = (near && near.street && !c.PositionDescriptor && near.dist < 450)
  ? ' <em class="call-mini-near">· cerca</em>' : '';
  const postal = (c.Location && c.Location.PostalCode) || (near && near.postal) ? esc((c.Location && c.Location.PostalCode) || (near && near.postal)) : '';
@@ -4471,12 +4471,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
  '<span>' + streetTxt + nearTag + '</span>' +
  '</div>' +
- '<div class="call-mini-meta"><span>Report│ ' + caller + '</span><span>' + esc(timeTxt) + '</span></div>' +
+ '<div class="call-mini-meta"><span>Report ' + caller + '</span><span>' + esc(timeTxt) + '</span></div>' +
  '</div>' +
  '</div>';
  }).join('');
 
- // Los mini-mapas se dibujan cuando el canvas ya tiene tama▒o real.
+ // Los mini-mapas se dibujan cuando el canvas ya tiene tamao real.
  requestAnimationFrame(function () {
  const R = window.HRP_MINIMAP_STATIC;
  if (!R) return;
@@ -4492,8 +4492,8 @@ OPERATIONS MODULES òÉòÉòÉ */
  });
  }
 
- // La secci│n vive en la pantalla principal (bajo Consulta de Personas),
- // as¡ que se sondea sola desde init() y se corta al salir de la pígina.
+ // La seccin vive en la pantalla principal (bajo Consulta de Personas),
+ // as¡ que se sondea sola desde init() y se corta al salir de la p­gina.
  function startCallsLive() {
  loadCalls();
  if (callsTimer) clearInterval(callsTimer);
@@ -4503,8 +4503,8 @@ OPERATIONS MODULES òÉòÉòÉ */
  if (callsTimer) { clearInterval(callsTimer); callsTimer = null; }
  }
 
- // öÇöÇ BODYCAM: activar / desactivar (emisor WebRTC) öÇöÇ
- // Al activar: pide la címara, arranca HRPBC.startServer y publica el
+ // ¶¶ BODYCAM: activar / desactivar (emisor WebRTC) ¶¶
+ // Al activar: pide la c­mara, arranca HRPBC.startServer y publica el
  // peerId en el turno activo para que solo el Dispatch lo encuentre.
  function setBodycamBtn(mode) {
  const btn = $('btn-bodycam');
@@ -4518,7 +4518,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  } else if (mode === 'starting') {
  btn.classList.remove('live');
  btn.disabled = true;
- btn.innerHTML = 'Activando bodycamÇª';
+ btn.innerHTML = 'Activando bodycamª';
  } else {
  btn.classList.remove('live');
  btn.disabled = !currentShift;
@@ -4563,7 +4563,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  unpublishBodycam();
  }
 
- // Si el navegador rechaza alg║n l¡mite (OverconstrainedError) volvemos a
+ // Si el navegador rechaza algn l¡mite (OverconstrainedError) volvemos a
  // intentar sin las restricciones duras, para no quedarnos sin bodycam.
  async function captureFallback(fn, constraints) {
  try {
@@ -4584,7 +4584,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  }
 
- // Baja frecuencia (10-15 FPS) y tope de resoluci│n: la idea es que la
+ // Baja frecuencia (10-15 FPS) y tope de resolucin: la idea es que la
  // bodycam casi no mueva los FPS de Roblox en la PC del oficial.
  async function acquireBodycamStream() {
  const srcSel = $('bodycam-src');
@@ -4616,13 +4616,13 @@ OPERATIONS MODULES òÉòÉòÉ */
  });
  try { stream.getVideoTracks().forEach(t => { t.contentHint = 'detail'; }); } catch (_) {}
  } catch (err) {
- // Cancel│ el selector o la pantalla no se puede capturar åÆ címara.
+ // Cancel el selector o la pantalla no se puede capturar ¥ c­mara.
  if (err && err.name === 'NotAllowedError') throw err;
  stream = await cameraStream();
  }
  }
 
- // Ültimo intento de bajar los FPS de captura (no rompe si falla).
+ // ltimo intento de bajar los FPS de captura (no rompe si falla).
  try {
  await Promise.all(stream.getVideoTracks().map(t =>
  t.applyConstraints({ frameRate: { ideal: 10, max: 15 } })
@@ -4634,32 +4634,32 @@ OPERATIONS MODULES òÉòÉòÉ */
 
  async function handleBodycamToggle() {
  if (bodycamStarting) return;
- // Ya activa åÆ apagar
+ // Ya activa ¥ apagar
  if (bodycamServer) {
  stopBodycamLocal();
- showToast('ô╣ Bodycam desactivada.');
+ showToast('´£ Bodycam desactivada.');
  return;
  }
  if (!currentShift) {
- showToast('Inicií un turno antes de activar la bodycam.', 'warn');
+ showToast('Inici­ un turno antes de activar la bodycam.', 'warn');
  return;
  }
  if (!window.HRPBC) {
- showToast('La librer¡a de bodycam no se carg│. Recargí la pígina.', 'error');
+ showToast('La librer¡a de bodycam no se carg. Recarg­ la p­gina.', 'error');
  return;
  }
 
  bodycamStarting = true;
  setBodycamBtn('starting');
 
- // Espera (con reintento) a que la se▒alizaci│n est⌐ lista: antes de esto
- // el MDT directamente bloqueaba con "la librer¡a a║n no carg│".
+ // Espera (con reintento) a que la sealizacin est lista: antes de esto
+ // el MDT directamente bloqueaba con "la librer¡a an no carg".
  try {
  await window.HRPBC.ready(15000);
  } catch (_) {
  bodycamStarting = false;
  setBodycamBtn('off');
- showToast('No se pudo conectar con el servicio de bodycam. Reintentí en unos segundos.', 'error');
+ showToast('No se pudo conectar con el servicio de bodycam. Reintent­ en unos segundos.', 'error');
  return;
  }
 
@@ -4671,7 +4671,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  const name = err && err.name ? err.name : '';
  showToast(
  name === 'NotAllowedError'
- ? 'Permit¡ el acceso a la pantalla/címara para activar la bodycam.'
+ ? 'Permit¡ el acceso a la pantalla/c­mara para activar la bodycam.'
  : 'No se pudo iniciar la captura: ' + (name || 'error desconocido'),
  'error'
  );
@@ -4686,12 +4686,12 @@ OPERATIONS MODULES òÉòÉòÉ */
  bodycamStarting = false;
  setBodycamBtn('live');
  publishBodycam(peerId);
- showToast('ô╣ Bodycam ACTIVA - el despacho ya puede verla en su panel.');
+ showToast('´£ Bodycam ACTIVA - el despacho ya puede verla en su panel.');
  },
  onError: function (msg) {
  bodycamStarting = false;
  stopBodycamLocal();
- showToast('Bodycam: ' + (msg || 'error de conexi│n'), 'error');
+ showToast('Bodycam: ' + (msg || 'error de conexin'), 'error');
  },
  onStop: function () {
  bodycamServer = null;
@@ -4706,7 +4706,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  }
  window.handleBodycamToggle = handleBodycamToggle;
 
- // öÇöÇ EXPORT HANDLERS öÇöÇ
+ // ¶¶ EXPORT HANDLERS ¶¶
  window.handleStartShift = async function() { await _handleStartShift(); };
  window.handleStartBreak = async function() { await _handleStartBreak(); };
  window.handleEndBreak = async function() { await _handleEndBreak(); };
@@ -4727,7 +4727,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  window.closeBoloPanel = closeBoloPanel;
  window.setBoloFilter = setBoloFilter;
 
- // öÇöÇ Acceso Dispatch: se oculta la tarjeta salvo rol exacto öÇöÇ
+ // ¶¶ Acceso Dispatch: se oculta la tarjeta salvo rol exacto ¶¶
  async function gateDispatchCard() {
  const card = document.querySelector('a.mod-card[href="dispatch.html"]');
  if (!card) return;
@@ -4752,7 +4752,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  window.removeBoloById = removeBoloById;
  window.reopenBoloById = reopenBoloById;
 
- // öÇöÇ INIT öÇöÇ
+ // ¶¶ INIT ¶¶
  async function init() {
  loadUser();
  session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
