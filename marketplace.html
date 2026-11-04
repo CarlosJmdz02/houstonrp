@@ -3186,34 +3186,47 @@ const title = prop.name || ('Propiedad #' + prop.id);
   }
 
 // Init
+  console.log('Marketplace script cargado. DOM state:', document.readyState);
+  
   function initMarketplace() {
-    // Llamar a loadOwned pero NO esperar
+    console.log('initMarketplace llamado');
+    console.log('PROPERTIES:', PROPERTIES.length, 'items');
+    console.log('SHOP_ITEMS:', SHOP_ITEMS.length, 'items');
+    
+    // Cargar datos del usuario (async, no esperar)
     loadOwned().catch(e => console.error('loadOwned error:', e));
     
-    // Renderizar inmediatamente
-    setTimeout(() => {
-      try {
-        renderProperties();
-      } catch (e) {
-        console.error('renderProperties error:', e);
-      }
-    }, 100);
+    // Renderizar las propiedades inmediatamente
+    try {
+      renderProperties();
+      console.log('renderProperties completado');
+    } catch (e) {
+      console.error('ERROR en renderProperties:', e);
+      console.error(e.stack);
+    }
   }
   
   if (document.readyState === 'loading') {
+    console.log('Esperando DOMContentLoaded...');
     document.addEventListener('DOMContentLoaded', initMarketplace);
   } else {
+    console.log('DOM ya está listo, llamando initMarketplace directamente');
     initMarketplace();
   }
   
-  // Si aún no se ha renderizado después de 2s, forzar
+  // Garantizar que se renderice después de 1s si no se ha hecho
   setTimeout(() => {
     const grid = $('market-grid');
-    if (grid && grid.innerHTML === '') {
-      console.log('Forzando renderProperties por timeout...');
-      renderProperties();
+    const hasContent = grid && grid.children.length > 0 && !grid.innerHTML.includes('Cargando');
+    if (!hasContent) {
+      console.log('Timeout: Forzando renderProperties...');
+      try {
+        renderProperties();
+      } catch (e) {
+        console.error('Error en timeout renderProperties:', e);
+      }
     }
-  }, 2000);
+  }, 1000);
 </script>
 </body>
 </html>
