@@ -1465,8 +1465,6 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <span class="calls-stamp">Listo para registrar</span>
         </div>
       </div>
-      <iframe id="incident-inline-frame" src="incident-report.html" title="Crear incidente"
-        style="display:block;width:100%;height:min(760px,78vh);border:0;border-radius:0 0 12px 12px;background:#121212;"></iframe>
     </div>
 
     <!-- ΓöÇΓöÇ OPERATIONS MODULES ΓöÇΓöÇ -->
@@ -3045,33 +3043,33 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             ${avatarUrl ? `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;" alt="${esc(q)}">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:Rajdhani,sans-serif;font-weight:700;font-size:20px;color:#fff;">${esc(q.charAt(0).toUpperCase())}</div>`}
           </div>
           <div style="flex:1;min-width:180px;">
-            <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--accent-cyan);">≡ƒôï ${esc(displayName)} ${activeBolos.length > 0 ? `<span style="display:inline-flex;align-items:center;gap:5px;margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(239,68,68,.9);border:1px solid rgba(239,68,68,.9);padding:3px 10px;border-radius:999px;">≡ƒö┤ Buscado${activeBolos.length > 1 ? ' ├ù' + activeBolos.length : ''}</span>` : ''}</div>
-            <div style="font-size:12px;color:var(--text-dim);margin-top:2px;">≡ƒÄ« ${esc(q)} ΓÇö ${arrests.length} arrestos ┬╖ ${fines.length} multas ┬╖ ${(licenses||[]).length} licencias ${(function(){var w=(records||[]).filter(function(r){return r.type==='warning';});if(!w.length)return '';return '<span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:rgba(230,168,104,.18);border:1px solid rgba(230,168,104,.45);color:#e6a868;font-weight:700;font-size:10.5px;">&#9888; '+w.length+' nota(s)</span>';})()}</div>
+            <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--accent-cyan);">${esc(displayName)} ${activeBolos.length > 0 ? `<span style="display:inline-flex;align-items:center;gap:5px;margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(239,68,68,.9);border:1px solid rgba(239,68,68,.9);padding:3px 10px;border-radius:999px;">BUSCADO${activeBolos.length > 1 ? ' x' + activeBolos.length : ''}</span>` : ''}</div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:2px;">Usuario: ${esc(q)} - ${arrests.length} arrestos • ${fines.length} multas • ${(licenses||[]).length} licencias ${(function(){var w=(records||[]).filter(function(r){return r.type==='warning';});if(!w.length)return '';return '<span style="display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:rgba(230,168,104,.18);border:1px solid rgba(230,168,104,.45);color:#e6a868;font-weight:700;font-size:10.5px;">Advertencias: '+w.length+'</span>';})()}</div>
             ${summary ? `<div style="font-size:11.5px;color:var(--text-secondary);margin-top:5px;">${esc(summary)}</div>` : ''}
           </div>
-          <button class="btn btn-primary" onclick="openProfile('${esc(q)}')" style="font-size:12px;padding:9px 18px;">Ver Perfil ΓåÆ</button>
+          <button class="btn btn-primary" onclick="openProfile('${esc(q)}')" style="font-size:12px;padding:9px 18px;">Ver Perfil</button>
         </div>
       </div>`;
     } catch (err) {
-      r.innerHTML = '<div class="search-result not-found">Γ¥î Error: ' + (err.message || 'desconocido') + '</div>';
+      r.innerHTML = '<div class="search-result not-found">ERROR: ' + (err.message || 'desconocido') + '</div>';
     }
     $('btn-search').disabled = false;
   }
 
-  // ΓöÇΓöÇ DEPARTAMENTOS (etiqueta para el perfil / unidades) ΓöÇΓöÇ
+  // DEPARTAMENTOS (etiqueta para el perfil / unidades)
   const DEPT_HERO = {
-    hpd:  { icon: '≡ƒÜö', code: 'HPD',  name: 'Polic├¡a de Houston' },
-    hcso: { icon: 'Γ¡É', code: 'HCSO', name: 'Sheriff del Condado Harris' },
-    tph:  { icon: '≡ƒ¢ú∩╕Å', code: 'TPH',  name: 'Patrulla Estatal' },
-    ice:  { icon: '≡ƒ¢í∩╕Å', code: 'ICE',  name: 'Immigration & Customs' },
-    hfd:  { icon: '≡ƒÜÆ', code: 'HFD',  name: 'Bomberos de Houston' },
-    dot:  { icon: '≡ƒöº', code: 'HDOT', name: 'Transporte (HDOT)' },
-    ems:  { icon: '≡ƒÜæ', code: 'EMS',  name: 'Emergencias M├⌐dicas' },
-    dc:   { icon: '≡ƒÅó', code: 'DC',   name: 'Departamento Central' },
+    hpd:  { icon: '👮', code: 'HPD',  name: 'Policia de Houston' },
+    hcso: { icon: '🛡️', code: 'HCSO', name: 'Sheriff del Condado Harris' },
+    tph:  { icon: '🚔', code: 'TPH',  name: 'Patrulla Estatal' },
+    ice:  { icon: '📋', code: 'ICE',  name: 'Immigration & Customs' },
+    hfd:  { icon: '🚒', code: 'HFD',  name: 'Bomberos de Houston' },
+    dot:  { icon: '🚗', code: 'HDOT', name: 'Transporte (HDOT)' },
+    ems:  { icon: '🚑', code: 'EMS',  name: 'Emergencias Medicas' },
+    dc:   { icon: '🏛️', code: 'DC',   name: 'Departamento Central' },
   };
   function deptHeroLabel(code) {
     const k = String(code || '').toLowerCase();
-    return DEPT_HERO[k] || { icon: '≡ƒÅ¢∩╕Å', code: String(code || '').toUpperCase() || 'ΓÇö', name: 'Departamento' };
+    return DEPT_HERO[k] || { icon: '📍', code: String(code || '').toUpperCase() || 'N/A', name: 'Departamento' };
   }
 
   async function openProfile(robloxUsername) {
@@ -3462,28 +3460,11 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     if (frame) setTimeout(() => { frame.src = 'about:blank'; }, 320);
   }
 
-  // Reportar incidencias dentro del MDT (incident-report.html en el mismo drawer).
+  // Reportar incidencias dentro del MDT (disabled - incident-report.html removed).
   function openIncidentDrawer() {
-    const overlay = $('drawer-overlay');
-    const drawer = $('record-drawer');
-    const head = $('drawer-head');
-    const icon = $('drawer-icon');
-    const title = $('drawer-title');
-    const sub = $('drawer-sub');
-    const frame = $('record-frame');
-    if (!overlay || !drawer || !frame) return;
-
-    head.classList.remove('fine');
-    icon.textContent = '≡ƒÜ¿';
-    title.textContent = 'Incidencias';
-    sub.textContent = 'Reportar incidentes ┬╖ HOUSTON RP';
-    drawer.classList.add('wide');
-    frame.src = 'incident-report.html';
-
-    overlay.classList.add('active');
-    drawer.classList.add('active');
-    drawer.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    // Function disabled - incident-report.html has been removed
+    console.log('openIncidentDrawer disabled');
+    return;
   }
   window.openIncidentDrawer = openIncidentDrawer;
 
