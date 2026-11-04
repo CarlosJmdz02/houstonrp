@@ -1240,57 +1240,19 @@ let userId = null;
    window.closeModal = closeModal;
 
    // ── VERIFY ACCESS CODE ──
-   window.checkAccessCode = async function() {
-     console.log('checkAccessCode llamado');
+   window.checkAccessCode = function() {
      const input = $('access-code-input');
      const errorDiv = $('access-error');
-     if (!input) {
-       console.error('No input encontrado');
-       return;
-     }
+     if (!input) return;
      
      const code = input.value.trim();
-     console.log('Código ingresado:', code);
      
      if (code === 'AR2026') {
-       console.log('Código correcto! Guardando y reiniciando...');
-       // Guardar el código
+       // Guardar código y recargar
        localStorage.setItem('hrp_admin_code', 'AR2026');
-       
-       // Esperar un poco y luego reinicializar todo
-       setTimeout(async () => {
-         try {
-           // Ejecutar el init de nuevo ahora que tiene acceso
-           const hasAccess = await checkAccess();
-           console.log('hasAccess después de guardar código:', hasAccess);
-           
-           if (hasAccess) {
-             // Inicializar la interfaz completa
-             tick();
-             setInterval(tick, 1000);
-             await loadUsers();
-             await loadRankFilterData();
-             await loadBalance();
-             await loadBadgeCounts();
-             
-             // Conectar eventos
-             document.querySelectorAll('.modal-overlay').forEach(el => {
-               el.addEventListener('click', function(e) {
-                 if (e.target === this) {
-                   this.classList.remove('open');
-                   selectedUser = null;
-                 }
-               });
-             });
-             
-             console.log('Panel iniciado exitosamente');
-           }
-         } catch (e) {
-           console.error('Error iniciando panel:', e);
-         }
-       }, 100);
+       location.reload();
      } else {
-       console.log('Código incorrecto');
+       // Mostrar error
        input.style.borderColor = 'var(--accent-red)';
        if (errorDiv) {
          errorDiv.textContent = '❌ Código incorrecto';
