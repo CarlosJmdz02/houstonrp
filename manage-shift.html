@@ -1234,13 +1234,57 @@ let userId = null;
   }
 
   function closeModal(id) {
-    $(id).classList.remove('open');
-    selectedUser = null;
-  }
-  window.closeModal = closeModal;
+     $(id).classList.remove('open');
+     selectedUser = null;
+   }
+   window.closeModal = closeModal;
 
-  // ── ACCESS CHECK ──
-  async function checkAccess() {
+   // ── VERIFY ACCESS CODE ──
+   window.checkAccessCode = async function() {
+     console.log('checkAccessCode llamado');
+     const input = $('access-code-input');
+     const errorDiv = $('access-error');
+     if (!input) {
+       console.error('No input encontrado');
+       return;
+     }
+     
+     const code = input.value.trim();
+     console.log('Código ingresado:', code);
+     
+     if (code === 'AR2026') {
+       console.log('Código correcto! Mostrando panel...');
+       // Guardar y mostrar contenido inmediatamente
+       localStorage.setItem('hrp_admin_code', 'AR2026');
+       $('access-loading').classList.add('hidden');
+       $('admin-content').style.display = 'block';
+       
+       // Cargar todos los datos del panel
+       try {
+         tick();
+         setInterval(tick, 1000);
+         await loadUsers();
+         await loadRankFilterData();
+         await loadBalance();
+         await loadBadgeCounts();
+         console.log('Datos cargados exitosamente');
+       } catch (e) {
+         console.error('Error cargando datos:', e);
+       }
+     } else {
+       console.log('Código incorrecto');
+       input.style.borderColor = 'var(--accent-red)';
+       if (errorDiv) {
+         errorDiv.textContent = '❌ Código incorrecto';
+         errorDiv.style.display = 'block';
+       }
+       input.value = '';
+       input.focus();
+     }
+   };
+
+   // ── ACCESS CHECK ──
+   async function checkAccess() {
      const session = typeof hrpGetSession === 'function' ? hrpGetSession() : null;
      if (!session || !session.id) {
        const _p=window.location.pathname.split('/').pop()||'index.html'; if(_p!=='index.html')localStorage.setItem('hrp_redirect',_p);
@@ -1285,46 +1329,8 @@ let userId = null;
        if (input) input.focus();
      }, 100);
      
-     return false;
-   }
-   
-   // Función global para verificar código
-    window.checkAccessCode = async function() {
-      const input = $('access-code-input');
-      const errorDiv = $('access-error');
-      if (!input) return;
-      
-      const code = input.value.trim();
-      if (code === 'AR2026') {
-        // Guardar y mostrar contenido inmediatamente
-        localStorage.setItem('hrp_admin_code', 'AR2026');
-        $('access-loading').classList.add('hidden');
-        $('admin-content').style.display = 'block';
-        
-        // Cargar todos los datos del panel
-        try {
-          tick();
-          setInterval(tick, 1000);
-          await loadUsers();
-          await loadRankFilterData();
-          await loadBalance();
-          await loadBadgeCounts();
-        } catch (e) {
-          console.error('Error cargando datos:', e);
-        }
-      } else {
-        input.style.borderColor = 'var(--accent-red)';
-        if (errorDiv) {
-          errorDiv.textContent = '❌ Código incorrecto';
-          errorDiv.style.display = 'block';
-        }
-        input.value = '';
-        input.focus();
-      }
-    };
-
-    return false;
-  }
+      return false;
+    }
 
 // ── DEPARTMENT ──
   function selectDepartment(dept) {
