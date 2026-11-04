@@ -1,0 +1,12 @@
+CACHE PURGE - Build: 459ed25
+Timestamp: 2026-11-03T22:30:00Z
+
+Changes deployed:
+- All corrupted UTF-8 characters removed from mdt.html
+- BOLOs section cleaned
+- Licenses section cleaned
+- Cancel button removed from incident-report.html
+- AR2026 access code added to manage-shift.html
+- dispatch.html HTML fixed
+
+Force refresh your browser: Ctrl+Shift+Delete then Ctrl+F5
