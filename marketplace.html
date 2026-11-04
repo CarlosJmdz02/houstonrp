@@ -3185,48 +3185,9 @@ const title = prop.name || ('Propiedad #' + prop.id);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
   }
 
-// Init
-  console.log('Marketplace script cargado. DOM state:', document.readyState);
-  
-  function initMarketplace() {
-    console.log('initMarketplace llamado');
-    console.log('PROPERTIES:', PROPERTIES.length, 'items');
-    console.log('SHOP_ITEMS:', SHOP_ITEMS.length, 'items');
-    
-    // Cargar datos del usuario (async, no esperar)
-    loadOwned().catch(e => console.error('loadOwned error:', e));
-    
-    // Renderizar las propiedades inmediatamente
-    try {
-      renderProperties();
-      console.log('renderProperties completado');
-    } catch (e) {
-      console.error('ERROR en renderProperties:', e);
-      console.error(e.stack);
-    }
-  }
-  
-  if (document.readyState === 'loading') {
-    console.log('Esperando DOMContentLoaded...');
-    document.addEventListener('DOMContentLoaded', initMarketplace);
-  } else {
-    console.log('DOM ya está listo, llamando initMarketplace directamente');
-    initMarketplace();
-  }
-  
-  // Garantizar que se renderice después de 1s si no se ha hecho
-  setTimeout(() => {
-    const grid = $('market-grid');
-    const hasContent = grid && grid.children.length > 0 && !grid.innerHTML.includes('Cargando');
-    if (!hasContent) {
-      console.log('Timeout: Forzando renderProperties...');
-      try {
-        renderProperties();
-      } catch (e) {
-        console.error('Error en timeout renderProperties:', e);
-      }
-    }
-  }, 1000);
+// Init - Mostrar propiedades directamente
+  renderProperties();
+  loadOwned().catch(() => {});
 </script>
 </body>
 </html>
