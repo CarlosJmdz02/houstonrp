@@ -3172,7 +3172,7 @@ const title = prop.name || ('Propiedad #' + prop.id);
   function showToast(msg, type = 'success') {
     const toast = $('toast');
     $('toast-msg').textContent = msg;
-    $('toast-icon').textContent = type === 'error' ? 'Γ£ò' : 'Γ£ô';
+    $('toast-icon').textContent = type === 'error' ? '✕' : '✓';
     toast.classList.toggle('error', type === 'error');
     toast.classList.toggle('success', type !== 'error');
     toast.classList.add('show');
@@ -3180,8 +3180,14 @@ const title = prop.name || ('Propiedad #' + prop.id);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
   }
 
-// ΓöÇΓöÇ Init ΓöÇΓöÇ
-  loadOwned().then(renderProperties);
+// Init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      loadOwned().then(renderProperties).catch(() => renderProperties());
+    });
+  } else {
+    loadOwned().then(renderProperties).catch(() => renderProperties());
+  }
 </script>
 </body>
 </html>
