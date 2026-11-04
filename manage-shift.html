@@ -2041,27 +2041,43 @@ async function loadUsers() {
   }
 
   // ── INIT ──
-  async function init() {
-    const hasAccess = await checkAccess();
-    if (!hasAccess) return;
+   async function init() {
+     const hasAccess = await checkAccess();
+     if (!hasAccess) return;
 
-    // La pestaña "Rangos" es solo para el rol de Alto Mando autorizado.
-    if (typeof hrpRankWhoAmI === 'function') {
-      hrpRankWhoAmI().then(function (w) {
-        if (w && w.canManageRanks === false) {
-          const btn = document.querySelector('.tab-btn[onclick*="rangos"]');
-          if (btn) btn.style.display = 'none';
-        }
-      }).catch(function () {});
-    }
+     // Verificar si las funciones necesarias existen
+     if (typeof hrpGetAllUsersWithHours !== 'function' || typeof supaSelect !== 'function') {
+       const panel = $('admin-content');
+       if (panel) {
+         panel.innerHTML = `
+           <div style="padding:40px;text-align:center;">
+             <div style="font-size:48px;margin-bottom:20px;">⚠️</div>
+             <h2 style="font-family:Rajdhani;font-size:24px;color:#e8ecf4;margin-bottom:10px;">Panel No Disponible</h2>
+             <p style="color:#94a3b8;margin-bottom:20px;">Manage Shift está diseñado para funcionar dentro de App.html</p>
+             <a href="app.html" style="display:inline-block;padding:12px 32px;background:#3b82f6;color:white;text-decoration:none;border-radius:8px;font-family:Rajdhani;font-weight:600;">Ir a App.html</a>
+           </div>
+         `;
+       }
+       return;
+     }
 
-    tick();
-    setInterval(tick, 1000);
+     // La pestaña "Rangos" es solo para el rol de Alto Mando autorizado.
+     if (typeof hrpRankWhoAmI === 'function') {
+       hrpRankWhoAmI().then(function (w) {
+         if (w && w.canManageRanks === false) {
+           const btn = document.querySelector('.tab-btn[onclick*="rangos"]');
+           if (btn) btn.style.display = 'none';
+         }
+       }).catch(function () {});
+     }
 
-loadUsers();
-    loadRankFilterData();
-    loadBalance();
-    loadBadgeCounts();
+     tick();
+     setInterval(tick, 1000);
+
+     loadUsers();
+     loadRankFilterData();
+     loadBalance();
+     loadBadgeCounts();
 
     // ── Solicitudes compartidas (apps-support → manage-shift) ──
     // Carga inicial y refresco automático: los reportes/ascensos/K-9 aparecen
