@@ -880,33 +880,9 @@
   <div class="content" id="main-content">
 
     <div id="access-loading" class="access-overlay">
-      <div class="access-icon loading"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 11l2 2 4-4"/></svg></div>
-      <div class="access-title">🔐 Código de Acceso</div>
-      <div class="access-desc">Ingresa el código administrativo para acceder al panel</div>
-      <input type="password" id="access-code-input" placeholder="Código..." style="
-        width: 100%;
-        max-width: 300px;
-        padding: 12px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        color: var(--text-primary);
-        font-family: 'JetBrains Mono', monospace;
-        margin-top: 20px;
-        margin-bottom: 16px;
-        box-sizing: border-box;
-      ">
-      <button onclick="verifyAccessCode()" style="
-        padding: 10px 24px;
-        background: var(--accent-blue);
-        border: 1px solid var(--accent-blue);
-        border-radius: 8px;
-        color: white;
-        cursor: pointer;
-        font-family: 'Rajdhani', sans-serif;
-        font-weight: 600;
-      ">Verificar Código</button>
-      <div id="access-error" style="color: var(--accent-red); margin-top: 12px; display: none; font-size: 13px;"></div>
+      <div class="access-icon loading"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></div>
+      <div class="access-title">Verificando acceso...</div>
+      <div class="access-desc">Comprobando tus permisos de administración.</div>
     </div>
 
     <div id="access-denied" class="access-overlay hidden">
@@ -1308,17 +1284,73 @@ let userId = null;
     // Mostrar pantalla de código
     $('access-loading').classList.add('hidden');
     $('access-denied').classList.remove('hidden');
-    $('denied-title').textContent = 'Ingresa el código de acceso';
-    $('denied-desc').innerHTML = '<input type="password" id="access-code-input" placeholder="Código AR####" style="padding:10px;width:100%;border-radius:6px;border:1px solid #ccc;margin:10px 0;"><button onclick="checkAccessCode()" style="padding:10px 20px;background:#3b82f6;color:white;border:none;border-radius:6px;cursor:pointer;">Verificar</button>';
-    window.checkAccessCode = function() {
-      const code = document.getElementById('access-code-input').value;
+    $('denied-title').textContent = '🔐 Código de Acceso';
+    $('denied-desc').innerHTML = '';
+    
+    // Crear el formulario de código
+    const codeForm = document.createElement('div');
+    codeForm.style.cssText = 'display:flex;flex-direction:column;gap:12px;align-items:center;';
+    
+    const input = document.createElement('input');
+    input.type = 'password';
+    input.id = 'access-code-input';
+    input.placeholder = 'Código AR2026';
+    input.style.cssText = `
+      padding: 12px;
+      width: 100%;
+      max-width: 300px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      box-sizing: border-box;
+    `;
+    
+    const button = document.createElement('button');
+    button.textContent = 'Verificar Código';
+    button.style.cssText = `
+      padding: 10px 24px;
+      background: var(--accent-blue);
+      color: white;
+      border: 1px solid var(--accent-blue);
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+    `;
+    
+    const errorMsg = document.createElement('div');
+    errorMsg.id = 'access-error-msg';
+    errorMsg.style.cssText = 'color:var(--accent-red);font-size:13px;display:none;';
+    
+    button.onclick = function() {
+      const code = input.value.trim();
       if (code === 'AR2026') {
         localStorage.setItem('hrp_admin_code', 'AR2026');
         location.reload();
       } else {
-        alert('Código incorrecto');
+        input.style.borderColor = 'var(--accent-red)';
+        errorMsg.textContent = '❌ Código incorrecto. Intenta nuevamente.';
+        errorMsg.style.display = 'block';
+        input.value = '';
+        input.focus();
       }
     };
+    
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') button.onclick();
+    });
+    
+    codeForm.appendChild(input);
+    codeForm.appendChild(button);
+    codeForm.appendChild(errorMsg);
+    
+    $('denied-desc').appendChild(codeForm);
+    
+    setTimeout(() => input.focus(), 100);
+    
+    window.checkAccessCode = button.onclick;
     return false;
   }
       $('denied-title').textContent = 'Re-autenticación necesaria';
