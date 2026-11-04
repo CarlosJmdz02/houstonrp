@@ -2685,6 +2685,11 @@ const PER_PAGE = 10;
 
   function renderProperties() {
     const grid = $('market-grid');
+    if (!grid) {
+      console.error('ERROR: No se encontró elemento market-grid');
+      return;
+    }
+    console.log('renderProperties llamado, filter:', activeFilter, 'PROPERTIES length:', PROPERTIES.length);
     const pag = document.querySelector('.pagination');
     const banner = document.querySelector('.maintenance-banner');
 
@@ -3181,13 +3186,34 @@ const title = prop.name || ('Propiedad #' + prop.id);
   }
 
 // Init
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      loadOwned().then(renderProperties).catch(() => renderProperties());
-    });
-  } else {
-    loadOwned().then(renderProperties).catch(() => renderProperties());
+  function initMarketplace() {
+    // Llamar a loadOwned pero NO esperar
+    loadOwned().catch(e => console.error('loadOwned error:', e));
+    
+    // Renderizar inmediatamente
+    setTimeout(() => {
+      try {
+        renderProperties();
+      } catch (e) {
+        console.error('renderProperties error:', e);
+      }
+    }, 100);
   }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMarketplace);
+  } else {
+    initMarketplace();
+  }
+  
+  // Si aún no se ha renderizado después de 2s, forzar
+  setTimeout(() => {
+    const grid = $('market-grid');
+    if (grid && grid.innerHTML === '') {
+      console.log('Forzando renderProperties por timeout...');
+      renderProperties();
+    }
+  }, 2000);
 </script>
 </body>
 </html>
