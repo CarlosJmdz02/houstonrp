@@ -2903,29 +2903,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
 
 
-    <!-- ==== INCIDENCIAS - FORMULARIO EMbebido (siempre visible) ==== -->
 
-    <div class="incident-inline" style="margin-top:20px;">
-
-      <div class="calls-head" style="border-radius:12px 12px 0 0;border-bottom:none;">
-
-        <div class="calls-head-title">
-
-          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#f87171" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-
-          <span class="page-title" style="font-size:19px;">Crear <span>Incidente</span></span>
-
-        </div>
-
-        <div class="calls-head-right">
-
-          <span class="calls-stamp">Listo para registrar</span>
-
-        </div>
-
-      </div>
-
-    </div>
 
 
 
@@ -3064,7 +3042,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
       </div>
 
-      <a class="mod-card" href="incident-report.html" style="--mc:#ec4899;">
+      <div class="mod-card" onclick="openIncidentDrawer()" style="--mc:#ec4899;cursor:pointer;">
         <div class="mod-card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </div>
@@ -3072,7 +3050,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <div class="mod-card-title">Incidentes</div>
           <div class="mod-card-label">Reportar incidentes</div>
         </div>
-      </a>
+      </div>
 
     </div>
 
@@ -6921,22 +6899,29 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
 
 
-  // Reportar incidencias dentro del MDT (disabled - incident-report.html removed).
+  // Reportar incidencias dentro del MDT (drawer con formulario embebido).
 
   function openIncidentDrawer() {
 
-    // Function disabled - incident-report.html has been removed
-    console.log('openIncidentDrawer disabled');
-    return;
+    const overlay = $('drawer-overlay');
+    const drawer = $('record-drawer');
+    const head = $('drawer-head');
+    const icon = $('drawer-icon');
+    const title = $('drawer-title');
+    const sub = $('drawer-sub');
+    const frame = $('record-frame');
+    if (!overlay || !drawer || !frame) return;
 
-
+    head.classList.remove('fine');
+    icon.textContent = '📋';
+    title.textContent = 'Incidencias';
+    sub.textContent = 'Reportar incidentes - HOUSTON RP';
+    drawer.classList.add('wide');
+    frame.src = 'incident-report.html';
 
     overlay.classList.add('active');
-
     drawer.classList.add('active');
-
     drawer.setAttribute('aria-hidden', 'false');
-
     document.body.style.overflow = 'hidden';
 
   }
