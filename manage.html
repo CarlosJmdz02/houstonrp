@@ -717,6 +717,147 @@
     alert('Filtro para ' + tab);
   }
 
+  // ── CARGAR OFICIALES DE SUPABASE ──
+  let allOfficers = [];
+
+  async function loadOfficersFromDatabase() {
+    try {
+      // Intentar cargar desde Supabase si está disponible
+      if (typeof supaSelect === 'function') {
+        console.log('Cargando oficiales de Supabase...');
+        const officers = await supaSelect('police_members', '*', { limit: '1000' });
+        if (officers && officers.length > 0) {
+          allOfficers = officers;
+          console.log('✓ Oficiales cargados:', officers.length);
+          renderAllOfficers();
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando de Supabase:', e);
+    }
+    
+    console.log('ℹ Usando datos de demostración');
+    // Datos de demostración si Supabase no está disponible
+  }
+
+  function renderAllOfficers() {
+    const officers = allOfficers.length > 0 ? allOfficers : getDemoOfficers();
+    
+    // Renderizar Horas
+    const horasList = document.getElementById('horas-list');
+    if (horasList) {
+      horasList.innerHTML = officers.map(officer => `
+        <div class="officer-card">
+          <div class="officer-info">
+            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
+            <div class="officer-details">
+              <span>🏢 ${officer.department || 'HPD'}</span>
+              <span>⏰ ${officer.hours || 0} horas</span>
+              <span>🎖️ ${officer.rank || 'Oficial'}</span>
+            </div>
+          </div>
+          <div class="officer-actions">
+            <button class="btn btn-success" onclick="addHours('${officer.username || officer.name}')">➕ Agregar</button>
+            <button class="btn btn-danger" onclick="removeHours('${officer.username || officer.name}')">➖ Remover</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Renderizar Dinero
+    const dineroList = document.getElementById('dinero-list');
+    if (dineroList) {
+      dineroList.innerHTML = officers.map(officer => `
+        <div class="officer-card">
+          <div class="officer-info">
+            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
+            <div class="officer-details">
+              <span>💰 $${officer.balance || 0}</span>
+            </div>
+          </div>
+          <div class="officer-actions">
+            <button class="btn btn-primary" onclick="addMoney('${officer.username || officer.name}')">➕ Agregar Dinero</button>
+            <button class="btn btn-danger" onclick="removeMoney('${officer.username || officer.name}')">➖ Quitar Dinero</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Renderizar Rango
+    const rangoList = document.getElementById('rango-list');
+    if (rangoList) {
+      rangoList.innerHTML = officers.map(officer => `
+        <div class="officer-card">
+          <div class="officer-info">
+            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
+            <div class="officer-details">
+              <span>🎖️ ${officer.rank || 'Oficial'}</span>
+              <span>🏢 ${officer.department || 'HPD'}</span>
+            </div>
+          </div>
+          <div class="officer-actions">
+            <button class="btn btn-primary" onclick="changeRank('${officer.username || officer.name}')">Cambiar Rango</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Renderizar Departamento
+    const deptList = document.getElementById('departamento-list');
+    if (deptList) {
+      deptList.innerHTML = officers.map(officer => `
+        <div class="officer-card">
+          <div class="officer-info">
+            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
+            <div class="officer-details">
+              <span>🏢 ${officer.department || 'HPD'}</span>
+            </div>
+          </div>
+          <div class="officer-actions">
+            <button class="btn btn-primary" onclick="changeDept('${officer.username || officer.name}')">Cambiar Departamento</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Renderizar Fire
+    const fireList = document.getElementById('fire-list');
+    if (fireList) {
+      fireList.innerHTML = officers.map(officer => `
+        <div class="officer-card">
+          <div class="officer-info">
+            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
+            <div class="officer-details">
+              <span>🏢 ${officer.department || 'HPD'}</span>
+              <span>⏰ ${officer.hours || 0} horas</span>
+              <span>🎖️ ${officer.rank || 'Oficial'}</span>
+            </div>
+          </div>
+          <div class="officer-actions">
+            <button class="btn btn-danger" onclick="fireOfficer('${officer.username || officer.name}')">🚨 DESPEDIR</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function getDemoOfficers() {
+    return [
+      { username: 'Juan Méndez', name: 'Juan Méndez', department: 'HPD', hours: 125, rank: 'Sargento', balance: 45000 },
+      { username: 'María Cortés', name: 'María Cortés', department: 'HCSO', hours: 98, rank: 'Oficial', balance: 32500 },
+      { username: 'Carlos Rojas', name: 'Carlos Rojas', department: 'HPD', hours: 156, rank: 'Detective', balance: 52000 },
+      { username: 'Ana Pérez', name: 'Ana Pérez', department: 'HCSO', hours: 87, rank: 'Oficial', balance: 28000 },
+      { username: 'Luis García', name: 'Luis García', department: 'HPD', hours: 110, rank: 'Oficial', balance: 41000 }
+    ];
+  }
+
+  // Cargar oficiales al iniciar
+  window.addEventListener('load', function() {
+    console.log('Página cargada, iniciando carga de oficiales...');
+    loadOfficersFromDatabase();
+  });
+
   console.log('✓ Manage Shift Panel cargado correctamente');
 </script>
 
