@@ -1289,27 +1289,39 @@ let userId = null;
    }
    
    // Función global para verificar código
-   window.checkAccessCode = function() {
-     const input = $('access-code-input');
-     const errorDiv = $('access-error');
-     if (!input) return;
-     
-     const code = input.value.trim();
-     if (code === 'AR2026') {
-       // Guardar y mostrar contenido inmediatamente
-       localStorage.setItem('hrp_admin_code', 'AR2026');
-       $('access-loading').classList.add('hidden');
-       $('admin-content').style.display = 'block';
-     } else {
-       input.style.borderColor = 'var(--accent-red)';
-       if (errorDiv) {
-         errorDiv.textContent = '❌ Código incorrecto';
-         errorDiv.style.display = 'block';
-       }
-       input.value = '';
-       input.focus();
-     }
-   };
+    window.checkAccessCode = async function() {
+      const input = $('access-code-input');
+      const errorDiv = $('access-error');
+      if (!input) return;
+      
+      const code = input.value.trim();
+      if (code === 'AR2026') {
+        // Guardar y mostrar contenido inmediatamente
+        localStorage.setItem('hrp_admin_code', 'AR2026');
+        $('access-loading').classList.add('hidden');
+        $('admin-content').style.display = 'block';
+        
+        // Cargar todos los datos del panel
+        try {
+          tick();
+          setInterval(tick, 1000);
+          await loadUsers();
+          await loadRankFilterData();
+          await loadBalance();
+          await loadBadgeCounts();
+        } catch (e) {
+          console.error('Error cargando datos:', e);
+        }
+      } else {
+        input.style.borderColor = 'var(--accent-red)';
+        if (errorDiv) {
+          errorDiv.textContent = '❌ Código incorrecto';
+          errorDiv.style.display = 'block';
+        }
+        input.value = '';
+        input.focus();
+      }
+    };
 
     return false;
   }
