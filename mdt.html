@@ -972,7 +972,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     letter-spacing: .1em; text-transform: uppercase;
     color: var(--accent-green);
   }
-  /* ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ RADIO T├üCTICA ΓÇö look HPD TAC (compacta) ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ */
+  /* ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ RADIO T├üCTICA - look HPD TAC (compacta) ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ */
   .radio-panel.tac {
     width: 364px;
     background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
@@ -1113,7 +1113,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   .tac-gate-btns button:hover { background: rgba(59,130,246,.3); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59,130,246,.35); }
   .tac-gate-err { font-size: 11px; color: #f87171; min-height: 14px; font-family: 'JetBrains Mono', monospace; }
 
-  /* ΓöÇΓöÇ LLAMADAS 911 ┬╖ secci├│n en la pantalla principal ΓöÇΓöÇ */
+  /* ΓöÇΓöÇ LLAMADAS 911  •  secci├│n en la pantalla principal ΓöÇΓöÇ */
   .calls-inline { margin: 22px 0 4px; }
   .calls-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
   .calls-head-title { display: flex; align-items: center; gap: 9px; }
@@ -1432,7 +1432,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       </div>
     </div>
 
-    <!-- ΓòÉΓòÉΓòÉ LLAMADAS 911 ┬╖ EN VIVO (bajo Consulta de Personas) ΓòÉΓòÉΓòÉ -->
+    <!-- ΓòÉΓòÉΓòÉ LLAMADAS 911  •  EN VIVO (bajo Consulta de Personas) ΓòÉΓòÉΓòÉ -->
     <div class="calls-inline">
       <div class="calls-head">
         <div class="calls-head-title">
@@ -1442,7 +1442,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <div class="calls-head-right">
           <span class="calls-live"><span class="dot"></span> En vivo</span>
           <span class="calls-count" id="calls-n">0</span>
-          <span class="calls-stamp" id="calls-last">ΓÇö</span>
+          <span class="calls-stamp" id="calls-last">-</span>
         </div>
       </div>
       <div class="calls-grid" id="calls-grid">
@@ -1539,7 +1539,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       <div class="history-top">
         <div class="history-top-left">
           <div>
-            <div class="page-title" style="font-size:26px;">Historial de <span>Operaciones</span><span class="qtag">Q-03 ┬╖ Log</span></div>
+            <div class="page-title" style="font-size:26px;">Historial de <span>Operaciones</span><span class="qtag">Q-03  •  Log</span></div>
           </div>
         </div>
         <button class="history-close" onclick="closeHistoryPanel()">
@@ -1601,7 +1601,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     <div id="bolo-panel">
       <div class="bolo-top">
         <div>
-          <div class="page-title" style="font-size:26px;">BOLO ┬╖ <span>Alerta de Vigilancia</span></div>
+          <div class="page-title" style="font-size:26px;">BOLO  •  <span>Alerta de Vigilancia</span></div>
         </div>
         <button class="history-close" onclick="closeBoloPanel()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1614,7 +1614,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <div class="bolo-form-row" style="margin-bottom:12px;">
           <div class="bolo-field">
             <label class="bolo-form-label">Buscar Ciudadano (Roblox / Nombre)</label>
-            <input class="bolo-input" id="bolo-search" type="text" placeholder="Escrib├¡ el nombre de usuario o nombre real..." autocomplete="off" spellcheck="false">
+            <input class="bolo-input" id="bolo-search" type="text" placeholder="Escribi el nombre de usuario o nombre real..." autocomplete="off" spellcheck="false">
           </div>
         </div>
         <div id="bolo-search-result"></div>
@@ -1622,8 +1622,8 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <div class="bolo-search-pick">
             <div class="bolo-avatar" id="bolo-pick-avatar">?</div>
             <div>
-              <div class="bolo-person-name" id="bolo-pick-name">ΓÇö</div>
-              <div class="bolo-person-user" id="bolo-pick-user">≡ƒÄ« ΓÇö</div>
+              <div class="bolo-person-name" id="bolo-pick-name">-</div>
+              <div class="bolo-person-user" id="bolo-pick-user">≡ƒÄ« -</div>
             </div>
             <button class="bolo-btn-x" onclick="clearBoloPick()" title="Quitar">Γ£ò</button>
           </div>
@@ -1632,25 +1632,25 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <div class="bolo-form-row" style="margin-top:14px;">
           <div class="bolo-field">
             <label class="bolo-form-label">Motivo del BOLO *</label>
-            <textarea class="bolo-input" id="bolo-motivo" maxlength="500" placeholder="Describ├¡ el motivo detallado del aviso de vigilancia..."></textarea>
+            <textarea class="bolo-input" id="bolo-motivo" maxlength="500" placeholder="DEscribi el motivo detallado del aviso de vigilancia..."></textarea>
           </div>
         </div>
         <div class="bolo-form-row">
           <div class="bolo-field">
-            <label class="bolo-form-label">C├│digo Penal</label>
-            <select class="bolo-input" id="bolo-penal"><option value="">ΓÇö Sin c├│digo penal ΓÇö</option></select>
+            <label class="bolo-form-label">Codigo Penal</label>
+            <select class="bolo-input" id="bolo-penal"><option value="">- Sin Codigo penal -</option></select>
           </div>
           <div class="bolo-field">
             <label class="bolo-form-label">Prioridad</label>
             <select class="bolo-input" id="bolo-prio">
-              <option value="alta">≡ƒö┤ Alta</option>
-              <option value="media" selected>≡ƒƒí Media</option>
-              <option value="baja">≡ƒƒó Baja</option>
+              <option value="alta">🔴 Alta</option>
+              <option value="media" selected>🟡 Media</option>
+              <option value="baja">🟢 Baja</option>
             </select>
           </div>
         </div>
         <div class="bolo-form-row" style="margin-top:14px;">
-          <button class="btn btn-bolo" id="btn-bolo-save" onclick="saveBolo()">≡ƒÜ¿ Emitir BOLO</button>
+          <button class="btn btn-bolo" id="btn-bolo-save" onclick="saveBolo()">🚨 Emitir BOLO</button>
         </div>
         <div class="bolo-form-error" id="bolo-form-msg"></div>
       </div>
@@ -1662,7 +1662,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <button class="bolo-filter-btn" data-bolo-filter="cerrados" onclick="setBoloFilter('cerrados', this)">Cerrados</button>
           <button class="bolo-filter-btn" data-bolo-filter="todos" onclick="setBoloFilter('todos', this)">Todos</button>
         </div>
-        <span style="font-family:JetBrains Mono,monospace;font-size:10.5px;color:var(--text-dim);" id="bolo-last">ΓÇö</span>
+        <span style="font-family:JetBrains Mono,monospace;font-size:10.5px;color:var(--text-dim);" id="bolo-last">-</span>
       </div>
       <div class="bolo-grid" id="bolo-list">
         <div class="bolo-empty">
@@ -1687,15 +1687,15 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     </div>
     <div class="bolo-form-row">
       <div class="bolo-field">
-        <label class="bolo-form-label">C├│digo Penal</label>
-        <select class="bolo-input" id="bolo-edit-penal"><option value="">ΓÇö Sin c├│digo penal ΓÇö</option></select>
+        <label class="bolo-form-label">Codigo Penal</label>
+        <select class="bolo-input" id="bolo-edit-penal"><option value="">- Sin Codigo penal -</option></select>
       </div>
       <div class="bolo-field">
         <label class="bolo-form-label">Prioridad</label>
         <select class="bolo-input" id="bolo-edit-prio">
-          <option value="alta">≡ƒö┤ Alta</option>
-          <option value="media">≡ƒƒí Media</option>
-          <option value="baja">≡ƒƒó Baja</option>
+          <option value="alta">🔴 Alta</option>
+          <option value="media">🟡 Media</option>
+          <option value="baja">🟢 Baja</option>
         </select>
       </div>
     </div>
@@ -1717,7 +1717,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   <div class="tac-gate" id="radio-gate">
     <div class="tac-gate-badge">RADIO T├üCTICA HPD</div>
     <div class="tac-gate-title">Selecciona canal</div>
-    <div class="tac-gate-sub">Escrib├¡ un n├║mero del <b>1 al 5</b> para entrar a la radio</div>
+    <div class="tac-gate-sub">Escribi un n├║mero del <b>1 al 5</b> para entrar a la radio</div>
     <div class="tac-gate-row">
       <input type="text" inputmode="numeric" maxlength="1" id="radio-gate-input" placeholder="1"
              onkeydown="if(event.key==='Enter'){HRPRadio.join(this.value)}">
@@ -1739,7 +1739,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
     <div class="tac-brand">
       <span class="tac-led" id="tac-led"></span>
-      <span class="tac-brand-txt">HOUSTON PD ┬╖ RADIO</span>
+      <span class="tac-brand-txt">HOUSTON PD  •  RADIO</span>
       <span class="tac-chip" id="radio-channel-label">CH 1</span>
       <button class="radio-close" type="button" onclick="HRPRadio.toggle()" title="Ocultar la radio">Γ£ò</button>
     </div>
@@ -1753,8 +1753,8 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <span id="screen-clock">00:00:00</span>
       </div>
 
-      <div class="tac-lcd-title" id="screen-channel-title">CANAL 1 ┬╖ PATRULLA</div>
-      <div class="tac-lcd-sub" id="radio-status">ΓÇö</div>
+      <div class="tac-lcd-title" id="screen-channel-title">CANAL 1  •  PATRULLA</div>
+      <div class="tac-lcd-sub" id="radio-status">-</div>
 
       <div class="tac-status" id="screen-status-box">
         <span class="tac-dot" id="status-indicator-dot"></span>
@@ -1772,11 +1772,11 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       <div class="tac-field">
         <label>Canal</label>
         <select id="radio-channel" class="radio-select">
-          <option value="1">Canal 1 ┬╖ Patrulla</option>
-          <option value="2">Canal 2 ┬╖ Despacho</option>
-          <option value="3">Canal 3 ┬╖ Tr├ífico</option>
-          <option value="4">Canal 4 ┬╖ Investigaciones</option>
-          <option value="5">Canal 5 ┬╖ Emergencias</option>
+          <option value="1">Canal 1  •  Patrulla</option>
+          <option value="2">Canal 2  •  Despacho</option>
+          <option value="3">Canal 3  •  Tr├ífico</option>
+          <option value="4">Canal 4  •  Investigaciones</option>
+          <option value="5">Canal 5  •  Emergencias</option>
         </select>
       </div>
       <div class="tac-field">
@@ -1796,7 +1796,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <span class="radio-ptt-dot" id="radio-ptt-dot"></span>
         <span class="radio-ptt-text" id="radio-ptt-label">MANTENER PARA HABLAR</span>
       </span>
-      <span class="tac-ptt-sub">TECLA [ <kbd class="radio-kbd" id="radio-ptt-key">R</kbd> ] ┬╖
+      <span class="tac-ptt-sub">TECLA [ <kbd class="radio-kbd" id="radio-ptt-key">R</kbd> ]  • 
         <button class="radio-mini" type="button" onclick="event.stopPropagation(); HRPRadio.bindKey()">Re-asignar</button>
       </span>
     </button>
@@ -2173,7 +2173,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     const code = codeEl ? codeEl.textContent.trim() : '';
     const st = ss ? ss.textContent.trim() : '';
     const stv = document.getElementById('cad-status');
-    if (stv) stv.textContent = (code && !/^sin/i.test(code) ? code + ' ┬╖ ' : '') + (st || 'Sin turno');
+    if (stv) stv.textContent = (code && !/^sin/i.test(code) ? code + '  •  ' : '') + (st || 'Sin turno');
 
     const t = document.getElementById('shift-timer');
     const ct = document.getElementById('cad-turn');
@@ -2222,7 +2222,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     return `${h}:${m}:${s}`;
   }
   function formatDateTime(iso) {
-    if (!iso) return 'ΓÇö';
+    if (!iso) return '-';
     const d = new Date(iso);
     return d.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   }
@@ -2275,7 +2275,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     if (currentShift) {
       const deptName = (selectedDept || currentShift.department || '').toUpperCase();
       el.className = 'user-role';
-      el.textContent = 'On Duty ┬╖ ' + deptName;
+      el.textContent = 'On Duty  •  ' + deptName;
     } else {
       el.className = 'user-role idle';
       el.textContent = 'Off Duty';
@@ -2367,7 +2367,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       (adjustments || []) .forEach(a => { total += (a.adjustment_seconds || 0); });
       const h = Math.floor(total / 3600);
       const m = Math.floor((total % 3600) / 60);
-      const yrs = total >= 36000 ? ' ┬╖ alcanzaste las 10h' : '';
+      const yrs = total >= 36000 ? '  •  alcanzaste las 10h' : '';
       const txt = 'Total acumulado: ' + h + 'h ' + m + 'm';
       if (el) el.textContent = txt;
       if (hoursEl) {
@@ -2491,7 +2491,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
   // ΓöÇΓöÇ UI STATES ΓöÇΓöÇ
   function displayDept() {
-    $('info-dept').innerHTML = currentShift ? (DEPT_NAMES[currentShift.department] || currentShift.department) : 'ΓÇö';
+    $('info-dept').innerHTML = currentShift ? (DEPT_NAMES[currentShift.department] || currentShift.department) : '-';
   }
 
   function renderState() {
@@ -2542,7 +2542,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     if (bcSrc) bcSrc.disabled = !!bodycamServer || bodycamStarting;
     if (lbStart) lbStart.disabled = true;
     if (lbEnd) lbEnd.disabled = false;
-    if (lbStatus) lbStatus.textContent = 'Turno activo ┬╖ ' + (DEPT_NAMES[currentShift.department] || currentShift.department) + ' ┬╖ ' + (currentShift.status === 'break' ? 'En descanso' : 'En servicio');
+    if (lbStatus) lbStatus.textContent = 'Turno activo  •  ' + (DEPT_NAMES[currentShift.department] || currentShift.department) + '  •  ' + (currentShift.status === 'break' ? 'En descanso' : 'En servicio');
     currentStatusCode = currentShift.status_code || null;
     updateCurrentCodeDisplay();
     highlightActiveCode();
@@ -2839,7 +2839,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     if (_cv(character.altura) || _cv(character.peso)) parts.push('Estatura/Peso: ' + [_cv(character.altura), _cv(character.peso)].filter(Boolean).join(' / '));
     if (_cv(character.ojos) || _cv(character.cabello)) parts.push('Ojos/Cabello: ' + [_cv(character.ojos), _cv(character.cabello)].filter(Boolean).join(' / '));
     if (_cv(character.direccion)) parts.push('Direcci├│n: ' + _cv(character.direccion));
-    return parts.join(' ┬╖ ');
+    return parts.join('  •  ');
   }
 
   function renderCharInfo(character) {
@@ -2849,22 +2849,22 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       body.innerHTML = '<div class="char-empty">Sin ficha de personaje registrada.</div>';
       return;
     }
-    const pair = function (a, b) { return [_cv(a), _cv(b)].filter(Boolean).join(' / ') || 'ΓÇö'; };
-    const dir = [_cv(character.direccion), _cv(character.ciudad), _cv(character.estado), _cv(character.zip)].filter(Boolean).join(', ') || 'ΓÇö';
-    const fullName = [_cv(character.nombres), _cv(character.apellidos)].filter(Boolean).join(' ') || 'ΓÇö';
-    const roblox = _cv(character.roblox) || 'ΓÇö';
+    const pair = function (a, b) { return [_cv(a), _cv(b)].filter(Boolean).join(' / ') || '-'; };
+    const dir = [_cv(character.direccion), _cv(character.ciudad), _cv(character.estado), _cv(character.zip)].filter(Boolean).join(', ') || '-';
+    const fullName = [_cv(character.nombres), _cv(character.apellidos)].filter(Boolean).join(' ') || '-';
+    const roblox = _cv(character.roblox) || '-';
     const robloxId = _cv(character.roblox_id);
     const items = [
       ['Nombre completo', fullName],
-      ['Sexo', _cv(character.sexo) || 'ΓÇö'],
-      ['Fecha de nacimiento', _cv(character.dob) || 'ΓÇö'],
-      ['Tipo de sangre', _cv(character.sangre) || 'ΓÇö'],
+      ['Sexo', _cv(character.sexo) || '-'],
+      ['Fecha de nacimiento', _cv(character.dob) || '-'],
+      ['Tipo de sangre', _cv(character.sangre) || '-'],
       ['Estatura / Peso', pair(character.altura, character.peso)],
       ['Ojos / Cabello', pair(character.ojos, character.cabello)],
-      ['Nacionalidad', _cv(character.nacionalidad) || 'ΓÇö'],
+      ['Nacionalidad', _cv(character.nacionalidad) || '-'],
       ['Direcci├│n', dir],
       ['Roblox', robloxId ? roblox + ' (ID: ' + robloxId + ')' : roblox],
-      ['Discord ID', _cv(character.user_discord) || 'ΓÇö'],
+      ['Discord ID', _cv(character.user_discord) || '-'],
     ];
     body.innerHTML = '<div class="char-grid">' + items.map(function (it) {
       return '<div class="char-item"><div class="char-item-label">' + esc(it[0]) + '</div><div class="char-item-value">' + esc(it[1]) + '</div></div>';
@@ -2874,7 +2874,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   // ΓöÇΓöÇ MODO DE B├ÜSQUEDA (personas) ΓöÇΓöÇ
   function setSearchMode() {
     const input = $('db-person');
-    if (input) input.placeholder = 'Escrib├¡ el nombre de usuario Roblox...';
+    if (input) input.placeholder = 'Escribi el nombre de usuario Roblox...';
     const res = $('db-person-result');
     if (res) res.innerHTML = '';
     if (input) input.focus();
@@ -2951,7 +2951,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     const seen = {};
     const rows = [];
 
-    // 1) EN VIVO (spawneados ahora en el servidor) ΓÇö prioridad
+    // 1) EN VIVO (spawneados ahora en el servidor) - prioridad
     liveVeh.forEach(v => {
       const k = String(v.plate || '').toUpperCase();
       if (k && seen[k]) return;
@@ -2961,7 +2961,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       const place = p ? [p.postal, p.street].filter(Boolean).join(' ') : '';
       rows.push({
         plate: v.plate, model: v.model, color: v.color,
-        ownerLabel: v.owner || 'ΓÇö', ownerKey: v.owner || '',
+        ownerLabel: v.owner || '-', ownerKey: v.owner || '',
         live: true,
         where: place ? '≡ƒôì ' + place : '',
         wanted: p ? p.wanted : 0,
@@ -2976,17 +2976,17 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       const rb = robloxByDiscord[v.owner_discord] || '';
       rows.push({
         plate: v.plate, model: v.model, color: v.color,
-        ownerLabel: v.owner_name || 'ΓÇö', ownerKey: rb || v.owner_discord || '',
+        ownerLabel: v.owner_name || '-', ownerKey: rb || v.owner_discord || '',
         live: false, where: '', wanted: 0,
       });
     });
 
     box.innerHTML = `<div class="veh-block">
-      <div class="veh-title">≡ƒÜù Veh├¡culos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO ┬╖ ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
+      <div class="veh-title">≡ƒÜù Veh├¡culos <span class="veh-count">${rows.length}</span>${live ? `<span class="veh-live">EN VIVO  •  ${live.online || 0}/${live.max || 0} en servidor</span>` : ''}</div>
       ${rows.map(v => `<div class="veh-card">
-        <div class="veh-plate">${esc(v.plate || 'ΓÇö')}</div>
+        <div class="veh-plate">${esc(v.plate || '-')}</div>
         <div class="veh-info">
-          <div class="veh-model">${esc(v.model || 'ΓÇö')}${v.color ? ' ┬╖ ' + esc(v.color) : ''}${v.live ? ' <span class="veh-flag">ΓùÅ EN VIVO</span>' : ''}</div>
+          <div class="veh-model">${esc(v.model || '-')}${v.color ? '  •  ' + esc(v.color) : ''}${v.live ? ' <span class="veh-flag">ΓùÅ EN VIVO</span>' : ''}</div>
           <div class="veh-owner">≡ƒæñ ${esc(v.ownerLabel)}${v.where ? ' &nbsp; ' + esc(v.where) : ''}${v.wanted > 0 ? ` <span class="veh-wanted">ΓÜá ${v.wanted}</span>` : ''}</div>
         </div>
         ${v.ownerKey ? `<button class="btn btn-primary" onclick="openProfile('${esc(v.ownerKey)}')" style="font-size:12px;padding:7px 14px;flex-shrink:0;">Ver ficha ΓåÆ</button>` : ''}
@@ -3129,9 +3129,9 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       currentProfile = { robloxUsername, displayName, avatarUrl, arrests, fines, licenses: licenses || [], vehicles: vehicles || [], bolos: activeBolos || [] };
 
       const dh = masked ? deptHeroLabel(deptInfo.department) : null;
-      const heroName = dh ? `${dh.icon} ${dh.code} ΓÇö ${dh.name}` : esc(displayName);
+      const heroName = dh ? `${dh.icon} ${dh.code} - ${dh.name}` : esc(displayName);
       const heroSub = dh
-        ? `≡ƒÄ« ${esc(robloxUsername)} ┬╖ ≡ƒæ« Fuera de servicio`
+        ? `≡ƒÄ« ${esc(robloxUsername)}  •  ≡ƒæ« Fuera de servicio`
         : `≡ƒÄ« ${esc(robloxUsername)}`;
 
       $('profile-hero').innerHTML = `
@@ -3147,7 +3147,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         ${activeBolos.length > 0 ? `<div style="margin:12px 0;padding:12px 16px;border:1px solid rgba(239,68,68,0.55);background:rgba(239,68,68,0.12);border-radius:12px;display:flex;align-items:center;gap:12px;">
           <span style="font-size:24px;">≡ƒÜ¿</span>
           <div style="flex:1;min-width:0;">
-            <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:var(--accent-red);text-transform:uppercase;letter-spacing:1px;">ΓÜá Persona Buscada${activeBolos.length > 1 ? ' ΓÇö ' + activeBolos.length + ' BOLOs activos' : ''}</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;color:var(--accent-red);text-transform:uppercase;letter-spacing:1px;">ΓÜá Persona Buscada${activeBolos.length > 1 ? ' - ' + activeBolos.length + ' BOLOs activos' : ''}</div>
             <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${esc(activeBolos[0].oficial_name || 'Oficial')} emiti├│ el BOLO: ${esc(activeBolos[0].motivo || 'BOLO activo')}</div>
           </div>
         </div>` : ''}
@@ -3227,7 +3227,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
               <div class="record-icon license">${icon}</div>
               <div class="record-info">
                 <div class="record-title">${esc(typeName)}</div>
-                <div class="record-sub">${esc(l.full_name || 'ΓÇö')}</div>
+                <div class="record-sub">${esc(l.full_name || '-')}</div>
               </div>
             </div>
             <div class="record-right">
@@ -3242,15 +3242,15 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         $('arrests-body').innerHTML = '<div class="no-records">No hay arrestos registrados</div>';
       } else {
         $('arrests-body').innerHTML = arrests.map(r => {
-          const parts = (r.reason || '').split(' ΓÇö ');
+          const parts = (r.reason || '').split(' - ');
           const code = parts[0] || '';
-          const crimeName = parts[1] || r.reason || 'ΓÇö';
+          const crimeName = parts[1] || r.reason || '-';
           return `<div class="record-item" ${r.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(r.case_id)}')"` : ''}>
             <div class="record-left">
               <div class="record-icon arrest">≡ƒÜö</div>
               <div class="record-info">
                 <div class="record-title">${esc(crimeName)} ${r.case_id ? '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(r.case_id) + '</span>' : ''}</div>
-                <div class="record-sub">≡ƒæ« ${esc(r.officer_name || 'ΓÇö')} ${code ? '┬╖ <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
+                <div class="record-sub">≡ƒæ« ${esc(r.officer_name || '-')} ${code ? ' •  <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
               </div>
             </div>
             <div class="record-right">
@@ -3266,15 +3266,15 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         $('fines-body').innerHTML = '<div class="no-records">No hay multas registradas</div>';
       } else {
         $('fines-body').innerHTML = fines.map(r => {
-          const parts = (r.reason || '').split(' ΓÇö ');
+          const parts = (r.reason || '').split(' - ');
           const code = parts[0] || '';
-          const crimeName = parts[1] || r.reason || 'ΓÇö';
+          const crimeName = parts[1] || r.reason || '-';
           return `<div class="record-item" ${r.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(r.case_id)}')"` : ''}>
             <div class="record-left">
               <div class="record-icon fine">≡ƒÆ░</div>
               <div class="record-info">
                 <div class="record-title">${esc(crimeName)} ${r.case_id ? '<span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(r.case_id) + '</span>' : ''}</div>
-                <div class="record-sub">≡ƒæ« ${esc(r.officer_name || 'ΓÇö')} ${code ? '┬╖ <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
+                <div class="record-sub">≡ƒæ« ${esc(r.officer_name || '-')} ${code ? ' •  <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--accent-cyan);">' + esc(code) + '</span>' : ''}</div>
               </div>
             </div>
             <div class="record-right">
@@ -3294,8 +3294,8 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             <div class="record-left">
               <div class="record-icon vehicle">≡ƒÜù</div>
               <div class="record-info">
-                <div class="record-title">${esc(v.model || 'ΓÇö')}</div>
-                <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;color:var(--accent-cyan);">${esc(v.plate || 'ΓÇö')}</span> ┬╖ Color: ${esc(v.color || 'ΓÇö')}</div>
+                <div class="record-title">${esc(v.model || '-')}</div>
+                <div class="record-sub"><span style="font-family:JetBrains Mono,monospace;color:var(--accent-cyan);">${esc(v.plate || '-')}</span>  •  Color: ${esc(v.color || '-')}</div>
               </div>
             </div>
           </div>
@@ -3354,13 +3354,13 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
               ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : (r.target_name ? r.target_name.charAt(0).toUpperCase() : '?')}
             </div>
             <div>
-              <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--text-body);">${esc(r.target_name || 'ΓÇö')}</div>
-              <div class="record-sub">≡ƒÄ« ${esc(r.target_discord || 'ΓÇö')}</div>
+              <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:16px;color:var(--text-body);">${esc(r.target_name || '-')}</div>
+              <div class="record-sub">≡ƒÄ« ${esc(r.target_discord || '-')}</div>
             </div>
           </div>
           <div class="case-facts">
-            <div class="case-fact"><span>≡ƒæ« Oficial a cargo</span><b>${esc(r.officer_name || 'ΓÇö')}</b></div>
-            <div class="case-fact"><span>≡ƒôà Fecha</span><b>${r.created_at ? new Date(r.created_at).toLocaleString() : 'ΓÇö'}</b></div>
+            <div class="case-fact"><span>≡ƒæ« Oficial a cargo</span><b>${esc(r.officer_name || '-')}</b></div>
+            <div class="case-fact"><span>≡ƒôà Fecha</span><b>${r.created_at ? new Date(r.created_at).toLocaleString() : '-'}</b></div>
             ${r.incident_type ? `<div class="case-fact"><span>≡ƒôï Tipo de incidente</span><b>${esc(r.incident_type)}</b></div>` : ''}
             ${r.type === 'jail' ? `<div class="case-fact"><span>ΓÅ▒∩╕Å Pena</span><b>${(r.amount || 0)} minutos</b></div>` : `<div class="case-fact"><span>${r.type === 'fine' ? '≡ƒÆ╡ Monto' : '≡ƒÆ╡ Fianza'}</span><b>$${(r.amount || 0).toLocaleString()}</b></div>`}
           </div>
@@ -3372,7 +3372,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
             <button class="btn btn-outline" onclick="openProfile('${esc(r.target_discord || r.target_name)}')">Ver Perfil del Ciudadano ΓåÆ</button>
           </div>
         </div>
-        ${otherRows.length > 0 ? `<div class="case-related"><div class="section-header"><h3>Expedientes coincidentes</h3><span class="section-count">${otherRows.length}</span></div>${otherRows.map(o => `<div class="record-item" ${o.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(o.case_id)}')"` : ''}><div class="record-left"><div class="record-icon ${o.type === 'fine' ? 'fine' : 'arrest'}">${o.type === 'fine' ? '≡ƒÆ░' : '≡ƒÜö'}</div><div class="record-info"><div class="record-title">${esc(o.case_id || (o.reason || '').split(' ΓÇö ')[1] || o.reason || 'ΓÇö')} ${o.paid ? '<span class="badge badge-active" style="font-size:9px;">Pagada</span>' : ''}</div><div class="record-sub">${esc(o.target_name || 'ΓÇö')} ┬╖ ${new Date(o.created_at).toLocaleDateString()}</div></div></div></div>`).join('')}</div>` : ''}`;
+        ${otherRows.length > 0 ? `<div class="case-related"><div class="section-header"><h3>Expedientes coincidentes</h3><span class="section-count">${otherRows.length}</span></div>${otherRows.map(o => `<div class="record-item" ${o.case_id ? `style="cursor:pointer;" onclick="openCaseById('${esc(o.case_id)}')"` : ''}><div class="record-left"><div class="record-icon ${o.type === 'fine' ? 'fine' : 'arrest'}">${o.type === 'fine' ? '≡ƒÆ░' : '≡ƒÜö'}</div><div class="record-info"><div class="record-title">${esc(o.case_id || (o.reason || '').split(' - ')[1] || o.reason || '-')} ${o.paid ? '<span class="badge badge-active" style="font-size:9px;">Pagada</span>' : ''}</div><div class="record-sub">${esc(o.target_name || '-')}  •  ${new Date(o.created_at).toLocaleDateString()}</div></div></div></div>`).join('')}</div>` : ''}`;
     } catch (err) {
       content.innerHTML = `<div class="case-empty" style="color:var(--accent-red);">Γ¥î Error al abrir el expediente: ${esc(err.message || 'desconocido')}</div>`;
     }
@@ -3435,7 +3435,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     head.classList.toggle('fine', !isArrest);
     icon.textContent = isArrest ? '≡ƒÜö' : '≡ƒÆ░';
     title.textContent = isArrest ? 'Registrar Arresto' : 'Registrar Multa';
-    sub.textContent = (isArrest ? 'Cargando formulario de arresto...' : 'Cargando formulario de multa...') + (displayName ? ' ┬╖ ' + displayName : '');
+    sub.textContent = (isArrest ? 'Cargando formulario de arresto...' : 'Cargando formulario de multa...') + (displayName ? '  •  ' + displayName : '');
 
     frame.src = (isArrest ? 'arrests.html' : 'fines.html') + '?name=' + n + '&roblox=' + r;
 
@@ -3491,7 +3491,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     const el = document.getElementById('warning-modal');
     if (!el) return;
     document.getElementById('warning-target').textContent =
-      warningTarget.roblox + (warningTarget.name ? '  ├é┬╖  ' + warningTarget.name : '');
+      warningTarget.roblox + (warningTarget.name ? '  ├é •   ' + warningTarget.name : '');
     document.getElementById('warning-text').value = '';
     document.getElementById('warning-msg').textContent = '';
     el.style.display = 'flex';
@@ -3645,18 +3645,18 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <div class="history-rec-body">
             <div class="history-rec-top">
               <span class="history-rec-badge fine">Multa</span>
-              ${esc(r.target_name || 'ΓÇö')}
+              ${esc(r.target_name || '-')}
               ${r.paid ? '<span class="history-rec-badge paid">Pagada</span>' : ''}
             </div>
             <div class="history-rec-reason" title="${esc(r.reason || '')}">${esc(mainReason)}</div>
             <div class="history-rec-meta">
-              <span>≡ƒæ« ${esc(r.officer_name || 'ΓÇö')}</span>
+              <span>≡ƒæ« ${esc(r.officer_name || '-')}</span>
               ${r.case_id ? `<span class="history-rec-case">${esc(r.case_id)}</span>` : ''}
             </div>
           </div>
           <div class="history-rec-right">
             <div class="history-rec-amount">$${(r.amount || 0).toLocaleString()}</div>
-            <div class="history-rec-date">${dateStr} ┬╖ ${timeStr}</div>
+            <div class="history-rec-date">${dateStr}  •  ${timeStr}</div>
           </div>
         </div>`;
       }).join('');
@@ -3709,11 +3709,11 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <div class="history-rec-body">
             <div class="history-rec-top">
               <span class="history-rec-badge arrest">Arresto</span>
-              ${esc(r.target_name || 'ΓÇö')}
+              ${esc(r.target_name || '-')}
             </div>
             <div class="history-rec-reason" title="${esc(r.reason || '')}">${esc(mainReason)}</div>
             <div class="history-rec-meta">
-              <span>≡ƒæ« ${esc(r.officer_name || 'ΓÇö')}</span>
+              <span>≡ƒæ« ${esc(r.officer_name || '-')}</span>
               ${r.case_id ? `<span class="history-rec-case">${esc(r.case_id)}</span>` : ''}
             </div>
           </div>
@@ -3767,7 +3767,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     return map[c] || ['#94a3b8', String(code || 'S/D').toUpperCase()];
   }
 
-  // ΓöÇΓöÇ Etiquetas de rango reales (payroll_salaries) ΓÇö cach├⌐ 5 min ΓöÇΓöÇ
+  // ΓöÇΓöÇ Etiquetas de rango reales (payroll_salaries) - cach├⌐ 5 min ΓöÇΓöÇ
   let _rankLabels = null;
   let _rankLabelsAt = 0;
   async function getRankLabels() {
@@ -3827,7 +3827,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
       list.innerHTML = listRows.map(o => {
         const assigned = charNameByDiscord[o.discord_id] || '';
-        const shownName = assigned || o.username || 'ΓÇö';
+        const shownName = assigned || o.username || '-';
         const robLabel = assigned && o.username ? o.username : '';
         const initial = (shownName || '?').charAt(0).toUpperCase();
         const isBreak = o.status === 'break';
@@ -3844,10 +3844,10 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
               <span class="unit-state ${isBreak ? 'brk' : 'on'}">${isBreak ? 'Pausa' : 'En servicio'}</span>
             </div>
             ${robLabel ? `<div class="on-duty-roblox">≡ƒÄ« ${esc(robLabel)}</div>` : ''}
-            <div class="on-duty-meta"><span class="on-duty-dept" style="color:${col}">${dept}</span>${rankLabel ? ' ┬╖ ' + esc(rankLabel) : ''}</div>
+            <div class="on-duty-meta"><span class="on-duty-dept" style="color:${col}">${dept}</span>${rankLabel ? '  •  ' + esc(rankLabel) : ''}</div>
             <div class="unit-tags">
               ${code ? `<span class="unit-tag code">${esc(code)}</span>` : ''}
-              <span class="unit-tag time">ΓÅ▒ ${elapsedSec >= 0 ? formatTime(elapsedSec) : 'ΓÇö'}</span>
+              <span class="unit-tag time">ΓÅ▒ ${elapsedSec >= 0 ? formatTime(elapsedSec) : '-'}</span>
               ${camOn ? '<span class="unit-tag cam">ΓùÅ REC</span>' : ''}
             </div>
           </div>
@@ -3930,9 +3930,9 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   }
 
   function boloPriorityData(p) {
-    if (p === 'alta') return { cls: 'alta', color: 'var(--accent-red)', label: 'Alta', icon: '≡ƒö┤' };
-    if (p === 'baja') return { cls: 'baja', color: 'var(--accent-green)', label: 'Baja', icon: '≡ƒƒó' };
-    return { cls: 'media', color: 'var(--accent-amber)', label: 'Media', icon: '≡ƒƒí' };
+    if (p === 'alta') return { cls: 'alta', color: 'var(--accent-red)', label: 'Alta', icon: '🔴' };
+    if (p === 'baja') return { cls: 'baja', color: 'var(--accent-green)', label: 'Baja', icon: '🟢' };
+    return { cls: 'media', color: 'var(--accent-amber)', label: 'Media', icon: '🟡' };
   }
 
   function boloStatusData(s) {
@@ -3945,7 +3945,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     const sel = $(selId);
     if (!sel) return;
     const crimes = (window.HRP_CRIMES || {});
-    sel.innerHTML = '<option value="">ΓÇö Sin c├│digo penal ΓÇö</option>';
+    sel.innerHTML = '<option value="">- Sin Codigo penal -</option>';
     const cats = {};
     Object.keys(crimes).forEach(k => { const c = crimes[k]; (cats[c.cat] = cats[c.cat] || []).push(k); });
     Object.keys(cats).sort().forEach(cat => {
@@ -3956,7 +3956,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       cats[cat].forEach(k => {
         const o = document.createElement('option');
         o.value = k;
-        o.textContent = k + ' ΓÇö ' + crimes[k].name;
+        o.textContent = k + ' - ' + crimes[k].name;
         sel.appendChild(o);
       });
     });
@@ -4064,15 +4064,15 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         <div class="bolo-person">
           <div class="bolo-avatar">${b.roblox_id ? `<img src="https://www.roblox.com/headshot-thumbnail/image?userId=${encodeURIComponent(b.roblox_id)}&width=100&height=100&format=png" onerror="this.parentNode.textContent='${initial}';">` : initial}</div>
           <div>
-            <div class="bolo-person-name">${esc(b.target_name || 'ΓÇö')}</div>
-            <div class="bolo-person-user">≡ƒÄ« ${esc(b.roblox_user || 'ΓÇö')}</div>
+            <div class="bolo-person-name">${esc(b.target_name || '-')}</div>
+            <div class="bolo-person-user">≡ƒÄ« ${esc(b.roblox_user || '-')}</div>
           </div>
           <span class="bolo-status ${st.cls}" style="margin-left:auto;">ΓùÅ ${st.label}</span>
         </div>
-        <div class="bolo-motivo">${esc(b.motivo || 'ΓÇö')}</div>
-        ${code ? `<div class="bolo-code">ΓÜû∩╕Å ${esc(code)} ΓÇö ${esc(penalLabel || '')}</div>` : ''}
+        <div class="bolo-motivo">${esc(b.motivo || '-')}</div>
+        ${code ? `<div class="bolo-code">ΓÜû∩╕Å ${esc(code)} - ${esc(penalLabel || '')}</div>` : ''}
         <div class="bolo-meta">
-          <span>≡ƒæ« ${esc(b.oficial_name || 'ΓÇö')}</span>
+          <span>≡ƒæ« ${esc(b.oficial_name || '-')}</span>
           <span style="color:${col};">≡ƒÅ¢∩╕Å ${dept}</span>
           <span>≡ƒòÉ ${dateStr}</span>
           ${b.closed_at ? `<span>≡ƒùâ∩╕Å Cerrado: ${new Date(b.closed_at).toLocaleString('es-ES', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</span>` : ''}
@@ -4137,8 +4137,8 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     if (nav) {
       nav.innerHTML = avatarUrl ? `<img src="${avatarUrl}" alt="">` : ((displayName || '?').charAt(0).toUpperCase());
     }
-    const nn = $('bolo-pick-name'); if (nn) nn.textContent = displayName || 'ΓÇö';
-    const uu = $('bolo-pick-user'); if (uu) uu.textContent = '≡ƒÄ« ' + (robloxUser || 'ΓÇö');
+    const nn = $('bolo-pick-name'); if (nn) nn.textContent = displayName || '-';
+    const uu = $('bolo-pick-user'); if (uu) uu.textContent = '≡ƒÄ« ' + (robloxUser || '-');
   }
 
   function clearBoloPick() {
@@ -4157,7 +4157,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     if (msg) msg.textContent = '';
     if (!boloPick) { if (msg) msg.textContent = 'ΓÜá∩╕Å Seleccion├í un ciudadano antes de emitir el BOLO.'; return; }
     const motivo = ($('bolo-motivo') ? $('bolo-motivo').value : '').trim();
-    if (!motivo) { if (msg) msg.textContent = 'ΓÜá∩╕Å Escrib├¡ un motivo detallado.'; return; }
+    if (!motivo) { if (msg) msg.textContent = 'ΓÜá∩╕Å Escribi un motivo detallado.'; return; }
     const penalCode = $('bolo-penal') ? $('bolo-penal').value : '';
     const penalName = penalCode && (window.HRP_CRIMES || {})[penalCode] ? (window.HRP_CRIMES)[penalCode].name : '';
     const prioridad = $('bolo-prio') ? $('bolo-prio').value : 'media';
@@ -4344,12 +4344,12 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           <div class="history-rec-body">
             <div class="history-rec-top">
               <span class="history-rec-badge arrest">BOLO</span>
-              ${esc(b.target_name || 'ΓÇö')}
+              ${esc(b.target_name || '-')}
               ${b.penal_code ? `<span class="history-rec-case">${esc(b.penal_code)}</span>` : ''}
             </div>
-            <div class="history-rec-reason" title="${esc(b.motivo || '')}">${prio.icon} ${esc((b.motivo || '').split(/[.;]/)[0] || b.motivo || 'ΓÇö')}</div>
+            <div class="history-rec-reason" title="${esc(b.motivo || '')}">${prio.icon} ${esc((b.motivo || '').split(/[.;]/)[0] || b.motivo || '-')}</div>
             <div class="history-rec-meta">
-              <span>≡ƒæ« ${esc(b.oficial_name || 'ΓÇö')}</span>
+              <span>≡ƒæ« ${esc(b.oficial_name || '-')}</span>
               <span class="bolo-status ${st.cls}">ΓùÅ ${st.label}</span>
             </div>
           </div>
@@ -4413,7 +4413,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
       const LE_TEAMS = { Police: 1, Sheriff: 1 };
       callsCache = (data.EmergencyCalls || []).filter(c => LE_TEAMS[c.Team] !== undefined);
       const nEl = $('calls-n'); if (nEl) nEl.textContent = String(callsCache.length);
-      const sEl = $('calls-server'); if (sEl) sEl.textContent = data.Name ? String(data.Name).slice(0, 22) : 'ΓÇö';
+      const sEl = $('calls-server'); if (sEl) sEl.textContent = data.Name ? String(data.Name).slice(0, 22) : '-';
       const lEl = $('calls-last'); if (lEl) lEl.textContent = new Date().toLocaleTimeString();
       renderCalls();
     } catch (_) {
@@ -4432,7 +4432,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     }
 
     grid.innerHTML = callsCache.map(c => {
-      const id = c.CallNumber || c.CallId || c.id || 'ΓÇö';
+      const id = c.CallNumber || c.CallId || c.id || '-';
       const reason = esc(c.Description || c.description || c.Reason || c.reason || 'Motivo no declarado');
       const caller = esc(c.Caller || 'Desconocido');
       const team = c.Team || '911';
@@ -4451,7 +4451,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
        const postal = (c.Location && c.Location.PostalCode) || (near && near.postal) ? esc((c.Location && c.Location.PostalCode) || (near && near.postal)) : '';
 
       const t = c.StartedAt ? new Date(c.StartedAt * (c.StartedAt < 1e12 ? 1000 : 1)) : null;
-      const timeTxt = t ? t.toLocaleTimeString() : 'ΓÇö';
+      const timeTxt = t ? t.toLocaleTimeString() : '-';
 
       return '<div class="call-mini-card">' +
         '<div class="call-mini-wrap">' +
@@ -4459,7 +4459,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
           '<span class="call-mini-badge" style="--tc:' + tc + '">' + esc(team) + '</span>' +
           '<span class="call-mini-num">#' + esc(String(id)) + '</span>' +
           '<div class="call-mini-foot">' +
-            (postal ? '<span class="call-mini-postal">postal ' + postal + '</span>' : '<span class="call-mini-postal" style="opacity:.5">postal ΓÇö</span>') +
+            (postal ? '<span class="call-mini-postal">postal ' + postal + '</span>' : '<span class="call-mini-postal" style="opacity:.5">postal -</span>') +
           '</div>' +
         '</div>' +
         '<div class="call-mini-body">' +
@@ -4514,7 +4514,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
     if (mode === 'live') {
       btn.classList.add('live');
       btn.disabled = false;
-      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Bodycam ACTIVA ΓÇö Desactivar';
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Bodycam ACTIVA - Desactivar';
     } else if (mode === 'starting') {
       btn.classList.remove('live');
       btn.disabled = true;
@@ -4686,7 +4686,7 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
         bodycamStarting = false;
         setBodycamBtn('live');
         publishBodycam(peerId);
-        showToast('≡ƒô╣ Bodycam ACTIVA ΓÇö el despacho ya puede verla en su panel.');
+        showToast('≡ƒô╣ Bodycam ACTIVA - el despacho ya puede verla en su panel.');
       },
       onError: function (msg) {
         bodycamStarting = false;
@@ -4855,3 +4855,4 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
 
 
 <!-- Cache Bust: 20261103230140 -->
+
