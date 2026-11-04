@@ -619,14 +619,23 @@
   .empty-state .e-text { font-size: 14px; margin-bottom: 6px; }
   .empty-state .e-sub { font-size: 12px; color: var(--text-dim); }
 
-  .access-overlay {
-    position: fixed; inset: 0; z-index: 99999;
-    background: var(--bg-void);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 20px; padding: 40px;
-  }
-  .access-overlay.hidden { display: none; }
+   .access-overlay {
+     position: fixed; inset: 0; z-index: 99999;
+     background: rgba(0,0,0,0.5);
+     display: flex; flex-direction: column;
+     align-items: center; justify-content: center;
+     gap: 20px; padding: 40px;
+   }
+   .access-overlay.hidden { display: none; }
+   .access-overlay > * {
+     background: var(--bg-card);
+     border: 1px solid var(--border);
+     border-radius: 16px;
+     padding: 40px;
+     max-width: 420px;
+     width: 100%;
+     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+   }
   .access-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
   .access-icon.denied { background: rgba(229,72,80,0.15); color: var(--accent-red); border: 2px solid rgba(229,72,80,0.3); }
   .access-icon.loading { background: rgba(59,111,182,0.15); color: var(--accent-cyan); border: 2px solid rgba(59,111,182,0.3); animation: pulse 1.8s infinite; }
@@ -880,12 +889,14 @@
   <div class="content" id="main-content">
 
     <div id="access-loading" class="access-overlay">
-      <div class="access-icon loading"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-      <div class="access-title">🔐 Código de Acceso</div>
-      <div class="access-desc">Ingresa el código administrativo</div>
-      <input type="password" id="access-code-input" placeholder="Ingresa el código..." onkeypress="if(event.key==='Enter')checkAccessCode()" style="padding:12px;width:280px;border-radius:6px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-primary);font-family:'JetBrains Mono';margin:16px 0;box-sizing:border-box;">
-      <button type="button" onclick="checkAccessCode()" style="padding:10px 24px;background:var(--accent-blue);border:1px solid var(--accent-blue);border-radius:6px;color:white;cursor:pointer;font-family:'Rajdhani';font-weight:600;">Verificar</button>
-      <div id="access-error" style="color:var(--accent-red);margin-top:12px;display:none;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:20px;">
+        <div class="access-icon loading"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="access-title">🔐 Código de Acceso</div>
+        <div class="access-desc">Ingresa el código administrativo</div>
+        <input type="password" id="access-code-input" placeholder="Ingresa el código..." onkeypress="if(event.key==='Enter')checkAccessCode()" style="padding:12px;width:100%;border-radius:6px;border:1px solid var(--border);background:var(--bg-void);color:var(--text-primary);font-family:'JetBrains Mono';box-sizing:border-box;">
+        <button type="button" onclick="checkAccessCode()" style="width:100%;padding:12px 24px;background:var(--accent-blue);border:1px solid var(--accent-blue);border-radius:6px;color:white;cursor:pointer;font-family:'Rajdhani';font-weight:600;">Verificar</button>
+        <div id="access-error" style="color:var(--accent-red);font-size:13px;display:none;"></div>
+      </div>
     </div>
 
     <div id="access-denied" class="access-overlay hidden">
