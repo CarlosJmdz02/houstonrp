@@ -3874,23 +3874,28 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   // contenido serializado como JSON en `message`. As├¡ la funci├│n de BOLO
   // funciona sin depender de la tabla `bolos` (a├║n no creada en el proyecto).
   const BOLO_STORE_TYPE = 'bolo';
+  function cleanText(txt) {
+    if (!txt) return '';
+    return String(txt).replace(/≡ƒ[a-zA-Z0-9]{2}/g, '').replace(/Γ[^a-z]/g, '').replace(/├[^─┤]/g, '').replace(/∩╕/g, '').replace(/┬╖/g, ' • ').trim();
+  }
+  
   function boloRowToObj(row) {
     let data = {};
     try { data = JSON.parse(row.message || '{}'); } catch (_) {}
     return {
       id: row.id,
-      roblox_id: data.roblox_id || '',
-      roblox_user: data.roblox_user || '',
-      target_name: data.target_name || '',
-      motivo: data.motivo || '',
-      penal_code: data.penal_code || '',
-      penal_name: data.penal_name || '',
-      prioridad: data.prioridad || 'media',
-      estado: data.estado || 'activo',
-      oficial_id: data.oficial_id || row.user_id || '',
-      oficial_name: data.oficial_name || row.username || 'Oficial',
-      departamento: data.departamento || 'hpd',
-      closed_by: data.closed_by || '',
+      roblox_id: cleanText(data.roblox_id) || '',
+      roblox_user: cleanText(data.roblox_user) || '',
+      target_name: cleanText(data.target_name) || '',
+      motivo: cleanText(data.motivo) || '',
+      penal_code: cleanText(data.penal_code) || '',
+      penal_name: cleanText(data.penal_name) || '',
+      prioridad: cleanText(data.prioridad) || 'media',
+      estado: cleanText(data.estado) || 'activo',
+      oficial_id: cleanText(data.oficial_id) || cleanText(row.user_id) || '',
+      oficial_name: cleanText(data.oficial_name) || cleanText(row.username) || 'Oficial',
+      departamento: cleanText(data.departamento) || 'hpd',
+      closed_by: cleanText(data.closed_by) || '',
       closed_at: data.closed_at || null,
       created_at: row.created_at || data.created_at,
       updated_at: data.updated_at || row.created_at,
@@ -3930,9 +3935,9 @@ OPERATIONS MODULES ΓòÉΓòÉΓòÉ */
   }
 
   function boloPriorityData(p) {
-    if (p === 'alta') return { cls: 'alta', color: 'var(--accent-red)', label: 'Alta', icon: '≡ƒö┤' };
-    if (p === 'baja') return { cls: 'baja', color: 'var(--accent-green)', label: 'Baja', icon: '≡ƒƒó' };
-    return { cls: 'media', color: 'var(--accent-amber)', label: 'Media', icon: '≡ƒƒí' };
+    if (p === 'alta') return { cls: 'alta', color: 'var(--accent-red)', label: 'Alta', icon: '🔴' };
+    if (p === 'baja') return { cls: 'baja', color: 'var(--accent-green)', label: 'Baja', icon: '🟢' };
+    return { cls: 'media', color: 'var(--accent-amber)', label: 'Media', icon: '🟡' };
   }
 
   function boloStatusData(s) {
