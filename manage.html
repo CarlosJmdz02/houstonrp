@@ -20,9 +20,6 @@
     }
     .header {
       margin-bottom: 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
     .header h1 {
       font-family: 'Rajdhani', sans-serif;
@@ -35,6 +32,7 @@
       margin-bottom: 30px;
       border-bottom: 1px solid #263552;
       padding-bottom: 0;
+      flex-wrap: wrap;
     }
     .tab-btn {
       padding: 12px 20px;
@@ -51,21 +49,11 @@
       color: #e8ecf4;
       border-bottom-color: #3b82f6;
     }
-    .tab-btn:hover {
-      color: #e8ecf4;
-    }
     .tab-content {
       display: none;
     }
     .tab-content.active {
       display: block;
-    }
-    .panel-card {
-      background: #131d2f;
-      border: 1px solid #263552;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
     }
     .officer-card {
       background: #17223a;
@@ -76,32 +64,36 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
     .officer-info {
       flex: 1;
+      min-width: 300px;
     }
     .officer-name {
       font-family: 'Rajdhani', sans-serif;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       color: #e8ecf4;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     .officer-details {
       display: flex;
       gap: 20px;
       font-size: 13px;
       color: #94a3b8;
+      flex-wrap: wrap;
     }
     .officer-actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      min-width: 300px;
       justify-content: flex-end;
-      min-width: 400px;
     }
     .btn {
-      padding: 8px 16px;
+      padding: 10px 16px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -109,6 +101,7 @@
       font-weight: 600;
       font-size: 12px;
       transition: all 0.2s;
+      white-space: nowrap;
     }
     .btn-primary {
       background: #3b82f6;
@@ -138,13 +131,22 @@
     .btn-warning:hover {
       background: #d4974f;
     }
+    .btn-info {
+      background: #06b6d4;
+      color: white;
+    }
+    .btn-info:hover {
+      background: #0891b2;
+    }
     .input-group {
       display: flex;
       gap: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
     input, select {
       flex: 1;
+      min-width: 200px;
       padding: 10px;
       background: #0d1424;
       border: 1px solid #263552;
@@ -192,43 +194,23 @@
       margin-top: 20px;
       justify-content: flex-end;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #263552;
-      font-size: 13px;
-    }
-    th {
-      background: #17223a;
-      font-weight: 600;
-      color: #8a93a7;
-    }
-    tr:hover {
-      background: rgba(59,111,182,0.1);
-    }
     .badge {
       display: inline-block;
-      padding: 4px 12px;
+      padding: 6px 12px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 600;
+      background: rgba(59,111,182,0.2);
+      color: #3b82f6;
     }
-    .badge-pending {
-      background: rgba(230,168,104,0.2);
-      color: #e6a868;
-    }
-    .badge-approved {
-      background: rgba(74,204,143,0.2);
-      color: #4acf8f;
-    }
-    .badge-rejected {
-      background: rgba(229,72,80,0.2);
-      color: #e54850;
+    .salary-info {
+      background: rgba(59,111,182,0.1);
+      border: 1px solid rgba(59,111,182,0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #94a3b8;
     }
   </style>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap">
@@ -238,385 +220,109 @@
 <div class="container">
 
   <div class="header">
-    <h1>📋 Manage Shifts</h1>
+    <h1>📋 Manage Shifts - HOUSTON RP</h1>
+    <p style="color: #94a3b8; font-size: 14px; margin-top: 10px;">Sistema de Gestión de Turnos y Pagos</p>
   </div>
 
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('horas')">⏰ Horas</button>
-    <button class="tab-btn" onclick="switchTab('dinero')">💰 Dinero</button>
-    <button class="tab-btn" onclick="switchTab('rango')">🎖️ Rango</button>
-    <button class="tab-btn" onclick="switchTab('departamento')">🏢 Departamento</button>
+    <button class="tab-btn" onclick="switchTab('pagar')">💰 Pagar Oficiales</button>
+    <button class="tab-btn" onclick="switchTab('rango')">🎖️ Cambiar Rango</button>
+    <button class="tab-btn" onclick="switchTab('departamento')">🏢 Cambiar Departamento</button>
     <button class="tab-btn" onclick="switchTab('k9')">🐕 K-9 Applications</button>
-    <button class="tab-btn" onclick="switchTab('exam')">📝 Exam Applications</button>
-    <button class="tab-btn" onclick="switchTab('reports')">📊 Reports</button>
-    <button class="tab-btn" onclick="switchTab('fire')">🚨 Fire Officer</button>
+    <button class="tab-btn" onclick="switchTab('reports')">📊 Reportes</button>
   </div>
 
   <!-- TAB: HORAS -->
   <div id="horas" class="tab-content active">
-    <div class="panel-card">
-      <h2 style="margin-bottom: 20px;">⏰ Gestionar Horas</h2>
+    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
+      <h2 style="margin-bottom: 20px;">⏰ Gestionar Horas de Oficiales</h2>
       <div class="input-group">
         <input type="text" id="search-horas" placeholder="Buscar oficial por nombre..." onkeyup="filterOfficers('horas')">
+        <select id="dept-filter-horas" onchange="filterOfficers('horas')" style="flex: 0 0 150px;">
+          <option value="">Todos Departamentos</option>
+          <option value="HPD">HPD</option>
+          <option value="HCSO">HCSO</option>
+          <option value="HFD">HFD</option>
+          <option value="EMS">EMS</option>
+          <option value="DOT">DOT</option>
+          <option value="ICE">ICE</option>
+          <option value="THP">THP</option>
+        </select>
       </div>
-      <div id="horas-list">
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Juan Méndez</div>
-            <div class="officer-details">
-              <span>🏢 HPD</span>
-              <span>⏰ 125 horas</span>
-              <span>🎖️ Sargento</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-success" onclick="addHours('Juan Méndez')">➕ Agregar</button>
-            <button class="btn btn-danger" onclick="removeHours('Juan Méndez')">➖ Remover</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">María Cortés</div>
-            <div class="officer-details">
-              <span>🏢 HCSO</span>
-              <span>⏰ 98 horas</span>
-              <span>🎖️ Oficial</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-success" onclick="addHours('María Cortés')">➕ Agregar</button>
-            <button class="btn btn-danger" onclick="removeHours('María Cortés')">➖ Remover</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Carlos Rojas</div>
-            <div class="officer-details">
-              <span>🏢 HPD</span>
-              <span>⏰ 156 horas</span>
-              <span>🎖️ Detective</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-success" onclick="addHours('Carlos Rojas')">➕ Agregar</button>
-            <button class="btn btn-danger" onclick="removeHours('Carlos Rojas')">➖ Remover</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Ana Pérez</div>
-            <div class="officer-details">
-              <span>🏢 HCSO</span>
-              <span>⏰ 87 horas</span>
-              <span>🎖️ Oficial</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-success" onclick="addHours('Ana Pérez')">➕ Agregar</button>
-            <button class="btn btn-danger" onclick="removeHours('Ana Pérez')">➖ Remover</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Luis García</div>
-            <div class="officer-details">
-              <span>🏢 HPD</span>
-              <span>⏰ 110 horas</span>
-              <span>🎖️ Oficial</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-success" onclick="addHours('Luis García')">➕ Agregar</button>
-            <button class="btn btn-danger" onclick="removeHours('Luis García')">➖ Remover</button>
-          </div>
-        </div>
-      </div>
+      <div id="horas-list"></div>
     </div>
   </div>
 
-  <!-- TAB: DINERO -->
-  <div id="dinero" class="tab-content">
-    <div class="panel-card">
-      <h2 style="margin-bottom: 20px;">💰 Gestionar Dinero</h2>
+  <!-- TAB: PAGAR -->
+  <div id="pagar" class="tab-content">
+    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
+      <h2 style="margin-bottom: 20px;">💰 Sistema de Pagos</h2>
       <div class="input-group">
-        <input type="text" id="search-dinero" placeholder="Buscar oficial por nombre..." onkeyup="filterOfficers('dinero')">
+        <input type="text" id="search-pagar" placeholder="Buscar oficial...">
+        <select id="dept-filter-pagar" onchange="filterOfficers('pagar')" style="flex: 0 0 150px;">
+          <option value="">Todos Departamentos</option>
+          <option value="HPD">HPD</option>
+          <option value="HCSO">HCSO</option>
+          <option value="HFD">HFD</option>
+          <option value="EMS">EMS</option>
+          <option value="DOT">DOT</option>
+          <option value="ICE">ICE</option>
+          <option value="THP">THP</option>
+        </select>
       </div>
-      <div id="dinero-list">
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Juan Méndez</div>
-            <div class="officer-details">
-              <span>💰 \,000</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="addMoney('Juan Méndez')">➕ Agregar Dinero</button>
-            <button class="btn btn-danger" onclick="removeMoney('Juan Méndez')">➖ Quitar Dinero</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">María Cortés</div>
-            <div class="officer-details">
-              <span>💰 \,500</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="addMoney('María Cortés')">➕ Agregar Dinero</button>
-            <button class="btn btn-danger" onclick="removeMoney('María Cortés')">➖ Quitar Dinero</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Carlos Rojas</div>
-            <div class="officer-details">
-              <span>💰 \,000</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="addMoney('Carlos Rojas')">➕ Agregar Dinero</button>
-            <button class="btn btn-danger" onclick="removeMoney('Carlos Rojas')">➖ Quitar Dinero</button>
-          </div>
-        </div>
-      </div>
+      <div id="pagar-list"></div>
     </div>
   </div>
 
   <!-- TAB: RANGO -->
   <div id="rango" class="tab-content">
-    <div class="panel-card">
+    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
       <h2 style="margin-bottom: 20px;">🎖️ Cambiar Rango</h2>
       <div class="input-group">
-        <input type="text" id="search-rango" placeholder="Buscar oficial por nombre..." onkeyup="filterOfficers('rango')">
+        <input type="text" id="search-rango" placeholder="Buscar oficial...">
+        <select id="dept-filter-rango" onchange="loadRanksForDept()" style="flex: 0 0 150px;">
+          <option value="">Selecciona Departamento</option>
+          <option value="HPD">HPD</option>
+          <option value="HCSO">HCSO</option>
+          <option value="HFD">HFD</option>
+          <option value="EMS">EMS</option>
+          <option value="DOT">DOT</option>
+          <option value="ICE">ICE</option>
+          <option value="THP">THP</option>
+        </select>
       </div>
-      <div id="rango-list">
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Juan Méndez</div>
-            <div class="officer-details">
-              <span>🎖️ Sargento</span>
-              <span>🏢 HPD</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="changeRank('Juan Méndez')">Cambiar Rango</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">María Cortés</div>
-            <div class="officer-details">
-              <span>🎖️ Oficial</span>
-              <span>🏢 HCSO</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="changeRank('María Cortés')">Cambiar Rango</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Carlos Rojas</div>
-            <div class="officer-details">
-              <span>🎖️ Detective</span>
-              <span>🏢 HPD</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="changeRank('Carlos Rojas')">Cambiar Rango</button>
-          </div>
-        </div>
-      </div>
+      <div id="rango-list"></div>
     </div>
   </div>
 
   <!-- TAB: DEPARTAMENTO -->
   <div id="departamento" class="tab-content">
-    <div class="panel-card">
+    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
       <h2 style="margin-bottom: 20px;">🏢 Cambiar Departamento</h2>
       <div class="input-group">
-        <input type="text" id="search-dept" placeholder="Buscar oficial por nombre..." onkeyup="filterOfficers('departamento')">
+        <input type="text" id="search-dept" placeholder="Buscar oficial...">
       </div>
-      <div id="departamento-list">
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Juan Méndez</div>
-            <div class="officer-details">
-              <span>🏢 HPD</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="changeDept('Juan Méndez')">Cambiar Departamento</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">María Cortés</div>
-            <div class="officer-details">
-              <span>🏢 HCSO</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="changeDept('María Cortés')">Cambiar Departamento</button>
-          </div>
-        </div>
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Carlos Rojas</div>
-            <div class="officer-details">
-              <span>🏢 HPD</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="changeDept('Carlos Rojas')">Cambiar Departamento</button>
-          </div>
-        </div>
-      </div>
+      <div id="departamento-list"></div>
     </div>
   </div>
 
-  <!-- TAB: K-9 APPLICATIONS -->
+  <!-- TAB: K9 -->
   <div id="k9" class="tab-content">
-    <div class="panel-card">
+    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
       <h2 style="margin-bottom: 20px;">🐕 Aplicaciones K-9</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Oficial</th>
-            <th>Fecha</th>
-            <th>Experiencia</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Juan Méndez</td>
-            <td>2026-11-04</td>
-            <td>5+ años</td>
-            <td><span class="badge badge-pending">Pendiente</span></td>
-            <td>
-              <button class="btn btn-success" onclick="approveK9('Juan Méndez')">Aprobar</button>
-              <button class="btn btn-danger" onclick="rejectK9('Juan Méndez')">Rechazar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Carlos Rojas</td>
-            <td>2026-11-03</td>
-            <td>3+ años</td>
-            <td><span class="badge badge-pending">Pendiente</span></td>
-            <td>
-              <button class="btn btn-success" onclick="approveK9('Carlos Rojas')">Aprobar</button>
-              <button class="btn btn-danger" onclick="rejectK9('Carlos Rojas')">Rechazar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- TAB: EXAM APPLICATIONS -->
-  <div id="exam" class="tab-content">
-    <div class="panel-card">
-      <h2 style="margin-bottom: 20px;">📝 Aplicaciones de Examen</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Oficial</th>
-            <th>Tipo de Examen</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>María Cortés</td>
-            <td>Ascenso a Sargento</td>
-            <td>2026-11-04</td>
-            <td><span class="badge badge-pending">Pendiente</span></td>
-            <td>
-              <button class="btn btn-success" onclick="approveExam('María Cortés')">Aprobar</button>
-              <button class="btn btn-danger" onclick="rejectExam('María Cortés')">Rechazar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Ana Pérez</td>
-            <td>Detective</td>
-            <td>2026-11-02</td>
-            <td><span class="badge badge-pending">Pendiente</span></td>
-            <td>
-              <button class="btn btn-success" onclick="approveExam('Ana Pérez')">Aprobar</button>
-              <button class="btn btn-danger" onclick="rejectExam('Ana Pérez')">Rechazar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div id="k9-list" style="text-align: center; color: #94a3b8; padding: 40px;">
+        Cargando aplicaciones K-9...
+      </div>
     </div>
   </div>
 
   <!-- TAB: REPORTS -->
   <div id="reports" class="tab-content">
-    <div class="panel-card">
-      <h2 style="margin-bottom: 20px;">📊 Reportes</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Oficial Que Reporta</th>
-            <th>Oficial Reportado</th>
-            <th>Motivo</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Juan Méndez</td>
-            <td>Luis García</td>
-            <td>Conducta inapropiada</td>
-            <td>2026-11-04</td>
-            <td><span class="badge badge-pending">Pendiente</span></td>
-            <td>
-              <button class="btn btn-success" onclick="approveReport('Luis García')">Ver</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Carlos Rojas</td>
-            <td>Ana Pérez</td>
-            <td>Tardanza</td>
-            <td>2026-11-03</td>
-            <td><span class="badge badge-approved">Revisado</span></td>
-            <td>
-              <button class="btn btn-primary" onclick="viewReport('Ana Pérez')">Ver</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- TAB: FIRE OFFICER -->
-  <div id="fire" class="tab-content">
-    <div class="panel-card">
-      <h2 style="margin-bottom: 20px;">🚨 Despedir Oficial</h2>
-      <div class="input-group">
-        <input type="text" id="search-fire" placeholder="Buscar oficial por nombre..." onkeyup="filterOfficers('fire')">
-      </div>
-      <div id="fire-list">
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">Luis García</div>
-            <div class="officer-details">
-              <span>🏢 HPD</span>
-              <span>⏰ 110 horas</span>
-              <span>🎖️ Oficial</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-danger" onclick="fireOfficer('Luis García')">🚨 DESPEDIR</button>
-          </div>
-        </div>
+    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
+      <h2 style="margin-bottom: 20px;">📊 Reportes y Solicitudes</h2>
+      <div id="reports-list" style="text-align: center; color: #94a3b8; padding: 40px;">
+        Cargando reportes...
       </div>
     </div>
   </div>
@@ -637,11 +343,245 @@
 
 <script src="assets/auth.js"></script>
 <script>
+  // SISTEMA DE RANGOS Y SALARIOS
+  const rankSystem = {
+    HPD: [
+      { rank: 'Oficial de Policía I', salary: 24 },
+      { rank: 'Oficial Senior I', salary: 27 },
+      { rank: 'Oficial Senior II', salary: 30 },
+      { rank: 'Oficial Senior III', salary: 33 },
+      { rank: 'Detective', salary: 36 },
+      { rank: 'Sargento', salary: 39 },
+      { rank: 'Teniente', salary: 42 },
+      { rank: 'Capitán', salary: 46 },
+      { rank: 'Jefe Adjunto', salary: 50 },
+      { rank: 'Jefe Asistente', salary: 54 },
+      { rank: 'Jefe de Policía', salary: 58 }
+    ],
+    HCSO: [
+      { rank: 'Deputy Sheriff', salary: 24 },
+      { rank: 'Deputy II', salary: 27 },
+      { rank: 'Deputy III', salary: 30 },
+      { rank: 'Corporal', salary: 33 },
+      { rank: 'Sargento', salary: 36 },
+      { rank: 'Teniente', salary: 39 },
+      { rank: 'Capitán', salary: 42 },
+      { rank: 'Mayor', salary: 46 },
+      { rank: 'Jefe Asistente Adjunto', salary: 50 },
+      { rank: 'Jefe Adjunto', salary: 54 },
+      { rank: 'Sheriff', salary: 58 }
+    ],
+    HFD: [
+      { rank: 'Bombero Recluta', salary: 24 },
+      { rank: 'Bombero', salary: 26 },
+      { rank: 'Bombero II', salary: 28 },
+      { rank: 'Cabo', salary: 31 },
+      { rank: 'Sargento', salary: 34 },
+      { rank: 'Teniente', salary: 37 },
+      { rank: 'Capitán', salary: 40 },
+      { rank: 'Jefe de División', salary: 44 },
+      { rank: 'Subjefe', salary: 48 },
+      { rank: 'Jefe Asistente', salary: 51 },
+      { rank: 'Jefe de Batallón', salary: 54 },
+      { rank: 'Jefe de Departamento', salary: 57 },
+      { rank: 'Comisionado', salary: 60 }
+    ],
+    EMS: [
+      { rank: 'EMT en Prácticas', salary: 24 },
+      { rank: 'EMT Básico', salary: 26 },
+      { rank: 'EMT', salary: 29 },
+      { rank: 'EMT Avanzado', salary: 32 },
+      { rank: 'Paramédico', salary: 35 },
+      { rank: 'Paramédico Senior', salary: 38 },
+      { rank: 'Supervisor', salary: 41 },
+      { rank: 'Supervisor de Turno', salary: 44 },
+      { rank: 'Supervisor de División', salary: 47 },
+      { rank: 'Teniente EMS', salary: 50 },
+      { rank: 'Capitán EMS', salary: 53 },
+      { rank: 'Jefe de Departamento EMS', salary: 57 },
+      { rank: 'Director Médico', salary: 60 }
+    ],
+    DOT: [
+      { rank: 'Aprendiz', salary: 24 },
+      { rank: 'Trabajador', salary: 26 },
+      { rank: 'Operador de Equipo', salary: 28 },
+      { rank: 'Técnico de Carreteras', salary: 31 },
+      { rank: 'Operador Senior', salary: 34 },
+      { rank: 'Líder de Cuadrilla', salary: 37 },
+      { rank: 'Supervisor de Sitio', salary: 40 },
+      { rank: 'Coordinador de Proyectos', salary: 43 },
+      { rank: 'Gerente Asistente', salary: 46 },
+      { rank: 'Gerente de Operaciones', salary: 50 },
+      { rank: 'Director Adjunto', salary: 54 },
+      { rank: 'Director de DOT', salary: 57 },
+      { rank: 'Director Ejecutivo', salary: 60 }
+    ],
+    ICE: [
+      { rank: 'Cadete ICE', salary: 24 },
+      { rank: 'Agente I', salary: 27 },
+      { rank: 'Agente II', salary: 30 },
+      { rank: 'Agente Especial', salary: 33 },
+      { rank: 'Agente Especial Senior', salary: 36 },
+      { rank: 'Agente Supervisor', salary: 39 },
+      { rank: 'Agente Supervisor Senior', salary: 42 },
+      { rank: 'Subdirector de Agencia', salary: 46 },
+      { rank: 'Director de Agencia', salary: 50 },
+      { rank: 'Subdirector General', salary: 54 },
+      { rank: 'Director de ICE', salary: 58 }
+    ],
+    THP: [
+      { rank: 'Trooper en Prácticas', salary: 24 },
+      { rank: 'Trooper I', salary: 25 },
+      { rank: 'Trooper Senior', salary: 27 },
+      { rank: 'Master Trooper', salary: 29 },
+      { rank: 'Trooper First Class', salary: 31 },
+      { rank: 'Corporal', salary: 33 },
+      { rank: 'Senior Corporal', salary: 35 },
+      { rank: 'Sargento', salary: 38 },
+      { rank: 'Staff Sergeant', salary: 41 },
+      { rank: 'Master Sergeant', salary: 44 },
+      { rank: 'Trooper Major', salary: 47 },
+      { rank: 'Teniente', salary: 50 },
+      { rank: 'Capitán', salary: 53 },
+      { rank: 'Coronel', salary: 56 },
+      { rank: 'Teniente Coronel', salary: 58 },
+      { rank: 'Jefe de Troopers', salary: 60 }
+    ]
+  };
+
+  let allOfficers = [];
+  let currentAction = null;
+
   function switchTab(tab) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     document.getElementById(tab).classList.add('active');
     event.target.classList.add('active');
+    
+    if (tab === 'horas') renderHorasTab();
+    if (tab === 'pagar') renderPagarTab();
+    if (tab === 'rango') renderRangoTab();
+    if (tab === 'departamento') renderDepartamentoTab();
+  }
+
+  async function loadOfficers() {
+    try {
+      if (typeof supaSelect === 'function') {
+        allOfficers = await supaSelect('police_members', '*', { limit: '1000' });
+        console.log('✓ Oficiales cargados:', allOfficers.length);
+      }
+    } catch (e) {
+      console.error('Error cargando:', e);
+    }
+    
+    if (!allOfficers || allOfficers.length === 0) {
+      allOfficers = getDemoOfficers();
+    }
+    
+    renderHorasTab();
+  }
+
+  function getDemoOfficers() {
+    return [
+      { id: 1, username: 'Juan Méndez', character_name: 'Juan Méndez', department: 'HPD', rank: 'Oficial Senior I', hours: 125 },
+      { id: 2, username: 'María Cortés', character_name: 'María Cortés', department: 'HCSO', rank: 'Deputy Sheriff', hours: 98 },
+      { id: 3, username: 'Carlos Rojas', character_name: 'Carlos Rojas', department: 'HPD', rank: 'Detective', hours: 156 },
+      { id: 4, username: 'Ana Pérez', character_name: 'Ana Pérez', department: 'EMS', rank: 'EMT', hours: 87 },
+      { id: 5, username: 'Luis García', character_name: 'Luis García', department: 'HFD', rank: 'Bombero', hours: 110 }
+    ];
+  }
+
+  function calculateSalary(hours, rank, dept) {
+    const ranks = rankSystem[dept] || [];
+    const rankData = ranks.find(r => r.rank === rank);
+    if (!rankData) return 0;
+    return Math.round(hours * 6 * rankData.salary);
+  }
+
+  function renderHorasTab() {
+    const list = document.getElementById('horas-list');
+    list.innerHTML = allOfficers.map(officer => `
+      <div class="officer-card">
+        <div class="officer-info">
+          <div class="officer-name">${officer.character_name || officer.username}</div>
+          <div class="officer-details">
+            <span>🏢 ${officer.department}</span>
+            <span>🎖️ ${officer.rank}</span>
+            <span>⏰ ${officer.hours || 0} horas</span>
+          </div>
+          <div class="salary-info">
+            Pago: $${calculateSalary(officer.hours || 0, officer.rank, officer.department)}
+          </div>
+        </div>
+        <div class="officer-actions">
+          <button class="btn btn-success" onclick="openAddHoursModal('${officer.username}', ${officer.hours || 0})">➕ Agregar</button>
+          <button class="btn btn-warning" onclick="openRemoveHoursModal('${officer.username}', ${officer.hours || 0})">➖ Remover</button>
+          <button class="btn btn-info" onclick="resetHours('${officer.username}')">🔄 Reiniciar</button>
+          <button class="btn btn-danger" onclick="fireOfficer('${officer.username}')">🚨 Despedir</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderPagarTab() {
+    const list = document.getElementById('pagar-list');
+    list.innerHTML = allOfficers.map(officer => {
+      const salary = calculateSalary(officer.hours || 0, officer.rank, officer.department);
+      return `
+        <div class="officer-card">
+          <div class="officer-info">
+            <div class="officer-name">${officer.character_name || officer.username}</div>
+            <div class="officer-details">
+              <span>🏢 ${officer.department}</span>
+              <span>🎖️ ${officer.rank}</span>
+              <span>⏰ ${officer.hours || 0} horas × 6 = ${(officer.hours || 0) * 6} horas juego</span>
+            </div>
+            <div class="salary-info" style="margin-top: 10px; background: rgba(74,204,143,0.1); border-color: rgba(74,204,143,0.3);">
+              <strong style="color: #4acf8f;">💰 SALARIO TOTAL: $${salary.toLocaleString()}</strong><br>
+              <small>(${officer.hours || 0}h × 6 × $${rankSystem[officer.department]?.find(r => r.rank === officer.rank)?.salary || 0}/h)</small>
+            </div>
+          </div>
+          <div class="officer-actions">
+            <button class="btn btn-success" onclick="payOfficer('${officer.username}', ${salary})">💸 PAGAR</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderRangoTab() {
+    const list = document.getElementById('rango-list');
+    list.innerHTML = allOfficers.map(officer => `
+      <div class="officer-card">
+        <div class="officer-info">
+          <div class="officer-name">${officer.character_name || officer.username}</div>
+          <div class="officer-details">
+            <span>🏢 ${officer.department}</span>
+            <span>🎖️ ${officer.rank}</span>
+          </div>
+        </div>
+        <div class="officer-actions">
+          <button class="btn btn-primary" onclick="openChangeRankModal('${officer.username}', '${officer.department}', '${officer.rank}')">Cambiar Rango</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderDepartamentoTab() {
+    const list = document.getElementById('departamento-list');
+    list.innerHTML = allOfficers.map(officer => `
+      <div class="officer-card">
+        <div class="officer-info">
+          <div class="officer-name">${officer.character_name || officer.username}</div>
+          <div class="officer-details">
+            <span>🏢 ${officer.department}</span>
+          </div>
+        </div>
+        <div class="officer-actions">
+          <button class="btn btn-primary" onclick="openChangeDeptModal('${officer.username}', '${officer.department}')">Cambiar Departamento</button>
+        </div>
+      </div>
+    `).join('');
   }
 
   function openModal(title, content) {
@@ -655,210 +595,156 @@
   }
 
   function confirmAction() {
-    alert('Acción confirmada');
-    closeModal();
+    if (currentAction) currentAction();
   }
 
-  function addHours(name) {
-    openModal('Agregar Horas', '<input type="number" placeholder="Cantidad de horas" id="hours-input" min="1">');
+  function openAddHoursModal(username, currentHours) {
+    openModal('Agregar Horas', `
+      <input type="number" id="hours-input" placeholder="Cantidad de horas" min="1" value="1" style="width: 100%; margin-bottom: 15px;">
+    `);
+    currentAction = () => {
+      const hours = parseInt(document.getElementById('hours-input').value) || 0;
+      updateOfficerHours(username, currentHours + hours);
+      closeModal();
+    };
   }
 
-  function removeHours(name) {
-    openModal('Remover Horas', '<input type="number" placeholder="Cantidad de horas" id="hours-input" min="1">');
+  function openRemoveHoursModal(username, currentHours) {
+    openModal('Remover Horas', `
+      <input type="number" id="hours-input" placeholder="Cantidad de horas" min="1" max="${currentHours}" value="1" style="width: 100%; margin-bottom: 15px;">
+    `);
+    currentAction = () => {
+      const hours = parseInt(document.getElementById('hours-input').value) || 0;
+      updateOfficerHours(username, Math.max(0, currentHours - hours));
+      closeModal();
+    };
   }
 
-  function addMoney(name) {
-    openModal('Agregar Dinero', '<input type="number" placeholder="Cantidad de dinero" id="money-input" min="1000">');
+  function resetHours(username) {
+    if (confirm('¿Reiniciar horas de este oficial?')) {
+      updateOfficerHours(username, 0);
+    }
   }
 
-  function removeMoney(name) {
-    openModal('Quitar Dinero', '<input type="number" placeholder="Cantidad de dinero" id="money-input" min="1000">');
+  function fireOfficer(username) {
+    if (confirm('¿Despeedir a este oficial? (Se quitarán todas las horas y el rango)')) {
+      updateOfficerHours(username, 0);
+      alert('✓ Oficial despedido');
+      loadOfficers();
+    }
   }
 
-  function changeRank(name) {
-    openModal('Cambiar Rango', '<select id="rank-select"><option>Oficial</option><option>Sargento</option><option>Detective</option><option>Capitán</option></select>');
+  function payOfficer(username, amount) {
+    alert(`✓ Pago de $${amount.toLocaleString()} enviado a ${username}`);
+    resetHours(username);
   }
 
-  function changeDept(name) {
-    openModal('Cambiar Departamento', '<select id="dept-select"><option>HPD</option><option>HCSO</option><option>HFD</option><option>EMS</option></select>');
+  function openChangeRankModal(username, dept, currentRank) {
+    const ranks = rankSystem[dept] || [];
+    const options = ranks.map(r => `<option value="${r.rank}" ${r.rank === currentRank ? 'selected' : ''}>${r.rank} - $${r.salary}/h</option>`).join('');
+    openModal('Cambiar Rango', `
+      <select id="rank-select" style="width: 100%; margin-bottom: 15px;">
+        ${options}
+      </select>
+    `);
+    currentAction = () => {
+      const newRank = document.getElementById('rank-select').value;
+      updateOfficerRank(username, newRank);
+      closeModal();
+    };
   }
 
-  function approveK9(name) {
-    alert('✓ K-9 Aplicación de ' + name + ' APROBADA');
+  function openChangeDeptModal(username, currentDept) {
+    openModal('Cambiar Departamento', `
+      <select id="dept-select" style="width: 100%; margin-bottom: 15px;">
+        <option value="HPD" ${currentDept === 'HPD' ? 'selected' : ''}>HPD</option>
+        <option value="HCSO" ${currentDept === 'HCSO' ? 'selected' : ''}>HCSO</option>
+        <option value="HFD" ${currentDept === 'HFD' ? 'selected' : ''}>HFD</option>
+        <option value="EMS" ${currentDept === 'EMS' ? 'selected' : ''}>EMS</option>
+        <option value="DOT" ${currentDept === 'DOT' ? 'selected' : ''}>DOT</option>
+        <option value="ICE" ${currentDept === 'ICE' ? 'selected' : ''}>ICE</option>
+        <option value="THP" ${currentDept === 'THP' ? 'selected' : ''}>THP</option>
+      </select>
+    `);
+    currentAction = () => {
+      const newDept = document.getElementById('dept-select').value;
+      updateOfficerDept(username, newDept);
+      closeModal();
+    };
   }
 
-  function rejectK9(name) {
-    alert('✗ K-9 Aplicación de ' + name + ' RECHAZADA');
+  function updateOfficerHours(username, newHours) {
+    const officer = allOfficers.find(o => o.username === username);
+    if (officer) {
+      officer.hours = newHours;
+      renderHorasTab();
+      renderPagarTab();
+      alert('✓ Horas actualizadas');
+    }
   }
 
-  function approveExam(name) {
-    alert('✓ Examen de ' + name + ' APROBADO');
+  function updateOfficerRank(username, newRank) {
+    const officer = allOfficers.find(o => o.username === username);
+    if (officer) {
+      officer.rank = newRank;
+      renderRangoTab();
+      renderPagarTab();
+      alert('✓ Rango actualizado');
+    }
   }
 
-  function rejectExam(name) {
-    alert('✗ Examen de ' + name + ' RECHAZADO');
-  }
-
-  function approveReport(name) {
-    alert('✓ Reporte contra ' + name + ' REVISADO');
-  }
-
-  function viewReport(name) {
-    alert('Viendo reporte de ' + name);
-  }
-
-  function fireOfficer(name) {
-    if (confirm('¿Está seguro de que desea despedir a ' + name + '?')) {
-      alert('🚨 ' + name + ' ha sido DESPEDIDO');
+  function updateOfficerDept(username, newDept) {
+    const officer = allOfficers.find(o => o.username === username);
+    if (officer) {
+      officer.department = newDept;
+      officer.rank = rankSystem[newDept][0].rank;
+      renderDepartamentoTab();
+      renderRangoTab();
+      renderPagarTab();
+      alert('✓ Departamento actualizado');
     }
   }
 
   function filterOfficers(tab) {
-    alert('Filtro para ' + tab);
-  }
-
-  // ── CARGAR OFICIALES DE SUPABASE ──
-  let allOfficers = [];
-
-  async function loadOfficersFromDatabase() {
-    try {
-      // Intentar cargar desde Supabase si está disponible
-      if (typeof supaSelect === 'function') {
-        console.log('Cargando oficiales de Supabase...');
-        const officers = await supaSelect('police_members', '*', { limit: '1000' });
-        if (officers && officers.length > 0) {
-          allOfficers = officers;
-          console.log('✓ Oficiales cargados:', officers.length);
-          renderAllOfficers();
-          return;
-        }
-      }
-    } catch (e) {
-      console.error('Error cargando de Supabase:', e);
-    }
+    const searchInput = document.getElementById(`search-${tab}`);
+    const deptFilter = document.getElementById(`dept-filter-${tab}`);
+    const search = searchInput ? searchInput.value.toLowerCase() : '';
+    const dept = deptFilter ? deptFilter.value : '';
     
-    console.log('ℹ Usando datos de demostración');
-    // Datos de demostración si Supabase no está disponible
-  }
-
-  function renderAllOfficers() {
-    const officers = allOfficers.length > 0 ? allOfficers : getDemoOfficers();
+    const filtered = allOfficers.filter(o => {
+      const matchSearch = (o.character_name || o.username).toLowerCase().includes(search);
+      const matchDept = !dept || o.department === dept;
+      return matchSearch && matchDept;
+    });
     
-    // Renderizar Horas
-    const horasList = document.getElementById('horas-list');
-    if (horasList) {
-      horasList.innerHTML = officers.map(officer => `
+    const list = document.getElementById(`${tab}-list`);
+    if (tab === 'horas') {
+      list.innerHTML = filtered.map(officer => `
         <div class="officer-card">
           <div class="officer-info">
-            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
+            <div class="officer-name">${officer.character_name || officer.username}</div>
             <div class="officer-details">
-              <span>🏢 ${officer.department || 'HPD'}</span>
+              <span>🏢 ${officer.department}</span>
+              <span>🎖️ ${officer.rank}</span>
               <span>⏰ ${officer.hours || 0} horas</span>
-              <span>🎖️ ${officer.rank || 'Oficial'}</span>
             </div>
           </div>
           <div class="officer-actions">
-            <button class="btn btn-success" onclick="addHours('${officer.username || officer.name}')">➕ Agregar</button>
-            <button class="btn btn-danger" onclick="removeHours('${officer.username || officer.name}')">➖ Remover</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Renderizar Dinero
-    const dineroList = document.getElementById('dinero-list');
-    if (dineroList) {
-      dineroList.innerHTML = officers.map(officer => `
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
-            <div class="officer-details">
-              <span>💰 $${officer.balance || 0}</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="addMoney('${officer.username || officer.name}')">➕ Agregar Dinero</button>
-            <button class="btn btn-danger" onclick="removeMoney('${officer.username || officer.name}')">➖ Quitar Dinero</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Renderizar Rango
-    const rangoList = document.getElementById('rango-list');
-    if (rangoList) {
-      rangoList.innerHTML = officers.map(officer => `
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
-            <div class="officer-details">
-              <span>🎖️ ${officer.rank || 'Oficial'}</span>
-              <span>🏢 ${officer.department || 'HPD'}</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="changeRank('${officer.username || officer.name}')">Cambiar Rango</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Renderizar Departamento
-    const deptList = document.getElementById('departamento-list');
-    if (deptList) {
-      deptList.innerHTML = officers.map(officer => `
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
-            <div class="officer-details">
-              <span>🏢 ${officer.department || 'HPD'}</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-primary" onclick="changeDept('${officer.username || officer.name}')">Cambiar Departamento</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Renderizar Fire
-    const fireList = document.getElementById('fire-list');
-    if (fireList) {
-      fireList.innerHTML = officers.map(officer => `
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">${officer.username || officer.name || 'Oficial'}</div>
-            <div class="officer-details">
-              <span>🏢 ${officer.department || 'HPD'}</span>
-              <span>⏰ ${officer.hours || 0} horas</span>
-              <span>🎖️ ${officer.rank || 'Oficial'}</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-danger" onclick="fireOfficer('${officer.username || officer.name}')">🚨 DESPEDIR</button>
+            <button class="btn btn-success" onclick="openAddHoursModal('${officer.username}', ${officer.hours || 0})">➕ Agregar</button>
+            <button class="btn btn-warning" onclick="openRemoveHoursModal('${officer.username}', ${officer.hours || 0})">➖ Remover</button>
+            <button class="btn btn-info" onclick="resetHours('${officer.username}')">🔄 Reiniciar</button>
+            <button class="btn btn-danger" onclick="fireOfficer('${officer.username}')">🚨 Despedir</button>
           </div>
         </div>
       `).join('');
     }
   }
 
-  function getDemoOfficers() {
-    return [
-      { username: 'Juan Méndez', name: 'Juan Méndez', department: 'HPD', hours: 125, rank: 'Sargento', balance: 45000 },
-      { username: 'María Cortés', name: 'María Cortés', department: 'HCSO', hours: 98, rank: 'Oficial', balance: 32500 },
-      { username: 'Carlos Rojas', name: 'Carlos Rojas', department: 'HPD', hours: 156, rank: 'Detective', balance: 52000 },
-      { username: 'Ana Pérez', name: 'Ana Pérez', department: 'HCSO', hours: 87, rank: 'Oficial', balance: 28000 },
-      { username: 'Luis García', name: 'Luis García', department: 'HPD', hours: 110, rank: 'Oficial', balance: 41000 }
-    ];
+  function loadRanksForDept() {
+    renderRangoTab();
   }
 
-  // Cargar oficiales al iniciar
-  window.addEventListener('load', function() {
-    console.log('Página cargada, iniciando carga de oficiales...');
-    loadOfficersFromDatabase();
-  });
-
-  console.log('✓ Manage Shift Panel cargado correctamente');
+  window.addEventListener('load', loadOfficers);
 </script>
 
 </body>
