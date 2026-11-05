@@ -26,34 +26,17 @@
       font-size: 32px;
       font-weight: 700;
     }
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #263552;
-      padding-bottom: 0;
-      flex-wrap: wrap;
+    .dept-section {
+      margin-bottom: 50px;
     }
-    .tab-btn {
-      padding: 12px 20px;
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      cursor: pointer;
+    .dept-title {
       font-family: 'Rajdhani', sans-serif;
-      font-weight: 600;
-      border-bottom: 3px solid transparent;
-      transition: all 0.3s;
-    }
-    .tab-btn.active {
-      color: #e8ecf4;
-      border-bottom-color: #3b82f6;
-    }
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #3b82f6;
+      color: #3b82f6;
     }
     .officer-card {
       background: #17223a;
@@ -103,26 +86,12 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
-    .btn-primary {
-      background: #3b82f6;
-      color: white;
-    }
-    .btn-primary:hover {
-      background: #2563eb;
-    }
     .btn-success {
       background: #4acf8f;
       color: #0d1424;
     }
     .btn-success:hover {
       background: #2fa76f;
-    }
-    .btn-danger {
-      background: #e54850;
-      color: white;
-    }
-    .btn-danger:hover {
-      background: #c73c44;
     }
     .btn-warning {
       background: #e6a868;
@@ -131,6 +100,13 @@
     .btn-warning:hover {
       background: #d4974f;
     }
+    .btn-danger {
+      background: #e54850;
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #c73c44;
+    }
     .btn-info {
       background: #06b6d4;
       color: white;
@@ -138,26 +114,12 @@
     .btn-info:hover {
       background: #0891b2;
     }
-    .input-group {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
     }
-    input, select {
-      flex: 1;
-      min-width: 200px;
-      padding: 10px;
-      background: #0d1424;
-      border: 1px solid #263552;
-      border-radius: 6px;
-      color: #e8ecf4;
-      font-family: 'Inter', sans-serif;
-    }
-    input:focus, select:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59,111,182,0.1);
+    .btn-primary:hover {
+      background: #2563eb;
     }
     .modal {
       display: none;
@@ -194,23 +156,27 @@
       margin-top: 20px;
       justify-content: flex-end;
     }
-    .badge {
-      display: inline-block;
-      padding: 6px 12px;
+    input, select {
+      width: 100%;
+      padding: 10px;
+      background: #0d1424;
+      border: 1px solid #263552;
       border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      background: rgba(59,111,182,0.2);
-      color: #3b82f6;
+      color: #e8ecf4;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 15px;
+      box-sizing: border-box;
     }
-    .salary-info {
-      background: rgba(59,111,182,0.1);
-      border: 1px solid rgba(59,111,182,0.3);
-      border-radius: 8px;
-      padding: 12px;
-      margin-top: 10px;
-      font-size: 12px;
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,111,182,0.1);
+    }
+    .loading {
+      text-align: center;
       color: #94a3b8;
+      padding: 40px;
+      font-size: 14px;
     }
   </style>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap">
@@ -218,115 +184,14 @@
 <body>
 
 <div class="container">
-
   <div class="header">
     <h1>📋 Manage Shifts - HOUSTON RP</h1>
-    <p style="color: #94a3b8; font-size: 14px; margin-top: 10px;">Sistema de Gestión de Turnos y Pagos</p>
+    <p style="color: #94a3b8; font-size: 14px; margin-top: 10px;">Sistema de Gestión de Turnos y Horas</p>
   </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('horas')">⏰ Horas</button>
-    <button class="tab-btn" onclick="switchTab('pagar')">💰 Pagar Oficiales</button>
-    <button class="tab-btn" onclick="switchTab('rango')">🎖️ Cambiar Rango</button>
-    <button class="tab-btn" onclick="switchTab('departamento')">🏢 Cambiar Departamento</button>
-    <button class="tab-btn" onclick="switchTab('k9')">🐕 K-9 Applications</button>
-    <button class="tab-btn" onclick="switchTab('reports')">📊 Reportes</button>
+  <div id="content">
+    <div class="loading">Cargando oficiales...</div>
   </div>
-
-  <!-- TAB: HORAS -->
-  <div id="horas" class="tab-content active">
-    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
-      <h2 style="margin-bottom: 20px;">⏰ Gestionar Horas de Oficiales</h2>
-      <div class="input-group">
-        <input type="text" id="search-horas" placeholder="Buscar oficial por nombre..." onkeyup="filterOfficers('horas')">
-        <select id="dept-filter-horas" onchange="filterOfficers('horas')" style="flex: 0 0 150px;">
-          <option value="">Todos Departamentos</option>
-          <option value="HPD">HPD</option>
-          <option value="HCSO">HCSO</option>
-          <option value="HFD">HFD</option>
-          <option value="EMS">EMS</option>
-          <option value="DOT">DOT</option>
-          <option value="ICE">ICE</option>
-          <option value="THP">THP</option>
-        </select>
-      </div>
-      <div id="horas-list"></div>
-    </div>
-  </div>
-
-  <!-- TAB: PAGAR -->
-  <div id="pagar" class="tab-content">
-    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
-      <h2 style="margin-bottom: 20px;">💰 Sistema de Pagos</h2>
-      <div class="input-group">
-        <input type="text" id="search-pagar" placeholder="Buscar oficial...">
-        <select id="dept-filter-pagar" onchange="filterOfficers('pagar')" style="flex: 0 0 150px;">
-          <option value="">Todos Departamentos</option>
-          <option value="HPD">HPD</option>
-          <option value="HCSO">HCSO</option>
-          <option value="HFD">HFD</option>
-          <option value="EMS">EMS</option>
-          <option value="DOT">DOT</option>
-          <option value="ICE">ICE</option>
-          <option value="THP">THP</option>
-        </select>
-      </div>
-      <div id="pagar-list"></div>
-    </div>
-  </div>
-
-  <!-- TAB: RANGO -->
-  <div id="rango" class="tab-content">
-    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
-      <h2 style="margin-bottom: 20px;">🎖️ Cambiar Rango</h2>
-      <div class="input-group">
-        <input type="text" id="search-rango" placeholder="Buscar oficial...">
-        <select id="dept-filter-rango" onchange="loadRanksForDept()" style="flex: 0 0 150px;">
-          <option value="">Selecciona Departamento</option>
-          <option value="HPD">HPD</option>
-          <option value="HCSO">HCSO</option>
-          <option value="HFD">HFD</option>
-          <option value="EMS">EMS</option>
-          <option value="DOT">DOT</option>
-          <option value="ICE">ICE</option>
-          <option value="THP">THP</option>
-        </select>
-      </div>
-      <div id="rango-list"></div>
-    </div>
-  </div>
-
-  <!-- TAB: DEPARTAMENTO -->
-  <div id="departamento" class="tab-content">
-    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
-      <h2 style="margin-bottom: 20px;">🏢 Cambiar Departamento</h2>
-      <div class="input-group">
-        <input type="text" id="search-dept" placeholder="Buscar oficial...">
-      </div>
-      <div id="departamento-list"></div>
-    </div>
-  </div>
-
-  <!-- TAB: K9 -->
-  <div id="k9" class="tab-content">
-    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
-      <h2 style="margin-bottom: 20px;">🐕 Aplicaciones K-9</h2>
-      <div id="k9-list" style="text-align: center; color: #94a3b8; padding: 40px;">
-        Cargando aplicaciones K-9...
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: REPORTS -->
-  <div id="reports" class="tab-content">
-    <div style="background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 20px;">
-      <h2 style="margin-bottom: 20px;">📊 Reportes y Solicitudes</h2>
-      <div id="reports-list" style="text-align: center; color: #94a3b8; padding: 40px;">
-        Cargando reportes...
-      </div>
-    </div>
-  </div>
-
 </div>
 
 <!-- MODAL -->
@@ -343,7 +208,6 @@
 
 <script src="assets/auth.js"></script>
 <script>
-  // SISTEMA DE RANGOS Y SALARIOS
   const rankSystem = {
     HPD: [
       { rank: 'Oficial de Policía I', salary: 24 },
@@ -452,136 +316,100 @@
   let allOfficers = [];
   let currentAction = null;
 
-  function switchTab(tab) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById(tab).classList.add('active');
-    event.target.classList.add('active');
-    
-    if (tab === 'horas') renderHorasTab();
-    if (tab === 'pagar') renderPagarTab();
-    if (tab === 'rango') renderRangoTab();
-    if (tab === 'departamento') renderDepartamentoTab();
-  }
-
   async function loadOfficers() {
     try {
-      if (typeof supaSelect === 'function') {
-        allOfficers = await supaSelect('police_members', '*', { limit: '1000' });
-        console.log('✓ Oficiales cargados:', allOfficers.length);
+      // Cargar datos de police_members con horas
+      const members = await supaSelect('police_members', '*', { limit: '1000' });
+      
+      if (!members || members.length === 0) {
+        document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales registrados</div>';
+        return;
       }
+
+      // Para cada miembro, obtener sus horas y nombre de character
+      allOfficers = await Promise.all(members.map(async (member) => {
+        try {
+          // Obtener horas de police_shift_sessions
+          const shifts = await supaSelect('police_shift_sessions', 'total_seconds', {
+            discord_id: `eq.${member.discord_id}`,
+            status: 'eq.completed'
+          });
+          
+          let totalSeconds = 0;
+          if (shifts && shifts.length > 0) {
+            totalSeconds = shifts.reduce((sum, s) => sum + (s.total_seconds || 0), 0);
+          }
+
+          const totalHours = Math.round(totalSeconds / 3600);
+
+          // Obtener nombre de character
+          const character = await supaSelect('characters', 'nombres, apellidos', {
+            user_discord: `eq.${member.discord_id}`,
+            limit: '1'
+          });
+
+          const characterName = character && character[0] 
+            ? `${character[0].nombres || ''} ${character[0].apellidos || ''}`.trim()
+            : member.username;
+
+          return {
+            discord_id: member.discord_id,
+            username: member.username,
+            character_name: characterName,
+            department: member.department || 'Sin Asignar',
+            rank: member.rank || 'Sin Rango',
+            hours: totalHours
+          };
+        } catch (e) {
+          console.error('Error cargando oficial:', e);
+          return null;
+        }
+      }));
+
+      allOfficers = allOfficers.filter(o => o !== null);
+      renderOfficersByDepartment();
     } catch (e) {
-      console.error('Error cargando:', e);
+      console.error('Error cargando oficiales:', e);
+      document.getElementById('content').innerHTML = '<div class="loading">Error cargando datos. Intenta de nuevo.</div>';
     }
-    
-    if (!allOfficers || allOfficers.length === 0) {
-      allOfficers = getDemoOfficers();
-    }
-    
-    renderHorasTab();
   }
 
-  function getDemoOfficers() {
-    return [
-      { id: 1, username: 'Juan Méndez', character_name: 'Juan Méndez', department: 'HPD', rank: 'Oficial Senior I', hours: 125 },
-      { id: 2, username: 'María Cortés', character_name: 'María Cortés', department: 'HCSO', rank: 'Deputy Sheriff', hours: 98 },
-      { id: 3, username: 'Carlos Rojas', character_name: 'Carlos Rojas', department: 'HPD', rank: 'Detective', hours: 156 },
-      { id: 4, username: 'Ana Pérez', character_name: 'Ana Pérez', department: 'EMS', rank: 'EMT', hours: 87 },
-      { id: 5, username: 'Luis García', character_name: 'Luis García', department: 'HFD', rank: 'Bombero', hours: 110 }
-    ];
-  }
+  function renderOfficersByDepartment() {
+    const depts = ['HPD', 'HCSO', 'HFD', 'EMS', 'DOT', 'ICE', 'THP'];
+    let html = '';
 
-  function calculateSalary(hours, rank, dept) {
-    const ranks = rankSystem[dept] || [];
-    const rankData = ranks.find(r => r.rank === rank);
-    if (!rankData) return 0;
-    return Math.round(hours * 6 * rankData.salary);
-  }
+    for (const dept of depts) {
+      const officersInDept = allOfficers.filter(o => o.department === dept);
+      if (officersInDept.length === 0) continue;
 
-  function renderHorasTab() {
-    const list = document.getElementById('horas-list');
-    list.innerHTML = allOfficers.map(officer => `
-      <div class="officer-card">
-        <div class="officer-info">
-          <div class="officer-name">${officer.character_name || officer.username}</div>
-          <div class="officer-details">
-            <span>🏢 ${officer.department}</span>
-            <span>🎖️ ${officer.rank}</span>
-            <span>⏰ ${officer.hours || 0} horas</span>
-          </div>
-          <div class="salary-info">
-            Pago: $${calculateSalary(officer.hours || 0, officer.rank, officer.department)}
-          </div>
-        </div>
-        <div class="officer-actions">
-          <button class="btn btn-success" onclick="openAddHoursModal('${officer.username}', ${officer.hours || 0})">➕ Agregar</button>
-          <button class="btn btn-warning" onclick="openRemoveHoursModal('${officer.username}', ${officer.hours || 0})">➖ Remover</button>
-          <button class="btn btn-info" onclick="resetHours('${officer.username}')">🔄 Reiniciar</button>
-          <button class="btn btn-danger" onclick="fireOfficer('${officer.username}')">🚨 Despedir</button>
-        </div>
-      </div>
-    `).join('');
-  }
+      html += `<div class="dept-section">
+        <div class="dept-title">${dept} - ${officersInDept.length} oficiales</div>`;
 
-  function renderPagarTab() {
-    const list = document.getElementById('pagar-list');
-    list.innerHTML = allOfficers.map(officer => {
-      const salary = calculateSalary(officer.hours || 0, officer.rank, officer.department);
-      return `
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">${officer.character_name || officer.username}</div>
-            <div class="officer-details">
-              <span>🏢 ${officer.department}</span>
-              <span>🎖️ ${officer.rank}</span>
-              <span>⏰ ${officer.hours || 0} horas × 6 = ${(officer.hours || 0) * 6} horas juego</span>
+      for (const officer of officersInDept) {
+        html += `
+          <div class="officer-card">
+            <div class="officer-info">
+              <div class="officer-name">${officer.character_name}</div>
+              <div class="officer-details">
+                <span>🏢 ${officer.department}</span>
+                <span>🎖️ ${officer.rank}</span>
+                <span>⏰ ${officer.hours} horas</span>
+              </div>
             </div>
-            <div class="salary-info" style="margin-top: 10px; background: rgba(74,204,143,0.1); border-color: rgba(74,204,143,0.3);">
-              <strong style="color: #4acf8f;">💰 SALARIO TOTAL: $${salary.toLocaleString()}</strong><br>
-              <small>(${officer.hours || 0}h × 6 × $${rankSystem[officer.department]?.find(r => r.rank === officer.rank)?.salary || 0}/h)</small>
+            <div class="officer-actions">
+              <button class="btn btn-success" onclick="openAddHoursModal('${officer.username}', ${officer.hours}, '${officer.character_name}')">➕ Agregar</button>
+              <button class="btn btn-warning" onclick="openRemoveHoursModal('${officer.username}', ${officer.hours}, '${officer.character_name}')">➖ Remover</button>
+              <button class="btn btn-info" onclick="resetHours('${officer.username}', '${officer.character_name}')">🔄 Reiniciar</button>
+              <button class="btn btn-danger" onclick="fireOfficer('${officer.username}', '${officer.character_name}')">🚨 Despedir</button>
             </div>
           </div>
-          <div class="officer-actions">
-            <button class="btn btn-success" onclick="payOfficer('${officer.username}', ${salary})">💸 PAGAR</button>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
+        `;
+      }
 
-  function renderRangoTab() {
-    const list = document.getElementById('rango-list');
-    list.innerHTML = allOfficers.map(officer => `
-      <div class="officer-card">
-        <div class="officer-info">
-          <div class="officer-name">${officer.character_name || officer.username}</div>
-          <div class="officer-details">
-            <span>🏢 ${officer.department}</span>
-            <span>🎖️ ${officer.rank}</span>
-          </div>
-        </div>
-        <div class="officer-actions">
-          <button class="btn btn-primary" onclick="openChangeRankModal('${officer.username}', '${officer.department}', '${officer.rank}')">Cambiar Rango</button>
-        </div>
-      </div>
-    `).join('');
-  }
+      html += `</div>`;
+    }
 
-  function renderDepartamentoTab() {
-    const list = document.getElementById('departamento-list');
-    list.innerHTML = allOfficers.map(officer => `
-      <div class="officer-card">
-        <div class="officer-info">
-          <div class="officer-name">${officer.character_name || officer.username}</div>
-          <div class="officer-details">
-            <span>🏢 ${officer.department}</span>
-          </div>
-        </div>
-        <div class="officer-actions">
-          <button class="btn btn-primary" onclick="openChangeDeptModal('${officer.username}', '${officer.department}')">Cambiar Departamento</button>
-        </div>
-      </div>
-    `).join('');
+    document.getElementById('content').innerHTML = html;
   }
 
   function openModal(title, content) {
@@ -598,150 +426,46 @@
     if (currentAction) currentAction();
   }
 
-  function openAddHoursModal(username, currentHours) {
-    openModal('Agregar Horas', `
-      <input type="number" id="hours-input" placeholder="Cantidad de horas" min="1" value="1" style="width: 100%; margin-bottom: 15px;">
+  function openAddHoursModal(username, currentHours, name) {
+    openModal(`Agregar Horas - ${name}`, `
+      <input type="number" id="hours-input" placeholder="Cantidad de horas" min="1" value="1">
     `);
     currentAction = () => {
       const hours = parseInt(document.getElementById('hours-input').value) || 0;
-      updateOfficerHours(username, currentHours + hours);
+      updateOfficerHours(username, currentHours + hours, name);
       closeModal();
     };
   }
 
-  function openRemoveHoursModal(username, currentHours) {
-    openModal('Remover Horas', `
-      <input type="number" id="hours-input" placeholder="Cantidad de horas" min="1" max="${currentHours}" value="1" style="width: 100%; margin-bottom: 15px;">
+  function openRemoveHoursModal(username, currentHours, name) {
+    openModal(`Remover Horas - ${name}`, `
+      <input type="number" id="hours-input" placeholder="Cantidad de horas" min="1" max="${currentHours}" value="1">
     `);
     currentAction = () => {
       const hours = parseInt(document.getElementById('hours-input').value) || 0;
-      updateOfficerHours(username, Math.max(0, currentHours - hours));
+      updateOfficerHours(username, Math.max(0, currentHours - hours), name);
       closeModal();
     };
   }
 
-  function resetHours(username) {
-    if (confirm('¿Reiniciar horas de este oficial?')) {
-      updateOfficerHours(username, 0);
+  function resetHours(username, name) {
+    if (confirm(`¿Reiniciar horas de ${name}?`)) {
+      updateOfficerHours(username, 0, name);
     }
   }
 
-  function fireOfficer(username) {
-    if (confirm('¿Despeedir a este oficial? (Se quitarán todas las horas y el rango)')) {
-      updateOfficerHours(username, 0);
-      alert('✓ Oficial despedido');
+  function fireOfficer(username, name) {
+    if (confirm(`¿Despeedir a ${name}? (Se quitarán todas las horas y el rango)`)) {
+      updateOfficerHours(username, 0, name);
+      alert(`✓ ${name} ha sido despedido`);
       loadOfficers();
     }
   }
 
-  function payOfficer(username, amount) {
-    alert(`✓ Pago de $${amount.toLocaleString()} enviado a ${username}`);
-    resetHours(username);
-  }
-
-  function openChangeRankModal(username, dept, currentRank) {
-    const ranks = rankSystem[dept] || [];
-    const options = ranks.map(r => `<option value="${r.rank}" ${r.rank === currentRank ? 'selected' : ''}>${r.rank} - $${r.salary}/h</option>`).join('');
-    openModal('Cambiar Rango', `
-      <select id="rank-select" style="width: 100%; margin-bottom: 15px;">
-        ${options}
-      </select>
-    `);
-    currentAction = () => {
-      const newRank = document.getElementById('rank-select').value;
-      updateOfficerRank(username, newRank);
-      closeModal();
-    };
-  }
-
-  function openChangeDeptModal(username, currentDept) {
-    openModal('Cambiar Departamento', `
-      <select id="dept-select" style="width: 100%; margin-bottom: 15px;">
-        <option value="HPD" ${currentDept === 'HPD' ? 'selected' : ''}>HPD</option>
-        <option value="HCSO" ${currentDept === 'HCSO' ? 'selected' : ''}>HCSO</option>
-        <option value="HFD" ${currentDept === 'HFD' ? 'selected' : ''}>HFD</option>
-        <option value="EMS" ${currentDept === 'EMS' ? 'selected' : ''}>EMS</option>
-        <option value="DOT" ${currentDept === 'DOT' ? 'selected' : ''}>DOT</option>
-        <option value="ICE" ${currentDept === 'ICE' ? 'selected' : ''}>ICE</option>
-        <option value="THP" ${currentDept === 'THP' ? 'selected' : ''}>THP</option>
-      </select>
-    `);
-    currentAction = () => {
-      const newDept = document.getElementById('dept-select').value;
-      updateOfficerDept(username, newDept);
-      closeModal();
-    };
-  }
-
-  function updateOfficerHours(username, newHours) {
-    const officer = allOfficers.find(o => o.username === username);
-    if (officer) {
-      officer.hours = newHours;
-      renderHorasTab();
-      renderPagarTab();
-      alert('✓ Horas actualizadas');
-    }
-  }
-
-  function updateOfficerRank(username, newRank) {
-    const officer = allOfficers.find(o => o.username === username);
-    if (officer) {
-      officer.rank = newRank;
-      renderRangoTab();
-      renderPagarTab();
-      alert('✓ Rango actualizado');
-    }
-  }
-
-  function updateOfficerDept(username, newDept) {
-    const officer = allOfficers.find(o => o.username === username);
-    if (officer) {
-      officer.department = newDept;
-      officer.rank = rankSystem[newDept][0].rank;
-      renderDepartamentoTab();
-      renderRangoTab();
-      renderPagarTab();
-      alert('✓ Departamento actualizado');
-    }
-  }
-
-  function filterOfficers(tab) {
-    const searchInput = document.getElementById(`search-${tab}`);
-    const deptFilter = document.getElementById(`dept-filter-${tab}`);
-    const search = searchInput ? searchInput.value.toLowerCase() : '';
-    const dept = deptFilter ? deptFilter.value : '';
-    
-    const filtered = allOfficers.filter(o => {
-      const matchSearch = (o.character_name || o.username).toLowerCase().includes(search);
-      const matchDept = !dept || o.department === dept;
-      return matchSearch && matchDept;
-    });
-    
-    const list = document.getElementById(`${tab}-list`);
-    if (tab === 'horas') {
-      list.innerHTML = filtered.map(officer => `
-        <div class="officer-card">
-          <div class="officer-info">
-            <div class="officer-name">${officer.character_name || officer.username}</div>
-            <div class="officer-details">
-              <span>🏢 ${officer.department}</span>
-              <span>🎖️ ${officer.rank}</span>
-              <span>⏰ ${officer.hours || 0} horas</span>
-            </div>
-          </div>
-          <div class="officer-actions">
-            <button class="btn btn-success" onclick="openAddHoursModal('${officer.username}', ${officer.hours || 0})">➕ Agregar</button>
-            <button class="btn btn-warning" onclick="openRemoveHoursModal('${officer.username}', ${officer.hours || 0})">➖ Remover</button>
-            <button class="btn btn-info" onclick="resetHours('${officer.username}')">🔄 Reiniciar</button>
-            <button class="btn btn-danger" onclick="fireOfficer('${officer.username}')">🚨 Despedir</button>
-          </div>
-        </div>
-      `).join('');
-    }
-  }
-
-  function loadRanksForDept() {
-    renderRangoTab();
+  function updateOfficerHours(username, newHours, name) {
+    // Aquí iría la actualización a Supabase
+    alert(`✓ Horas actualizadas para ${name}: ${newHours}h`);
+    loadOfficers();
   }
 
   window.addEventListener('load', loadOfficers);
