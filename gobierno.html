@@ -887,9 +887,14 @@ window.saveAlias=saveAlias;
 async function loadFines(){
   const container=$('fines-container');
   try{
-    const data=await fetchMyRecords('*',{type:'eq.fine',order:'created_at.desc',limit:'50'});
+    // Timeout de 8 segundos para evitar cargas infinitas
+    let data=null;
+    const fetchPromise=fetchMyRecords('*',{type:'eq.fine',order:'created_at.desc',limit:'50'});
+    const timeoutPromise=new Promise((resolve)=>setTimeout(()=>resolve(null),8000));
+    data=await Promise.race([fetchPromise,timeoutPromise]);
+    
     if(!data||data.length===0){
-      container.innerHTML='<div class="empty-state"><div class="big-icon">🎉</div><p>No tienes multas activas</p><div class="sub">Mantén un récord limpio</div><div class="sub" style="margin-top:8px;opacity:.8">¿Deberías tener una? Escribí tu usuario de Roblox arriba y pulsá <b>Buscar</b>.</div></div>';
+      container.innerHTML='<div class="empty-state"><div class="big-icon">🎉</div><p>No tienes multas registradas</p><div class="sub">Mantén un récord limpio</div><div class="sub" style="margin-top:8px;opacity:.8">Si tienes multas y no aparecen, actualiza la página o <b>Busca nuevamente</b>.</div></div>';
       $('fines-count-badge').textContent='0 Pendientes';
       return;
     }
@@ -932,7 +937,7 @@ async function loadFines(){
       </div>`;
     }).join('');
   }catch(_){
-    container.innerHTML='<div class="empty-state" style="color:var(--accent-red)"><p>Error al cargar multas</p></div>';
+    container.innerHTML='<div class="empty-state" style="color:var(--accent-red)"><p>Error al cargar multas</p><p style="font-size:12px;margin-top:8px;opacity:.7">Intenta actualizar la página</p></div>';
   }
 }
 
@@ -1011,17 +1016,34 @@ async function loadAnnouncements(){
   const container=$('announcements-container');
   try{
     const data=await supaSelect('government_announcements','*',{active:'eq.true',order:'created_at.desc',limit:'20'});
-    if(!data||data.length===0){
+    let announcements=data||[];
+    
+    // Si no hay avisos, agregar avisos por defecto
+    if(!announcements||announcements.length===0){
       try{
         const demo=await supaSelect('government_announcements','count',{limit:'0'});
       }catch(_){
         container.innerHTML='<div class="empty-state"><div class="big-icon">📢</div><p>Tabla de avisos no configurada</p><div class="sub">Ejecuta la migración SQL en Supabase</div></div>';
         return;
       }
+      // Avisos por defecto del sistema
+      announcements=[
+        {
+          title:'Paradas de Tráfico - Normativa Importante',
+          content:'No está permitido escapar simplemente porque un oficial les realiza una parada de tráfico por saltarse un semáforo en rojo, no respetar una señal de STOP o cometer alguna infracción menor.',
+          author:'Gobierno de Houston',
+          priority:'high',
+          created_at:new Date().toISOString()
+        }
+      ];
+    }
+    
+    if(!announcements||announcements.length===0){
       container.innerHTML='<div class="empty-state"><div class="big-icon">📢</div><p>No hay avisos oficiales</p><div class="sub">Próximamente se publicarán noticias</div></div>';
       return;
     }
-    container.innerHTML=data.map((a,i)=>
+    
+    container.innerHTML=announcements.map((a,i)=>
       `<div class="announcement-item" style="animation-delay:${i*0.05}s">
         <div class="annc-priority ${a.priority||'normal'}"></div>
         <div class="annc-content">
