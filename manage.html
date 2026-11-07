@@ -208,18 +208,6 @@
 
 <script src="assets/auth.js"></script>
 <script>
-  // Verificar autenticación y permisos
-  (async function() {
-    const session = hrpRequireSession();
-    if (!session) return;
-    
-    const hasAccess = await hrpCheckManageAccess(session.id);
-    if (!hasAccess) {
-      document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No tienes permisos para acceder a esta página. Contacta al administrador.</div>';
-      return;
-    }
-  })();
-
   const rankSystem = {
     HPD: [
       { rank: 'Oficial de Policía I', salary: 24 },
@@ -333,7 +321,14 @@
       // Verificar que el usuario tiene permisos
       const session = hrpGetSession();
       if (!session) {
-        document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No estás autenticado. Por favor, inicia sesión.</div>';
+        document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No estás autenticado. Por favor, <a href="index.html" style="color: #3b82f6;">inicia sesión</a>.</div>';
+        return;
+      }
+
+      // Verificar permisos de administrador
+      const hasAccess = await hrpCheckManageAccess(session.id);
+      if (!hasAccess) {
+        document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No tienes permisos para acceder a esta página. Contacta al administrador.</div>';
         return;
       }
 
@@ -485,14 +480,6 @@
   function resetHours(username, name) {
     if (confirm(`¿Reiniciar horas de ${name}?`)) {
       updateOfficerHours(username, 0, name);
-    }
-  }
-
-  function fireOfficer(username, name) {
-    if (confirm(`¿Despeedir a ${name}? (Se quitarán todas las horas y el rango)`)) {
-      updateOfficerHours(username, 0, name);
-      alert(`✓ ${name} ha sido despedido`);
-      loadOfficers();
     }
   }
 
