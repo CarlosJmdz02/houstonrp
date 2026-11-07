@@ -144,17 +144,18 @@
             background-clip: text;
         }
 
-        /* Grid de reglas */
+        /* Grid de reglas - 2 COLUMNAS, ACOSTADAS */
         .rules-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
             margin-bottom: 3rem;
         }
 
-        /* Tarjeta de regla - LÍNEAS ACOSTADAS */
+        /* Tarjeta de regla - HORIZONTAL/ACOSTADA */
         .rule-card {
             background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(37, 99, 235, 0.3);
             border-left: 4px solid var(--primary);
             border-radius: 8px;
             padding: 1.5rem;
@@ -162,6 +163,24 @@
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: auto;
+        }
+
+        .rule-card.with-image {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .rule-card.with-image img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
         }
 
         .rule-card::before {
@@ -175,8 +194,9 @@
         }
 
         .rule-card:hover {
-            transform: translateX(5px);
+            transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+            border-color: rgba(37, 99, 235, 0.5);
             border-left-color: var(--primary-light);
             background: rgba(15, 23, 42, 0.8);
         }
@@ -199,25 +219,25 @@
         }
 
         .rule-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: white;
             letter-spacing: -0.5px;
+            margin-bottom: 0.4rem;
         }
 
         .rule-code {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--primary-light);
             font-family: 'Monaco', monospace;
             font-weight: 600;
-            margin-top: 0.2rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .rule-description {
             color: var(--text-secondary);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-bottom: 1rem;
             line-height: 1.6;
         }
@@ -756,6 +776,76 @@
                     </div>
                     <p class="rule-description">Evita debates sobre política, religión o división.</p>
                     <span class="rule-sanction sanction-1pt">1 PUNTO</span>
+                </div>
+
+                <!-- ZONAS SEGURAS / PASAPORTE -->
+                <div class="rule-card with-image">
+                    <div>
+                        <div class="rule-header">
+                            <div class="rule-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="rule-content">
+                                <div class="rule-title">ZONAS SEGURAS</div>
+                                <div class="rule-code">Pasaporte Safe Zone</div>
+                            </div>
+                        </div>
+                        <p class="rule-description">Las zonas seguras (mostradas en el mapa) están protegidas. No se permite combate, robos ni actividades delictivas dentro de estas áreas. El personal de seguridad vigila constantemente. Incumplir resultará en sanciones severas.</p>
+                        <span class="rule-sanction sanction-kick">KICK</span>
+                    </div>
+                    <img src="images/zonas seguras.png" alt="Mapa de Zonas Seguras">
+                </div>
+
+                <!-- PERSECUCIONES CIVILES -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <div class="rule-icon"><i class="fas fa-car"></i></div>
+                        <div class="rule-content">
+                            <div class="rule-title">PERSECUCIONES CIVILES</div>
+                            <div class="rule-code">Razón Válida Requerida</div>
+                        </div>
+                    </div>
+                    <p class="rule-description">Para iniciar una persecución como civil, debes tener una razón válida y coherente con un rol previo que justifique la huida. NO está permitido escapar simplemente por una parada de tráfico por infracciones menores (semáforo en rojo, STOP, etc.). Toda persecución debe tener sentido dentro del rol.</p>
+                    <div style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgba(37, 99, 235, 0.2); font-size: 0.85rem; color: var(--text-secondary);">
+                        <strong>Sanciones:</strong> 1ª infracción: WARNING | 2ª infracción: KICK (45 min)
+                    </div>
+                </div>
+
+                <!-- BUNNY JUMPING -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <div class="rule-icon"><i class="fas fa-rabbit"></i></div>
+                        <div class="rule-content">
+                            <div class="rule-title">BUNNY JUMPING</div>
+                            <div class="rule-code">Abuso de Mecánicas</div>
+                        </div>
+                    </div>
+                    <p class="rule-description">No se permite el abuso de la mecánica de salto (bunny hopping) para obtener ventaja en combate o huidas. Esta práctica es considerada explotación de mecánicas del juego y está estrictamente prohibida en all competiciones y enfrentamientos de rol.</p>
+                    <span class="rule-sanction sanction-2pt">2 PUNTOS</span>
+                </div>
+
+                <!-- CHALECO CON LOGO/DISEÑO -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <div class="rule-icon"><i class="fas fa-vest"></i></div>
+                        <div class="rule-content">
+                            <div class="rule-title">CHALECO PERSONALIZADO</div>
+                            <div class="rule-code">Prohibido Logo/Diseño</div>
+                        </div>
+                    </div>
+                    <p class="rule-description">El uso de chalecos policiales con logos, diseños personalizados o estilos únicos está PROHIBIDO en Houston Community Roleplay. Solo se permite el chaleco estándar sin modificaciones. Los equipos oficiales deben ser uniformes y consistentes.</p>
+                    <span class="rule-sanction sanction-warn">WARNING</span>
+                </div>
+
+                <!-- FORZAR ROL -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <div class="rule-icon"><i class="fas fa-theater-masks"></i></div>
+                        <div class="rule-content">
+                            <div class="rule-title">FORZAR ROL</div>
+                            <div class="rule-code">Roleplay Consensual</div>
+                        </div>
+                    </div>
+                    <p class="rule-description">No se permite forzar rol a otros jugadores sin su consentimiento. Todo roleplay debe ser consensual y coordinado. No puedes obligar a un jugador a participar en una escena contra su voluntad. Si un jugador rechaza tu rol, respeta su decisión.</p>
+                    <span class="rule-sanction sanction-3pt">3 PUNTOS</span>
                 </div>
             </div>
         </div>
