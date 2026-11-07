@@ -80,36 +80,45 @@ async function loadOfficers() {
   
   try {
     // Step 1: Load members
-    console.log('Loading members...');
-    document.getElementById('content').innerHTML = '<div class="loading">📥 Cargando datos de oficiales...</div>';
+    console.log('Step 1: Loading members...');
+    document.getElementById('content').innerHTML = '<div class="loading">Step 1: Loading members...</div>';
     
     const members = await supaSelect('police_members', '*', { limit: '1000' });
     console.log('Members loaded:', members ? members.length : 0);
     
     if (!members || members.length === 0) {
-      document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales registrados</div>';
+      document.getElementById('content').innerHTML = '<div class="loading">❌ No members found</div>';
       return;
     }
 
     // Step 2: Load all hours data
-    console.log('Loading shifts...');
-    document.getElementById('content').innerHTML = '<div class="loading">⏰ Cargando horas...</div>';
+    console.log('Step 2: Loading shifts...');
+    document.getElementById('content').innerHTML = '<div class="loading">Step 2: Loading shifts (may take a moment)...</div>';
     
-    const shifts = await supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' }).catch(e => {
-      console.warn('Shifts failed:', e);
-      return [];
-    });
+    let shifts = [];
+    try {
+      shifts = await supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' });
+    } catch (e) {
+      console.warn('Shifts error:', e);
+    }
     console.log('Shifts loaded:', shifts ? shifts.length : 0);
 
     // Step 3: Load adjustments
-    const adjustments = await supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' }).catch(e => {
-      console.warn('Adjustments failed:', e);
-      return [];
-    });
+    console.log('Step 3: Loading adjustments...');
+    document.getElementById('content').innerHTML = '<div class="loading">Step 3: Loading adjustments...</div>';
+    
+    let adjustments = [];
+    try {
+      adjustments = await supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' });
+    } catch (e) {
+      console.warn('Adjustments error:', e);
+    }
     console.log('Adjustments loaded:', adjustments ? adjustments.length : 0);
 
     // Step 4: Calculate hours map
+    console.log('Step 4: Calculating hours map...');
     const hoursMap = {};
+    
     if (shifts && Array.isArray(shifts)) {
       for (const s of shifts) {
         if (s.discord_id) {
@@ -124,16 +133,17 @@ async function loadOfficers() {
         }
       }
     }
+    console.log('Hours map created with', Object.keys(hoursMap).length, 'entries');
 
     // Step 5: Process officers
-    console.log('Processing officers...');
-    document.getElementById('content').innerHTML = '<div class="loading">⚙️ Procesando...</div>';
+    console.log('Step 5: Processing officers...');
+    document.getElementById('content').innerHTML = '<div class="loading">Step 5: Processing ' + members.length + ' officers...</div>';
     
     allOfficers = members.map(m => ({
       discord_id: m.discord_id,
       username: m.username,
       character_name: m.username,
-      department: m.department || 'Sin Asignar',
+      department: m.department || m.dept || 'Sin Asignar',
       rank: m.rank || 'Sin Rango',
       hours: Math.round((hoursMap[m.discord_id] || 0) / 3600)
     }));
@@ -141,8 +151,10 @@ async function loadOfficers() {
     console.log('Officers processed:', allOfficers.length);
 
     // Step 6: Render
-    console.log('Rendering...');
+    console.log('Step 6: Rendering...');
+    document.getElementById('content').innerHTML = '<div class="loading">Step 6: Rendering...</div>';
     renderOfficers();
+    console.log('Done!');
     
   } catch (error) {
     console.error('FATAL ERROR:', error);
