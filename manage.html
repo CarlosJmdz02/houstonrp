@@ -7,13 +7,7 @@
   <link rel="icon" href="favicon.ico">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #0d1424;
-      color: #e8ecf4;
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      padding: 20px;
-    }
+    body { background: #0d1424; color: #e8ecf4; font-family: 'Inter', sans-serif; min-height: 100vh; padding: 20px; }
     .container { max-width: 1400px; margin: 0 auto; }
     .header { margin-bottom: 30px; }
     .header h1 { font-family: 'Rajdhani', sans-serif; font-size: 32px; font-weight: 700; }
@@ -23,25 +17,20 @@
     .officer-info { flex: 1; min-width: 300px; }
     .officer-name { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: #e8ecf4; margin-bottom: 10px; }
     .officer-details { display: flex; gap: 20px; font-size: 13px; color: #94a3b8; flex-wrap: wrap; }
-    .officer-actions { display: flex; gap: 10px; flex-wrap: wrap; min-width: 300px; justify-content: flex-end; }
+    .officer-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
     .btn { padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 12px; transition: all 0.2s; white-space: nowrap; }
-    .btn-success { background: #4acf8f; color: #0d1424; }
-    .btn-success:hover { background: #2fa76f; }
-    .btn-warning { background: #e6a868; color: #0d1424; }
-    .btn-warning:hover { background: #d4974f; }
-    .btn-danger { background: #e54850; color: white; }
-    .btn-danger:hover { background: #c73c44; }
-    .btn-info { background: #06b6d4; color: white; }
-    .btn-info:hover { background: #0891b2; }
-    .btn-primary { background: #3b82f6; color: white; }
-    .btn-primary:hover { background: #2563eb; }
+    .btn-success { background: #4acf8f; color: #0d1424; } .btn-success:hover { background: #2fa76f; }
+    .btn-warning { background: #e6a868; color: #0d1424; } .btn-warning:hover { background: #d4974f; }
+    .btn-danger { background: #e54850; color: white; } .btn-danger:hover { background: #c73c44; }
+    .btn-info { background: #06b6d4; color: white; } .btn-info:hover { background: #0891b2; }
+    .btn-primary { background: #3b82f6; color: white; } .btn-primary:hover { background: #2563eb; }
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
     .modal.active { display: flex; }
     .modal-content { background: #131d2f; border: 1px solid #263552; border-radius: 12px; padding: 30px; max-width: 500px; width: 90%; }
     .modal-title { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 20px; }
     .modal-buttons { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
-    input, select { width: 100%; padding: 10px; background: #0d1424; border: 1px solid #263552; border-radius: 6px; color: #e8ecf4; font-family: 'Inter', sans-serif; margin-bottom: 15px; box-sizing: border-box; }
-    input:focus, select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,111,182,0.1); }
+    input { width: 100%; padding: 10px; background: #0d1424; border: 1px solid #263552; border-radius: 6px; color: #e8ecf4; font-family: 'Inter', sans-serif; margin-bottom: 15px; box-sizing: border-box; }
+    input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,111,182,0.1); }
     .loading { text-align: center; color: #94a3b8; padding: 40px; font-size: 14px; }
   </style>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap">
@@ -53,9 +42,8 @@
     <h1>📋 Manage Shifts - HOUSTON RP</h1>
     <p style="color: #94a3b8; font-size: 14px; margin-top: 10px;">Sistema de Gestión de Turnos y Horas</p>
   </div>
-
   <div id="content">
-    <div class="loading">Inicializando...</div>
+    <div class="loading">⏳ Inicializando...</div>
   </div>
 </div>
 
@@ -76,49 +64,61 @@ let allOfficers = [];
 let currentAction = null;
 
 async function loadOfficers() {
-  console.log('loadOfficers started');
-  
   try {
-    // Step 1: Load members
-    console.log('Step 1: Loading members...');
-    document.getElementById('content').innerHTML = '<div class="loading">Step 1: Loading members...</div>';
+    console.log('Step 1: Loading police_members...');
+    document.getElementById('content').innerHTML = '<div class="loading">⏳ Step 1: Cargando oficiales...</div>';
     
-    const members = await supaSelect('police_members', '*', { limit: '1000' });
-    console.log('Members loaded:', members ? members.length : 0);
+    // Cargar police_members con username y discord_id
+    const members = await supaSelect('police_members', 'discord_id, username', { limit: '1000' });
+    console.log('Loaded', members ? members.length : 0, 'members');
     
     if (!members || members.length === 0) {
-      document.getElementById('content').innerHTML = '<div class="loading">❌ No members found</div>';
+      document.getElementById('content').innerHTML = '<div class="loading">❌ No hay oficiales registrados</div>';
       return;
     }
 
-    // Step 2: Load all hours data
-    console.log('Step 2: Loading shifts...');
-    document.getElementById('content').innerHTML = '<div class="loading">Step 2: Loading shifts (may take a moment)...</div>';
+    console.log('Step 2: Loading payroll_members for department/rank...');
+    document.getElementById('content').innerHTML = '<div class="loading">⏳ Step 2: Cargando datos de nómina...</div>';
     
+    // Cargar payroll_members para department y rank
+    let payroll = [];
+    try {
+      payroll = await supaSelect('payroll_members', 'discord_id, department, rank', { limit: '1000' });
+    } catch (e) {
+      console.warn('Payroll query failed:', e);
+    }
+    
+    const payrollMap = {};
+    if (payroll && Array.isArray(payroll)) {
+      for (const p of payroll) {
+        payrollMap[p.discord_id] = p;
+      }
+    }
+
+    console.log('Step 3: Loading shifts...');
+    document.getElementById('content').innerHTML = '<div class="loading">⏳ Step 3: Cargando horas de turnos...</div>';
+    
+    // Cargar shifts
     let shifts = [];
     try {
       shifts = await supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' });
     } catch (e) {
-      console.warn('Shifts error:', e);
+      console.warn('Shifts failed:', e);
     }
-    console.log('Shifts loaded:', shifts ? shifts.length : 0);
 
-    // Step 3: Load adjustments
-    console.log('Step 3: Loading adjustments...');
-    document.getElementById('content').innerHTML = '<div class="loading">Step 3: Loading adjustments...</div>';
+    console.log('Step 4: Loading adjustments...');
+    document.getElementById('content').innerHTML = '<div class="loading">⏳ Step 4: Cargando ajustes...</div>';
     
+    // Cargar adjustments
     let adjustments = [];
     try {
       adjustments = await supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' });
     } catch (e) {
-      console.warn('Adjustments error:', e);
+      console.warn('Adjustments failed:', e);
     }
-    console.log('Adjustments loaded:', adjustments ? adjustments.length : 0);
 
-    // Step 4: Calculate hours map
-    console.log('Step 4: Calculating hours map...');
+    // Crear mapa de horas
     const hoursMap = {};
-    
     if (shifts && Array.isArray(shifts)) {
       for (const s of shifts) {
         if (s.discord_id) {
@@ -133,28 +133,27 @@ async function loadOfficers() {
         }
       }
     }
-    console.log('Hours map created with', Object.keys(hoursMap).length, 'entries');
 
-    // Step 5: Process officers
     console.log('Step 5: Processing officers...');
-    document.getElementById('content').innerHTML = '<div class="loading">Step 5: Processing ' + members.length + ' officers...</div>';
+    document.getElementById('content').innerHTML = '<div class="loading">⏳ Step 5: Procesando ' + members.length + ' oficiales...</div>';
     
-    allOfficers = members.map(m => ({
-      discord_id: m.discord_id,
-      username: m.username,
-      character_name: m.username,
-      department: m.department || m.dept || 'Sin Asignar',
-      rank: m.rank || 'Sin Rango',
-      hours: Math.round((hoursMap[m.discord_id] || 0) / 3600)
-    }));
-    
-    console.log('Officers processed:', allOfficers.length);
+    // Procesar oficiales
+    allOfficers = members.map(m => {
+      const payrollInfo = payrollMap[m.discord_id] || {};
+      return {
+        discord_id: m.discord_id,
+        username: m.username,
+        department: payrollInfo.department || 'Sin Asignar',
+        rank: payrollInfo.rank || 'Sin Rango',
+        hours: Math.round((hoursMap[m.discord_id] || 0) / 3600)
+      };
+    });
 
-    // Step 6: Render
-    console.log('Step 6: Rendering...');
-    document.getElementById('content').innerHTML = '<div class="loading">Step 6: Rendering...</div>';
+    console.log('Step 6: Rendering officers...');
+    document.getElementById('content').innerHTML = '<div class="loading">⏳ Step 6: Renderizando...</div>';
+    
     renderOfficers();
-    console.log('Done!');
+    console.log('✅ Done!');
     
   } catch (error) {
     console.error('FATAL ERROR:', error);
@@ -177,7 +176,7 @@ function renderOfficers() {
       html += `
         <div class="officer-card">
           <div class="officer-info">
-            <div class="officer-name">${o.character_name}</div>
+            <div class="officer-name">${o.username}</div>
             <div class="officer-details">
               <span>🏢 ${o.department}</span>
               <span>🎖️ ${o.rank}</span>
@@ -185,10 +184,10 @@ function renderOfficers() {
             </div>
           </div>
           <div class="officer-actions">
-            <button class="btn btn-success" onclick="openAddModal('${o.username}', ${o.hours}, '${o.character_name}')">➕ Agregar</button>
-            <button class="btn btn-warning" onclick="openRemoveModal('${o.username}', ${o.hours}, '${o.character_name}')">➖ Remover</button>
-            <button class="btn btn-info" onclick="resetHours('${o.username}', '${o.character_name}')">🔄 Reiniciar</button>
-            <button class="btn btn-danger" onclick="fireOfficer('${o.username}', '${o.character_name}')">🚨 Despedir</button>
+            <button class="btn btn-success" onclick="openAddModal('${o.username}', ${o.hours}, '${o.username}')">➕ Agregar</button>
+            <button class="btn btn-warning" onclick="openRemoveModal('${o.username}', ${o.hours}, '${o.username}')">➖ Remover</button>
+            <button class="btn btn-info" onclick="resetHours('${o.username}', '${o.username}')">🔄 Reiniciar</button>
+            <button class="btn btn-danger" onclick="fireOfficer('${o.username}', '${o.username}')">🚨 Despedir</button>
           </div>
         </div>
       `;
@@ -196,12 +195,17 @@ function renderOfficers() {
     html += '</div>';
   }
 
+  if (html === '') {
+    document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales para mostrar</div>';
+    return;
+  }
+
   document.getElementById('content').innerHTML = html;
 }
 
 function openAddModal(u, h, n) {
-  document.getElementById('modal-title').textContent = `Agregar Horas - ${n}`;
-  document.getElementById('modal-body').innerHTML = '<input type="number" id="hours" placeholder="Horas" min="1" value="1">';
+  document.getElementById('modal-title').textContent = `➕ Agregar Horas - ${n}`;
+  document.getElementById('modal-body').innerHTML = '<input type="number" id="hours" placeholder="Cantidad de horas" min="1" value="1">';
   document.getElementById('modal').classList.add('active');
   currentAction = () => {
     const hrs = parseInt(document.getElementById('hours').value) || 0;
@@ -211,8 +215,8 @@ function openAddModal(u, h, n) {
 }
 
 function openRemoveModal(u, h, n) {
-  document.getElementById('modal-title').textContent = `Remover Horas - ${n}`;
-  document.getElementById('modal-body').innerHTML = `<input type="number" id="hours" placeholder="Horas" min="1" max="${h}" value="1">`;
+  document.getElementById('modal-title').textContent = `➖ Remover Horas - ${n}`;
+  document.getElementById('modal-body').innerHTML = `<input type="number" id="hours" placeholder="Cantidad de horas" min="0" max="${h}" value="1">`;
   document.getElementById('modal').classList.add('active');
   currentAction = () => {
     const hrs = parseInt(document.getElementById('hours').value) || 0;
@@ -230,19 +234,18 @@ function confirmAction() {
 }
 
 async function resetHours(u, n) {
-  if (!confirm(`¿Reiniciar horas de ${n}?`)) return;
+  if (!confirm(`🔄 ¿Reiniciar horas de ${n}?`)) return;
   updateHours(u, 0, n);
 }
 
 async function fireOfficer(u, n) {
-  if (!confirm(`¿Despedir a ${n}?`)) return;
+  if (!confirm(`🚨 ¿Despeedir a ${n}? Se quitarán todas las horas.`)) return;
   updateHours(u, 0, n);
-  alert(`✓ ${n} despedido`);
-  loadOfficers();
 }
 
 async function updateHours(u, newHours, n) {
   try {
+    // Obtener discord_id del usuario
     const officers = await supaSelect('police_members', 'discord_id', { username: `eq.${u}` });
     if (!officers || officers.length === 0) {
       alert('❌ Oficial no encontrado');
@@ -253,22 +256,28 @@ async function updateHours(u, newHours, n) {
     const sess = hrpGetSession();
     const newSec = newHours * 3600;
     
-    const shifts = await supaSelect('police_shift_sessions', 'total_seconds', { discord_id: `eq.${dId}`, status: 'eq.completed' });
+    // Obtener horas actuales
     let curSec = 0;
-    if (shifts && shifts.length > 0) {
-      curSec = shifts.reduce((sum, s) => sum + (s.total_seconds || 0), 0);
+    try {
+      const shifts = await supaSelect('police_shift_sessions', 'total_seconds', { discord_id: `eq.${dId}`, status: 'eq.completed' });
+      if (shifts && shifts.length > 0) {
+        curSec = shifts.reduce((sum, s) => sum + (s.total_seconds || 0), 0);
+      }
+    } catch (e) {
+      console.warn('Could not get current hours:', e);
     }
     
+    // Calcular diferencia
     const diff = newSec - curSec;
     if (diff !== 0) {
       if (diff > 0) {
-        await hrpAddHours(dId, u, diff, `Admin: ${sess?.username || 'Unknown'}`, sess?.id);
+        await hrpAddHours(dId, u, diff, `Ajuste manual`, sess?.id);
       } else {
-        await hrpRemoveHours(dId, u, Math.abs(diff), `Admin: ${sess?.username || 'Unknown'}`, sess?.id);
+        await hrpRemoveHours(dId, u, Math.abs(diff), `Ajuste manual`, sess?.id);
       }
     }
     
-    alert(`✓ ${n}: ${newHours}h`);
+    alert(`✅ Horas actualizadas para ${n}: ${newHours}h`);
     loadOfficers();
   } catch (e) {
     console.error('Error:', e);
@@ -277,7 +286,6 @@ async function updateHours(u, newHours, n) {
   }
 }
 
-// Start when page loads
 document.addEventListener('DOMContentLoaded', loadOfficers);
 </script>
 
