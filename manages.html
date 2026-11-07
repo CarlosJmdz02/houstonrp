@@ -484,6 +484,29 @@
       box-shadow: 0 8px 25px rgba(33, 150, 243, 0.25);
     }
 
+    .formato-subrango-btn {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, rgba(0, 188, 212, 0.2), rgba(33, 150, 243, 0.15));
+      border: 1px solid rgba(0, 188, 212, 0.4);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .formato-subrango-btn:hover {
+      background: linear-gradient(135deg, rgba(0, 188, 212, 0.35), rgba(33, 150, 243, 0.25));
+      border-color: rgba(0, 188, 212, 0.7);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 188, 212, 0.3);
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -2289,7 +2312,15 @@ async function rejectRequest(reqId) {
 const FORMATOS = {
   hpd: {
     title: '🚔 HPD FORMATS',
-    content: '<p style="color: var(--accent-gold); font-weight: 600; margin-bottom: 10px;">Por ahora sin contenido. Los formatos de HPD se agregarán próximamente.</p>'
+    content: `<div style="margin-bottom: 20px;">
+  <h4 style="color: var(--accent-blue); margin-bottom: 15px;">SELECCIONA UN RANGO HPD</h4>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+    <button class="formato-subrango-btn" onclick="openFormatoModal('hpd_senior_1')">Senior Official I</button>
+    <button class="formato-subrango-btn" onclick="openFormatoModal('hpd_senior_2')">Senior Official II</button>
+    <button class="formato-subrango-btn" onclick="openFormatoModal('hpd_senior_3')">Senior Official III</button>
+    <button class="formato-subrango-btn" onclick="openFormatoModal('hpd_detective')">Detective Division</button>
+  </div>
+</div>`
   },
   hcso: {
     title: '⭐ HCSO FORMATS',
@@ -2648,6 +2679,230 @@ Espero que hayan aprendido y que puedan aplicar todo lo que vimos hoy durante su
 <p style="text-align: center; color: var(--text-primary); font-weight: 600; margin-top: 20px;">
 HOUSTON POLICE DEPARTMENT<br>
 <em style="font-size: 12px; color: var(--text-secondary);">Professionalism – Discipline – Integrity</em>
+</p>`
+  },
+  hpd_senior_1: {
+    title: '🚔 EXAMEN DE ASCENSO – SENIOR OFFICIAL I',
+    content: `<h3 style="color: var(--accent-blue); margin-bottom: 15px; margin-top: 0;">HOUSTON POLICE DEPARTMENT</h3>
+<h4 style="color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">EXAMEN DE ASCENSO – SENIOR OFFICIAL I</h4>
+
+<p style="color: var(--text-secondary); margin-bottom: 12px;"><strong>Instructor a cargo del examen:</strong> ____________________</p>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">INTRODUCCIÓN – INSTRUCTOR</h4>
+<blockquote style="border-left: 3px solid var(--accent-blue); padding-left: 12px; margin-left: 0; color: var(--text-primary);">
+Antes de comenzar tu examen para el ascenso a Senior Official I, quiero recordarte que este rango trae más responsabilidad dentro del Departamento de Policía de Houston.<br><br>
+A partir de este rango, se espera que tengas un buen conocimiento de los procedimientos policiales, que sepas manejar diferentes situaciones durante tus patrullajes y que puedas tomar decisiones correctas sin depender de que alguien te esté diciendo qué hacer en todo momento.<br><br>
+Recuerda que tu responsabilidad como oficial es mantener la seguridad de la ciudad, responder a las llamadas, realizar paradas de tráfico correctamente, mantener comunicación con Central y trabajar en equipo con las demás unidades.<br><br>
+Durante este examen tendrás preguntas, escenarios y una evaluación práctica. No se trata solamente de memorizar códigos o escoger respuestas; también queremos comprobar que sabes aplicar lo que has aprendido cuando estás en servicio.<br><br>
+Tómate tu tiempo, lee cada pregunta cuidadosamente y responde con honestidad. Si no sabes alguna respuesta, no intentes adivinar sin pensar. Demuestra lo que sabes y cómo manejarías cada situación.<br><br>
+¡Mucha suerte! Vamos a comenzar y veamos si estás preparado para llevar el rango de Senior Official I.
+</blockquote>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">PARTE 1 – PREGUNTAS (20)</h4>
+
+<ol style="color: var(--text-secondary); margin-left: 20px;">
+<li><strong>¿Cuál es el propósito del 10-8?</strong>
+  <ul><li>A. Solicitar refuerzos</li><li>B. Reportar un accidente</li><li>C. Iniciar una patrulla</li><li>D. Oficial en servicio</li></ul>
+</li>
+<li><strong>¿Cuándo se debe realizar una parada de tráfico?</strong></li>
+<li><strong>Menciona al menos 3 razones válidas para realizar un arresto.</strong></li>
+<li><strong>¿Qué documentos debes pedir primero al conductor?</strong>
+  <ul><li>A. Registro del vehículo</li><li>B. Licencia de conducir</li><li>C. Seguro del vehículo</li><li>D. Identificación personal</li></ul>
+</li>
+<li><strong>Explica la diferencia entre un delito menor y un delito mayor.</strong></li>
+<li><strong>¿Qué es un 10-32?</strong>
+  <ul><li>A. Persona en custodia</li><li>B. Accidente de tráfico</li><li>C. Refuerzos</li><li>D. Persona armada</li></ul>
+</li>
+<li><strong>¿Cuándo está permitido el uso de fuerza?</strong></li>
+<li><strong>¿Qué información debe incluir un reporte de tráfico?</strong>
+  <ul><li>A. Solo el nombre del conductor</li><li>B. Solo la placa</li><li>C. Solo la razón de la parada</li><li>D. Fecha, hora, ubicación y descripción</li></ul>
+</li>
+<li><strong>¿Cuáles son los derechos Miranda?</strong></li>
+<li><strong>¿Qué significa el 10-20?</strong>
+  <ul><li>A. Actualizar ubicación</li><li>B. Accidente grave</li><li>C. Sujeto bajo custodia</li><li>D. Vehículo sospechoso</li></ul>
+</li>
+<li><strong>¿Qué debes hacer si un vehículo se da a la fuga?</strong>
+  <ul><li>A. Bloquear la vía</li><li>B. Ignorarlo</li><li>C. Seguir solo si es seguro y autorizado</li><li>D. Disparar a las llantas inmediatamente</li></ul>
+</li>
+<li><strong>¿Qué factores se consideran al realizar una persecución?</strong></li>
+<li><strong>¿Qué es el PIT y cuándo se puede utilizar?</strong>
+  <ul><li>A. Código para operativo de drogas</li><li>B. Técnica para detener un vehículo en fuga</li><li>C. Señal para pedir asistencia médica</li><li>D. Procedimiento de registro vehicular</li></ul>
+</li>
+<li><strong>¿Qué información debes solicitar por radio al pedir una placa?</strong></li>
+<li><strong>¿Qué equipo es obligatorio durante una parada de tráfico?</strong>
+  <ul><li>A. Rifle</li><li>B. Cámara corporal</li><li>C. Conos de tráfico</li><li>D. Radio, chaleco y linterna</li></ul>
+</li>
+<li><strong>¿Qué haces al llegar a un accidente de tráfico?</strong></li>
+<li><strong>¿Qué debes hacer si un sospechoso se niega a identificarse?</strong>
+  <ul><li>A. Investigar y proceder según la ley</li><li>B. Emitir una advertencia</li><li>C. Dejarlo ir</li><li>D. Arrestarlo inmediatamente</li></ul>
+</li>
+<li><strong>¿Qué información debes verificar al identificar a una persona?</strong></li>
+<li><strong>¿Cuándo se debe solicitar una unidad canina?</strong>
+  <ul><li>A. Cuando el conductor lo solicita</li><li>B. En cualquier parada</li><li>C. Solo si hay sospecha razonable</li><li>D. Solo en accidentes de tráfico</li></ul>
+</li>
+<li><strong>¿Cómo se coordina con otras unidades en una situación mayor?</strong></li>
+</ol>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">PARTE 2 – ESCENARIOS (5)</h4>
+
+<ol style="color: var(--text-secondary); margin-left: 20px;">
+<li>Estás en una parada de tráfico y el conductor parece nervioso, evita el contacto visual y sus manos están temblando. ¿Qué preguntas harías para determinar si hay actividad criminal?</li>
+<li>Durante una patrulla, observas un vehículo que coincide con la descripción de un robo reciente. ¿Qué preguntas harías antes de detenerlo?</li>
+<li>Un ciudadano se te acerca y te informa sobre disparos en el área. ¿Qué información le pedirías a Central?</li>
+<li>Realizas una parada de tráfico por una infracción de velocidad y el conductor tiene una licencia vencida. ¿Qué preguntas harías y qué información necesitas antes de tomar cualquier acción?</li>
+<li>Estás en una escena de accidente con múltiples vehículos. ¿Qué preguntas harías a los involucrados para determinar la causa del accidente?</li>
+</ol>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">PARTE 3 – RIDE ALONG: PARADA DE TRÁFICO</h4>
+
+<p style="color: var(--text-secondary); margin-bottom: 12px;"><strong>Requisitos para aprobar:</strong></p>
+<ul style="color: var(--text-secondary); margin-left: 20px;">
+<li>Realizar una parada de tráfico completa y segura.</li>
+<li>Seguir los procedimientos correctos.</li>
+<li>Mantener comunicación clara con Central.</li>
+<li>Manejar adecuadamente la situación.</li>
+<li>Tomar decisiones correctas.</li>
+<li>Demostrar buen conocimiento del protocolo.</li>
+</ul>
+
+<p style="color: var(--text-secondary); margin-top: 12px; margin-bottom: 12px;"><strong>Criterios de evaluación:</strong></p>
+<ul style="color: var(--text-secondary); margin-left: 20px;">
+<li>Aproximación segura al vehículo.</li>
+<li>Uso correcto del equipo.</li>
+<li>Comunicación con el conductor.</li>
+<li>Solicitud y verificación de documentos.</li>
+<li>Evaluación de la situación.</li>
+<li>Cierre de la parada de manera adecuada.</li>
+</ul>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">RESULTADO DEL EXAMEN</h4>
+
+<div style="background: rgba(33, 150, 243, 0.08); border-left: 3px solid var(--accent-blue); padding: 12px; margin: 12px 0; border-radius: 4px;">
+<p style="color: var(--text-primary); margin: 0;"><strong>Calificación:</strong> ______ / ______</p>
+<p style="color: var(--text-primary); margin: 8px 0 0 0;"><strong>Resultado:</strong> Aprobado / Reprobado</p>
+<p style="color: var(--text-secondary); margin: 8px 0 0 0;"><strong>Observaciones del evaluador:</strong> _______________________________</p>
+<p style="color: var(--text-primary); margin: 8px 0 0 0;"><strong>Firma del evaluador:</strong> ____________________</p>
+</div>
+
+<hr style="border: none; border-top: 2px solid var(--accent-red); margin: 25px 0;">
+
+<h4 style="background: rgba(244, 67, 54, 0.15); border-left: 4px solid var(--accent-red); padding: 12px; margin: 12px 0; border-radius: 4px; color: var(--accent-red); font-weight: 600;">
+⚠️ CLAVE DE RESPUESTAS – SOLO PARA INSTRUCTORES
+</h4>
+
+<p style="background: rgba(244, 67, 54, 0.1); color: var(--accent-red); padding: 10px; margin: 12px 0; border-radius: 4px; font-weight: 600;">
+NO COMPARTIR ESTA SECCIÓN CON LOS OFICIALES.
+</p>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">Parte 1 – Selección múltiple</h5>
+
+<div style="background: rgba(244, 67, 54, 0.05); padding: 12px; border-radius: 4px; margin: 12px 0; color: var(--text-secondary);">
+<p><strong style="color: var(--accent-red);">Pregunta 1:</strong> D – Oficial en servicio</p>
+<p><strong style="color: var(--accent-red);">Pregunta 4:</strong> B – Licencia de conducir</p>
+<p><strong style="color: var(--accent-red);">Pregunta 6:</strong> C – Refuerzos</p>
+<p><strong style="color: var(--accent-red);">Pregunta 8:</strong> D – Fecha, hora, ubicación y descripción</p>
+<p><strong style="color: var(--accent-red);">Pregunta 10:</strong> A – Actualizar ubicación</p>
+<p><strong style="color: var(--accent-red);">Pregunta 11:</strong> C – Seguir solo si es seguro y autorizado</p>
+<p><strong style="color: var(--accent-red);">Pregunta 13:</strong> B – Técnica para detener un vehículo en fuga</p>
+<p><strong style="color: var(--accent-red);">Pregunta 15:</strong> D – Radio, chaleco y linterna</p>
+<p><strong style="color: var(--accent-red);">Pregunta 17:</strong> A – Investigar y proceder según la ley</p>
+<p><strong style="color: var(--accent-red);">Pregunta 19:</strong> C – Solo si hay sospecha razonable</p>
+</div>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">Preguntas abiertas – Guía para el instructor</h5>
+
+<div style="background: rgba(244, 67, 54, 0.05); padding: 12px; border-radius: 4px; margin: 12px 0; color: var(--text-secondary);">
+<p><strong style="color: var(--accent-red);">Pregunta 2:</strong> Cuando se observa una infracción de tráfico o existe una razón legal y justificable.</p>
+<p><strong style="color: var(--accent-red);">Pregunta 3:</strong> Una orden de arresto vigente, evidencia de un delito, persona sorprendida cometiendo un delito.</p>
+<p><strong style="color: var(--accent-red);">Pregunta 5:</strong> Delito menor = infracción de menor gravedad; Delito mayor = conducta criminal más grave con consecuencias severas.</p>
+<p><strong style="color: var(--accent-red);">Pregunta 7:</strong> Cuando sea legalmente necesario y proporcional a la situación, siguiendo procedimientos del departamento.</p>
+<p><strong style="color: var(--accent-red);">Pregunta 9:</strong> Derecho a guardar silencio, que lo diga puede utilizarse en su contra, derecho a abogado, se le proporcionará si no puede pagarlo.</p>
+<p><strong style="color: var(--accent-red);">Pregunta 12:</strong> Velocidad, tráfico, ubicación, peligro para civiles/oficiales, gravedad del delito, condiciones de la vía.</p>
+<p><strong style="color: var(--accent-red);">Pregunta 14:</strong> Placa del vehículo e información adicional para identificarlo (estado, descripción).</p>
+<p><strong style="color: var(--accent-red);">Pregunta 16:</strong> Asegurar zona, verificar heridos, solicitar asistencia médica, informar a Central, recopilar información.</p>
+<p><strong style="color: var(--accent-red);">Pregunta 18:</strong> Nombre, fecha de nacimiento, identificación, órdenes o antecedentes relevantes.</p>
+<p><strong style="color: var(--accent-red);">Pregunta 20:</strong> Mantener comunicación con Central, informar ubicación/situación, asignar funciones, seguir instrucciones de unidad responsable.</p>
+</div>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">Parte 2 – Escenarios: guía de evaluación</h5>
+
+<div style="background: rgba(244, 67, 54, 0.05); padding: 12px; border-radius: 4px; margin: 12px 0; color: var(--text-secondary);">
+<p><strong style="color: var(--accent-red);">Escenario 1:</strong> Preguntar motivo del viaje, si conoce razón de parada, observar comportamiento, mantener distancia segura.</p>
+<p><strong style="color: var(--accent-red);">Escenario 2:</strong> Confirmar descripción, comunicar a Central, verificar placa y datos del vehículo, justificar detención.</p>
+<p><strong style="color: var(--accent-red);">Escenario 3:</strong> Solicitar ubicación exacta, cantidad de disparos, personas/vehículos involucrados, heridos, comunicar a Central.</p>
+<p><strong style="color: var(--accent-red);">Escenario 4:</strong> Verificar identidad, confirmar estado de licencia, revisar información del vehículo, determinar acción correspondiente.</p>
+<p><strong style="color: var(--accent-red);">Escenario 5:</strong> Preguntar cómo ocurrió, dirección de viaje, heridos, identificar testigos, recopilar información de vehículos.</p>
+</div>`
+  },
+  hpd_senior_2: {
+    title: '🚔 EXAMEN DE ASCENSO – SENIOR OFFICIAL II',
+    content: `<h3 style="color: var(--accent-blue); margin-bottom: 15px; margin-top: 0;">HOUSTON POLICE DEPARTMENT</h3>
+<h4 style="color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">EXAMEN DE ASCENSO – SENIOR OFFICIAL II</h4>
+
+<p style="color: var(--text-secondary); margin-bottom: 12px;"><strong>Instructor a cargo del examen:</strong> ____________________</p>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">INTRODUCCIÓN – INSTRUCTOR</h4>
+<blockquote style="border-left: 3px solid var(--accent-blue); padding-left: 12px; margin-left: 0; color: var(--text-primary);">
+Antes de comenzar tu examen para el ascenso a Senior Official II, quiero recordarte que este rango representa un nivel mayor de responsabilidad dentro del Departamento de Policía de Houston.<br><br>
+A estas alturas, se espera que tengas experiencia durante tus patrullajes, que conozcas los códigos policiales y que puedas reaccionar correctamente ante diferentes situaciones que se presenten en la ciudad.<br><br>
+Tu responsabilidad no es solamente realizar paradas de tráfico o responder llamadas. También debes saber cuándo solicitar refuerzos, cómo manejar una persecución, cómo actuar ante una situación peligrosa y cómo mantener una buena comunicación con Central y las demás unidades.<br><br>
+Durante este examen tendrás preguntas, escenarios y una evaluación práctica. Queremos comprobar que puedes tomar decisiones por tu cuenta, mantener el control de una situación y actuar de manera profesional.<br><br>
+Lee cuidadosamente cada pregunta y piensa bien tus respuestas. Recuerda que un rango más alto significa más responsabilidad y esperamos que puedas demostrar que estás preparado para dar el siguiente paso dentro del departamento.<br><br>
+¡Mucha suerte! Vamos a comenzar y veamos si estás preparado para convertirte en Senior Official II.
+</blockquote>
+
+<p style="color: var(--accent-gold); margin-top: 15px; font-weight: 600; text-align: center;">
+📋 Contenido completo de 20 preguntas, 5 escenarios y evaluación práctica disponible en formato PDF
+</p>`
+  },
+  hpd_senior_3: {
+    title: '🚔 EXAMEN DE ASCENSO – SENIOR OFFICIAL III',
+    content: `<h3 style="color: var(--accent-blue); margin-bottom: 15px; margin-top: 0;">HOUSTON POLICE DEPARTMENT</h3>
+<h4 style="color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">EXAMEN DE ASCENSO – SENIOR OFFICIAL III</h4>
+
+<p style="color: var(--text-secondary); margin-bottom: 12px;"><strong>Instructor a cargo del examen:</strong> ____________________</p>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">INTRODUCCIÓN – INSTRUCTOR</h4>
+<blockquote style="border-left: 3px solid var(--accent-blue); padding-left: 12px; margin-left: 0; color: var(--text-primary);">
+Antes de comenzar tu examen para el ascenso a Senior Official III, quiero recordarte que este rango representa un nivel importante de responsabilidad dentro del Departamento de Policía de Houston.<br><br>
+A estas alturas, esperamos que tengas experiencia suficiente para manejar situaciones complicadas durante tus patrullajes, tomar decisiones bajo presión y conocer los procedimientos que debe seguir un oficial.<br><br>
+Tu responsabilidad no es solamente responder llamadas y realizar paradas de tráfico. También debes saber evaluar los riesgos de una persecución, coordinarte con Central, solicitar asistencia cuando sea necesario y actuar correctamente ante situaciones que puedan poner en peligro a los ciudadanos o a otros oficiales.<br><br>
+Durante este examen tendrás preguntas, escenarios y una evaluación práctica. Queremos comprobar que tienes el conocimiento y el criterio necesarios para asumir las responsabilidades de este rango.<br><br>
+Lee cuidadosamente cada pregunta, piensa antes de responder y demuestra que puedes manejar diferentes situaciones sin perder el profesionalismo.<br><br>
+Recuerda que cada ascenso trae nuevas responsabilidades. No se trata solamente de obtener un nuevo rango, sino de demostrar que estás preparado para representarlo.<br><br>
+¡Mucha suerte! Vamos a comenzar y veamos si estás preparado para convertirte en Senior Official III.
+</blockquote>
+
+<p style="color: var(--accent-gold); margin-top: 15px; font-weight: 600; text-align: center;">
+📋 Contenido completo de 20 preguntas, 5 escenarios y evaluación práctica disponible en formato PDF
+</p>`
+  },
+  hpd_detective: {
+    title: '🚔 EXAMEN DE ASCENSO – DETECTIVE DIVISION',
+    content: `<h3 style="color: var(--accent-blue); margin-bottom: 15px; margin-top: 0;">HOUSTON POLICE DEPARTMENT</h3>
+<h4 style="color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">EXAMEN DE ASCENSO – DETECTIVE DIVISION</h4>
+
+<p style="color: var(--text-secondary); margin-bottom: 12px;"><strong>Instructor a cargo del examen:</strong> ____________________</p>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">INTRODUCCIÓN – INSTRUCTOR</h4>
+<blockquote style="border-left: 3px solid var(--accent-blue); padding-left: 12px; margin-left: 0; color: var(--text-primary);">
+Antes de comenzar tu examen para ingresar o ascender dentro de la Detective Division, quiero recordarte que el trabajo de un detective es muy diferente al de un oficial que realiza patrullajes diariamente.<br><br>
+Como detective, tu responsabilidad será investigar delitos, analizar escenas, recopilar evidencia, entrevistar testigos y sospechosos, y trabajar para encontrar respuestas que permitan resolver los casos.<br><br>
+No se trata solamente de llegar a una escena y buscar un sospechoso. Debes aprender a prestar atención a los detalles, documentar correctamente cada evidencia y evitar cometer errores que puedan afectar una investigación.<br><br>
+Durante este examen tendrás preguntas, escenarios y una evaluación práctica. Queremos comprobar que sabes manejar una investigación desde el momento en que recibes un caso hasta que logras reunir suficiente información para llegar a una conclusión.<br><br>
+Recuerda que cada detalle puede ser importante. Una fotografía, una declaración, una huella o incluso un objeto pequeño pueden ayudar a resolver un caso.<br><br>
+Mantén la calma, piensa antes de responder y demuestra que tienes la capacidad de trabajar como parte de la Detective Division.<br><br>
+¡Mucha suerte! Vamos a comenzar y veamos si estás preparado para asumir las responsabilidades de un detective del Houston Police Department.
+</blockquote>
+
+<p style="color: var(--accent-gold); margin-top: 15px; font-weight: 600; text-align: center;">
+📋 Contenido completo de 20 preguntas, 5 escenarios y evaluación práctica disponible en formato PDF
 </p>`
   }
 };
