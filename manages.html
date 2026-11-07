@@ -1027,13 +1027,15 @@ async function loadActiveShifts() {
 
     activeShifts = shifts.map((s, idx) => ({
       index: idx + 1,
+      id: s.id,
       discord_id: s.discord_id,
       username: s.username,
       character_name: charMap[s.discord_id] || s.username,
       avatar: userMap[s.discord_id],
       department: s.department || 'Sin Asignar',
       start_time: s.start_time,
-      status: s.status
+      status: s.status,
+      break_duration: s.break_duration || 0
     }));
 
     document.getElementById('activeShifts').textContent = activeShifts.length;
@@ -1296,7 +1298,11 @@ function openResetModal(idx, name) {
 }
 
 function openEndShiftModal(idx, name) {
-  currentOfficer = activeShifts[idx - 1];
+  const shift = activeShifts[idx - 1];
+  if (!shift) return;
+  
+  // Guardar el shift completo para poder acceder a su ID y start_time
+  currentOfficer = shift;
   document.getElementById('endShiftOfficialName').textContent = name;
   document.getElementById('endShiftModal').classList.add('active');
 }
@@ -1364,14 +1370,17 @@ async function confirmResetHours() {
 }
 
 async function confirmEndShift() {
-  if (!currentOfficer) return;
+  if (!currentOfficer || !currentOfficer.id) return;
   
   try {
-    const session = hrpGetSession();
-    await hrpEndShift(currentOfficer.id, currentOfficer.start_time, 0);
-    alert('✅ Turno terminado correctamente');
-    closeModal('endShiftModal');
-    loadActiveShifts();
+    const success = await hrpEndShift(currentOfficer.id, currentOfficer.start_time, currentOfficer.break_duration || 0);
+    if (success) {
+      alert('✅ Turno terminado correctamente');
+      closeModal('endShiftModal');
+      loadActiveShifts();
+    } else {
+      alert('❌ Error al terminar el turno');
+    }
   } catch (e) {
     console.error('Error:', e);
     alert('❌ Error: ' + e.message);
