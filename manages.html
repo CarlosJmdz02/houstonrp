@@ -995,14 +995,30 @@
 <!-- MODAL DISCIPLINA (INFRACCIÓN) -->
 <div id="disciplineModal" class="modal">
   <div class="modal-content">
-    <div class="modal-title">⚖️ Registrar Infracción</div>
+    <div class="modal-title">⚖️ ACCIÓN ADMINISTRATIVA</div>
+    
+    <div style="background: rgba(59,111,182,0.1); border-left: 3px solid var(--accent-blue); padding: 12px; margin-bottom: 20px; border-radius: 4px; font-size: 12px; color: var(--text-secondary);">
+      ℹ️ Complete todos los campos para registrar la acción administrativa
+    </div>
+    
     <div class="form-group">
       <label>Oficial</label>
       <input type="text" id="disciplineOfficialName" disabled>
     </div>
+    
     <div class="form-group">
-      <label>Tipo de Infracción</label>
-      <select id="disciplineType">
+      <label>Departamento</label>
+      <input type="text" id="disciplineOfficialDept" disabled>
+    </div>
+    
+    <div class="form-group">
+      <label>Rango Actual</label>
+      <input type="text" id="disciplineOfficialRank" disabled>
+    </div>
+    
+    <div class="form-group">
+      <label>Tipo de Acción <span style="color: var(--accent-red);">*</span></label>
+      <select id="disciplineType" onchange="toggleSuspensionDays()">
         <option value="">Seleccionar tipo...</option>
         <option value="nota">📝 Nota</option>
         <option value="advertencia">⚠️ Advertencia</option>
@@ -1010,17 +1026,25 @@
         <option value="despido">🚪 Despido</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>Razón de la Infracción</label>
-      <input type="text" id="disciplineReason" placeholder="Describe la razón de la infracción">
-    </div>
+    
     <div class="form-group" id="suspensionDaysGroup" style="display: none;">
-      <label>Días de Suspensión</label>
+      <label>Días de Suspensión <span style="color: var(--accent-red);">*</span></label>
       <input type="number" id="suspensionDays" placeholder="Número de días" min="1">
     </div>
+    
+    <div class="form-group">
+      <label>Razón de la Acción <span style="color: var(--accent-red);">*</span></label>
+      <input type="text" id="disciplineReason" placeholder="Explica el motivo de la acción">
+    </div>
+    
+    <div class="form-group">
+      <label>Fecha <span style="color: var(--accent-red);">*</span></label>
+      <input type="date" id="disciplineDate">
+    </div>
+    
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeModal('disciplineModal')">Cancelar</button>
-      <button class="btn-confirm" onclick="confirmDiscipline()">Registrar Infracción</button>
+      <button class="btn-confirm" onclick="confirmDiscipline()">Registrar Acción</button>
     </div>
   </div>
 </div>
@@ -1566,10 +1590,10 @@ function renderTable() {
       <td>${isActive ? '<span class="status-active"><span class="status-dot"></span>TURNO ACTIVO</span>' : '<span style="color: var(--text-dim);">—</span>'}</td>
       <td>
         <div class="actions">
-          <button class="btn btn-edit" onclick="openEditModal(${o.index})">Editar</button>
-          <button class="btn btn-add" onclick="openAddModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Añadir</button>
-          <button class="btn btn-remove" onclick="openRemoveModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Remover</button>
-          <button class="btn btn-reset" onclick="openResetModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Reset</button>
+          <button class="btn btn-edit" onclick="openEditModal('${o.discord_id}')">Editar</button>
+          <button class="btn btn-add" onclick="openAddModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Añadir</button>
+          <button class="btn btn-remove" onclick="openRemoveModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Remover</button>
+          <button class="btn btn-reset" onclick="openResetModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Reset</button>
         </div>
       </td>
     </tr>
@@ -1708,7 +1732,7 @@ function renderDisciplineList() {
           </div>
         </div>
         <div class="discipline-actions">
-          <button class="btn btn-discipline" onclick="openDisciplineModal(${o.index})">⚖️ Sancionar</button>
+          <button class="btn btn-discipline" onclick="openDisciplineModal('${o.discord_id}')">⚖️ Sancionar</button>
         </div>
       </div>
     </div>
@@ -1752,9 +1776,13 @@ document.getElementById('searchDisciplineInput').addEventListener('input', (e) =
   renderDisciplineList();
 });
 
-function openEditModal(idx) {
-  currentOfficer = allOfficers[idx - 1];
-  if (!currentOfficer) return;
+function openEditModal(discordId) {
+  // Buscar por discord_id en lugar de índice
+  currentOfficer = allOfficers.find(o => o.discord_id === discordId);
+  if (!currentOfficer) {
+    console.error('Oficial no encontrado:', discordId);
+    return;
+  }
   
   // Mostrar el nombre correcto del oficial que se está editando
   const displayName = currentOfficer.character_name || currentOfficer.username;
@@ -1791,24 +1819,27 @@ document.getElementById('editDepartment').addEventListener('change', function() 
   updateRankSelect(this.value);
 });
 
-function openAddModal(idx, name) {
-  currentOfficer = allOfficers[idx - 1];
+function openAddModal(discordId, name) {
+  currentOfficer = allOfficers.find(o => o.discord_id === discordId);
+  if (!currentOfficer) return;
   document.getElementById('addOfficialName').value = name;
   document.getElementById('addHours').value = '';
   document.getElementById('addReason').value = '';
   document.getElementById('addModal').classList.add('active');
 }
 
-function openRemoveModal(idx, name) {
-  currentOfficer = allOfficers[idx - 1];
+function openRemoveModal(discordId, name) {
+  currentOfficer = allOfficers.find(o => o.discord_id === discordId);
+  if (!currentOfficer) return;
   document.getElementById('removeOfficialName').value = name;
   document.getElementById('removeHours').value = '';
   document.getElementById('removeReason').value = '';
   document.getElementById('removeModal').classList.add('active');
 }
 
-function openResetModal(idx, name) {
-  currentOfficer = allOfficers[idx - 1];
+function openResetModal(discordId, name) {
+  currentOfficer = allOfficers.find(o => o.discord_id === discordId);
+  if (!currentOfficer) return;
   document.getElementById('resetOfficialName').textContent = name;
   document.getElementById('resetModal').classList.add('active');
 }
@@ -1822,23 +1853,33 @@ function openEndShiftModal(idx, name) {
   document.getElementById('endShiftModal').classList.add('active');
 }
 
-function openDisciplineModal(idx) {
-  currentOfficer = allOfficers[idx - 1];
-  if (!currentOfficer) return;
+function openDisciplineModal(discordId) {
+  currentOfficer = allOfficers.find(o => o.discord_id === discordId);
+  if (!currentOfficer) {
+    console.error('Oficial no encontrado:', discordId);
+    return;
+  }
   
   document.getElementById('disciplineOfficialName').value = currentOfficer.character_name;
+  document.getElementById('disciplineOfficialDept').value = currentOfficer.department;
+  document.getElementById('disciplineOfficialRank').value = currentOfficer.rank;
   document.getElementById('disciplineType').value = '';
   document.getElementById('disciplineReason').value = '';
   document.getElementById('suspensionDays').value = '';
   document.getElementById('suspensionDaysGroup').style.display = 'none';
   
+  // Establecer fecha de hoy por defecto
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('disciplineDate').value = today;
+  
   document.getElementById('disciplineModal').classList.add('active');
 }
 
-document.getElementById('disciplineType').addEventListener('change', function() {
+function toggleSuspensionDays() {
+  const type = document.getElementById('disciplineType').value;
   const group = document.getElementById('suspensionDaysGroup');
-  group.style.display = this.value === 'suspension' ? 'block' : 'none';
-});
+  group.style.display = type === 'suspension' ? 'block' : 'none';
+}
 
 function closeModal(modalId) {
   document.getElementById(modalId).classList.remove('active');
@@ -1968,67 +2009,126 @@ async function confirmEndShift() {
 }
 
 async function confirmDiscipline() {
-  if (!currentOfficer) return;
+  if (!currentOfficer) {
+    alert('❌ Debes seleccionar un oficial');
+    return;
+  }
   
   const type = document.getElementById('disciplineType').value;
   const reason = document.getElementById('disciplineReason').value;
+  const dateStr = document.getElementById('disciplineDate').value;
+  let suspensionDays = null;
   
-  if (!type || !reason) {
-    alert('❌ Completa todos los campos');
+  // Validar campos obligatorios
+  if (!type) {
+    alert('❌ Debes seleccionar un tipo de acción');
     return;
+  }
+  
+  if (!reason || reason.trim() === '') {
+    alert('❌ Debes proporcionar una razón');
+    return;
+  }
+  
+  if (!dateStr) {
+    alert('❌ Debes seleccionar una fecha');
+    return;
+  }
+  
+  if (type === 'suspension') {
+    suspensionDays = parseInt(document.getElementById('suspensionDays').value);
+    if (!suspensionDays || suspensionDays < 1) {
+      alert('❌ Debes especificar los días de suspensión');
+      return;
+    }
   }
   
   try {
     const session = hrpGetSession();
     const adminName = session?.username || 'Admin';
+    const adminRank = session?.rank || 'Admin';
     const dept = currentOfficer.department;
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('es-ES');
     
-    // Crear embed para Discord
+    // Tipo labels
     const typeLabels = {
-      nota: '📝 NOTA',
-      advertencia: '⚠️ ADVERTENCIA',
-      suspension: '⛔ SUSPENSIÓN',
-      despido: '🚪 DESPIDO'
+      nota: 'NOTA',
+      advertencia: 'ADVERTENCIA',
+      suspension: 'SUSPENSIÓN',
+      despido: 'DESPIDO'
     };
     
-    const color = {
-      nota: 3447003,
-      advertencia: 16776960,
-      suspension: 16711680,
-      despido: 0
-    }[type] || 3447003;
+    const typeEmojis = {
+      nota: '📝',
+      advertencia: '⚠️',
+      suspension: '⛔',
+      despido: '🚪'
+    };
     
-    let description = `**Oficial:** ${currentOfficer.character_name}\n`;
-    description += `**Rango:** ${currentOfficer.rank}\n`;
-    description += `**Razón:** ${reason}\n`;
-    description += `**Fecha:** ${dateStr}\n`;
+    // Colores para Discord
+    const colors = {
+      nota: 3447003,      // Azul
+      advertencia: 16776960, // Amarillo
+      suspension: 16711680,  // Rojo
+      despido: 0          // Negro
+    };
     
-    if (type === 'suspension') {
-      const days = parseInt(document.getElementById('suspensionDays').value) || 1;
-      description += `**Días de Suspensión:** ${days}`;
+    // Crear embed profesional
+    let embedDescription = `**Oficial:** ${currentOfficer.character_name}\n`;
+    embedDescription += `**Rango:** ${currentOfficer.rank}\n`;
+    embedDescription += `**Departamento:** ${dept}\n`;
+    embedDescription += `**Razón:** ${reason}\n`;
+    embedDescription += `**Fecha:** ${dateStr}\n`;
+    
+    if (suspensionDays) {
+      embedDescription += `**Días de Suspensión:** ${suspensionDays}\n`;
     }
+    
+    embedDescription += `\n**Registrado por:** ${adminRank} ${adminName}`;
     
     const embed = {
-      title: typeLabels[type],
-      description: description,
-      color: color,
-      footer: { text: `Registrado por: ${adminName}` },
-      timestamp: now.toISOString()
+      title: `${typeEmojis[type]} ${typeLabels[type]}`,
+      description: embedDescription,
+      color: colors[type],
+      footer: { text: `Houston PD — Sistema de Disciplina` },
+      timestamp: new Date().toISOString()
     };
     
-    // Enviar webhook
+    // Enviar webhook al departamento correspondiente
     const webhook = WEBHOOKS[dept];
-    if (webhook) {
-      await hrpSendDiscordWebhook(webhook, { embeds: [embed] });
+    if (!webhook) {
+      alert(`❌ No hay webhook configurado para ${dept}`);
+      return;
     }
     
-    alert('✅ Infracción registrada y enviada a Discord');
+    await hrpSendDiscordWebhook(webhook, { embeds: [embed] });
+    
+    // Guardar en base de datos
+    try {
+      await supaInsert('officer_discipline', {
+        discord_id: currentOfficer.discord_id,
+        officer_name: currentOfficer.character_name,
+        officer_rank: currentOfficer.rank,
+        department: dept,
+        action_type: type,
+        reason: reason,
+        suspension_days: suspensionDays,
+        action_date: dateStr,
+        admin_discord_id: session?.id,
+        admin_name: adminName,
+        admin_rank: adminRank,
+        created_at: new Date().toISOString()
+      });
+    } catch (dbError) {
+      console.warn('No se pudo guardar en BD (tabla no existe):', dbError);
+      // No es crítico si no se guarda en BD, lo importante es el webhook
+    }
+    
+    alert('✅ Acción registrada y enviada a Discord');
     closeModal('disciplineModal');
+    renderDisciplineList(); // Refrescar lista
     
   } catch (e) {
-    console.error('Error:', e);
+    console.error('Error en disciplina:', e);
     alert('❌ Error: ' + e.message);
   }
 }
