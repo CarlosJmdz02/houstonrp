@@ -83,7 +83,7 @@ async function loadOfficers() {
     console.log('Loading members...');
     document.getElementById('content').innerHTML = '<div class="loading">📥 Cargando datos de oficiales...</div>';
     
-    const members = await supaSelect('police_members', 'discord_id, username, department, rank', { limit: '1000' });
+    const members = await supaSelect('police_members', '*', { limit: '1000' });
     console.log('Members loaded:', members ? members.length : 0);
     
     if (!members || members.length === 0) {
