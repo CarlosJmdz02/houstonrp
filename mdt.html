@@ -1858,19 +1858,61 @@ OPERATIONS MODULES òÉòÉòÉ */
 </div>
 <script src="assets/auth.js"></script>
 <!-- PASSWORD MODAL FOR MANAGE SHIFTS -->
-<div id="passwordModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-  <div style="background: #1a1a2e; border: 2px solid #fbbf24; border-radius: 12px; padding: 30px; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
-    <h2 style="color: #fbbf24; text-align: center; margin-bottom: 20px; margin-top: 0;">MANAGE SHIFTS</h2>
-    <p style="color: #999; text-align: center; margin-bottom: 20px;">Ingresa la contraseña para acceder</p>
+<div id="passwordModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(20,20,50,0.9)); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(5px);">
+  <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 3px solid #fbbf24; border-radius: 20px; padding: 50px 40px; max-width: 450px; box-shadow: 0 0 60px rgba(251, 191, 36, 0.3), 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: relative; overflow: hidden;">
     
-    <input type="password" id="passwordInput" placeholder="Contraseña..." style="width: 100%; padding: 12px; margin-bottom: 15px; background: #2a2a3e; border: 1px solid #fbbf24; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box;">
+    <!-- Efecto de brillo de fondo -->
+    <div style="position: absolute; top: -50%; right: -50%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(251, 191, 36, 0.1), transparent); border-radius: 50%; pointer-events: none;"></div>
     
-    <div style="display: flex; gap: 10px;">
-      <button onclick="checkPassword()" style="flex: 1; padding: 12px; background: #fbbf24; border: none; border-radius: 6px; color: #000; font-weight: 600; cursor: pointer; font-size: 14px;">Ingresar</button>
-      <button onclick="closePasswordModal()" style="flex: 1; padding: 12px; background: #333; border: 1px solid #666; border-radius: 6px; color: #fff; font-weight: 600; cursor: pointer; font-size: 14px;">Cancelar</button>
+    <div style="position: relative; z-index: 1;">
+      <!-- Icono de candado -->
+      <div style="text-align: center; margin-bottom: 25px; font-size: 48px;">🔐</div>
+      
+      <h2 style="color: #fbbf24; text-align: center; margin-bottom: 10px; margin-top: 0; font-size: 28px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">MANAGE SHIFTS</h2>
+      
+      <div style="height: 2px; background: linear-gradient(90deg, transparent, #fbbf24, transparent); margin-bottom: 25px;"></div>
+      
+      <p style="color: #aaa; text-align: center; margin-bottom: 30px; font-size: 15px; line-height: 1.6;">Acceso restringido para supervisores.<br>Ingresa la contraseña para continuar.</p>
+      
+      <!-- Input de contraseña con efectos -->
+      <div style="position: relative; margin-bottom: 25px;">
+        <input type="password" id="passwordInput" placeholder="Contraseña..." style="width: 100%; padding: 16px 18px; background: linear-gradient(135deg, #2a2a3e 0%, #1f1f35 100%); border: 2px solid #fbbf24; border-radius: 12px; color: #fff; font-size: 16px; box-sizing: border-box; transition: all 0.3s ease; font-weight: 500; letter-spacing: 1px;">
+        <div style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #fbbf24; font-size: 18px;">🔑</div>
+      </div>
+      
+      <!-- Botones mejorados -->
+      <div style="display: flex; gap: 12px; margin-top: 30px;">
+        <button onclick="checkPassword()" style="flex: 1; padding: 16px 24px; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); border: none; border-radius: 10px; color: #000; font-weight: 700; cursor: pointer; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(251, 191, 36, 0.3); position: relative; overflow: hidden;">
+          <span>✓ Ingresar</span>
+        </button>
+        <button onclick="closePasswordModal()" style="flex: 1; padding: 16px 24px; background: transparent; border: 2px solid #666; border-radius: 10px; color: #aaa; font-weight: 700; cursor: pointer; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease;">
+          ✕ Cancelar
+        </button>
+      </div>
+      
+      <!-- Instrucción adicional -->
+      <p style="color: #666; text-align: center; margin-top: 25px; font-size: 12px; margin-bottom: 0;">Presiona ENTER para enviar</p>
     </div>
   </div>
 </div>
+
+<style>
+  #passwordInput:focus {
+    outline: none;
+    border-color: #fbbf24 !important;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), inset 0 0 10px rgba(251, 191, 36, 0.1) !important;
+    background: linear-gradient(135deg, #3a3a4e 0%, #2f2f45 100%) !important;
+  }
+  
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4) !important;
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+</style>
 
 <script src="assets/payroll.js"></script>
 <script src="assets/criminal-codes.js"></script>
@@ -4886,9 +4928,19 @@ function checkPassword() {
     closePasswordModal();
     window.location.href = 'manages.html';
   } else {
-    // Contraseña incorrecta - ir a manages.html (Panel de Gestión)
-    closePasswordModal();
-    window.location.href = 'manages.html';
+    // Contraseña incorrecta - mostrar error
+    const passwordInput = document.getElementById('passwordInput');
+    passwordInput.style.borderColor = '#ff4444';
+    passwordInput.style.backgroundColor = 'rgba(255, 68, 68, 0.1)';
+    passwordInput.value = '';
+    passwordInput.placeholder = 'Contraseña incorrecta ❌';
+    
+    // Limpiar el error después de 2 segundos
+    setTimeout(() => {
+      passwordInput.style.borderColor = '#fbbf24';
+      passwordInput.style.backgroundColor = '#2a2a3e';
+      passwordInput.placeholder = 'Contraseña...';
+    }, 2000);
   }
 }
 
