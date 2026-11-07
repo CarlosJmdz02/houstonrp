@@ -942,7 +942,7 @@ async function loadOfficers() {
     }
 
     // Determinar departamento basado en roles Discord
-    function getDepartmentFromRoles(discordId, roles) {
+    function getDepartmentFromRoles(discordId, roles, defaultDept) {
       const memberRoles = roles || rolesMap[discordId] || [];
       
       if (memberRoles.includes(ROLE_IDS.HPD)) return 'HPD';
@@ -950,12 +950,12 @@ async function loadOfficers() {
       if (memberRoles.includes(ROLE_IDS.ICE)) return 'ICE';
       if (memberRoles.includes(ROLE_IDS.THP)) return 'THP';
       
-      return m.department || 'Sin Asignar';
+      return defaultDept || 'Sin Asignar';
     }
 
     allOfficers = members.map((m, idx) => {
       const memberRoles = rolesMap[m.discord_id] || [];
-      const dept = getDepartmentFromRoles(m.discord_id, memberRoles);
+      const dept = getDepartmentFromRoles(m.discord_id, memberRoles, m.department);
       
       return {
         index: idx + 1,
