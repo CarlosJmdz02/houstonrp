@@ -560,6 +560,154 @@
       opacity: 0.5;
     }
 
+    .requests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .request-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s;
+    }
+
+    .request-card:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 16px rgba(59,111,182,0.15);
+    }
+
+    .request-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .request-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: white;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+      overflow: hidden;
+    }
+
+    .request-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .request-info {
+      flex: 1;
+    }
+
+    .request-user {
+      font-weight: 600;
+      color: var(--accent-cyan);
+      font-size: 13px;
+    }
+
+    .request-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .request-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .request-details {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .request-reason {
+      background: rgba(59,111,182,0.08);
+      border-left: 3px solid var(--accent-blue);
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+      font-style: italic;
+      max-height: 80px;
+      overflow-y: auto;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn-small {
+      padding: 8px 14px;
+      font-size: 11px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      flex: 1;
+      text-align: center;
+    }
+
+    .btn-small:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(59,111,182,0.08);
+    }
+
+    .btn-small.approve {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .btn-small.approve:hover {
+      background: rgba(74, 207, 143, 0.12);
+    }
+
+    .btn-small.reject {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    .btn-small.reject:hover {
+      background: rgba(229,72,80,0.12);
+    }
+
     .discipline-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -916,15 +1064,136 @@ async function loadData() {
 async function loadRanks() {
   try {
     const ranksData = await supaSelect('ranks', '*', { limit: '1000' });
-    if (!ranksData) return;
-    
-    for (const r of ranksData) {
-      if (!ranks[r.department]) ranks[r.department] = [];
-      ranks[r.department].push({ key: r.rank_key, label: r.rank_label });
+    if (ranksData && Array.isArray(ranksData)) {
+      for (const r of ranksData) {
+        if (!ranks[r.department]) ranks[r.department] = [];
+        ranks[r.department].push({ key: r.rank_key, label: r.rank_label });
+      }
     }
   } catch (e) {
     console.warn('Error cargando rangos:', e);
+    // Si hay error, usar rangos hardcodeados
+    loadHardcodedRanks();
   }
+}
+
+function loadHardcodedRanks() {
+  ranks = {
+    'thp': [
+      { key: 'probationary_trooper', label: 'Probationary Trooper' },
+      { key: 'trooper_i', label: 'Trooper I' },
+      { key: 'senior_trooper', label: 'Senior Trooper' },
+      { key: 'master_trooper', label: 'Master Trooper' },
+      { key: 'trooper_first_class', label: 'Trooper First Class' },
+      { key: 'corporal', label: 'Corporal' },
+      { key: 'senior_corporal', label: 'Senior Corporal' },
+      { key: 'sergeant', label: 'Sergeant' },
+      { key: 'staff_sergeant', label: 'Staff Sergeant' },
+      { key: 'master_sergeant', label: 'Master Sergeant' },
+      { key: 'trooper_major', label: 'Trooper Major' },
+      { key: 'lieutenant', label: 'Lieutenant' },
+      { key: 'captain', label: 'Captain' },
+      { key: 'colonel', label: 'Colonel' },
+      { key: 'lieutenant_colonel', label: 'Lieutenant Colonel' },
+      { key: 'trooper_chief', label: 'Trooper Chief' }
+    ],
+    'THP': [
+      { key: 'probationary_trooper', label: 'Probationary Trooper' },
+      { key: 'trooper_i', label: 'Trooper I' },
+      { key: 'senior_trooper', label: 'Senior Trooper' },
+      { key: 'master_trooper', label: 'Master Trooper' },
+      { key: 'trooper_first_class', label: 'Trooper First Class' },
+      { key: 'corporal', label: 'Corporal' },
+      { key: 'senior_corporal', label: 'Senior Corporal' },
+      { key: 'sergeant', label: 'Sergeant' },
+      { key: 'staff_sergeant', label: 'Staff Sergeant' },
+      { key: 'master_sergeant', label: 'Master Sergeant' },
+      { key: 'trooper_major', label: 'Trooper Major' },
+      { key: 'lieutenant', label: 'Lieutenant' },
+      { key: 'captain', label: 'Captain' },
+      { key: 'colonel', label: 'Colonel' },
+      { key: 'lieutenant_colonel', label: 'Lieutenant Colonel' },
+      { key: 'trooper_chief', label: 'Trooper Chief' }
+    ],
+    'hpd': [
+      { key: 'police_officer_i', label: 'Police Officer I' },
+      { key: 'senior_officer_i', label: 'Senior Officer I' },
+      { key: 'senior_officer_ii', label: 'Senior Officer II' },
+      { key: 'senior_officer_iii', label: 'Senior Officer III' },
+      { key: 'detective', label: 'Detective' },
+      { key: 'sergeant', label: 'Sergeant' },
+      { key: 'lieutenant', label: 'Lieutenant' },
+      { key: 'captain', label: 'Captain' },
+      { key: 'deputy_chief', label: 'Deputy Chief' },
+      { key: 'assistant_chief', label: 'Assistant Chief' },
+      { key: 'chief', label: 'Chief' }
+    ],
+    'HPD': [
+      { key: 'police_officer_i', label: 'Police Officer I' },
+      { key: 'senior_officer_i', label: 'Senior Officer I' },
+      { key: 'senior_officer_ii', label: 'Senior Officer II' },
+      { key: 'senior_officer_iii', label: 'Senior Officer III' },
+      { key: 'detective', label: 'Detective' },
+      { key: 'sergeant', label: 'Sergeant' },
+      { key: 'lieutenant', label: 'Lieutenant' },
+      { key: 'captain', label: 'Captain' },
+      { key: 'deputy_chief', label: 'Deputy Chief' },
+      { key: 'assistant_chief', label: 'Assistant Chief' },
+      { key: 'chief', label: 'Chief' }
+    ],
+    'hcso': [
+      { key: 'deputy_sheriff', label: 'Deputy Sheriff' },
+      { key: 'deputy_ii', label: 'Deputy II' },
+      { key: 'deputy_iii', label: 'Deputy III' },
+      { key: 'corporal', label: 'Corporal' },
+      { key: 'sergeant', label: 'Sergeant' },
+      { key: 'lieutenant', label: 'Lieutenant' },
+      { key: 'captain', label: 'Captain' },
+      { key: 'major', label: 'Major' },
+      { key: 'assistant_chief_deputy', label: 'Assistant Chief Deputy' },
+      { key: 'chief_deputy', label: 'Chief Deputy' },
+      { key: 'sheriff', label: 'Sheriff' }
+    ],
+    'HCSO': [
+      { key: 'deputy_sheriff', label: 'Deputy Sheriff' },
+      { key: 'deputy_ii', label: 'Deputy II' },
+      { key: 'deputy_iii', label: 'Deputy III' },
+      { key: 'corporal', label: 'Corporal' },
+      { key: 'sergeant', label: 'Sergeant' },
+      { key: 'lieutenant', label: 'Lieutenant' },
+      { key: 'captain', label: 'Captain' },
+      { key: 'major', label: 'Major' },
+      { key: 'assistant_chief_deputy', label: 'Assistant Chief Deputy' },
+      { key: 'chief_deputy', label: 'Chief Deputy' },
+      { key: 'sheriff', label: 'Sheriff' }
+    ],
+    'ice': [
+      { key: 'cadete_ice', label: 'Cadete ICE' },
+      { key: 'agente_i', label: 'Agente I' },
+      { key: 'agente_ii', label: 'Agente II' },
+      { key: 'agente_especial', label: 'Agente Especial' },
+      { key: 'agente_especial_senior', label: 'Agente Especial Senior' },
+      { key: 'agente_supervisor', label: 'Agente Supervisor' },
+      { key: 'agente_supervisor_senior', label: 'Agente Supervisor Senior' },
+      { key: 'subdirector_agencia', label: 'Subdirector de Agencia' },
+      { key: 'director_agencia', label: 'Director de Agencia' },
+      { key: 'subdirector_general', label: 'Subdirector General' },
+      { key: 'director_ice', label: 'Director de ICE' }
+    ],
+    'ICE': [
+      { key: 'cadete_ice', label: 'Cadete ICE' },
+      { key: 'agente_i', label: 'Agente I' },
+      { key: 'agente_ii', label: 'Agente II' },
+      { key: 'agente_especial', label: 'Agente Especial' },
+      { key: 'agente_especial_senior', label: 'Agente Especial Senior' },
+      { key: 'agente_supervisor', label: 'Agente Supervisor' },
+      { key: 'agente_supervisor_senior', label: 'Agente Supervisor Senior' },
+      { key: 'subdirector_agencia', label: 'Subdirector de Agencia' },
+      { key: 'director_agencia', label: 'Director de Agencia' },
+      { key: 'subdirector_general', label: 'Subdirector General' },
+      { key: 'director_ice', label: 'Director de ICE' }
+    ]
+  };
 }
 
 async function loadOfficers() {
@@ -965,9 +1234,16 @@ async function loadOfficers() {
 
     let rankMembers = [];
     try {
-      rankMembers = await supaSelect('rank_members', 'discord_id, rank_key, department, badge_number', { limit: '10000' });
+      rankMembers = await supaSelect('rank_members', 'discord_id, rank_key, department', { limit: '10000' });
     } catch (e) {
       console.warn('Rank members error:', e);
+    }
+
+    let badgeMembers = [];
+    try {
+      badgeMembers = await supaSelect('officer_badges', 'discord_id, badge_number', { limit: '10000' });
+    } catch (e) {
+      console.warn('Badge members error - tabla no existe, crearemos:', e);
     }
 
     let guildMembers = [];
@@ -1000,7 +1276,11 @@ async function loadOfficers() {
       for (const rm of rankMembers) {
         rankMap[rm.discord_id] = rm.rank_key;
         deptMap[rm.discord_id] = rm.department;
-        if (rm.badge_number) badgeMap[rm.discord_id] = rm.badge_number;
+      }
+    }
+    if (badgeMembers && Array.isArray(badgeMembers)) {
+      for (const bm of badgeMembers) {
+        badgeMap[bm.discord_id] = bm.badge_number;
       }
     }
 
@@ -1349,16 +1629,30 @@ function renderRequests(type) {
   document.getElementById('requestsContainer').innerHTML = filtered.map(r => {
     const avatarUrl = getAvatarUrl(r.discord_id, r.avatar);
     const date = new Date(r.created_at);
-    const typeEmoji = { k9: '🐕', ascenso: '📈', promotion: '📈', report: '📝', reporte: '📝' }[r.type] || '📋';
-    const typeLabel = { k9: 'K9', ascenso: 'ASCENSO', promotion: 'ASCENSO', report: 'REPORTE', reporte: 'REPORTE' }[r.type] || r.type.toUpperCase();
     
-    let additionalInfo = '';
+    const typeInfo = {
+      k9: { emoji: '🐕', label: 'K-9', color: 'var(--accent-purple)' },
+      ascenso: { emoji: '📈', label: 'ASCENSO', color: 'var(--accent-green)' },
+      promotion: { emoji: '📈', label: 'ASCENSO', color: 'var(--accent-green)' },
+      report: { emoji: '📝', label: 'REPORTE', color: 'var(--accent-red)' },
+      reporte: { emoji: '📝', label: 'REPORTE', color: 'var(--accent-red)' }
+    };
+    
+    const info = typeInfo[r.type] || { emoji: '📋', label: r.type.toUpperCase(), color: 'var(--accent-blue)' };
+    
+    let detailsHtml = '';
     if (r.type === 'k9') {
-      additionalInfo = `<div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;"><strong>Ubicación:</strong> ${r.target_name || 'No especificada'}</div>`;
+      detailsHtml = `<div class="request-details">📍 <strong>Ubicación:</strong> ${r.target_name || 'No especificada'}</div>`;
     } else if (r.type === 'ascenso' || r.type === 'promotion') {
-      additionalInfo = `<div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;"><strong>Rango Solicitado:</strong> ${r.target_name || 'No especificado'}</div>`;
+      detailsHtml = `<div class="request-details">⭐ <strong>Rango Solicitado:</strong> ${r.target_name || 'No especificado'}</div>`;
     } else if (r.type === 'report' || r.type === 'reporte') {
-      additionalInfo = `<div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;"><strong>Reportado:</strong> ${r.target_name || 'No especificado'}</div>`;
+      detailsHtml = `<div class="request-details">🎯 <strong>Reportado:</strong> ${r.target_name || 'No especificado'}</div>`;
+    }
+    
+    const daysDiff = Math.floor((new Date() - date) / (1000 * 60 * 60 * 24));
+    let timeAgo = date.toLocaleTimeString('es-ES');
+    if (daysDiff > 0) {
+      timeAgo = `${daysDiff}d atrás`;
     }
     
     return `
@@ -1368,16 +1662,24 @@ function renderRequests(type) {
           ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : (r.username ? r.username.charAt(0).toUpperCase() : 'U')}
         </div>
         <div class="request-info">
-          <div class="request-user">${r.username || 'Usuario'}</div>
-          <div class="request-time">${date.toLocaleDateString('es-ES')} ${date.toLocaleTimeString('es-ES')}</div>
+          <div class="request-user">${r.username || 'Usuario Desconocido'}</div>
+          <div class="request-time">${timeAgo}</div>
         </div>
       </div>
-      <div style="font-size: 11px; font-weight: 600; color: var(--accent-cyan); margin-bottom: 10px;">${typeEmoji} ${typeLabel}</div>
-      ${additionalInfo}
-      <div style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin-bottom: 12px; max-height: 120px; overflow-y: auto;">${r.message || 'Sin descripción'}</div>
-      <div style="display: flex; gap: 8px;">
-        <button class="btn-small" onclick="approveRequest('${r.req_id || r.id}')">✓ Aprobar</button>
-        <button class="btn-small" onclick="rejectRequest('${r.req_id || r.id}')">✗ Rechazar</button>
+      
+      <div class="request-type" style="color: ${info.color};">
+        ${info.emoji} ${info.label}
+      </div>
+      
+      ${detailsHtml}
+      
+      <div class="request-reason">
+        "${r.message || 'Sin descripción proporcionada'}"
+      </div>
+      
+      <div class="request-actions">
+        <button class="btn-small approve" onclick="approveRequest('${r.req_id || r.id}')">✓ Aprobar</button>
+        <button class="btn-small reject" onclick="rejectRequest('${r.req_id || r.id}')">✗ Rechazar</button>
       </div>
     </div>
   `}).join('');
@@ -1454,7 +1756,9 @@ function openEditModal(idx) {
   currentOfficer = allOfficers[idx - 1];
   if (!currentOfficer) return;
   
-  document.getElementById('editOfficialName').value = currentOfficer.character_name;
+  // Mostrar el nombre correcto del oficial que se está editando
+  const displayName = currentOfficer.character_name || currentOfficer.username;
+  document.getElementById('editOfficialName').value = displayName;
   document.getElementById('editDepartment').value = currentOfficer.department || '';
   document.getElementById('editBadge').value = currentOfficer.badge || '';
   
@@ -1554,11 +1858,30 @@ async function confirmEdit() {
   }
   
   try {
-    // Actualizar o insertar en rank_members
+    // Actualizar en rank_members (SIN badge_number)
     await supaUpdate('rank_members', 
-      { department: dept, rank_key: rank || null, badge_number: badge || null }, 
+      { department: dept, rank_key: rank || '' }, 
       { discord_id: `eq.${currentOfficer.discord_id}` }
     );
+    
+    // Guardar badge en tabla officer_badges
+    if (badge) {
+      try {
+        await supaUpdate('officer_badges', 
+          { badge_number: badge }, 
+          { discord_id: `eq.${currentOfficer.discord_id}` }
+        );
+      } catch (e) {
+        // Si falla, intentar insertar
+        try {
+          await supaInsert('officer_badges', 
+            { discord_id: currentOfficer.discord_id, badge_number: badge }
+          );
+        } catch (e2) {
+          console.warn('Error guardando badge:', e2);
+        }
+      }
+    }
     
     alert('✅ Información actualizada correctamente');
     closeModal('editModal');
