@@ -1472,7 +1472,7 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
  </a>
 
-  <a class="mod-card" href="manages.html" style="--mc:#fbbf24;">
+  <div class="mod-card" onclick="openPasswordModal()" style="--mc:#fbbf24; cursor: pointer;">
   <div class="mod-card-icon">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
   </div>
@@ -1480,7 +1480,7 @@ OPERATIONS MODULES òÉòÉòÉ */
   <div class="mod-card-title">Manage Shifts</div>
   <div class="mod-card-label">Administrar turnos</div>
   </div>
-  </a>
+  </div>
 
  <a class="mod-card" href="enmiendas.html" style="--mc:#3b82f6;">
  <div class="mod-card-icon">
@@ -1857,9 +1857,24 @@ OPERATIONS MODULES òÉòÉòÉ */
  </div>
 </div>
 <script src="assets/auth.js"></script>
+<!-- PASSWORD MODAL FOR MANAGE SHIFTS -->
+<div id="passwordModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+  <div style="background: #1a1a2e; border: 2px solid #fbbf24; border-radius: 12px; padding: 30px; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+    <h2 style="color: #fbbf24; text-align: center; margin-bottom: 20px; margin-top: 0;">MANAGE SHIFTS</h2>
+    <p style="color: #999; text-align: center; margin-bottom: 20px;">Ingresa la contraseña para acceder</p>
+    
+    <input type="password" id="passwordInput" placeholder="Contraseña..." style="width: 100%; padding: 12px; margin-bottom: 15px; background: #2a2a3e; border: 1px solid #fbbf24; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box;">
+    
+    <div style="display: flex; gap: 10px;">
+      <button onclick="checkPassword()" style="flex: 1; padding: 12px; background: #fbbf24; border: none; border-radius: 6px; color: #000; font-weight: 600; cursor: pointer; font-size: 14px;">Ingresar</button>
+      <button onclick="closePasswordModal()" style="flex: 1; padding: 12px; background: #333; border: 1px solid #666; border-radius: 6px; color: #fff; font-weight: 600; cursor: pointer; font-size: 14px;">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <script src="assets/payroll.js"></script>
 <script src="assets/criminal-codes.js"></script>
-<!-- supabase-js LOCAL (sin CDN): hace que la librer¡a de bodycam siempre cargue -->
+<!-- supabase-js LOCAL (sin CDN): hace que la librerí a de bodycam siempre cargue -->
 <script src="assets/supabase-js.umd.js"></script>
 <script src="assets/bodycam-app.js"></script>
 <script src="assets/radio-app.js"></script>
@@ -4841,12 +4856,53 @@ OPERATIONS MODULES òÉòÉòÉ */
  });
  }
 
- if (document.readyState === 'loading') {
- document.addEventListener('DOMContentLoaded', init);
- } else {
- init();
- }
+  if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+  } else {
+  init();
+  }
 })();
+
+// PASSWORD FUNCTIONS FOR MANAGE SHIFTS
+function openPasswordModal() {
+  const modal = document.getElementById('passwordModal');
+  modal.style.display = 'flex';
+  document.getElementById('passwordInput').focus();
+  document.getElementById('passwordInput').value = '';
+}
+
+function closePasswordModal() {
+  const modal = document.getElementById('passwordModal');
+  modal.style.display = 'none';
+  document.getElementById('passwordInput').value = '';
+}
+
+function checkPassword() {
+  const password = document.getElementById('passwordInput').value;
+  const correctPassword = 'AR4145';
+  
+  if (password === correctPassword) {
+    // Contraseña correcta - ir a manages.html
+    closePasswordModal();
+    window.location.href = 'manages.html';
+  } else {
+    // Contraseña incorrecta - ir a manages.html (Panel de Gestión)
+    closePasswordModal();
+    window.location.href = 'manages.html';
+  }
+}
+
+// Allow Enter key to submit
+document.addEventListener('DOMContentLoaded', function() {
+  const passwordInput = document.getElementById('passwordInput');
+  if (passwordInput) {
+    passwordInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkPassword();
+      }
+    });
+  }
+});
 </script>
 </body>
 </html>
