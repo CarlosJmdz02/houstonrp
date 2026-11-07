@@ -354,35 +354,35 @@ body::after {
 
 /* ── PASSPORT ── */
 .passp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
-.doc-duo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(500px,1fr));gap:28px}
-.doc-duo-cell{display:flex;flex-direction:column;gap:12px}
+.doc-duo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(700px,1fr));gap:28px}
+.doc-duo-cell{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;align-items:center}
 .passp-card{
-  position:relative;width:100%;max-width:300px;aspect-ratio:0.74;border-radius:18px;overflow:hidden;justify-self:center;
-  display:flex;flex-direction:column;border:1px solid rgba(230,168,104,.28);
+  position:relative;width:100%;height:220px;border-radius:18px;overflow:hidden;
+  display:flex;flex-direction:row;border:1px solid rgba(230,168,104,.28);
   background:
     radial-gradient(120% 70% at 50% -10%, rgba(230,168,104,.10), transparent 55%),
     linear-gradient(160deg,#6d1a36,#4a0f24 70%,#3a0c1c);
   box-shadow:0 12px 34px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.05);
   transition:transform .35s,box-shadow .35s;
 }
-.passp-card:hover{transform:perspective(900px) rotateX(-2deg) rotateY(2deg) translateY(-5px);box-shadow:0 22px 55px rgba(0,0,0,.7)}
-.passp-cover{text-align:center;padding:18px 16px 12px;border-bottom:1px dashed rgba(230,168,104,.3)}
-.passp-star{font-size:18px;color:var(--accent-gold);text-shadow:0 0 12px rgba(230,168,104,.6);line-height:1}
-.passp-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:20px;letter-spacing:4px;color:#ffe0a8;margin-top:2px}
-.passp-country{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;color:#c08a4f;margin-top:3px;text-transform:uppercase}
-.passp-body{flex:1;display:flex;gap:14px;padding:16px;min-height:0}
-.passp-photo{width:86px;flex-shrink:0;border-radius:10px;overflow:hidden;background:linear-gradient(160deg,#0b1020,#1a2236);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center}
+.passp-card:hover{transform:translateY(-5px);box-shadow:0 22px 55px rgba(0,0,0,.7)}
+.passp-cover{padding:12px 14px;border-right:1px dashed rgba(230,168,104,.3);display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:120px;flex-shrink:0}
+.passp-star{font-size:16px;color:var(--accent-gold);text-shadow:0 0 12px rgba(230,168,104,.6);line-height:1}
+.passp-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;letter-spacing:2px;color:#ffe0a8;margin-top:2px}
+.passp-country{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:1px;color:#c08a4f;margin-top:2px;text-transform:uppercase;text-align:center;line-height:1.2}
+.passp-body{flex:1;display:flex;gap:10px;padding:12px 14px;min-height:0;align-items:flex-start}
+.passp-photo{width:70px;height:100px;flex-shrink:0;border-radius:6px;overflow:hidden;background:linear-gradient(160deg,#0b1020,#1a2236);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center}
 .passp-photo img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
 .passp-photo img.loaded{opacity:1}
-.passp-photo .passp-initials{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:30px;color:#e0b06a}
-.passp-fields{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
-.passp-field .lbl{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:1.5px;color:#9c6b45;text-transform:uppercase}
-.passp-field .val{font-size:11.5px;color:#f6e8d8;margin-top:1px;line-height:1.25;word-wrap:break-word}
-.passp-field .val.nat{font-size:13px;font-weight:600;color:var(--accent-gold);letter-spacing:.5px}
+.passp-photo .passp-initials{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:24px;color:#e0b06a}
+.passp-fields{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+.passp-field .lbl{font-family:'JetBrains Mono',monospace;font-size:6px;letter-spacing:1px;color:#9c6b45;text-transform:uppercase}
+.passp-field .val{font-size:10px;color:#f6e8d8;margin-top:0px;line-height:1.2;word-wrap:break-word}
+.passp-field .val.nat{font-size:11px;font-weight:600;color:var(--accent-gold);letter-spacing:.3px}
 .passp-status{
-  margin:0 16px 16px;display:flex;align-items:center;justify-content:center;gap:8px;
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;letter-spacing:3px;
-  padding:7px 12px;border-radius:20px;color:var(--accent-green);
+  position:absolute;bottom:8px;right:8px;display:flex;align-items:center;justify-content:center;gap:4px;
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:9px;letter-spacing:2px;
+  padding:4px 8px;border-radius:12px;color:var(--accent-green);
   background:rgba(74,204,143,.12);border:1px solid rgba(74,204,143,.35);
 }
 .passp-status::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent-green);box-shadow:0 0 8px var(--accent-green);animation:pulseDot 2s ease-out infinite}
@@ -865,11 +865,20 @@ async function fetchMyRecords(select,extra){
   const ids=await getMyIds();
   let rows;
   try{
+    // Primero intenta búsqueda compleja
     rows=await supaSelect('police_records',select,await myRecordsFilter(extra));
   }catch(_){
+    // Si falla, intenta búsqueda por Discord ID
     rows=await supaSelect('police_records',select,Object.assign({target_discord:`eq.${userId}`},extra||{}));
   }
-  return (rows||[]).filter(r=>isMyRecord(r,ids));
+  
+  // Filtro más estricto: solo multas que coincidan perfectamente
+  return (rows||[]).filter(r=>{
+    // Si es un registro tuyo (target_discord coincide), es definitivamente tuyo
+    if(r.target_discord && normId(r.target_discord) === normId(userId)) return true;
+    // Si no, usa el filtro estándar
+    return isMyRecord(r,ids);
+  });
 }
 
 // Guarda el alias manual y recarga TODO (multas, arrestos y pagos).
@@ -1014,19 +1023,24 @@ async function loadPayments(){
 
 async function loadAnnouncements(){
   const container=$('announcements-container');
+  if(!container) return;
+  
   try{
-    const data=await supaSelect('government_announcements','*',{active:'eq.true',order:'created_at.desc',limit:'20'});
-    let announcements=data||[];
+    let announcements=[];
     
-    // Si no hay avisos, agregar avisos por defecto
-    if(!announcements||announcements.length===0){
-      try{
-        const demo=await supaSelect('government_announcements','count',{limit:'0'});
-      }catch(_){
-        container.innerHTML='<div class="empty-state"><div class="big-icon">📢</div><p>Tabla de avisos no configurada</p><div class="sub">Ejecuta la migración SQL en Supabase</div></div>';
-        return;
+    // Intenta cargar avisos de la BD
+    try{
+      const data=await supaSelect('government_announcements','*',{active:'eq.true',order:'created_at.desc',limit:'20'});
+      if(data && Array.isArray(data) && data.length > 0){
+        announcements=data;
       }
-      // Avisos por defecto del sistema
+    }catch(dbError){
+      // Si falla la BD, usar avisos por defecto
+      console.warn('No se pudo cargar avisos de BD:', dbError);
+    }
+    
+    // Si no hay avisos, usar avisos por defecto del sistema
+    if(!announcements || announcements.length === 0){
       announcements=[
         {
           title:'Paradas de Tráfico - Normativa Importante',
@@ -1034,15 +1048,18 @@ async function loadAnnouncements(){
           author:'Gobierno de Houston',
           priority:'high',
           created_at:new Date().toISOString()
+        },
+        {
+          title:'Bienvenido al Portal Cívico',
+          content:'Este es tu acceso directo a documentos, multas y avisos importantes del Gobierno de Houston. Mantente informado de las últimas normativas y actualizaciones.',
+          author:'Departamento de Comunicaciones',
+          priority:'normal',
+          created_at:new Date().toISOString()
         }
       ];
     }
     
-    if(!announcements||announcements.length===0){
-      container.innerHTML='<div class="empty-state"><div class="big-icon">📢</div><p>No hay avisos oficiales</p><div class="sub">Próximamente se publicarán noticias</div></div>';
-      return;
-    }
-    
+    // Renderizar avisos
     container.innerHTML=announcements.map((a,i)=>
       `<div class="announcement-item" style="animation-delay:${i*0.05}s">
         <div class="annc-priority ${a.priority||'normal'}"></div>
@@ -1050,7 +1067,7 @@ async function loadAnnouncements(){
           <div class="annc-title">${esc(a.title)}</div>
           <div class="annc-text">${esc(a.content)}</div>
           <div class="annc-meta">
-            <span>✍️ ${esc(a.author)}</span>
+            <span>✍️ ${esc(a.author||'Oficial')}</span>
             <span>📅 ${new Date(a.created_at).toLocaleDateString()}</span>
             ${a.priority==='urgent'?'<span style="color:var(--accent-red)">🔴 Urgente</span>':''}
             ${a.priority==='high'?'<span style="color:var(--accent-gold)">⚡ Importante</span>':''}
@@ -1058,8 +1075,11 @@ async function loadAnnouncements(){
         </div>
       </div>`
     ).join('');
-  }catch(_){
-    container.innerHTML='<div class="empty-state"><div class="big-icon">📢</div><p>Avisos del Gobierno</p><div class="sub">Conéctate para ver las últimas noticias</div></div>';
+  }catch(error){
+    console.error('Error en loadAnnouncements:', error);
+    if(container){
+      container.innerHTML='<div class="empty-state"><div class="big-icon">📢</div><p>Avisos del Gobierno</p><div class="sub">Conéctate para ver las últimas noticias</div></div>';
+    }
   }
 }
 
