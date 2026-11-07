@@ -1238,8 +1238,10 @@
             }
         }
         
-        // Intenta adjuntar listener inmediatamente
+        // Intenta adjuntar listener inmediatamente y también con delay
         attachFormListener();
+        setTimeout(attachFormListener, 100);
+        setTimeout(attachFormListener, 500);
 
         function deleteRule(idx) {
             if (confirm('¿Estás seguro de que deseas eliminar esta regla?')) {
