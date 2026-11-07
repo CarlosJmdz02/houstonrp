@@ -461,6 +461,29 @@
       box-shadow: 0 4px 16px rgba(244, 67, 54, 0.25);
     }
 
+    .formato-btn {
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(0, 188, 212, 0.1));
+      border: 2px solid rgba(33, 150, 243, 0.3);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .formato-btn:hover {
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.25), rgba(0, 188, 212, 0.2));
+      border-color: rgba(33, 150, 243, 0.6);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(33, 150, 243, 0.25);
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -801,6 +824,7 @@
     <button class="tab" onclick="switchTab('turnos')">🔴 TURNOS ACTIVOS</button>
     <button class="tab" onclick="switchTab('solicitudes')">📋 SOLICITUDES</button>
     <button class="tab" onclick="switchTab('disciplina')">⚖️ DISCIPLINA</button>
+    <button class="tab" onclick="switchTab('formatos')">📄 FORMATOS</button>
   </div>
 
   <!-- TAB: GESTIÓN DE HORAS -->
@@ -914,6 +938,20 @@
       <div class="empty-state">
         <div class="empty-icon">⚖️</div>
         <p>Cargando lista de oficiales...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: FORMATOS -->
+  <div id="formatos" class="tab-content">
+    <div style="padding: 20px;">
+      <h2 style="color: var(--text-primary); margin-bottom: 20px; font-family: 'Rajdhani', sans-serif; font-size: 28px;">📄 FORMATOS DEPARTAMENTALES</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+        <button class="formato-btn" onclick="openFormatoModal('hpd')">🚔 HPD Formats</button>
+        <button class="formato-btn" onclick="openFormatoModal('hcso')">⭐ HCSO Formats</button>
+        <button class="formato-btn" onclick="openFormatoModal('ice')">🔍 ICE Formats</button>
+        <button class="formato-btn" onclick="openFormatoModal('tph')">🛣️ TPH Formats</button>
+        <button class="formato-btn" onclick="openFormatoModal('entrenamiento')">🎓 Entrenamiento Formato</button>
       </div>
     </div>
   </div>
@@ -1081,6 +1119,20 @@
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeModal('disciplineModal')">Cancelar</button>
       <button class="btn-confirm" onclick="confirmDiscipline()">Registrar Acción</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FORMATOS -->
+<div id="formatoModal" class="modal">
+  <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
+    <div style="position: sticky; top: 0; background: var(--bg-panel); padding-bottom: 10px;">
+      <div class="modal-title" id="formatoTitle">📄 FORMATO</div>
+      <button class="btn-cancel" onclick="closeModal('formatoModal')" style="position: absolute; top: 20px; right: 20px; padding: 6px 12px;">✕ Cerrar</button>
+    </div>
+    
+    <div id="formatoContent" style="color: var(--text-secondary); line-height: 1.8; font-size: 13px;">
+      <!-- El contenido se cargará dinámicamente aquí -->
     </div>
   </div>
 </div>
@@ -2161,7 +2213,7 @@ async function confirmDiscipline() {
       fields: fields,
       footer: { 
         text: `${config.footerText} | Houston RP — Sistema de Disciplina`,
-        icon_url: 'https://discord.com/assets/e4923594e694a21542a3f05d885af57f.png'
+        icon_url: 'https://media.discordapp.net/attachments/1305044064424689684/1461252885554790470/Adobe_Express_-_file_7.png?ex=6aef748c&is=6aee230c&hm=8497fb5cba7e9cb52914c9b70f356d32e46327f4998420acd0478d1e205a36aa&=&format=webp&quality=lossless'
       },
       thumbnail: {
         url: `https://cdn.discordapp.com/avatars/${adminDiscordId}/${currentOfficer.avatar}.png` || null
@@ -2231,6 +2283,112 @@ async function rejectRequest(reqId) {
     console.error('Error:', e);
     alert('❌ Error al rechazar la solicitud');
   }
+}
+
+// FORMATOS
+const FORMATOS = {
+  hpd: {
+    title: '🚔 HPD FORMATS',
+    content: '<p style="color: var(--accent-gold); font-weight: 600; margin-bottom: 10px;">Por ahora sin contenido. Los formatos de HPD se agregarán próximamente.</p>'
+  },
+  hcso: {
+    title: '⭐ HCSO FORMATS',
+    content: '<p style="color: var(--accent-gold); font-weight: 600; margin-bottom: 10px;">Por ahora sin contenido. Los formatos de HCSO se agregarán próximamente.</p>'
+  },
+  ice: {
+    title: '🔍 ICE FORMATS',
+    content: '<p style="color: var(--accent-gold); font-weight: 600; margin-bottom: 10px;">Por ahora sin contenido. Los formatos de ICE se agregarán próximamente.</p>'
+  },
+  tph: {
+    title: '🛣️ TPH FORMATS',
+    content: '<p style="color: var(--accent-gold); font-weight: 600; margin-bottom: 10px;">Por ahora sin contenido. Los formatos de TPH se agregarán próximamente.</p>'
+  },
+  entrenamiento: {
+    title: '🎓 ENTRENAMIENTO FORMATO',
+    content: `<h3 style="color: var(--accent-blue); margin-bottom: 15px; margin-top: 0;">HOUSTON POLICE DEPARTMENT</h3>
+<h4 style="color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">ENTRENAMIENTO DE NUEVOS OFICIALES</h4>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">INSTRUCCIONES ANTES DE COMENZAR</h4>
+<p>El instructor deberá leer lo siguiente antes de iniciar:</p>
+<blockquote style="border-left: 3px solid var(--accent-blue); padding-left: 12px; margin-left: 0; color: var(--text-primary);">
+"Buenas tardes. Antes de comenzar, les voy a pedir que mantengan silencio y presten atención a las instrucciones que se les van a dar.<br><br>
+Durante este entrenamiento quiero respeto hacia sus compañeros y hacia los instructores. No quiero interrupciones ni personas hablando sin autorización.<br><br>
+Si tienen alguna pregunta, deberán poner un signo de exclamación (!) en el juego y esperar a que el instructor les dé permiso para hablar.<br><br>
+También quiero que mantengan el rol en todo momento. No quiero bromas, faltas de respeto ni situaciones fuera de personaje durante el entrenamiento.<br><br>
+Cualquier persona que no siga las instrucciones podrá ser retirada de la sesión.<br><br>
+Por último, todo el entrenamiento será grabado para poder revisar su desempeño."
+</blockquote>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">INICIO DEL ENTRENAMIENTO</h4>
+
+<h5 style="color: var(--accent-cyan); margin-bottom: 8px;">Presentación del instructor</h5>
+<blockquote style="border-left: 3px solid var(--accent-blue); padding-left: 12px; margin-left: 0; color: var(--text-primary);">
+"Buenas tardes. Mi nombre es (NOMBRE DEL INSTRUCTOR). Soy instructor del Departamento de Policía de Houston.<br><br>
+El día de hoy estaré encargado de realizar su entrenamiento y evaluar cómo se desempeñan durante las diferentes actividades que vamos a realizar."<br><br>
+<em style="color: var(--text-secondary);">Esperar 10 segundos.</em><br><br>
+"Quiero que desde este momento presten atención a todo lo que se les explique. Durante el entrenamiento vamos a revisar las reglas del departamento, el uso de la radio, las paradas de tráfico, los códigos policiales y diferentes situaciones que pueden encontrarse durante un patrullaje.<br><br>
+No espero que sepan absolutamente todo desde el principio, pero sí espero que tengan disposición para aprender y que sigan las instrucciones."<br><br>
+<em style="color: var(--text-secondary);">Esperar 10 segundos.</em><br><br>
+"También quiero recordarles que su comportamiento cuenta. No solamente voy a evaluar si saben utilizar la radio o conducir un vehículo policial, también voy a observar cómo se comportan, cómo hablan con los demás y cómo reaccionan durante el rol.<br><br>
+Así que vamos a comenzar."
+</blockquote>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">FASE 1 – REGLAS Y CONDUCTA</h4>
+<p>El instructor leerá y explicará brevemente sobre:</p>
+<ul style="color: var(--text-secondary); margin-left: 20px;">
+<li>Metagaming (MG)</li>
+<li>Powergaming (PG)</li>
+<li>Fail Roleplay (FRP)</li>
+<li>Abuso de autoridad</li>
+<li>Uso incorrecto de herramientas policiales</li>
+<li>Respeto hacia civiles y compañeros</li>
+<li>Reglas generales de HPD</li>
+</ul>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">FASE 2 – COMUNICACIÓN Y USO DE RADIO</h4>
+<p>El instructor debe explicar el uso correcto de la radio y cómo comunicarse con Central.</p>
+<blockquote style="border-left: 3px solid var(--accent-blue); padding-left: 12px; margin-left: 0; color: var(--text-primary);">
+Ejemplo: "8D-401 para Central, me encuentro 10-8 y 10-41, disponible para servicio."
+</blockquote>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">FASE 3 – PARADAS DE TRÁFICO</h4>
+<p>Realizar una demostración de parada de tráfico correcta.</p>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">FASE 4 – CÓDIGOS POLICIALES Y EXAMEN</h4>
+<p>Revisar códigos policiales y realizar preguntas individuales a cada cadete.</p>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">FASE 5 – UNIFORME Y VEHÍCULOS</h4>
+<p>Revisar uniformes y vehículos de los cadetes.</p>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">FASE 6 – ESCENARIOS PRÁCTICOS Y PERSECUCIONES</h4>
+<p>Realizar escenarios prácticos y persecuciones.</p>
+
+<h4 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px;">REPORTE FINAL</h4>
+<p>Enviar información del cadete con:</p>
+<ul style="color: var(--text-secondary); margin-left: 20px;">
+<li>Usuario de Roblox</li>
+<li>Usuario de Discord</li>
+<li>Placa asignada</li>
+<li>Calificación total</li>
+<li>Resultado (Aprobado/Rechazado)</li>
+<li>Errores cometidos</li>
+<li>Observaciones del instructor</li>
+<li>Nombre del instructor y fecha</li>
+</ul>
+
+<p style="margin-top: 20px; padding: 12px; background: rgba(33, 150, 243, 0.1); border-left: 3px solid var(--accent-blue); border-radius: 4px; color: var(--text-secondary);">
+<strong>Nota:</strong> Este es el formato oficial para el entrenamiento de nuevos oficiales de HPD. Todos los instructores deben seguir este procedimiento.
+</p>`
+  }
+};
+
+function openFormatoModal(tipo) {
+  const formato = FORMATOS[tipo];
+  if (!formato) return;
+  
+  document.getElementById('formatoTitle').textContent = formato.title;
+  document.getElementById('formatoContent').innerHTML = formato.content;
+  document.getElementById('formatoModal').classList.add('active');
 }
 
 document.addEventListener('DOMContentLoaded', loadData);
