@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HOUSTON RP — Panel de Gestión</title>
+  <title>HOUSTON RP — Panel de Gestión (Alto Mando)</title>
   <link rel="icon" type="image/png" href="images/logo.png?v=1">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -35,16 +35,25 @@
       color: var(--text-primary);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
-      padding: 40px;
+      padding: 40px 20px;
     }
 
     .container {
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
     }
 
     .header {
       margin-bottom: 40px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 20px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
     }
 
     .header-eyebrow {
@@ -53,62 +62,115 @@
       color: var(--accent-cyan);
       letter-spacing: 3px;
       text-transform: uppercase;
-      margin-bottom: 12px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(230,168,104,0.15), rgba(230,168,104,0.06));
+      border: 1px solid rgba(230,168,104,0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--accent-gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .header-title {
       font-family: 'Rajdhani', sans-serif;
-      font-size: 42px;
+      font-size: 48px;
       font-weight: 700;
       color: var(--text-primary);
       letter-spacing: 1px;
+      margin-bottom: 5px;
     }
 
     .header-subtitle {
       font-size: 14px;
       color: var(--text-secondary);
-      margin-top: 8px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab {
+      padding: 14px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-bottom: 2px solid transparent;
+      letter-spacing: 0.5px;
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+    }
+
+    .tab.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
     }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
 
     .stat-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 20px;
+      padding: 24px;
       text-align: center;
     }
 
     .stat-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-secondary);
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .stat-value {
       font-family: 'Rajdhani', sans-serif;
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 700;
       color: var(--accent-cyan);
     }
 
-    .dept-filters {
+    .filters {
       display: flex;
       gap: 10px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       flex-wrap: wrap;
     }
 
-    .dept-btn {
+    .filter-btn {
       padding: 8px 18px;
       border-radius: 6px;
       border: 1px solid var(--border);
@@ -121,12 +183,12 @@
       transition: all 0.25s;
     }
 
-    .dept-btn:hover {
+    .filter-btn:hover {
       border-color: var(--border-glow);
       color: var(--text-primary);
     }
 
-    .dept-btn.active {
+    .filter-btn.active {
       background: linear-gradient(135deg, rgba(59,111,182,0.2), rgba(230,168,104,0.08));
       border-color: var(--accent-blue);
       color: var(--accent-cyan);
@@ -139,7 +201,7 @@
 
     .search-input {
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
       padding: 12px 16px;
       border-radius: 8px;
       border: 1px solid var(--border);
@@ -165,6 +227,7 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
+      margin-bottom: 30px;
     }
 
     table {
@@ -177,7 +240,7 @@
       padding: 16px;
       text-align: left;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-secondary);
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -186,7 +249,7 @@
     }
 
     td {
-      padding: 16px;
+      padding: 14px 16px;
       border-bottom: 1px solid rgba(38, 53, 82, 0.4);
       font-size: 13px;
     }
@@ -199,9 +262,49 @@
       border-bottom: none;
     }
 
+    .officer-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .officer-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: white;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+      overflow: hidden;
+    }
+
+    .officer-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .officer-info {
+      display: flex;
+      flex-direction: column;
+    }
+
     .officer-name {
       font-weight: 600;
       color: var(--accent-cyan);
+      font-size: 13px;
+    }
+
+    .officer-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
     }
 
     .hours {
@@ -210,9 +313,37 @@
       font-weight: 600;
     }
 
+    .status-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(74, 207, 143, 0.15);
+      border: 1px solid rgba(74, 207, 143, 0.3);
+      border-radius: 5px;
+      color: var(--accent-green);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
     .actions {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .btn {
@@ -256,6 +387,18 @@
     .btn-reset:hover {
       background: #c73c44;
       transform: translateY(-1px);
+    }
+
+    .btn-end {
+      background: rgba(229,72,80,0.2);
+      border: 1px solid rgba(229,72,80,0.4);
+      color: #c7b2b2;
+      padding: 6px 12px;
+    }
+
+    .btn-end:hover {
+      background: rgba(229,72,80,0.4);
+      color: var(--accent-red);
     }
 
     .modal {
@@ -369,73 +512,236 @@
       padding: 40px;
       color: var(--text-secondary);
     }
+
+    .requests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .request-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .request-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .request-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      color: white;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+      overflow: hidden;
+    }
+
+    .request-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .request-info {
+      flex: 1;
+    }
+
+    .request-user {
+      font-weight: 600;
+      color: var(--accent-cyan);
+      font-size: 12px;
+    }
+
+    .request-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    .request-body {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 11px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-small:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <div class="header">
-    <div class="header-eyebrow">// HOUSTON PD — Administración</div>
-    <h1 class="header-title">Panel de Gestión</h1>
-    <p class="header-subtitle">Gestiona las horas y turnos de tus oficiales</p>
-  </div>
-
-  <!-- STATS -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Total Oficiales</div>
-      <div class="stat-value" id="totalOfficials">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Horas</div>
-      <div class="stat-value" id="totalHours">0h</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Turnos</div>
-      <div class="stat-value" id="totalShifts">0</div>
+    <div class="header-top">
+      <div>
+        <div class="header-eyebrow">// HOUSTON PD — ALTO MANDO</div>
+        <h1 class="header-title">Panel de Gestión</h1>
+        <p class="header-subtitle">Sistema de administración de recursos humanos para jefes de departamento</p>
+      </div>
+      <div class="header-badge">⭐ SISTEMA ADMINISTRATIVO</div>
     </div>
   </div>
 
-  <!-- FILTERS -->
-  <div class="dept-filters">
-    <button class="dept-btn active" onclick="filterDept('all')">Todas</button>
-    <button class="dept-btn" onclick="filterDept('HPD')">HPD</button>
-    <button class="dept-btn" onclick="filterDept('HCSO')">HCSO</button>
-    <button class="dept-btn" onclick="filterDept('ICE')">ICE</button>
-    <button class="dept-btn" onclick="filterDept('THP')">TPH</button>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('horas')">📊 GESTIÓN DE HORAS</button>
+    <button class="tab" onclick="switchTab('turnos')">🔴 TURNOS ACTIVOS</button>
+    <button class="tab" onclick="switchTab('solicitudes')">📋 SOLICITUDES</button>
   </div>
 
-  <!-- SEARCH -->
-  <div class="search-box">
-    <input type="text" class="search-input" id="searchInput" placeholder="Buscar oficial por nombre...">
+  <!-- TAB: GESTIÓN DE HORAS -->
+  <div id="horas" class="tab-content active">
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Oficiales Activos</div>
+        <div class="stat-value" id="totalOfficials">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total de Horas</div>
+        <div class="stat-value" id="totalHours">0h</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Turnos Completados</div>
+        <div class="stat-value" id="totalShifts">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">En Turno Ahora</div>
+        <div class="stat-value" id="activeShifts">0</div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters" id="deptFilters">
+      <button class="filter-btn active" onclick="filterDept(event, 'all')">Todos</button>
+      <button class="filter-btn" onclick="filterDept(event, 'HPD')">🚔 HPD</button>
+      <button class="filter-btn" onclick="filterDept(event, 'HCSO')">⭐ HCSO</button>
+      <button class="filter-btn" onclick="filterDept(event, 'ICE')">🔍 ICE</button>
+      <button class="filter-btn" onclick="filterDept(event, 'THP')">🛣️ TPH</button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar oficial por nombre o ID Discord...">
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Oficial</th>
+            <th>Departamento</th>
+            <th>Horas Totales</th>
+            <th>Turnos</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="officersTable">
+          <tr>
+            <td colspan="7" class="loading">⏳ Cargando datos...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- TABLE -->
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Oficial</th>
-          <th>Dept</th>
-          <th>Horas Totales</th>
-          <th>Turnos</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="officersTable">
-        <tr>
-          <td colspan="6" class="loading">Cargando datos...</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- TAB: TURNOS ACTIVOS -->
+  <div id="turnos" class="tab-content">
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchActiveInput" placeholder="🔍 Buscar en turnos activos...">
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Oficial</th>
+            <th>Departamento</th>
+            <th>Tiempo en Turno</th>
+            <th>Inicio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="activeTable">
+          <tr>
+            <td colspan="6" class="loading">⏳ Cargando turnos activos...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: SOLICITUDES -->
+  <div id="solicitudes" class="tab-content">
+    <div class="filters" id="requestFilters">
+      <button class="filter-btn active" onclick="filterRequests(event, 'all')">Todas las Solicitudes</button>
+      <button class="filter-btn" onclick="filterRequests(event, 'k9')">🐕 K-9</button>
+      <button class="filter-btn" onclick="filterRequests(event, 'ascenso')">📈 Ascensos</button>
+      <button class="filter-btn" onclick="filterRequests(event, 'reporte')">📝 Reportes</button>
+    </div>
+    <div class="requests-grid" id="requestsContainer">
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <p>Cargando solicitudes...</p>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- MODAL AGREGAR HORAS -->
 <div id="addModal" class="modal">
   <div class="modal-content">
-    <div class="modal-title">Añadir Horas</div>
+    <div class="modal-title">➕ Agregar Horas</div>
     <div class="form-group">
       <label>Oficial</label>
       <input type="text" id="addOfficialName" disabled>
@@ -446,11 +752,11 @@
     </div>
     <div class="form-group">
       <label>Razón (opcional)</label>
-      <input type="text" id="addReason" placeholder="Ej: Turno extra">
+      <input type="text" id="addReason" placeholder="Ej: Turno extra, sobretiempo">
     </div>
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeModal('addModal')">Cancelar</button>
-      <button class="btn-confirm" onclick="confirmAddHours()">Añadir Horas</button>
+      <button class="btn-confirm" onclick="confirmAddHours()">Confirmar</button>
     </div>
   </div>
 </div>
@@ -458,7 +764,7 @@
 <!-- MODAL REMOVER HORAS -->
 <div id="removeModal" class="modal">
   <div class="modal-content">
-    <div class="modal-title">Remover Horas</div>
+    <div class="modal-title">➖ Remover Horas</div>
     <div class="form-group">
       <label>Oficial</label>
       <input type="text" id="removeOfficialName" disabled>
@@ -469,11 +775,11 @@
     </div>
     <div class="form-group">
       <label>Razón (opcional)</label>
-      <input type="text" id="removeReason" placeholder="Ej: Ausencia injustificada">
+      <input type="text" id="removeReason" placeholder="Ej: Ajuste administrativo">
     </div>
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeModal('removeModal')">Cancelar</button>
-      <button class="btn-confirm" onclick="confirmRemoveHours()">Remover Horas</button>
+      <button class="btn-confirm" onclick="confirmRemoveHours()">Confirmar</button>
     </div>
   </div>
 </div>
@@ -481,9 +787,9 @@
 <!-- MODAL RESETEAR HORAS -->
 <div id="resetModal" class="modal">
   <div class="modal-content">
-    <div class="modal-title">Resetear Horas</div>
+    <div class="modal-title">🔄 Resetear Horas</div>
     <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">
-      ¿Estás seguro de resetear las horas de <strong id="resetOfficialName"></strong>? Esta acción eliminará todos los turnos completados.
+      ¿Estás seguro de resetear todas las horas de <strong id="resetOfficialName"></strong>? Esta acción eliminará todos los turnos completados.
     </p>
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeModal('resetModal')">Cancelar</button>
@@ -492,22 +798,63 @@
   </div>
 </div>
 
+<!-- MODAL TERMINAR TURNO -->
+<div id="endShiftModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">🛑 Terminar Turno</div>
+    <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">
+      ¿Deseas terminar el turno de <strong id="endShiftOfficialName"></strong>? Se guardará el tiempo trabajado.
+    </p>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal('endShiftModal')">Cancelar</button>
+      <button class="btn-confirm" style="background: var(--accent-red);" onclick="confirmEndShift()">Sí, Terminar Turno</button>
+    </div>
+  </div>
+</div>
+
 <script src="assets/auth.js"></script>
 <script>
+const ROLE_IDS = {
+  HPD: '1364729666128314418',
+  HCSO: '1364729668569137172',
+  ICE: '1310839129252298802',
+  THP: '1310839295988334612'
+};
+
 let allOfficers = [];
 let filteredOfficers = [];
+let activeShifts = [];
+let requests = [];
 let currentDept = 'all';
 let currentAction = null;
 let currentOfficer = null;
 
+async function loadData() {
+  console.log('🔄 Cargando datos...');
+  await Promise.all([
+    loadOfficers(),
+    loadActiveShifts(),
+    loadRequests()
+  ]);
+}
+
 async function loadOfficers() {
   try {
-    console.log('Cargando oficiales...');
-    
     const members = await supaSelect('police_members', '*', { limit: '1000' });
     if (!members || members.length === 0) {
-      document.getElementById('officersTable').innerHTML = '<tr><td colspan="6" class="loading">No hay oficiales registrados</td></tr>';
+      document.getElementById('officersTable').innerHTML = '<tr><td colspan="7" class="loading">❌ No hay oficiales</td></tr>';
       return;
+    }
+
+    // Obtener roles del usuario actual para validar acceso
+    let currentUserRoles = [];
+    try {
+      const member = await hrpFetchGuildMember();
+      if (member && member.roles) {
+        currentUserRoles = member.roles;
+      }
+    } catch (e) {
+      console.warn('Error obteniendo roles del usuario:', e);
     }
 
     let shifts = [];
@@ -522,6 +869,56 @@ async function loadOfficers() {
       adjustments = await supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' });
     } catch (e) {
       console.warn('Adjustments error:', e);
+    }
+
+    let users = [];
+    try {
+      users = await supaSelect('users', 'discord_id, avatar', { limit: '10000' });
+    } catch (e) {
+      console.warn('Users error:', e);
+    }
+
+    let characters = [];
+    try {
+      characters = await supaSelect('characters', 'user_discord, nombres, apellidos', { limit: '10000' });
+    } catch (e) {
+      console.warn('Characters error:', e);
+    }
+
+    // Obtener los roles de todos los miembros
+    let guildMembers = [];
+    try {
+      guildMembers = await supaSelect('guild_members', 'discord_id, roles_json', { limit: '10000' });
+    } catch (e) {
+      console.warn('Guild members error:', e);
+    }
+
+    const userMap = {};
+    if (users && Array.isArray(users)) {
+      for (const u of users) {
+        userMap[u.discord_id] = u.avatar;
+      }
+    }
+
+    const charMap = {};
+    if (characters && Array.isArray(characters)) {
+      for (const c of characters) {
+        if (!charMap[c.user_discord]) {
+          charMap[c.user_discord] = `${c.nombres || ''} ${c.apellidos || ''}`.trim();
+        }
+      }
+    }
+
+    const rolesMap = {};
+    if (guildMembers && Array.isArray(guildMembers)) {
+      for (const gm of guildMembers) {
+        try {
+          const rolesArray = typeof gm.roles_json === 'string' ? JSON.parse(gm.roles_json) : gm.roles_json;
+          rolesMap[gm.discord_id] = rolesArray || [];
+        } catch (e) {
+          rolesMap[gm.discord_id] = [];
+        }
+      }
     }
 
     const hoursMap = {};
@@ -544,23 +941,150 @@ async function loadOfficers() {
       }
     }
 
-    allOfficers = members.map((m, idx) => ({
-      index: idx + 1,
-      discord_id: m.discord_id,
-      username: m.username,
-      department: m.department || 'HPD',
-      hours: hoursMap[m.discord_id] || 0,
-      shifts: shiftsMap[m.discord_id] || 0
-    }));
+    // Determinar departamento basado en roles Discord
+    function getDepartmentFromRoles(discordId, roles) {
+      const memberRoles = roles || rolesMap[discordId] || [];
+      
+      if (memberRoles.includes(ROLE_IDS.HPD)) return 'HPD';
+      if (memberRoles.includes(ROLE_IDS.HCSO)) return 'HCSO';
+      if (memberRoles.includes(ROLE_IDS.ICE)) return 'ICE';
+      if (memberRoles.includes(ROLE_IDS.THP)) return 'THP';
+      
+      return m.department || 'Sin Asignar';
+    }
+
+    allOfficers = members.map((m, idx) => {
+      const memberRoles = rolesMap[m.discord_id] || [];
+      const dept = getDepartmentFromRoles(m.discord_id, memberRoles);
+      
+      return {
+        index: idx + 1,
+        discord_id: m.discord_id,
+        username: m.username,
+        character_name: charMap[m.discord_id] || m.username,
+        avatar: userMap[m.discord_id],
+        department: dept,
+        hours: hoursMap[m.discord_id] || 0,
+        shifts: shiftsMap[m.discord_id] || 0,
+        roles: memberRoles
+      };
+    });
 
     allOfficers.sort((a, b) => b.hours - a.hours);
     
     updateStats();
-    filterDept('all');
+    filterDept({target: document.querySelector('.filter-btn.active')}, 'all');
     
   } catch (e) {
     console.error('Error cargando:', e);
-    document.getElementById('officersTable').innerHTML = `<tr><td colspan="6" class="loading">Error: ${e.message}</td></tr>`;
+    document.getElementById('officersTable').innerHTML = `<tr><td colspan="7" class="loading">❌ Error: ${e.message}</td></tr>`;
+  }
+}
+
+async function loadActiveShifts() {
+  try {
+    const shifts = await supaSelect('police_shift_sessions', '*', { 
+      status: 'eq.active,eq.break',
+      order: 'start_time.asc',
+      limit: '1000'
+    });
+
+    if (!shifts || shifts.length === 0) {
+      document.getElementById('activeTable').innerHTML = '<tr><td colspan="6" class="empty-state" style="padding: 40px;"><div>✅ No hay turnos activos en este momento</div></td></tr>';
+      document.getElementById('activeShifts').textContent = '0';
+      return;
+    }
+
+    let users = [];
+    try {
+      users = await supaSelect('users', 'discord_id, avatar', { limit: '10000' });
+    } catch (e) {
+      console.warn('Users error:', e);
+    }
+
+    let characters = [];
+    try {
+      characters = await supaSelect('characters', 'user_discord, nombres, apellidos', { limit: '10000' });
+    } catch (e) {
+      console.warn('Characters error:', e);
+    }
+
+    const userMap = {};
+    if (users && Array.isArray(users)) {
+      for (const u of users) {
+        userMap[u.discord_id] = u.avatar;
+      }
+    }
+
+    const charMap = {};
+    if (characters && Array.isArray(characters)) {
+      for (const c of characters) {
+        if (!charMap[c.user_discord]) {
+          charMap[c.user_discord] = `${c.nombres || ''} ${c.apellidos || ''}`.trim();
+        }
+      }
+    }
+
+    activeShifts = shifts.map((s, idx) => ({
+      index: idx + 1,
+      discord_id: s.discord_id,
+      username: s.username,
+      character_name: charMap[s.discord_id] || s.username,
+      avatar: userMap[s.discord_id],
+      department: s.department || 'Sin Asignar',
+      start_time: s.start_time,
+      status: s.status
+    }));
+
+    document.getElementById('activeShifts').textContent = activeShifts.length;
+    renderActiveShifts();
+    
+  } catch (e) {
+    console.error('Error cargando turnos:', e);
+  }
+}
+
+async function loadRequests() {
+  try {
+    const recs = await supaSelect('app_support_requests', '*', { 
+      order: 'created_at.desc',
+      limit: '100'
+    });
+
+    if (!recs || recs.length === 0) {
+      document.getElementById('requestsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><div class="empty-icon">📭</div><p>No hay solicitudes pendientes</p></div>';
+      return;
+    }
+
+    let users = [];
+    try {
+      users = await supaSelect('users', 'discord_id, avatar', { limit: '10000' });
+    } catch (e) {
+      console.warn('Users error:', e);
+    }
+
+    const userMap = {};
+    if (users && Array.isArray(users)) {
+      for (const u of users) {
+        userMap[u.discord_id] = u.avatar;
+      }
+    }
+
+    requests = recs.map(r => ({
+      id: r.id,
+      discord_id: r.discord_id,
+      username: r.username,
+      avatar: userMap[r.discord_id],
+      type: r.type || 'reporte',
+      message: r.message,
+      created_at: r.created_at,
+      resolved: r.resolved
+    }));
+
+    renderRequests('all');
+    
+  } catch (e) {
+    console.error('Error cargando solicitudes:', e);
   }
 }
 
@@ -579,10 +1103,24 @@ function formatHours(seconds) {
   return `${hours}h ${mins}m`;
 }
 
-function filterDept(dept) {
+function getAvatarUrl(discordId, avatar) {
+  if (avatar) {
+    return `https://cdn.discordapp.com/avatars/${discordId}/${avatar}.png`;
+  }
+  return null;
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function filterDept(event, dept) {
   currentDept = dept;
   
-  document.querySelectorAll('.dept-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
   event.target.classList.add('active');
   
   if (dept === 'all') {
@@ -594,41 +1132,146 @@ function filterDept(dept) {
   renderTable();
 }
 
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  const query = e.target.value.toLowerCase();
-  if (query === '') {
-    filterDept(currentDept);
-  } else {
-    filteredOfficers = allOfficers.filter(o => o.username.toLowerCase().includes(query));
-    renderTable();
-  }
-});
-
 function renderTable() {
   const tbody = document.getElementById('officersTable');
   
   if (filteredOfficers.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="loading">No hay oficiales</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="loading">No hay oficiales en este departamento</td></tr>';
     return;
   }
   
-  tbody.innerHTML = filteredOfficers.map(o => `
+  tbody.innerHTML = filteredOfficers.map(o => {
+    const avatarUrl = getAvatarUrl(o.discord_id, o.avatar);
+    const isActive = activeShifts.some(s => s.discord_id === o.discord_id);
+    
+    return `
     <tr>
       <td>#${o.index}</td>
-      <td><span class="officer-name">${o.username}</span></td>
+      <td>
+        <div class="officer-cell">
+          <div class="officer-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
+            ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : o.username.charAt(0).toUpperCase()}
+          </div>
+          <div class="officer-info">
+            <div class="officer-name">${o.character_name}</div>
+            <div class="officer-id">${o.discord_id}</div>
+          </div>
+        </div>
+      </td>
       <td>${o.department}</td>
       <td><span class="hours">${formatHours(o.hours)}</span></td>
-      <td>${o.shifts} turno(s)</td>
+      <td>${o.shifts}</td>
+      <td>${isActive ? '<span class="status-active"><span class="status-dot"></span>TURNO ACTIVO</span>' : '<span style="color: var(--text-dim);">—</span>'}</td>
       <td>
         <div class="actions">
-          <button class="btn btn-add" onclick="openAddModal(${o.index}, '${o.username}')">Añadir</button>
-          <button class="btn btn-remove" onclick="openRemoveModal(${o.index}, '${o.username}')">Remover</button>
-          <button class="btn btn-reset" onclick="openResetModal(${o.index}, '${o.username}')">Reset</button>
+          <button class="btn btn-add" onclick="openAddModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Añadir</button>
+          <button class="btn btn-remove" onclick="openRemoveModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Remover</button>
+          <button class="btn btn-reset" onclick="openResetModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Reset</button>
         </div>
       </td>
     </tr>
-  `).join('');
+  `}).join('');
 }
+
+function renderActiveShifts() {
+  const tbody = document.getElementById('activeTable');
+  
+  if (activeShifts.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">✅ No hay turnos activos</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = activeShifts.map(s => {
+    const avatarUrl = getAvatarUrl(s.discord_id, s.avatar);
+    const startTime = new Date(s.start_time);
+    const now = new Date();
+    const diff = Math.floor((now - startTime) / 1000);
+    const timeStr = formatHours(diff);
+    
+    return `
+    <tr>
+      <td>#${s.index}</td>
+      <td>
+        <div class="officer-cell">
+          <div class="officer-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
+            ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : s.username.charAt(0).toUpperCase()}
+          </div>
+          <div class="officer-info">
+            <div class="officer-name">${s.character_name}</div>
+            <div class="officer-id">${s.discord_id}</div>
+          </div>
+        </div>
+      </td>
+      <td>${s.department}</td>
+      <td><span class="hours">${timeStr}</span></td>
+      <td style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">${startTime.toLocaleTimeString('es-ES')}</td>
+      <td>
+        <button class="btn btn-end" onclick="openEndShiftModal(${s.index}, '${s.character_name.replace(/'/g, "\\'")}')">Terminar Turno</button>
+      </td>
+    </tr>
+  `}).join('');
+}
+
+function renderRequests(type) {
+  let filtered = requests;
+  if (type !== 'all') {
+    filtered = requests.filter(r => r.type === type);
+  }
+
+  if (filtered.length === 0) {
+    document.getElementById('requestsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><div class="empty-icon">📭</div><p>No hay solicitudes de este tipo</p></div>';
+    return;
+  }
+
+  document.getElementById('requestsContainer').innerHTML = filtered.map(r => {
+    const avatarUrl = getAvatarUrl(r.discord_id, r.avatar);
+    const date = new Date(r.created_at);
+    const typeEmoji = { k9: '🐕', ascenso: '📈', reporte: '📝' }[r.type] || '📋';
+    
+    return `
+    <div class="request-card">
+      <div class="request-header">
+        <div class="request-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
+          ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : r.username.charAt(0).toUpperCase()}
+        </div>
+        <div class="request-info">
+          <div class="request-user">${r.username}</div>
+          <div class="request-time">${date.toLocaleDateString('es-ES')} ${date.toLocaleTimeString('es-ES')}</div>
+        </div>
+      </div>
+      <div style="font-size: 11px; font-weight: 600; color: var(--accent-cyan); margin-bottom: 10px;">${typeEmoji} ${r.type.toUpperCase()}</div>
+      <div class="request-body">${r.message}</div>
+      <div class="request-actions">
+        <button class="btn-small">Revisar</button>
+        <button class="btn-small">Resolver</button>
+      </div>
+    </div>
+  `}).join('');
+}
+
+function filterRequests(event, type) {
+  document.querySelectorAll('#requestFilters .filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  renderRequests(type);
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+  if (query === '') {
+    const dept = currentDept;
+    if (dept === 'all') {
+      filteredOfficers = allOfficers;
+    } else {
+      filteredOfficers = allOfficers.filter(o => o.department === dept);
+    }
+  } else {
+    filteredOfficers = allOfficers.filter(o => 
+      o.character_name.toLowerCase().includes(query) || 
+      o.discord_id.includes(query)
+    );
+  }
+  renderTable();
+});
 
 function openAddModal(idx, name) {
   currentOfficer = allOfficers[idx - 1];
@@ -650,6 +1293,12 @@ function openResetModal(idx, name) {
   currentOfficer = allOfficers[idx - 1];
   document.getElementById('resetOfficialName').textContent = name;
   document.getElementById('resetModal').classList.add('active');
+}
+
+function openEndShiftModal(idx, name) {
+  currentOfficer = activeShifts[idx - 1];
+  document.getElementById('endShiftOfficialName').textContent = name;
+  document.getElementById('endShiftModal').classList.add('active');
 }
 
 function closeModal(modalId) {
@@ -714,7 +1363,23 @@ async function confirmResetHours() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadOfficers);
+async function confirmEndShift() {
+  if (!currentOfficer) return;
+  
+  try {
+    const session = hrpGetSession();
+    await hrpEndShift(currentOfficer.id, currentOfficer.start_time, 0);
+    alert('✅ Turno terminado correctamente');
+    closeModal('endShiftModal');
+    loadActiveShifts();
+  } catch (e) {
+    console.error('Error:', e);
+    alert('❌ Error: ' + e.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadData);
+setInterval(loadActiveShifts, 10000); // Actualizar turnos cada 10 segundos
 </script>
 
 </body>
