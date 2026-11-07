@@ -18,6 +18,8 @@
       --accent-gold:   #e6a868;
       --accent-red:    #e54850;
       --accent-green:  #4acf8f;
+      --accent-orange: #ff9800;
+      --accent-purple: #9c27b0;
       --text-primary:  #e4e7ee;
       --text-secondary:#8a93a7;
       --text-dim:      #4c5a72;
@@ -99,6 +101,7 @@
       margin-bottom: 30px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 0;
+      flex-wrap: wrap;
     }
 
     .tab {
@@ -389,6 +392,28 @@
       transform: translateY(-1px);
     }
 
+    .btn-edit {
+      background: var(--accent-cyan);
+      color: #0d1424;
+      padding: 6px 12px;
+    }
+
+    .btn-edit:hover {
+      background: #2a8fa3;
+      transform: translateY(-1px);
+    }
+
+    .btn-discipline {
+      background: var(--accent-orange);
+      color: white;
+      padding: 6px 12px;
+    }
+
+    .btn-discipline:hover {
+      background: #e68900;
+      transform: translateY(-1px);
+    }
+
     .btn-end {
       background: rgba(229,72,80,0.2);
       border: 1px solid rgba(229,72,80,0.4);
@@ -425,6 +450,8 @@
       padding: 30px;
       max-width: 500px;
       width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .modal-title {
@@ -448,7 +475,7 @@
       letter-spacing: 0.5px;
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid var(--border);
@@ -461,9 +488,17 @@
       transition: border-color 0.3s;
     }
 
-    input:focus {
+    input:focus, select:focus {
       border-color: var(--accent-blue);
       box-shadow: 0 0 0 3px rgba(59,111,182,0.12);
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238a93a8' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
     }
 
     .modal-buttons {
@@ -513,95 +548,6 @@
       color: var(--text-secondary);
     }
 
-    .requests-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .request-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-    }
-
-    .request-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .request-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 12px;
-      color: white;
-      flex-shrink: 0;
-      border: 2px solid var(--border);
-      overflow: hidden;
-    }
-
-    .request-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .request-info {
-      flex: 1;
-    }
-
-    .request-user {
-      font-weight: 600;
-      color: var(--accent-cyan);
-      font-size: 12px;
-    }
-
-    .request-time {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-dim);
-    }
-
-    .request-body {
-      color: var(--text-secondary);
-      font-size: 13px;
-      line-height: 1.5;
-      margin-bottom: 12px;
-      max-height: 120px;
-      overflow-y: auto;
-    }
-
-    .request-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-small {
-      padding: 6px 12px;
-      font-size: 11px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-secondary);
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-small:hover {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
-    }
-
     .empty-state {
       text-align: center;
       padding: 50px 20px;
@@ -612,6 +558,42 @@
       font-size: 48px;
       margin-bottom: 16px;
       opacity: 0.5;
+    }
+
+    .discipline-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .discipline-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .discipline-info {
+      flex: 1;
+    }
+
+    .discipline-name {
+      font-weight: 600;
+      color: var(--accent-cyan);
+      font-size: 14px;
+    }
+
+    .discipline-dept {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .discipline-actions {
+      display: flex;
+      gap: 8px;
     }
   </style>
 </head>
@@ -634,6 +616,7 @@
     <button class="tab active" onclick="switchTab('horas')">📊 GESTIÓN DE HORAS</button>
     <button class="tab" onclick="switchTab('turnos')">🔴 TURNOS ACTIVOS</button>
     <button class="tab" onclick="switchTab('solicitudes')">📋 SOLICITUDES</button>
+    <button class="tab" onclick="switchTab('disciplina')">⚖️ DISCIPLINA</button>
   </div>
 
   <!-- TAB: GESTIÓN DE HORAS -->
@@ -680,6 +663,7 @@
             <th>#</th>
             <th>Oficial</th>
             <th>Departamento</th>
+            <th>Rango</th>
             <th>Horas Totales</th>
             <th>Turnos</th>
             <th>Estado</th>
@@ -688,7 +672,7 @@
         </thead>
         <tbody id="officersTable">
           <tr>
-            <td colspan="7" class="loading">⏳ Cargando datos...</td>
+            <td colspan="8" class="loading">⏳ Cargando datos...</td>
           </tr>
         </tbody>
       </table>
@@ -734,6 +718,54 @@
         <div class="empty-icon">📋</div>
         <p>Cargando solicitudes...</p>
       </div>
+    </div>
+  </div>
+
+  <!-- TAB: DISCIPLINA -->
+  <div id="disciplina" class="tab-content">
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchDisciplineInput" placeholder="🔍 Buscar oficial para disciplina...">
+    </div>
+    <div id="disciplineContainer">
+      <div class="empty-state">
+        <div class="empty-icon">⚖️</div>
+        <p>Cargando lista de oficiales...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR DEPARTAMENTO/RANGO/PLACA -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">✏️ Editar Información del Oficial</div>
+    <div class="form-group">
+      <label>Oficial</label>
+      <input type="text" id="editOfficialName" disabled>
+    </div>
+    <div class="form-group">
+      <label>Departamento</label>
+      <select id="editDepartment">
+        <option value="">Seleccionar departamento...</option>
+        <option value="HPD">🚔 HPD</option>
+        <option value="HCSO">⭐ HCSO</option>
+        <option value="ICE">🔍 ICE</option>
+        <option value="THP">🛣️ TPH</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Rango</label>
+      <select id="editRank">
+        <option value="">Seleccionar rango...</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Placa (Ej: 1K-01)</label>
+      <input type="text" id="editBadge" placeholder="Ej: 1K-01">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal('editModal')">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmEdit()">Guardar</button>
     </div>
   </div>
 </div>
@@ -812,6 +844,39 @@
   </div>
 </div>
 
+<!-- MODAL DISCIPLINA (INFRACCIÓN) -->
+<div id="disciplineModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">⚖️ Registrar Infracción</div>
+    <div class="form-group">
+      <label>Oficial</label>
+      <input type="text" id="disciplineOfficialName" disabled>
+    </div>
+    <div class="form-group">
+      <label>Tipo de Infracción</label>
+      <select id="disciplineType">
+        <option value="">Seleccionar tipo...</option>
+        <option value="nota">📝 Nota</option>
+        <option value="advertencia">⚠️ Advertencia</option>
+        <option value="suspension">⛔ Suspensión</option>
+        <option value="despido">🚪 Despido</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Razón de la Infracción</label>
+      <input type="text" id="disciplineReason" placeholder="Describe la razón de la infracción">
+    </div>
+    <div class="form-group" id="suspensionDaysGroup" style="display: none;">
+      <label>Días de Suspensión</label>
+      <input type="number" id="suspensionDays" placeholder="Número de días" min="1">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal('disciplineModal')">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmDiscipline()">Registrar Infracción</button>
+    </div>
+  </div>
+</div>
+
 <script src="assets/auth.js"></script>
 <script>
 const ROLE_IDS = {
@@ -821,10 +886,19 @@ const ROLE_IDS = {
   THP: '1310839295988334612'
 };
 
+const WEBHOOKS = {
+  HPD: 'https://discord.com/api/webhooks/1568493905622601778/ArABGTJmOd39xqnnJGgJXGGUQ6IMe4MUPHEKhipFQHaH3-vkfdlcsm2_S2t2GkuZlkMO',
+  HCSO: 'https://discord.com/api/webhooks/1568494729836896376/hoig5Qqxo_oQzvRtCHxRw83lUbZXaPAatKJ03l0leWtZ0vpUGh_hFpUucoGmZo5Bs0OL',
+  ICE: 'https://discord.com/api/webhooks/1568494920552157304/UK8MIfssgJ_gxI4j88t96d6WO5IWj71cJVJDANxlxlCKZLCwK9nfmh7hCBz92GgXJZ9M',
+  THP: 'https://discord.com/api/webhooks/1568495049975529603/lUvEljJvXBsA47eDgatGeMbDkaNve-KJ8QqLRVu4WFZEdl8hjv1AUXYdW8SWKG0vyvU6'
+};
+
 let allOfficers = [];
 let filteredOfficers = [];
+let allDisciplineOfficers = [];
 let activeShifts = [];
 let requests = [];
+let ranks = {};
 let currentDept = 'all';
 let currentAction = null;
 let currentOfficer = null;
@@ -832,29 +906,33 @@ let currentOfficer = null;
 async function loadData() {
   console.log('🔄 Cargando datos...');
   await Promise.all([
+    loadRanks(),
     loadOfficers(),
     loadActiveShifts(),
     loadRequests()
   ]);
 }
 
+async function loadRanks() {
+  try {
+    const ranksData = await supaSelect('ranks', '*', { limit: '1000' });
+    if (!ranksData) return;
+    
+    for (const r of ranksData) {
+      if (!ranks[r.department]) ranks[r.department] = [];
+      ranks[r.department].push({ key: r.rank_key, label: r.rank_label });
+    }
+  } catch (e) {
+    console.warn('Error cargando rangos:', e);
+  }
+}
+
 async function loadOfficers() {
   try {
     const members = await supaSelect('police_members', '*', { limit: '1000' });
     if (!members || members.length === 0) {
-      document.getElementById('officersTable').innerHTML = '<tr><td colspan="7" class="loading">❌ No hay oficiales</td></tr>';
+      document.getElementById('officersTable').innerHTML = '<tr><td colspan="8" class="loading">❌ No hay oficiales</td></tr>';
       return;
-    }
-
-    // Obtener roles del usuario actual para validar acceso
-    let currentUserRoles = [];
-    try {
-      const member = await hrpFetchGuildMember();
-      if (member && member.roles) {
-        currentUserRoles = member.roles;
-      }
-    } catch (e) {
-      console.warn('Error obteniendo roles del usuario:', e);
     }
 
     let shifts = [];
@@ -885,7 +963,13 @@ async function loadOfficers() {
       console.warn('Characters error:', e);
     }
 
-    // Obtener los roles de todos los miembros
+    let rankMembers = [];
+    try {
+      rankMembers = await supaSelect('rank_members', 'discord_id, rank_key, department, badge_number', { limit: '10000' });
+    } catch (e) {
+      console.warn('Rank members error:', e);
+    }
+
     let guildMembers = [];
     try {
       guildMembers = await supaSelect('guild_members', 'discord_id, roles_json', { limit: '10000' });
@@ -906,6 +990,17 @@ async function loadOfficers() {
         if (!charMap[c.user_discord]) {
           charMap[c.user_discord] = `${c.nombres || ''} ${c.apellidos || ''}`.trim();
         }
+      }
+    }
+
+    const rankMap = {};
+    const deptMap = {};
+    const badgeMap = {};
+    if (rankMembers && Array.isArray(rankMembers)) {
+      for (const rm of rankMembers) {
+        rankMap[rm.discord_id] = rm.rank_key;
+        deptMap[rm.discord_id] = rm.department;
+        if (rm.badge_number) badgeMap[rm.discord_id] = rm.badge_number;
       }
     }
 
@@ -941,7 +1036,6 @@ async function loadOfficers() {
       }
     }
 
-    // Determinar departamento basado en roles Discord
     function getDepartmentFromRoles(discordId, roles, defaultDept) {
       const memberRoles = roles || rolesMap[discordId] || [];
       
@@ -950,20 +1044,39 @@ async function loadOfficers() {
       if (memberRoles.includes(ROLE_IDS.ICE)) return 'ICE';
       if (memberRoles.includes(ROLE_IDS.THP)) return 'THP';
       
-      return defaultDept || 'Sin Asignar';
+      return defaultDept || deptMap[discordId] || 'Sin Asignar';
     }
 
     allOfficers = members.map((m, idx) => {
       const memberRoles = rolesMap[m.discord_id] || [];
       const dept = getDepartmentFromRoles(m.discord_id, memberRoles, m.department);
+      const badge = badgeMap[m.discord_id] || '';
+      const rankKey = rankMap[m.discord_id] || '';
+      
+      // Determinar etiqueta de rango
+      let rankLabel = '';
+      if (rankKey && ranks[dept]) {
+        const rankObj = ranks[dept].find(r => r.key === rankKey);
+        rankLabel = rankObj ? rankObj.label : rankKey;
+      }
+      
+      // Nombre con placa
+      let displayName = charMap[m.discord_id] || m.username;
+      if (badge) {
+        displayName = `${badge} | ${displayName}`;
+      }
       
       return {
         index: idx + 1,
         discord_id: m.discord_id,
         username: m.username,
         character_name: charMap[m.discord_id] || m.username,
+        display_name: displayName,
         avatar: userMap[m.discord_id],
         department: dept,
+        rank: rankLabel || 'Sin Asignar',
+        rank_key: rankKey,
+        badge: badge,
         hours: hoursMap[m.discord_id] || 0,
         shifts: shiftsMap[m.discord_id] || 0,
         roles: memberRoles
@@ -971,20 +1084,22 @@ async function loadOfficers() {
     });
 
     allOfficers.sort((a, b) => b.hours - a.hours);
+    allDisciplineOfficers = allOfficers;
     
     updateStats();
     filterDept({target: document.querySelector('.filter-btn.active')}, 'all');
+    renderDisciplineList();
     
   } catch (e) {
     console.error('Error cargando:', e);
-    document.getElementById('officersTable').innerHTML = `<tr><td colspan="7" class="loading">❌ Error: ${e.message}</td></tr>`;
+    document.getElementById('officersTable').innerHTML = `<tr><td colspan="8" class="loading">❌ Error: ${e.message}</td></tr>`;
   }
 }
 
 async function loadActiveShifts() {
   try {
     const shifts = await supaSelect('police_shift_sessions', '*', { 
-      status: 'eq.active,eq.break',
+      status: 'in.(active,break)',
       order: 'start_time.asc',
       limit: '1000'
     });
@@ -1142,7 +1257,7 @@ function renderTable() {
   const tbody = document.getElementById('officersTable');
   
   if (filteredOfficers.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="loading">No hay oficiales en este departamento</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="loading">No hay oficiales en este departamento</td></tr>';
     return;
   }
   
@@ -1159,17 +1274,19 @@ function renderTable() {
             ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : o.username.charAt(0).toUpperCase()}
           </div>
           <div class="officer-info">
-            <div class="officer-name">${o.character_name}</div>
+            <div class="officer-name">${o.display_name}</div>
             <div class="officer-id">${o.discord_id}</div>
           </div>
         </div>
       </td>
       <td>${o.department}</td>
+      <td>${o.rank}</td>
       <td><span class="hours">${formatHours(o.hours)}</span></td>
       <td>${o.shifts}</td>
       <td>${isActive ? '<span class="status-active"><span class="status-dot"></span>TURNO ACTIVO</span>' : '<span style="color: var(--text-dim);">—</span>'}</td>
       <td>
         <div class="actions">
+          <button class="btn btn-edit" onclick="openEditModal(${o.index})">Editar</button>
           <button class="btn btn-add" onclick="openAddModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Añadir</button>
           <button class="btn btn-remove" onclick="openRemoveModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Remover</button>
           <button class="btn btn-reset" onclick="openResetModal(${o.index}, '${o.character_name.replace(/'/g, "\\'")}')">Reset</button>
@@ -1235,7 +1352,6 @@ function renderRequests(type) {
     const typeEmoji = { k9: '🐕', ascenso: '📈', promotion: '📈', report: '📝', reporte: '📝' }[r.type] || '📋';
     const typeLabel = { k9: 'K9', ascenso: 'ASCENSO', promotion: 'ASCENSO', report: 'REPORTE', reporte: 'REPORTE' }[r.type] || r.type.toUpperCase();
     
-    // Información adicional según el tipo
     let additionalInfo = '';
     if (r.type === 'k9') {
       additionalInfo = `<div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;"><strong>Ubicación:</strong> ${r.target_name || 'No especificada'}</div>`;
@@ -1258,10 +1374,40 @@ function renderRequests(type) {
       </div>
       <div style="font-size: 11px; font-weight: 600; color: var(--accent-cyan); margin-bottom: 10px;">${typeEmoji} ${typeLabel}</div>
       ${additionalInfo}
-      <div class="request-body">${r.message || 'Sin descripción'}</div>
-      <div class="request-actions">
+      <div style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin-bottom: 12px; max-height: 120px; overflow-y: auto;">${r.message || 'Sin descripción'}</div>
+      <div style="display: flex; gap: 8px;">
         <button class="btn-small" onclick="approveRequest('${r.req_id || r.id}')">✓ Aprobar</button>
         <button class="btn-small" onclick="rejectRequest('${r.req_id || r.id}')">✗ Rechazar</button>
+      </div>
+    </div>
+  `}).join('');
+}
+
+function renderDisciplineList() {
+  const container = document.getElementById('disciplineContainer');
+  
+  if (allDisciplineOfficers.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚖️</div><p>No hay oficiales</p></div>';
+    return;
+  }
+  
+  container.innerHTML = allDisciplineOfficers.map(o => {
+    const avatarUrl = getAvatarUrl(o.discord_id, o.avatar);
+    return `
+    <div class="discipline-card">
+      <div class="discipline-header">
+        <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+          <div class="officer-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
+            ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : o.username.charAt(0).toUpperCase()}
+          </div>
+          <div class="discipline-info">
+            <div class="discipline-name">${o.display_name}</div>
+            <div class="discipline-dept">${o.department} • ${o.rank}</div>
+          </div>
+        </div>
+        <div class="discipline-actions">
+          <button class="btn btn-discipline" onclick="openDisciplineModal(${o.index})">⚖️ Sancionar</button>
+        </div>
       </div>
     </div>
   `}).join('');
@@ -1291,6 +1437,56 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
   renderTable();
 });
 
+document.getElementById('searchDisciplineInput').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+  if (query === '') {
+    allDisciplineOfficers = allOfficers;
+  } else {
+    allDisciplineOfficers = allOfficers.filter(o => 
+      o.character_name.toLowerCase().includes(query) || 
+      o.discord_id.includes(query)
+    );
+  }
+  renderDisciplineList();
+});
+
+function openEditModal(idx) {
+  currentOfficer = allOfficers[idx - 1];
+  if (!currentOfficer) return;
+  
+  document.getElementById('editOfficialName').value = currentOfficer.character_name;
+  document.getElementById('editDepartment').value = currentOfficer.department || '';
+  document.getElementById('editBadge').value = currentOfficer.badge || '';
+  
+  // Cargar rangos según el departamento
+  updateRankSelect(currentOfficer.department);
+  
+  document.getElementById('editModal').classList.add('active');
+}
+
+function updateRankSelect(dept) {
+  const select = document.getElementById('editRank');
+  select.innerHTML = '<option value="">Seleccionar rango...</option>';
+  
+  if (dept && ranks[dept]) {
+    for (const r of ranks[dept]) {
+      const opt = document.createElement('option');
+      opt.value = r.key;
+      opt.textContent = r.label;
+      select.appendChild(opt);
+    }
+    
+    // Seleccionar rango actual
+    if (currentOfficer && currentOfficer.rank_key) {
+      select.value = currentOfficer.rank_key;
+    }
+  }
+}
+
+document.getElementById('editDepartment').addEventListener('change', function() {
+  updateRankSelect(this.value);
+});
+
 function openAddModal(idx, name) {
   currentOfficer = allOfficers[idx - 1];
   document.getElementById('addOfficialName').value = name;
@@ -1317,15 +1513,60 @@ function openEndShiftModal(idx, name) {
   const shift = activeShifts[idx - 1];
   if (!shift) return;
   
-  // Guardar el shift completo para poder acceder a su ID y start_time
   currentOfficer = shift;
   document.getElementById('endShiftOfficialName').textContent = name;
   document.getElementById('endShiftModal').classList.add('active');
 }
 
+function openDisciplineModal(idx) {
+  currentOfficer = allOfficers[idx - 1];
+  if (!currentOfficer) return;
+  
+  document.getElementById('disciplineOfficialName').value = currentOfficer.character_name;
+  document.getElementById('disciplineType').value = '';
+  document.getElementById('disciplineReason').value = '';
+  document.getElementById('suspensionDays').value = '';
+  document.getElementById('suspensionDaysGroup').style.display = 'none';
+  
+  document.getElementById('disciplineModal').classList.add('active');
+}
+
+document.getElementById('disciplineType').addEventListener('change', function() {
+  const group = document.getElementById('suspensionDaysGroup');
+  group.style.display = this.value === 'suspension' ? 'block' : 'none';
+});
+
 function closeModal(modalId) {
   document.getElementById(modalId).classList.remove('active');
   currentOfficer = null;
+}
+
+async function confirmEdit() {
+  if (!currentOfficer) return;
+  
+  const dept = document.getElementById('editDepartment').value;
+  const rank = document.getElementById('editRank').value;
+  const badge = document.getElementById('editBadge').value;
+  
+  if (!dept) {
+    alert('❌ Debes seleccionar un departamento');
+    return;
+  }
+  
+  try {
+    // Actualizar o insertar en rank_members
+    await supaUpdate('rank_members', 
+      { department: dept, rank_key: rank || null, badge_number: badge || null }, 
+      { discord_id: `eq.${currentOfficer.discord_id}` }
+    );
+    
+    alert('✅ Información actualizada correctamente');
+    closeModal('editModal');
+    loadOfficers();
+  } catch (e) {
+    console.error('Error:', e);
+    alert('❌ Error: ' + e.message);
+  }
 }
 
 async function confirmAddHours() {
@@ -1403,6 +1644,72 @@ async function confirmEndShift() {
   }
 }
 
+async function confirmDiscipline() {
+  if (!currentOfficer) return;
+  
+  const type = document.getElementById('disciplineType').value;
+  const reason = document.getElementById('disciplineReason').value;
+  
+  if (!type || !reason) {
+    alert('❌ Completa todos los campos');
+    return;
+  }
+  
+  try {
+    const session = hrpGetSession();
+    const adminName = session?.username || 'Admin';
+    const dept = currentOfficer.department;
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('es-ES');
+    
+    // Crear embed para Discord
+    const typeLabels = {
+      nota: '📝 NOTA',
+      advertencia: '⚠️ ADVERTENCIA',
+      suspension: '⛔ SUSPENSIÓN',
+      despido: '🚪 DESPIDO'
+    };
+    
+    const color = {
+      nota: 3447003,
+      advertencia: 16776960,
+      suspension: 16711680,
+      despido: 0
+    }[type] || 3447003;
+    
+    let description = `**Oficial:** ${currentOfficer.character_name}\n`;
+    description += `**Rango:** ${currentOfficer.rank}\n`;
+    description += `**Razón:** ${reason}\n`;
+    description += `**Fecha:** ${dateStr}\n`;
+    
+    if (type === 'suspension') {
+      const days = parseInt(document.getElementById('suspensionDays').value) || 1;
+      description += `**Días de Suspensión:** ${days}`;
+    }
+    
+    const embed = {
+      title: typeLabels[type],
+      description: description,
+      color: color,
+      footer: { text: `Registrado por: ${adminName}` },
+      timestamp: now.toISOString()
+    };
+    
+    // Enviar webhook
+    const webhook = WEBHOOKS[dept];
+    if (webhook) {
+      await hrpSendDiscordWebhook(webhook, { embeds: [embed] });
+    }
+    
+    alert('✅ Infracción registrada y enviada a Discord');
+    closeModal('disciplineModal');
+    
+  } catch (e) {
+    console.error('Error:', e);
+    alert('❌ Error: ' + e.message);
+  }
+}
+
 async function approveRequest(reqId) {
   try {
     await supaUpdate('admin_requests', { status: 'Aprobado' }, { req_id: `eq.${reqId}` });
@@ -1426,8 +1733,8 @@ async function rejectRequest(reqId) {
 }
 
 document.addEventListener('DOMContentLoaded', loadData);
-setInterval(loadActiveShifts, 10000); // Actualizar turnos cada 10 segundos
-setInterval(loadRequests, 15000); // Actualizar solicitudes cada 15 segundos
+setInterval(loadActiveShifts, 10000);
+setInterval(loadRequests, 15000);
 </script>
 
 </body>
