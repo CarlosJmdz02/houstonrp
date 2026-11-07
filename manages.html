@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOUSTON RP — Panel de Gestión</title>
+  <link rel="icon" type="image/png" href="images/logo.png?v=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --bg-void:       #0d1424;
+      --bg-panel:      #131d2f;
+      --bg-card:       #17223a;
+      --bg-hover:      #1f304f;
+      --accent-blue:   #3b6fb6;
+      --accent-cyan:   #3b6fb6;
+      --accent-gold:   #e6a868;
+      --accent-red:    #e54850;
+      --accent-green:  #4acf8f;
+      --text-primary:  #e4e7ee;
+      --text-secondary:#8a93a7;
+      --text-dim:      #4c5a72;
+      --border:        #263552;
+      --border-glow:   #314466;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-void);
+      background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(59,111,182,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(230,168,104,0.05) 0%, transparent 50%);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 40px;
+    }
+
+    .header-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent-cyan);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .header-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 1px;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .dept-filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .dept-btn {
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .dept-btn:hover {
+      border-color: var(--border-glow);
+      color: var(--text-primary);
+    }
+
+    .dept-btn.active {
+      background: linear-gradient(135deg, rgba(59,111,182,0.2), rgba(230,168,104,0.08));
+      border-color: var(--accent-blue);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 16px rgba(59,111,182,0.12);
+    }
+
+    .search-box {
+      margin-bottom: 25px;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59,111,182,0.12);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 16px;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid rgba(38, 53, 82, 0.4);
+      font-size: 13px;
+    }
+
+    tr:hover {
+      background: rgba(59,111,182,0.06);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .officer-name {
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    .hours {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-add {
+      background: var(--accent-green);
+      color: #0d1424;
+    }
+
+    .btn-add:hover {
+      background: #3da871;
+      transform: translateY(-1px);
+    }
+
+    .btn-remove {
+      background: var(--accent-gold);
+      color: #0d1424;
+    }
+
+    .btn-remove:hover {
+      background: #d4974f;
+      transform: translateY(-1px);
+    }
+
+    .btn-reset {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    .btn-reset:hover {
+      background: #c73c44;
+      transform: translateY(-1px);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59,111,182,0.12);
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+
+    .btn-cancel {
+      padding: 10px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+      border-color: var(--border-glow);
+      color: var(--text-primary);
+    }
+
+    .btn-confirm {
+      padding: 10px 20px;
+      background: var(--accent-green);
+      color: #0d1424;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-confirm:hover {
+      background: #3da871;
+      transform: translateY(-1px);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-eyebrow">// HOUSTON PD — Administración</div>
+    <h1 class="header-title">Panel de Gestión</h1>
+    <p class="header-subtitle">Gestiona las horas y turnos de tus oficiales</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Oficiales</div>
+      <div class="stat-value" id="totalOfficials">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Horas</div>
+      <div class="stat-value" id="totalHours">0h</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Turnos</div>
+      <div class="stat-value" id="totalShifts">0</div>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="dept-filters">
+    <button class="dept-btn active" onclick="filterDept('all')">Todas</button>
+    <button class="dept-btn" onclick="filterDept('HPD')">HPD</button>
+    <button class="dept-btn" onclick="filterDept('HCSO')">HCSO</button>
+    <button class="dept-btn" onclick="filterDept('ICE')">ICE</button>
+    <button class="dept-btn" onclick="filterDept('THP')">TPH</button>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-box">
+    <input type="text" class="search-input" id="searchInput" placeholder="Buscar oficial por nombre...">
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Oficial</th>
+          <th>Dept</th>
+          <th>Horas Totales</th>
+          <th>Turnos</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="officersTable">
+        <tr>
+          <td colspan="6" class="loading">Cargando datos...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL AGREGAR HORAS -->
+<div id="addModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">Añadir Horas</div>
+    <div class="form-group">
+      <label>Oficial</label>
+      <input type="text" id="addOfficialName" disabled>
+    </div>
+    <div class="form-group">
+      <label>Horas a añadir</label>
+      <input type="number" id="addHours" placeholder="Ej: 5" min="1">
+    </div>
+    <div class="form-group">
+      <label>Razón (opcional)</label>
+      <input type="text" id="addReason" placeholder="Ej: Turno extra">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal('addModal')">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmAddHours()">Añadir Horas</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REMOVER HORAS -->
+<div id="removeModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">Remover Horas</div>
+    <div class="form-group">
+      <label>Oficial</label>
+      <input type="text" id="removeOfficialName" disabled>
+    </div>
+    <div class="form-group">
+      <label>Horas a remover</label>
+      <input type="number" id="removeHours" placeholder="Ej: 2" min="1">
+    </div>
+    <div class="form-group">
+      <label>Razón (opcional)</label>
+      <input type="text" id="removeReason" placeholder="Ej: Ausencia injustificada">
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal('removeModal')">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmRemoveHours()">Remover Horas</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RESETEAR HORAS -->
+<div id="resetModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">Resetear Horas</div>
+    <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">
+      ¿Estás seguro de resetear las horas de <strong id="resetOfficialName"></strong>? Esta acción eliminará todos los turnos completados.
+    </p>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal('resetModal')">Cancelar</button>
+      <button class="btn-confirm" style="background: var(--accent-red);" onclick="confirmResetHours()">Sí, Resetear Todo</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/auth.js"></script>
+<script>
+let allOfficers = [];
+let filteredOfficers = [];
+let currentDept = 'all';
+let currentAction = null;
+let currentOfficer = null;
+
+async function loadOfficers() {
+  try {
+    console.log('Cargando oficiales...');
+    
+    const members = await supaSelect('police_members', '*', { limit: '1000' });
+    if (!members || members.length === 0) {
+      document.getElementById('officersTable').innerHTML = '<tr><td colspan="6" class="loading">No hay oficiales registrados</td></tr>';
+      return;
+    }
+
+    let shifts = [];
+    try {
+      shifts = await supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' });
+    } catch (e) {
+      console.warn('Shifts error:', e);
+    }
+
+    let adjustments = [];
+    try {
+      adjustments = await supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' });
+    } catch (e) {
+      console.warn('Adjustments error:', e);
+    }
+
+    const hoursMap = {};
+    const shiftsMap = {};
+    
+    if (shifts && Array.isArray(shifts)) {
+      for (const s of shifts) {
+        if (s.discord_id) {
+          hoursMap[s.discord_id] = (hoursMap[s.discord_id] || 0) + (s.total_seconds || 0);
+          shiftsMap[s.discord_id] = (shiftsMap[s.discord_id] || 0) + 1;
+        }
+      }
+    }
+    
+    if (adjustments && Array.isArray(adjustments)) {
+      for (const a of adjustments) {
+        if (a.discord_id) {
+          hoursMap[a.discord_id] = (hoursMap[a.discord_id] || 0) + (a.adjustment_seconds || 0);
+        }
+      }
+    }
+
+    allOfficers = members.map((m, idx) => ({
+      index: idx + 1,
+      discord_id: m.discord_id,
+      username: m.username,
+      department: m.department || 'HPD',
+      hours: hoursMap[m.discord_id] || 0,
+      shifts: shiftsMap[m.discord_id] || 0
+    }));
+
+    allOfficers.sort((a, b) => b.hours - a.hours);
+    
+    updateStats();
+    filterDept('all');
+    
+  } catch (e) {
+    console.error('Error cargando:', e);
+    document.getElementById('officersTable').innerHTML = `<tr><td colspan="6" class="loading">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function updateStats() {
+  const totalHours = allOfficers.reduce((sum, o) => sum + o.hours, 0);
+  const totalShifts = allOfficers.reduce((sum, o) => sum + o.shifts, 0);
+  
+  document.getElementById('totalOfficials').textContent = allOfficers.length;
+  document.getElementById('totalHours').textContent = formatHours(totalHours);
+  document.getElementById('totalShifts').textContent = totalShifts;
+}
+
+function formatHours(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  return `${hours}h ${mins}m`;
+}
+
+function filterDept(dept) {
+  currentDept = dept;
+  
+  document.querySelectorAll('.dept-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  if (dept === 'all') {
+    filteredOfficers = allOfficers;
+  } else {
+    filteredOfficers = allOfficers.filter(o => o.department === dept);
+  }
+  
+  renderTable();
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+  if (query === '') {
+    filterDept(currentDept);
+  } else {
+    filteredOfficers = allOfficers.filter(o => o.username.toLowerCase().includes(query));
+    renderTable();
+  }
+});
+
+function renderTable() {
+  const tbody = document.getElementById('officersTable');
+  
+  if (filteredOfficers.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">No hay oficiales</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = filteredOfficers.map(o => `
+    <tr>
+      <td>#${o.index}</td>
+      <td><span class="officer-name">${o.username}</span></td>
+      <td>${o.department}</td>
+      <td><span class="hours">${formatHours(o.hours)}</span></td>
+      <td>${o.shifts} turno(s)</td>
+      <td>
+        <div class="actions">
+          <button class="btn btn-add" onclick="openAddModal(${o.index}, '${o.username}')">Añadir</button>
+          <button class="btn btn-remove" onclick="openRemoveModal(${o.index}, '${o.username}')">Remover</button>
+          <button class="btn btn-reset" onclick="openResetModal(${o.index}, '${o.username}')">Reset</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openAddModal(idx, name) {
+  currentOfficer = allOfficers[idx - 1];
+  document.getElementById('addOfficialName').value = name;
+  document.getElementById('addHours').value = '';
+  document.getElementById('addReason').value = '';
+  document.getElementById('addModal').classList.add('active');
+}
+
+function openRemoveModal(idx, name) {
+  currentOfficer = allOfficers[idx - 1];
+  document.getElementById('removeOfficialName').value = name;
+  document.getElementById('removeHours').value = '';
+  document.getElementById('removeReason').value = '';
+  document.getElementById('removeModal').classList.add('active');
+}
+
+function openResetModal(idx, name) {
+  currentOfficer = allOfficers[idx - 1];
+  document.getElementById('resetOfficialName').textContent = name;
+  document.getElementById('resetModal').classList.add('active');
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+  currentOfficer = null;
+}
+
+async function confirmAddHours() {
+  if (!currentOfficer) return;
+  
+  const hours = parseInt(document.getElementById('addHours').value);
+  if (!hours || hours < 1) {
+    alert('❌ Ingresa una cantidad válida');
+    return;
+  }
+  
+  try {
+    const session = hrpGetSession();
+    await hrpAddHours(currentOfficer.discord_id, currentOfficer.username, hours * 3600, document.getElementById('addReason').value || 'Añadido manualmente', session?.id);
+    alert('✅ Horas añadidas correctamente');
+    closeModal('addModal');
+    loadOfficers();
+  } catch (e) {
+    console.error('Error:', e);
+    alert('❌ Error: ' + e.message);
+  }
+}
+
+async function confirmRemoveHours() {
+  if (!currentOfficer) return;
+  
+  const hours = parseInt(document.getElementById('removeHours').value);
+  if (!hours || hours < 1) {
+    alert('❌ Ingresa una cantidad válida');
+    return;
+  }
+  
+  try {
+    const session = hrpGetSession();
+    await hrpRemoveHours(currentOfficer.discord_id, currentOfficer.username, hours * 3600, document.getElementById('removeReason').value || 'Removido manualmente', session?.id);
+    alert('✅ Horas removidas correctamente');
+    closeModal('removeModal');
+    loadOfficers();
+  } catch (e) {
+    console.error('Error:', e);
+    alert('❌ Error: ' + e.message);
+  }
+}
+
+async function confirmResetHours() {
+  if (!currentOfficer) return;
+  
+  try {
+    const session = hrpGetSession();
+    await hrpRemoveHours(currentOfficer.discord_id, currentOfficer.username, currentOfficer.hours, 'Reset manual de todas las horas', session?.id);
+    alert('✅ Horas reseteadas correctamente');
+    closeModal('resetModal');
+    loadOfficers();
+  } catch (e) {
+    console.error('Error:', e);
+    alert('❌ Error: ' + e.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadOfficers);
+</script>
+
+</body>
+</html>
