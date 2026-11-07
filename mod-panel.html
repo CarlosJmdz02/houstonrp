@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mod Panel - Houston RP Rules</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="rules-data.js"></script>
     <style>
         * {
             margin: 0;
@@ -244,6 +245,25 @@
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: auto;
+        }
+
+        .logo-brand img {
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.4));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
 
         header .header-actions {
@@ -864,11 +884,14 @@
 
     <!-- Mod Panel -->
     <div class="mod-panel" id="modPanel">
-        <header>
+         <header>
             <div class="header-content">
-                <h1>
-                    <i class="fas fa-cogs"></i> Mod Panel
-                </h1>
+                <div class="logo-brand">
+                    <img src="images/logo.png" alt="HCRP Logo">
+                    <h1>
+                        <i class="fas fa-cogs"></i> Mod Panel
+                    </h1>
+                </div>
                 <div class="header-actions">
                     <button class="btn-back" onclick="goBackToRules()">
                         <i class="fas fa-arrow-left"></i> Volver
@@ -1032,41 +1055,6 @@
 
     <script>
         const CORRECT_CODE = "AI2026";
-        const ICON_MAP = {
-            "RDM": "fas fa-gun",
-            "VDM": "fas fa-car-crash",
-            "MG": "fas fa-brain",
-            "PG": "fas fa-eye-slash",
-            "CK": "fas fa-skull",
-            "NLR": "fas fa-redo",
-            "FAIL RP": "fas fa-times-circle",
-            "ERP": "fas fa-ban",
-            "TROLL RP": "fas fa-clown",
-            "SIN ROLEPLAY EN CHOQUE": "fas fa-exclamation-circle",
-            "ANTIROL: VELOCIDAD": "fas fa-tachometer-alt",
-            "NO VALORA SU VIDA": "fas fa-heart",
-            "EXPLOITS": "fas fa-bug",
-            "BAD DRIVING": "fas fa-warning",
-            "SIN VERIFICAR": "fas fa-check-circle",
-            "CARRO VIP SIN PERMISO": "fas fa-car",
-            "RESPETO IC / OOC": "fas fa-handshake",
-            "ZONAS SEGURAS": "fas fa-map-marker-alt",
-            "PERSECUCIONES CIVILES": "fas fa-car",
-            "BUNNY JUMPING": "fas fa-rabbit",
-            "CHALECO PERSONALIZADO": "fas fa-vest",
-            "FORZAR ROL": "fas fa-theater-masks",
-            "RESPETAR A TODOS": "fas fa-handshake",
-            "ANTIRECLUTAMIENTO": "fas fa-ban",
-            "SPAM": "fas fa-ban",
-            "CONTENIDO ADULTO": "fas fa-exclamation-circle",
-            "FLOOD": "fas fa-water",
-            "MENCIONES EXCESIVAS": "fas fa-at",
-            "OFF-TOPIC": "fas fa-random",
-            "IMPERSONACIÓN": "fas fa-mask",
-            "LENGUAJE TÓXICO": "fas fa-fire",
-            "SIN POLÍTICA": "fas fa-dove"
-        };
-
         let isAuthenticated = false;
         let rulesData = [];
         let currentFilter = "ALL";
@@ -1075,62 +1063,14 @@
 
         // Cargar reglas desde localStorage
         function loadRules() {
-            const stored = localStorage.getItem('houstonRPRules');
-            if (stored) {
-                try {
-                    rulesData = JSON.parse(stored);
-                } catch (e) {
-                    console.error('Error al cargar reglas:', e);
-                    rulesData = getDefaultRules();
-                }
-            } else {
-                rulesData = getDefaultRules();
-                saveRules();
-            }
+            // Usar las funciones compartidas de rules-data.js
+            rulesData = loadRulesShared();
             updateStats();
         }
 
-        function getDefaultRules() {
-            return [
-                // ROLEPLAY
-                {title: "RDM", code: "Random Death Match", description: "Matar a un jugador sin razón válida de roleplay.", sanction: "KICK", section: "roleplay"},
-                {title: "VDM", code: "Vehicle Death Match", description: "Usar vehículo para golpear o matar sin razón válida.", sanction: "WARN", section: "roleplay"},
-                {title: "MG", code: "Metagaming", description: "Usar información fuera del juego para beneficiarte en roleplay.", sanction: "BANNED", section: "roleplay"},
-                {title: "PG", code: "Powergaming", description: "Realizar acciones sin permitir respuesta a otros jugadores.", sanction: "KICK", section: "roleplay"},
-                {title: "CK", code: "Character Kill", description: "Matar permanentemente personaje sin consentimiento previo.", sanction: "WARN", section: "roleplay"},
-                {title: "NLR", code: "New Life Rule", description: "Después de morir, tu personaje pierde toda memoria de eventos anteriores.", sanction: "KICK", section: "roleplay"},
-                {title: "FAIL RP", code: "Roleplay Fallido", description: "No actuar de forma realista ante situaciones.", sanction: "WARN", section: "roleplay"},
-                {title: "ERP", code: "Explicit Roleplay", description: "Contenido sexual, erótico o explícito está prohibido.", sanction: "5 PUNTOS (BAN)", section: "roleplay"},
-                {title: "TROLL RP", code: "Disruptivo", description: "Jugar para molestar o arruinar experiencia de otros.", sanction: "5 PUNTOS (BAN)", section: "roleplay"},
-                {title: "SIN ROLEPLAY EN CHOQUE", code: "Reacción Realista", description: "Actúa como si realmente estuvieras en shock o asustado.", sanction: "KICK", section: "roleplay"},
-                {title: "ANTIROL: VELOCIDAD", code: "> 150 MPH", description: "Conducir >150 MPH sin razón válida de emergencia.", sanction: "ANTIROL", section: "roleplay"},
-                {title: "NO VALORA SU VIDA", code: "Fear RP", description: "Debes actuar como si tu vida tuviera valor real.", sanction: "ANTIROL", section: "roleplay"},
-                {title: "EXPLOITS", code: "Abuso de Fallos", description: "Usar bugs para obtener ventaja. Se reporta automáticamente.", sanction: "5 PUNTOS (BAN)", section: "roleplay"},
-                {title: "BAD DRIVING", code: "Conducción Peligrosa", description: "Conducir irresponsablemente chocando constantemente.", sanction: "KICK", section: "roleplay"},
-                {title: "SIN VERIFICAR", code: "Verificación Edad", description: "Debes verificar edad en el servidor.", sanction: "KICK", section: "roleplay"},
-                {title: "CARRO VIP SIN PERMISO", code: "Vehículos Exclusivos", description: "Solo usuarios con VIP pueden usar estos vehículos.", sanction: "KICK", section: "roleplay"},
-                {title: "RESPETO IC / OOC", code: "Tolerancia Cero", description: "Respeta a todos en IC y OOC. Sin discriminación.", sanction: "BANNED", section: "roleplay"},
-                {title: "ZONAS SEGURAS", code: "Pasaporte Safe Zone", description: "Las zonas seguras están protegidas. No combate, robos ni actividades delictivas.", sanction: "KICK", section: "roleplay"},
-                {title: "PERSECUCIONES CIVILES", code: "Razón Válida Requerida", description: "Debes tener razón válida para perseguir como civil.", sanction: "WARN", section: "roleplay"},
-                {title: "BUNNY JUMPING", code: "Abuso de Mecánicas", description: "No se permite saltos repetidos para obtener ventaja.", sanction: "2 PUNTOS", section: "roleplay"},
-                {title: "CHALECO PERSONALIZADO", code: "Prohibido Logo/Diseño", description: "Solo se permite el chaleco estándar sin modificaciones.", sanction: "WARN", section: "roleplay"},
-                {title: "FORZAR ROL", code: "Roleplay Consensual", description: "No se permite forzar rol sin consentimiento del otro jugador.", sanction: "3 PUNTOS", section: "roleplay"},
-                // DISCORD
-                {title: "RESPETAR A TODOS", code: "Básico", description: "Sé respetuoso con todos. Sin insultos ni discriminación.", sanction: "1 PUNTO", section: "discord"},
-                {title: "ANTIRECLUTAMIENTO", code: "Prohibido", description: "No reclutar para otros servidores sin permiso.", sanction: "4 PUNTOS", section: "discord"},
-                {title: "SPAM", code: "Mensajes Repetitivos", description: "No spamear mensajes, emojis o menciones.", sanction: "1 PUNTO", section: "discord"},
-                {title: "CONTENIDO ADULTO", code: "NSFW Prohibido", description: "Sin sexual, gore o imágenes ofensivas.", sanction: "5 PUNTOS (BAN)", section: "discord"},
-                {title: "FLOOD", code: "Inundación", description: "No enviar muchos mensajes cortos seguidos.", sanction: "1 PUNTO", section: "discord"},
-                {title: "MENCIONES EXCESIVAS", code: "Sin Abusar @", description: "No mencionar constantemente a staff sin razón.", sanction: "1 PUNTO", section: "discord"},
-                {title: "OFF-TOPIC", code: "Tema del Canal", description: "Usa canales para su propósito específico.", sanction: "1 PUNTO", section: "discord"},
-                {title: "IMPERSONACIÓN", code: "Hacerse Pasar", description: "No pretender ser staff o impersonar jugadores.", sanction: "4 PUNTOS", section: "discord"},
-                {title: "LENGUAJE TÓXICO", code: "Insultos", description: "Sin insultos, palabrotas dirigidas a otros.", sanction: "4 PUNTOS", section: "discord"},
-                {title: "SIN POLÍTICA", code: "Temas Sensibles", description: "Evita debates sobre política, religión o división.", sanction: "1 PUNTO", section: "discord"}
-            ];
-        }
-
         function saveRules() {
-            localStorage.setItem('houstonRPRules', JSON.stringify(rulesData));
+            // Usar la función compartida de rules-data.js
+            saveRulesShared(rulesData);
         }
 
         function updateStats() {
@@ -1202,7 +1142,7 @@
 
             document.getElementById('rulesTableBody').innerHTML = filtered.map((rule, idx) => {
                 const realIdx = rulesData.indexOf(rule);
-                const icon = ICON_MAP[rule.title] || 'fas fa-circle';
+                const icon = getIconForRule(rule.title);
                 return `
                     <tr>
                         <td class="rule-title"><i class="${icon}"></i> ${rule.title}</td>
@@ -1322,6 +1262,15 @@
 
         window.addEventListener('load', function() {
             document.getElementById('codeInput').focus();
+        });
+
+        // Listener para sincronización con otros tabs
+        window.addEventListener('rulesUpdated', function(e) {
+            if (isAuthenticated) {
+                rulesData = e.detail.rules;
+                updateStats();
+                renderRules();
+            }
         });
     </script>
 </body>

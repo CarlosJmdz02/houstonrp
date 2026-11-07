@@ -16,11 +16,13 @@
             --primary: #2563eb;
             --primary-dark: #1e40af;
             --primary-light: #60a5fa;
+            --primary-ultra-light: #93c5fd;
             --danger: #ef4444;
             --warning: #f59e0b;
             --success: #10b981;
-            --dark-bg: #121212;
-            --card-bg: #1e293b;
+            --dark-bg: #0f1729;
+            --darker-bg: #0a0f1f;
+            --card-bg: #1a2847;
             --text-primary: #f1f5f9;
             --text-secondary: #cbd5e1;
             --border: #334155;
@@ -30,102 +32,144 @@
             scroll-behavior: smooth;
         }
 
+        /* Background con logo fijo */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #121212;
+            background: linear-gradient(135deg, #0a0f1f 0%, #1a2847 50%, #0f1729 100%);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Logo de fondo FIJO */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background-image: url('images/logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+            filter: brightness(1.2) saturate(0.8);
+        }
+
+        /* Contenedor principal con relación z-index adecuada */
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
         }
 
         /* Header */
         header {
-            background: #141a30;
-            padding: 1rem 0;
-            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(180deg, rgba(20, 26, 48, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
+            padding: 2rem 0 1.5rem;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.4), 0 0 40px rgba(96, 165, 250, 0.15);
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(37, 99, 235, 0.3);
         }
 
         header h1 {
             text-align: center;
-            font-size: 1.5rem;
-            color: #60a5fa;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 50%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            margin-bottom: 0.2rem;
-            font-weight: 800;
-            letter-spacing: -0.3px;
+            margin-bottom: 0.3rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            filter: drop-shadow(0 4px 8px rgba(96, 165, 250, 0.3));
         }
 
         header p {
             text-align: center;
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
             font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
         /* Navegación */
         nav {
             max-width: 1200px;
-            margin: 0.5rem auto 0;
+            margin: 1.5rem auto 0;
             display: flex;
             justify-content: center;
-            gap: 0.6rem;
+            gap: 0.8rem;
             padding: 0 1rem;
             flex-wrap: wrap;
         }
 
         nav button {
-            background: rgba(96, 165, 250, 0.15);
-            border: 2px solid rgba(96, 165, 250, 0.3);
+            background: rgba(96, 165, 250, 0.12);
+            border: 2px solid rgba(96, 165, 250, 0.35);
             color: #60a5fa;
-            padding: 0.5rem 1.1rem;
-            border-radius: 7px;
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-weight: 700;
             backdrop-filter: blur(10px);
-        }
-
-        nav button:hover,
-        nav button.active {
-            background: rgba(96, 165, 250, 0.25);
-            color: #93c5fd;
-            border-color: #60a5fa;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(96, 165, 250, 0.3);
-        }
-
-        .mod-panel-btn {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(37, 99, 235, 0.15)) !important;
-            border-color: #3b82f6 !important;
-            color: #60a5fa !important;
-            margin-left: auto;
             position: relative;
             overflow: hidden;
         }
 
-        .mod-panel-btn::before {
+        nav button::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.2), transparent);
             transition: left 0.5s ease;
+            z-index: -1;
         }
 
-        .mod-panel-btn:hover::before {
+        nav button:hover::before {
             left: 100%;
+        }
+
+        nav button:hover,
+        nav button.active {
+            background: rgba(96, 165, 250, 0.3);
+            color: #93c5fd;
+            border-color: #60a5fa;
+            transform: translateY(-3px) scale(1.08);
+            box-shadow: 0 8px 25px rgba(96, 165, 250, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        nav button.active {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.35), rgba(59, 130, 246, 0.25));
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5), 0 0 20px rgba(96, 165, 250, 0.3);
+        }
+
+        .mod-panel-btn {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(37, 99, 235, 0.12)) !important;
+            border-color: #3b82f6 !important;
+            color: #60a5fa !important;
+            margin-left: auto;
+            position: relative;
         }
 
         .mod-panel-btn:hover {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(37, 99, 235, 0.25)) !important;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4) !important;
-            transform: translateY(-3px) scale(1.05) !important;
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5) !important;
+            transform: translateY(-4px) scale(1.1) !important;
         }
 
         @media (max-width: 768px) {
@@ -137,15 +181,59 @@
 
         /* Contenedor principal */
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 3rem 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Botón volver */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 0.9rem 1.8rem;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-bottom: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .back-btn:hover::before {
+            left: 100%;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            transform: translateX(-5px) translateY(-2px);
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.5);
         }
 
         /* Secciones */
         .section {
             display: none;
-            animation: fadeInUp 0.6s ease-out;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .section.active {
@@ -155,7 +243,18 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
             }
             to {
                 opacity: 1;
@@ -164,91 +263,140 @@
         }
 
         .section h2 {
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
             color: var(--primary-light);
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-weight: 800;
+            font-weight: 900;
+            animation: slideInDown 0.6s ease-out;
+            letter-spacing: -0.5px;
         }
 
         .section h2 i {
-            font-size: 2rem;
+            font-size: 2.5rem;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(96, 165, 250, 0.3));
         }
 
-        /* Grid de reglas - 2 COLUMNAS, ACOSTADAS */
+        /* Sección de advertencia */
+        .alert-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(220, 38, 38, 0.08) 100%);
+            border-left: 5px solid #ef4444;
+            padding: 2rem 1.8rem;
+            border-radius: 12px;
+            margin: 2.5rem 0;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(239, 68, 68, 0.25);
+            animation: slideInDown 0.6s ease-out 0.1s both;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.15);
+        }
+
+        .alert-box h3 {
+            color: #fca5a5;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .alert-box p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        /* Grid de reglas - 2 COLUMNAS */
         .rules-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            gap: 1.8rem;
+            margin-bottom: 4rem;
         }
 
-        /* Tarjeta de regla - HORIZONTAL/ACOSTADA */
+        /* Tarjeta de regla */
         .rule-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(37, 99, 235, 0.3);
-            border-left: 4px solid var(--primary);
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: all 0.35s ease;
+            background: linear-gradient(135deg, rgba(26, 40, 71, 0.7) 0%, rgba(15, 23, 42, 0.5) 100%);
+            border: 2px solid rgba(37, 99, 235, 0.25);
+            border-left: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 2rem 1.8rem;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: fadeInUp 0.6s ease-out both;
         }
 
-        .rule-card.with-image {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 1.5rem;
-            align-items: start;
-        }
+        /* Efecto de carga para tarjetas */
+        .rule-card:nth-child(1) { animation-delay: 0.1s; }
+        .rule-card:nth-child(2) { animation-delay: 0.15s; }
+        .rule-card:nth-child(3) { animation-delay: 0.2s; }
+        .rule-card:nth-child(4) { animation-delay: 0.25s; }
+        .rule-card:nth-child(5) { animation-delay: 0.3s; }
+        .rule-card:nth-child(6) { animation-delay: 0.35s; }
+        .rule-card:nth-child(n+7) { animation-delay: 0.4s; }
 
-        .rule-card.with-image img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid rgba(37, 99, 235, 0.2);
-        }
-
+        /* Brillo superior en la tarjeta */
         .rule-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
+            height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--primary-light), transparent);
+            opacity: 0.7;
+        }
+
+        /* Fondo oscuro con brillo */
+        .rule-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+            transition: left 0.8s ease;
+            z-index: 1;
+        }
+
+        .rule-card:hover::after {
+            left: 100%;
         }
 
         .rule-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
-            border-color: rgba(37, 99, 235, 0.5);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.4), 0 0 30px rgba(96, 165, 250, 0.25);
+            border-color: rgba(37, 99, 235, 0.6);
             border-left-color: var(--primary-light);
-            background: rgba(15, 23, 42, 0.8);
+            background: linear-gradient(135deg, rgba(26, 40, 71, 0.85) 0%, rgba(15, 23, 42, 0.65) 100%);
         }
 
         .rule-header {
             display: flex;
             align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 1.2rem;
+            margin-bottom: 1.3rem;
+            position: relative;
+            z-index: 2;
         }
 
         .rule-icon {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             color: var(--primary-light);
-            min-width: 40px;
+            min-width: 50px;
+            filter: drop-shadow(0 2px 4px rgba(96, 165, 250, 0.3));
         }
 
         .rule-content {
@@ -256,657 +404,407 @@
         }
 
         .rule-title {
-            font-size: 1.1rem;
-            font-weight: 800;
+            font-size: 1.2rem;
+            font-weight: 900;
             color: white;
             letter-spacing: -0.5px;
             margin-bottom: 0.4rem;
         }
 
         .rule-code {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--primary-light);
-            font-family: 'Monaco', monospace;
-            font-weight: 600;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
+            opacity: 0.85;
         }
 
         .rule-description {
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
         }
 
         .rule-sanction {
             display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-weight: 800;
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 900;
             font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Monaco', monospace;
+            letter-spacing: 1.2px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
-        /* Sanciones - Colores */
+        .rule-sanction:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Sanciones - Colores degradados vibrantes */
         .sanction-1pt {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
+            border: 1px solid rgba(59, 130, 246, 0.4);
         }
 
         .sanction-2pt {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
+            border: 1px solid rgba(245, 158, 11, 0.4);
         }
 
         .sanction-3pt {
             background: linear-gradient(135deg, #ef5350 0%, #d32f2f 100%);
             color: white;
+            border: 1px solid rgba(239, 83, 80, 0.4);
         }
 
         .sanction-4pt {
             background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
             color: white;
+            border: 1px solid rgba(156, 39, 176, 0.4);
         }
 
         .sanction-5pt {
-            background: linear-gradient(135deg, #000000 0%, #262626 100%);
-            color: #ef4444;
-            border: 2px solid #ef4444;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b;
         }
 
         .sanction-kick {
             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             color: white;
+            border: 1px solid rgba(99, 102, 241, 0.4);
         }
 
         .sanction-warn {
             background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
-        }
-
-        /* Sección de advertencia */
-        .alert-box {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%);
-            border-left: 5px solid #ef4444;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 2rem 0;
-            backdrop-filter: blur(10px);
-        }
-
-        .alert-box h3 {
-            color: #fca5a5;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-weight: 800;
-            font-size: 1.1rem;
-        }
-
-        .alert-box p {
-            color: var(--text-secondary);
-            line-height: 1.8;
+            border: 1px solid rgba(139, 92, 246, 0.4);
         }
 
         /* Footer */
         footer {
-            background: #141a30;
+            background: linear-gradient(180deg, rgba(20, 26, 48, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 3rem 1.5rem;
             color: rgba(255, 255, 255, 0.8);
-            margin-top: 4rem;
-            border-top: 2px solid #3b82f6;
+            margin-top: 5rem;
+            border-top: 2px solid rgba(37, 99, 235, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -10px 30px rgba(37, 99, 235, 0.2);
+            position: relative;
+            z-index: 1;
         }
 
         footer p {
-            margin: 0.4rem 0;
+            margin: 0.6rem 0;
             font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        /* Botón volver */
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-bottom: 2rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
             font-size: 0.95rem;
-            font-weight: 700;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+            letter-spacing: 0.3px;
         }
 
-        .back-btn:hover {
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
-            transform: translateX(-5px);
-            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.3);
+        footer p strong {
+            color: var(--primary-light);
+            text-shadow: 0 2px 4px rgba(96, 165, 250, 0.3);
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.3rem;
-            }
-
-            nav {
-                gap: 0.4rem;
-            }
-
-            nav button {
-                padding: 0.4rem 0.9rem;
-                font-size: 0.8rem;
-            }
-
+        @media (max-width: 1024px) {
             .rules-grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
 
             .section h2 {
-                font-size: 1.5rem;
+                font-size: 1.7rem;
                 gap: 0.8rem;
             }
 
             .section h2 i {
-                font-size: 1.5rem;
+                font-size: 2rem;
             }
+
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            .container {
+                padding: 2.5rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.4rem;
+            }
+
+            header p {
+                font-size: 0.8rem;
+            }
+
+            nav {
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+
+            nav button {
+                padding: 0.6rem 1.1rem;
+                font-size: 0.8rem;
+            }
+
+            .section h2 {
+                font-size: 1.4rem;
+                gap: 0.6rem;
+            }
+
+            .section h2 i {
+                font-size: 1.6rem;
+            }
+
+            .rule-card {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .rule-icon {
+                font-size: 1.8rem;
+                min-width: 40px;
+            }
+
+            .rule-title {
+                font-size: 1rem;
+            }
+
+            .alert-box {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .alert-box h3 {
+                font-size: 1rem;
+                gap: 0.6rem;
+            }
+
+            .back-btn {
+                padding: 0.7rem 1.4rem;
+                font-size: 0.9rem;
+                margin-bottom: 2rem;
+            }
+
+            .mod-panel-btn {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.2rem;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav button {
+                width: 100%;
+            }
+
+            .section h2 {
+                font-size: 1.2rem;
+            }
+
+            .rule-card {
+                padding: 1.2rem 1rem;
+            }
+
+            .rule-sanction {
+                font-size: 0.75rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-left: 0.8rem;
+            border: 3px solid rgba(96, 165, 250, 0.3);
+            border-top-color: #60a5fa;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>⚖️ REGLAS HOUSTON RP</h1>
-        <p>Una vida en Houston Comunidad Roleplay</p>
-        <nav>
-            <button class="tab-btn active" onclick="switchTab('roleplay')">
-                <i class="fas fa-theater-masks"></i> Roleplay
-            </button>
-            <button class="tab-btn" onclick="switchTab('discord')">
-                <i class="fab fa-discord"></i> Discord
-            </button>
-            <button class="tab-btn mod-panel-btn" onclick="window.location.href='mod-panel.html'" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(37, 99, 235, 0.15)); border-color: #3b82f6; color: #60a5fa; margin-left: auto;">
-                <i class="fas fa-cogs"></i> Mod Panel
-            </button>
-        </nav>
-    </header>
+    <div class="page-wrapper">
+        <header>
+            <h1>⚖️ REGLAS HOUSTON RP</h1>
+            <p>Una vida en Houston Comunidad Roleplay</p>
+            <nav>
+                <button class="tab-btn active" onclick="switchTab('roleplay')">
+                    <i class="fas fa-theater-masks"></i> Roleplay
+                </button>
+                <button class="tab-btn" onclick="switchTab('discord')">
+                    <i class="fab fa-discord"></i> Discord
+                </button>
+                <button class="tab-btn mod-panel-btn" onclick="window.location.href='mod-panel.html'">
+                    <i class="fas fa-cogs"></i> Mod Panel
+                </button>
+            </nav>
+        </header>
 
-    <div class="container">
-        <button class="back-btn" onclick="window.location.href='index.html'">
-            <i class="fas fa-arrow-left"></i> Volver
-        </button>
+        <div class="container">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </button>
 
-        <!-- SECCIÓN ROLEPLAY -->
-        <div id="roleplay" class="section active">
-            <h2><i class="fas fa-theater-masks"></i> Reglas de Roleplay</h2>
+            <!-- SECCIÓN ROLEPLAY -->
+            <div id="roleplay" class="section active">
+                <h2><i class="fas fa-theater-masks"></i> Reglas de Roleplay</h2>
 
-            <div class="alert-box">
-                <h3><i class="fas fa-exclamation-triangle"></i> AVISO IMPORTANTE</h3>
-                <p>Bienvenido a <strong>Houston RP</strong>, un servidor de roleplay serio. Se espera que todos los jugadores mantengan el inmersionismo. Las violaciones repetidas resultarán en sanciones progresivas.</p>
+                <div class="alert-box">
+                    <h3><i class="fas fa-exclamation-triangle"></i> AVISO IMPORTANTE</h3>
+                    <p>Bienvenido a <strong>Houston RP</strong>, un servidor de roleplay serio. Se espera que todos los jugadores mantengan el inmersionismo y sigan las reglas establecidas. Las violaciones repetidas resultarán en sanciones progresivas. <strong>Juega limpio, respeta a todos.</strong></p>
+                </div>
+
+                <div class="rules-grid" id="roleplay-rules">
+                    <div class="loading">Cargando reglas...</div>
+                </div>
             </div>
 
-            <div class="rules-grid">
-                <!-- RDM -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-gun"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">RDM</div>
-                            <div class="rule-code">Random Death Match</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Matar a un jugador sin razón válida de roleplay.</p>
-                    <span class="rule-sanction sanction-kick">KICK</span>
+            <!-- SECCIÓN DISCORD -->
+            <div id="discord" class="section">
+                <h2><i class="fab fa-discord"></i> Reglas de Discord</h2>
+
+                <div class="alert-box">
+                    <h3><i class="fas fa-exclamation-triangle"></i> SISTEMA DE PUNTOS</h3>
+                    <p><strong>5 puntos = BAN PERMANENTE</strong> | <strong>4 puntos = BAN APELABLE</strong> | <strong>3 puntos = KICK</strong> | <strong>2 puntos = MUTE 1H+</strong> | <strong>1 punto = MUTE 30 MIN</strong></p>
                 </div>
 
-                <!-- VDM -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-car-crash"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">VDM</div>
-                            <div class="rule-code">Vehicle Death Match</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Usar vehículo para golpear o matar sin razón válida.</p>
-                    <span class="rule-sanction sanction-warn">WARN</span>
-                </div>
-
-                <!-- MG -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-brain"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">MG</div>
-                            <div class="rule-code">Metagaming</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Usar información fuera del juego para beneficiarte en roleplay.</p>
-                    <span class="rule-sanction sanction-3pt">BANNED</span>
-                </div>
-
-                <!-- PG -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-eye-slash"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">PG</div>
-                            <div class="rule-code">Powergaming</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Realizar acciones sin permitir respuesta a otros jugadores.</p>
-                    <span class="rule-sanction sanction-kick">KICK</span>
-                </div>
-
-                <!-- CK -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-skull"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">CK</div>
-                            <div class="rule-code">Character Kill</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Matar permanentemente personaje sin consentimiento previo.</p>
-                    <span class="rule-sanction sanction-warn">WARN</span>
-                </div>
-
-                <!-- NLR -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-redo"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">NLR</div>
-                            <div class="rule-code">New Life Rule</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Después de morir, tu personaje pierde toda memoria de eventos anteriores.</p>
-                    <span class="rule-sanction sanction-kick">KICK</span>
-                </div>
-
-                <!-- Fail RP -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-times-circle"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">FAIL RP</div>
-                            <div class="rule-code">Roleplay Fallido</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No actuar de forma realista ante situaciones.</p>
-                    <span class="rule-sanction sanction-warn">WARN</span>
-                </div>
-
-                <!-- ERP -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-ban"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">ERP</div>
-                            <div class="rule-code">Explicit Roleplay</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Contenido sexual, erótico o explícito está prohibido.</p>
-                    <span class="rule-sanction sanction-5pt">BANNED PERMANENTE</span>
-                </div>
-
-                <!-- Troll RP -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-clown"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">TROLL RP</div>
-                            <div class="rule-code">Disruptivo</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Jugar para molestar o arruinar experiencia de otros.</p>
-                    <span class="rule-sanction sanction-5pt">BANNED PERMANENTE</span>
-                </div>
-
-                <!-- Sin Roleplay Choque -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-exclamation-circle"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">SIN ROLEPLAY EN CHOQUE</div>
-                            <div class="rule-code">Reacción Realista</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Actúa como si realmente estuvieras en shock o asustado.</p>
-                    <span class="rule-sanction sanction-kick">KICK</span>
-                </div>
-
-                <!-- Velocidad -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">ANTIROL: VELOCIDAD</div>
-                            <div class="rule-code">&gt; 150 MPH</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Conducir &gt;150 MPH sin razón válida de emergencia.</p>
-                    <span class="rule-sanction sanction-warn">ANTIROL</span>
-                </div>
-
-                <!-- No valora vida -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-heart"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">NO VALORA SU VIDA</div>
-                            <div class="rule-code">Fear RP</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Debes actuar como si tu vida tuviera valor real.</p>
-                    <span class="rule-sanction sanction-warn">ANTIROL/WARN</span>
-                </div>
-
-                <!-- Exploits -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-bug"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">EXPLOITS</div>
-                            <div class="rule-code">Abuso de Fallos</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Usar bugs para obtener ventaja. Se reporta automáticamente.</p>
-                    <span class="rule-sanction sanction-5pt">BANNED PERMANENTE</span>
-                </div>
-
-                <!-- Bad Driving -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-warning"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">BAD DRIVING</div>
-                            <div class="rule-code">Conducción Peligrosa</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Conducir irresponsablemente chocando constantemente.</p>
-                    <span class="rule-sanction sanction-kick">KICK</span>
-                </div>
-
-                <!-- Sin verificar -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-check-circle"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">SIN VERIFICAR</div>
-                            <div class="rule-code">Verificación Edad</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Debes verificar edad en el servidor.</p>
-                    <span class="rule-sanction sanction-kick">KICK AUTOMÁTICO</span>
-                </div>
-
-                <!-- Carro VIP -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-car"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">CARRO VIP SIN PERMISO</div>
-                            <div class="rule-code">Vehículos Exclusivos</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Solo usuarios con VIP pueden usar estos vehículos.</p>
-                    <span class="rule-sanction sanction-kick">KICK AUTOMÁTICO</span>
-                </div>
-
-                <!-- Respeto -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-handshake"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">RESPETO IC / OOC</div>
-                            <div class="rule-code">Tolerancia Cero</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Respeta a todos en IC y OOC. Sin discriminación.</p>
-                    <span class="rule-sanction sanction-3pt">BANNED</span>
-                </div>
-
-                <!-- ZONAS SEGURAS / PASAPORTE -->
-                <div class="rule-card with-image">
-                    <div>
-                        <div class="rule-header">
-                            <div class="rule-icon"><i class="fas fa-map-marker-alt"></i></div>
-                            <div class="rule-content">
-                                <div class="rule-title">ZONAS SEGURAS</div>
-                                <div class="rule-code">Pasaporte Safe Zone</div>
-                            </div>
-                        </div>
-                        <p class="rule-description">Las zonas seguras (mostradas en el mapa) están protegidas. No se permite combate, robos ni actividades delictivas dentro de estas áreas. El personal de seguridad vigila constantemente. Incumplir resultará en sanciones severas.</p>
-                        <span class="rule-sanction sanction-kick">KICK</span>
-                    </div>
-                    <img src="images/zonas_seguras.png" alt="Mapa de Zonas Seguras" style="display: block; width: 100%; height: 250px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(37, 99, 235, 0.2);">
-                </div>
-
-                <!-- PERSECUCIONES CIVILES -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-car"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">PERSECUCIONES CIVILES</div>
-                            <div class="rule-code">Razón Válida Requerida</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Para iniciar una persecución como civil, debes tener una razón válida y coherente con un rol previo que justifique la huida. NO está permitido escapar simplemente por una parada de tráfico por infracciones menores (semáforo en rojo, STOP, etc.). Toda persecución debe tener sentido dentro del rol.</p>
-                    <div style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgba(37, 99, 235, 0.2); font-size: 0.85rem; color: var(--text-secondary);">
-                        <strong>Sanciones:</strong> 1ª infracción: WARNING | 2ª infracción: KICK (45 min)
-                    </div>
-                </div>
-
-                <!-- BUNNY JUMPING -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-rabbit"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">BUNNY JUMPING</div>
-                            <div class="rule-code">Abuso de Mecánicas</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No se permite el abuso de la mecánica de salto (bunny hopping) para obtener ventaja en combate o huidas. Esta práctica es considerada explotación de mecánicas del juego y está estrictamente prohibida en all competiciones y enfrentamientos de rol.</p>
-                    <span class="rule-sanction sanction-2pt">2 PUNTOS</span>
-                </div>
-
-                <!-- CHALECO CON LOGO/DISEÑO -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-vest"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">CHALECO PERSONALIZADO</div>
-                            <div class="rule-code">Prohibido Logo/Diseño</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">El uso de chalecos policiales con logos, diseños personalizados o estilos únicos está PROHIBIDO en Houston Community Roleplay. Solo se permite el chaleco estándar sin modificaciones. Los equipos oficiales deben ser uniformes y consistentes.</p>
-                    <span class="rule-sanction sanction-warn">WARNING</span>
-                </div>
-
-                <!-- FORZAR ROL -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-theater-masks"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">FORZAR ROL</div>
-                            <div class="rule-code">Roleplay Consensual</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No se permite forzar rol a otros jugadores sin su consentimiento. Todo roleplay debe ser consensual y coordinado. No puedes obligar a un jugador a participar en una escena contra su voluntad. Si un jugador rechaza tu rol, respeta su decisión.</p>
-                    <span class="rule-sanction sanction-3pt">3 PUNTOS</span>
+                <div class="rules-grid" id="discord-rules">
+                    <div class="loading">Cargando reglas...</div>
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN DISCORD -->
-        <div id="discord" class="section">
-            <h2><i class="fab fa-discord"></i> Reglas de Discord (Sistema de Puntos)</h2>
-
-            <div class="alert-box">
-                <h3><i class="fas fa-exclamation-triangle"></i> SISTEMA DE PUNTOS</h3>
-                <p><strong>5 puntos = BAN PERMANENTE DE DISCORD</strong> | <strong>4 puntos = BAN APELABLE</strong> | <strong>3 puntos = KICK</strong> | <strong>2 puntos = MUTE 1H+</strong> | <strong>1 punto = MUTE 30 MIN</strong></p>
-            </div>
-
-            <div class="rules-grid">
-                <!-- Respetar a todos -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-handshake"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">RESPETAR A TODOS</div>
-                            <div class="rule-code">Básico</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Sé respetuoso con todos. Sin insultos ni discriminación.</p>
-                    <span class="rule-sanction sanction-1pt">1 PUNTO</span>
-                </div>
-
-                <!-- Antireclutamiento -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-ban"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">ANTIRECLUTAMIENTO</div>
-                            <div class="rule-code">Prohibido</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No reclutar para otros servidores sin permiso.</p>
-                    <span class="rule-sanction sanction-4pt">4 PUNTOS</span>
-                </div>
-
-                <!-- Spam -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-ban"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">SPAM</div>
-                            <div class="rule-code">Mensajes Repetitivos</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No spamear mensajes, emojis o menciones.</p>
-                    <span class="rule-sanction sanction-1pt">1 PUNTO</span>
-                </div>
-
-                <!-- Contenido Adulto -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-exclamation-circle"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">CONTENIDO ADULTO</div>
-                            <div class="rule-code">NSFW Prohibido</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Sin sexual, gore o imágenes ofensivas.</p>
-                    <span class="rule-sanction sanction-5pt">5 PUNTOS (BAN)</span>
-                </div>
-
-                <!-- Flood -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-water"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">FLOOD</div>
-                            <div class="rule-code">Inundación</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No enviar muchos mensajes cortos seguidos.</p>
-                    <span class="rule-sanction sanction-1pt">1 PUNTO</span>
-                </div>
-
-                <!-- Menciones Excesivas -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-at"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">MENCIONES EXCESIVAS</div>
-                            <div class="rule-code">Sin Abusar @</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No mencionar constantemente a staff sin razón.</p>
-                    <span class="rule-sanction sanction-1pt">1 PUNTO</span>
-                </div>
-
-                <!-- Off-Topic -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-random"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">OFF-TOPIC</div>
-                            <div class="rule-code">Tema del Canal</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Usa canales para su propósito específico.</p>
-                    <span class="rule-sanction sanction-1pt">1 PUNTO</span>
-                </div>
-
-                <!-- Impersonación -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-mask"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">IMPERSONACIÓN</div>
-                            <div class="rule-code">Hacerse Pasar</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">No pretender ser staff o impersonar jugadores.</p>
-                    <span class="rule-sanction sanction-4pt">4 PUNTOS</span>
-                </div>
-
-                <!-- Lenguaje Tóxico -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-fire"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">LENGUAJE TÓXICO</div>
-                            <div class="rule-code">Insultos</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Sin insultos, palabrotas dirigidas a otros.</p>
-                    <span class="rule-sanction sanction-4pt">4 PUNTOS</span>
-                </div>
-
-                <!-- Política y Religión -->
-                <div class="rule-card">
-                    <div class="rule-header">
-                        <div class="rule-icon"><i class="fas fa-dove"></i></div>
-                        <div class="rule-content">
-                            <div class="rule-title">SIN POLÍTICA</div>
-                            <div class="rule-code">Temas Sensibles</div>
-                        </div>
-                    </div>
-                    <p class="rule-description">Evita debates sobre política, religión o división.</p>
-                    <span class="rule-sanction sanction-1pt">1 PUNTO</span>
-                </div>
-            </div>
-        </div>
+        <footer>
+            <p><strong>⚖️ Una vida en Houston Comunidad Roleplay</strong></p>
+            <p>Última actualización: Noviembre 2026</p>
+            <p>Por violar estas reglas, tu cuenta será sancionada. Juega limpio, respeta a todos.</p>
+        </footer>
     </div>
 
-    <footer>
-        <p><strong>Una vida en Houston Comunidad Roleplay</strong></p>
-        <p>Última actualización: Noviembre 2026</p>
-        <p>⚖️ Por violar estas reglas, tu cuenta será sancionada. Juega limpio, respeta a todos.</p>
-    </footer>
+    <!-- Importar datos compartidos -->
+    <script src="rules-data.js"></script>
 
     <script>
+        // Obtener la clase de sanción basada en el texto
+        function getSanctionClass(sanction) {
+            const sanctionLower = sanction.toLowerCase();
+            
+            if (sanctionLower.includes('1 punto')) return 'sanction-1pt';
+            if (sanctionLower.includes('2 puntos')) return 'sanction-2pt';
+            if (sanctionLower.includes('3 puntos')) return 'sanction-3pt';
+            if (sanctionLower.includes('4 puntos')) return 'sanction-4pt';
+            if (sanctionLower.includes('5 puntos') || sanctionLower.includes('banned permanente') || sanctionLower.includes('ban permanente')) return 'sanction-5pt';
+            if (sanctionLower.includes('kick')) return 'sanction-kick';
+            if (sanctionLower.includes('warn')) return 'sanction-warn';
+            
+            return 'sanction-1pt';
+        }
+
+        // Renderizar reglas dinámicamente
+        function renderRules(section) {
+            const container = document.getElementById(`${section}-rules`);
+            const rules = getRulesBySection(section);
+
+            if (!rules || rules.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 2rem;">No hay reglas disponibles.</p>';
+                return;
+            }
+
+            container.innerHTML = rules.map((rule, index) => {
+                const icon = getIconForRule(rule.title);
+                const sanctionClass = getSanctionClass(rule.sanction);
+
+                return `
+                    <div class="rule-card">
+                        <div class="rule-header">
+                            <div class="rule-icon"><i class="${icon}"></i></div>
+                            <div class="rule-content">
+                                <div class="rule-title">${rule.title}</div>
+                                <div class="rule-code">${rule.code}</div>
+                            </div>
+                        </div>
+                        <p class="rule-description">${rule.description}</p>
+                        <span class="rule-sanction ${sanctionClass}">${rule.sanction}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Cambiar entre tabs
         function switchTab(tabName) {
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
             document.getElementById(tabName).classList.add('active');
+            
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.closest('.tab-btn').classList.add('active');
+
+            // Renderizar reglas del tab activo
+            renderRules(tabName);
+        }
+
+        // Escuchar eventos de actualización de reglas
+        window.addEventListener('rulesUpdated', function(e) {
+            console.log('Reglas actualizadas desde otro tab:', e.detail.rules);
+            renderRules('roleplay');
+            renderRules('discord');
+        });
+
+        // Cargar reglas al inicio
+        function initializeRules() {
+            renderRules('roleplay');
+            // Discord se renderizará cuando se haga click en el tab
+        }
+
+        // Inicializar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeRules);
+        } else {
+            initializeRules();
         }
     </script>
 </body>
