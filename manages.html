@@ -1048,8 +1048,9 @@ async function loadActiveShifts() {
 
 async function loadRequests() {
   try {
-    const recs = await supaSelect('app_support_requests', '*', { 
-      order: 'created_at.desc',
+    const recs = await supaSelect('admin_requests', '*', { 
+      status: 'eq.Pendiente',
+      order: 'id.desc',
       limit: '100'
     });
 
@@ -1074,19 +1075,22 @@ async function loadRequests() {
 
     requests = recs.map(r => ({
       id: r.id,
-      discord_id: r.discord_id,
-      username: r.username,
-      avatar: userMap[r.discord_id],
+      req_id: r.req_id,
+      discord_id: r.officer_discord,
+      username: r.officer_name_label || r.officer_name,
+      avatar: userMap[r.officer_discord],
       type: r.type || 'reporte',
-      message: r.message,
-      created_at: r.created_at,
-      resolved: r.resolved
+      message: r.reason || r.message,
+      target_name: r.target_name,
+      created_at: r.created_at || new Date().toISOString(),
+      status: r.status || 'Pendiente'
     }));
 
     renderRequests('all');
     
   } catch (e) {
     console.error('Error cargando solicitudes:', e);
+    document.getElementById('requestsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><div class="empty-icon">❌</div><p>Error cargando solicitudes</p></div>';
   }
 }
 
@@ -1228,24 +1232,36 @@ function renderRequests(type) {
   document.getElementById('requestsContainer').innerHTML = filtered.map(r => {
     const avatarUrl = getAvatarUrl(r.discord_id, r.avatar);
     const date = new Date(r.created_at);
-    const typeEmoji = { k9: '🐕', ascenso: '📈', reporte: '📝' }[r.type] || '📋';
+    const typeEmoji = { k9: '🐕', ascenso: '📈', promotion: '📈', report: '📝', reporte: '📝' }[r.type] || '📋';
+    const typeLabel = { k9: 'K9', ascenso: 'ASCENSO', promotion: 'ASCENSO', report: 'REPORTE', reporte: 'REPORTE' }[r.type] || r.type.toUpperCase();
+    
+    // Información adicional según el tipo
+    let additionalInfo = '';
+    if (r.type === 'k9') {
+      additionalInfo = `<div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;"><strong>Ubicación:</strong> ${r.target_name || 'No especificada'}</div>`;
+    } else if (r.type === 'ascenso' || r.type === 'promotion') {
+      additionalInfo = `<div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;"><strong>Rango Solicitado:</strong> ${r.target_name || 'No especificado'}</div>`;
+    } else if (r.type === 'report' || r.type === 'reporte') {
+      additionalInfo = `<div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;"><strong>Reportado:</strong> ${r.target_name || 'No especificado'}</div>`;
+    }
     
     return `
     <div class="request-card">
       <div class="request-header">
         <div class="request-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
-          ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : r.username.charAt(0).toUpperCase()}
+          ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : (r.username ? r.username.charAt(0).toUpperCase() : 'U')}
         </div>
         <div class="request-info">
-          <div class="request-user">${r.username}</div>
+          <div class="request-user">${r.username || 'Usuario'}</div>
           <div class="request-time">${date.toLocaleDateString('es-ES')} ${date.toLocaleTimeString('es-ES')}</div>
         </div>
       </div>
-      <div style="font-size: 11px; font-weight: 600; color: var(--accent-cyan); margin-bottom: 10px;">${typeEmoji} ${r.type.toUpperCase()}</div>
-      <div class="request-body">${r.message}</div>
+      <div style="font-size: 11px; font-weight: 600; color: var(--accent-cyan); margin-bottom: 10px;">${typeEmoji} ${typeLabel}</div>
+      ${additionalInfo}
+      <div class="request-body">${r.message || 'Sin descripción'}</div>
       <div class="request-actions">
-        <button class="btn-small">Revisar</button>
-        <button class="btn-small">Resolver</button>
+        <button class="btn-small" onclick="approveRequest('${r.req_id || r.id}')">✓ Aprobar</button>
+        <button class="btn-small" onclick="rejectRequest('${r.req_id || r.id}')">✗ Rechazar</button>
       </div>
     </div>
   `}).join('');
@@ -1387,8 +1403,31 @@ async function confirmEndShift() {
   }
 }
 
+async function approveRequest(reqId) {
+  try {
+    await supaUpdate('admin_requests', { status: 'Aprobado' }, { req_id: `eq.${reqId}` });
+    alert('✅ Solicitud aprobada');
+    loadRequests();
+  } catch (e) {
+    console.error('Error:', e);
+    alert('❌ Error al aprobar la solicitud');
+  }
+}
+
+async function rejectRequest(reqId) {
+  try {
+    await supaUpdate('admin_requests', { status: 'Rechazado' }, { req_id: `eq.${reqId}` });
+    alert('❌ Solicitud rechazada');
+    loadRequests();
+  } catch (e) {
+    console.error('Error:', e);
+    alert('❌ Error al rechazar la solicitud');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', loadData);
 setInterval(loadActiveShifts, 10000); // Actualizar turnos cada 10 segundos
+setInterval(loadRequests, 15000); // Actualizar solicitudes cada 15 segundos
 </script>
 
 </body>
