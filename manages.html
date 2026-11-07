@@ -2083,54 +2083,93 @@ async function confirmDiscipline() {
     const session = hrpGetSession();
     const adminName = session?.username || 'Admin';
     const adminRank = session?.rank || 'Admin';
+    const adminDiscordId = currentOfficer.discord_id; // ID del oficial
     const dept = currentOfficer.department;
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     
-    // Tipo labels
-    const typeLabels = {
-      nota: 'NOTA',
-      advertencia: 'ADVERTENCIA',
-      suspension: 'SUSPENSIÓN',
-      despido: 'DESPIDO'
+    // Configuración de tipos
+    const typeConfig = {
+      nota: {
+        label: 'NOTA',
+        emoji: '📝',
+        color: 3447003, // Azul
+        footerText: 'Esta nota ha sido registrada en el archivo disciplinario del oficial.'
+      },
+      advertencia: {
+        label: 'ADVERTENCIA',
+        emoji: '⚠️',
+        color: 16776960, // Amarillo
+        footerText: 'Se ha emitido una advertencia oficial. Futuras infracciones pueden resultar en acciones más severas.'
+      },
+      suspension: {
+        label: 'SUSPENSIÓN',
+        emoji: '⛔',
+        color: 16711680, // Rojo
+        footerText: `El oficial ha sido suspendido por ${suspensionDays} día${suspensionDays > 1 ? 's' : ''}. Se espera reincorporación tras cumplir la suspensión.`
+      },
+      despido: {
+        label: 'DESPIDO',
+        emoji: '🚪',
+        color: 10038562, // Morado oscuro
+        footerText: 'El oficial ha sido despedido del departamento. Consultar con administración para más información.'
+      }
     };
     
-    const typeEmojis = {
-      nota: '📝',
-      advertencia: '⚠️',
-      suspension: '⛔',
-      despido: '🚪'
-    };
+    const config = typeConfig[type];
     
-    // Colores para Discord
-    const colors = {
-      nota: 3447003,      // Azul
-      advertencia: 16776960, // Amarillo
-      suspension: 16711680,  // Rojo
-      despido: 0          // Negro
-    };
+    // Crear campos del embed
+    const fields = [
+      {
+        name: '👤 OFICIAL DISCIPLINADO',
+        value: `<@${adminDiscordId}>\n**Nombre:** ${currentOfficer.character_name}\n**Discord ID:** \`${adminDiscordId}\``,
+        inline: false
+      },
+      {
+        name: '⭐ INFORMACIÓN DEL OFICIAL',
+        value: `**Rango:** ${currentOfficer.rank}\n**Departamento:** ${dept}`,
+        inline: true
+      },
+      {
+        name: '📋 DETALLES DE LA ACCIÓN',
+        value: `**Razón:** ${reason}\n**Fecha:** ${dateStr}\n**Hora:** ${timeStr}`,
+        inline: true
+      }
+    ];
     
-    // Crear embed profesional
-    let embedDescription = `**Oficial:** ${currentOfficer.character_name}\n`;
-    embedDescription += `**Rango:** ${currentOfficer.rank}\n`;
-    embedDescription += `**Departamento:** ${dept}\n`;
-    embedDescription += `**Razón:** ${reason}\n`;
-    embedDescription += `**Fecha:** ${dateStr}\n`;
-    
+    // Agregar campo de suspensión si aplica
     if (suspensionDays) {
-      embedDescription += `**Días de Suspensión:** ${suspensionDays}\n`;
+      fields.push({
+        name: '⏱️ DURACIÓN DE SUSPENSIÓN',
+        value: `**${suspensionDays} día${suspensionDays > 1 ? 's' : ''}**`,
+        inline: false
+      });
     }
     
-    embedDescription += `\n**Registrado por:** ${adminRank} ${adminName}`;
+    // Agregar información del administrador
+    fields.push({
+      name: '👨‍⚖️ REGISTRADO POR',
+      value: `**Rango:** ${adminRank}\n**Nombre:** ${adminName}`,
+      inline: false
+    });
     
+    // Crear embed profesional
     const embed = {
-      title: `${typeEmojis[type]} ${typeLabels[type]}`,
-      description: embedDescription,
-      color: colors[type],
-      footer: { text: `Houston PD — Sistema de Disciplina` },
-      timestamp: new Date().toISOString()
+      title: `${config.emoji} ${config.label}`,
+      description: `Se ha registrado una acción administrativa en el sistema.\n\n**Oficial:** ${currentOfficer.character_name}`,
+      color: config.color,
+      fields: fields,
+      footer: { 
+        text: `${config.footerText} | Houston RP — Sistema de Disciplina`,
+        icon_url: 'https://discord.com/assets/e4923594e694a21542a3f05d885af57f.png'
+      },
+      thumbnail: {
+        url: `https://cdn.discordapp.com/avatars/${adminDiscordId}/${currentOfficer.avatar}.png` || null
+      },
+      timestamp: now.toISOString()
     };
     
     // Enviar webhook al departamento correspondiente
-    // Convertir a mayúsculas para coincidir con las claves en WEBHOOKS
     const deptKey = dept.toUpperCase();
     const webhook = WEBHOOKS[deptKey];
     if (!webhook) {
@@ -2152,6 +2191,7 @@ async function confirmDiscipline() {
         reason: reason,
         suspension_days: suspensionDays,
         action_date: dateStr,
+        action_time: timeStr,
         admin_discord_id: session?.id,
         admin_name: adminName,
         admin_rank: adminRank,
@@ -2159,12 +2199,11 @@ async function confirmDiscipline() {
       });
     } catch (dbError) {
       console.warn('No se pudo guardar en BD (tabla no existe):', dbError);
-      // No es crítico si no se guarda en BD, lo importante es el webhook
     }
     
     alert('✅ Acción registrada y enviada a Discord');
     closeModal('disciplineModal');
-    renderDisciplineList(); // Refrescar lista
+    renderDisciplineList();
     
   } catch (e) {
     console.error('Error en disciplina:', e);
