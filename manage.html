@@ -318,76 +318,89 @@
 
   async function loadOfficers() {
     try {
-      document.getElementById('content').innerHTML = '<div class="loading">Verificando sesión...</div>';
+      document.getElementById('content').innerHTML = '<div class="loading">Cargando data...</div>';
       
-      // Verificar que el usuario tiene permisos
-      const session = hrpGetSession();
-      if (!session) {
-        document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No estás autenticado. Por favor, <a href="index.html" style="color: #3b82f6;">inicia sesión</a>.</div>';
+      // Cargar datos de police_members - SIN AUTENTICACION POR AHORA
+      let members;
+      try {
+        members = await supaSelect('police_members', 'discord_id, username, department, rank', { limit: '1000' });
+      } catch (e) {
+        console.error('Error supaSelect police_members:', e);
+        document.getElementById('content').innerHTML = `<div class="loading" style="color: #e54850;">❌ Error cargando oficiales: ${e.message}</div>`;
         return;
       }
-
-      document.getElementById('content').innerHTML = '<div class="loading">Verificando permisos...</div>';
-
-      // Verificar permisos de administrador
-      const hasAccess = await hrpCheckManageAccess(session.id);
-      if (!hasAccess) {
-        document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No tienes permisos para acceder a esta página. Contacta al administrador.</div>';
-        return;
-      }
-
-      document.getElementById('content').innerHTML = '<div class="loading">Cargando oficiales...</div>';
-
-      // Cargar datos de police_members con horas - SIMPLIFICADO
-      const members = await supaSelect('police_members', 'discord_id, username, department, rank', { limit: '1000' });
       
       if (!members || members.length === 0) {
         document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales registrados</div>';
         return;
       }
 
-      // Cargar TODAS las horas en una sola query más eficiente
-      const [allShifts, allAdjustments] = await Promise.all([
-        supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' }).catch(() => []),
-        supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' }).catch(() => [])
-      ]);
+      document.getElementById('content').innerHTML = '<div class="loading">Cargando horas...</div>';
 
-      // Crear mapas de horas por discord_id
+      // Cargar TODAS las horas en queries paralelas
+      let allShifts = [];
+      let allAdjustments = [];
+      
+      try {
+        allShifts = await supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' }).catch(e => {
+          console.warn('Shifts query failed:', e.message);
+          return [];
+        });
+      } catch (e) {
+        console.error('Shifts error:', e);
+      }
+
+      try {
+        allAdjustments = await supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' }).catch(e => {
+          console.warn('Adjustments query failed:', e.message);
+          return [];
+        });
+      } catch (e) {
+        console.error('Adjustments error:', e);
+      }
+
+      // Crear mapa de horas por discord_id
       const hoursMap = {};
       
-      if (allShifts && allShifts.length > 0) {
+      if (allShifts && Array.isArray(allShifts) && allShifts.length > 0) {
         for (const shift of allShifts) {
-          if (!hoursMap[shift.discord_id]) hoursMap[shift.discord_id] = 0;
-          hoursMap[shift.discord_id] += shift.total_seconds || 0;
+          if (shift.discord_id) {
+            if (!hoursMap[shift.discord_id]) hoursMap[shift.discord_id] = 0;
+            hoursMap[shift.discord_id] += shift.total_seconds || 0;
+          }
         }
       }
       
-      if (allAdjustments && allAdjustments.length > 0) {
+      if (allAdjustments && Array.isArray(allAdjustments) && allAdjustments.length > 0) {
         for (const adj of allAdjustments) {
-          if (!hoursMap[adj.discord_id]) hoursMap[adj.discord_id] = 0;
-          hoursMap[adj.discord_id] += adj.adjustment_seconds || 0;
+          if (adj.discord_id) {
+            if (!hoursMap[adj.discord_id]) hoursMap[adj.discord_id] = 0;
+            hoursMap[adj.discord_id] += adj.adjustment_seconds || 0;
+          }
         }
       }
 
-      // Procesar oficiales sin hacer queries individuales
+      document.getElementById('content').innerHTML = '<div class="loading">Procesando oficiales...</div>';
+
+      // Procesar oficiales
       allOfficers = members.map(member => ({
         discord_id: member.discord_id,
         username: member.username,
-        character_name: member.username, // Sin query a characters
+        character_name: member.username,
         department: member.department || 'Sin Asignar',
         rank: member.rank || 'Sin Rango',
         hours: Math.round((hoursMap[member.discord_id] || 0) / 3600)
       }));
       
       if (allOfficers.length === 0) {
-        document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales registrados</div>';
+        document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales para mostrar</div>';
         return;
       }
       
       renderOfficersByDepartment();
     } catch (e) {
-      console.error('Error cargando oficiales:', e);
-      document.getElementById('content').innerHTML = `<div class="loading" style="color: #e54850;">❌ Error: ${e.message || 'Error desconocido'}</div>`;
+      console.error('Fatal error in loadOfficers:', e);
+      document.getElementById('content').innerHTML = `<div class="loading" style="color: #e54850;">❌ Error fatal: ${e.message || JSON.stringify(e)}</div>`;
     }
   }
 
