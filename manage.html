@@ -318,12 +318,16 @@
 
   async function loadOfficers() {
     try {
+      document.getElementById('content').innerHTML = '<div class="loading">Verificando sesión...</div>';
+      
       // Verificar que el usuario tiene permisos
       const session = hrpGetSession();
       if (!session) {
         document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No estás autenticado. Por favor, <a href="index.html" style="color: #3b82f6;">inicia sesión</a>.</div>';
         return;
       }
+
+      document.getElementById('content').innerHTML = '<div class="loading">Verificando permisos...</div>';
 
       // Verificar permisos de administrador
       const hasAccess = await hrpCheckManageAccess(session.id);
@@ -332,64 +336,48 @@
         return;
       }
 
-      // Cargar datos de police_members con horas
-      const members = await supaSelect('police_members', '*', { limit: '1000' });
+      document.getElementById('content').innerHTML = '<div class="loading">Cargando oficiales...</div>';
+
+      // Cargar datos de police_members con horas - SIMPLIFICADO
+      const members = await supaSelect('police_members', 'discord_id, username, department, rank', { limit: '1000' });
       
       if (!members || members.length === 0) {
         document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales registrados</div>';
         return;
       }
 
-      // Para cada miembro, obtener sus horas y nombre de character
-      allOfficers = await Promise.all(members.map(async (member) => {
-        try {
-          // Obtener horas de police_shift_sessions
-          const shifts = await supaSelect('police_shift_sessions', 'total_seconds', {
-            discord_id: `eq.${member.discord_id}`,
-            status: 'eq.completed'
-          });
-          
-          let totalSeconds = 0;
-          if (shifts && shifts.length > 0) {
-            totalSeconds = shifts.reduce((sum, s) => sum + (s.total_seconds || 0), 0);
-          }
+      // Cargar TODAS las horas en una sola query más eficiente
+      const [allShifts, allAdjustments] = await Promise.all([
+        supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' }).catch(() => []),
+        supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' }).catch(() => [])
+      ]);
 
-          // Obtener horas de adjustments
-          const adjustments = await supaSelect('police_hours_adjustments', 'adjustment_seconds', {
-            discord_id: `eq.${member.discord_id}`
-          });
-          
-          if (adjustments && adjustments.length > 0) {
-            totalSeconds += adjustments.reduce((sum, a) => sum + (a.adjustment_seconds || 0), 0);
-          }
-
-          const totalHours = Math.round(totalSeconds / 3600);
-
-          // Obtener nombre de character
-          const character = await supaSelect('characters', 'nombres, apellidos', {
-            user_discord: `eq.${member.discord_id}`,
-            limit: '1'
-          });
-
-          const characterName = character && character[0] 
-            ? `${character[0].nombres || ''} ${character[0].apellidos || ''}`.trim()
-            : member.username;
-
-          return {
-            discord_id: member.discord_id,
-            username: member.username,
-            character_name: characterName,
-            department: member.department || 'Sin Asignar',
-            rank: member.rank || 'Sin Rango',
-            hours: totalHours
-          };
-        } catch (e) {
-          console.error('Error cargando oficial:', e);
-          return null;
+      // Crear mapas de horas por discord_id
+      const hoursMap = {};
+      
+      if (allShifts && allShifts.length > 0) {
+        for (const shift of allShifts) {
+          if (!hoursMap[shift.discord_id]) hoursMap[shift.discord_id] = 0;
+          hoursMap[shift.discord_id] += shift.total_seconds || 0;
         }
-      }));
+      }
+      
+      if (allAdjustments && allAdjustments.length > 0) {
+        for (const adj of allAdjustments) {
+          if (!hoursMap[adj.discord_id]) hoursMap[adj.discord_id] = 0;
+          hoursMap[adj.discord_id] += adj.adjustment_seconds || 0;
+        }
+      }
 
-      allOfficers = allOfficers.filter(o => o !== null);
+      // Procesar oficiales sin hacer queries individuales
+      allOfficers = members.map(member => ({
+        discord_id: member.discord_id,
+        username: member.username,
+        character_name: member.username, // Sin query a characters
+        department: member.department || 'Sin Asignar',
+        rank: member.rank || 'Sin Rango',
+        hours: Math.round((hoursMap[member.discord_id] || 0) / 3600)
+      }));
       
       if (allOfficers.length === 0) {
         document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales registrados</div>';
@@ -399,7 +387,7 @@
       renderOfficersByDepartment();
     } catch (e) {
       console.error('Error cargando oficiales:', e);
-      document.getElementById('content').innerHTML = `<div class="loading" style="color: #e54850;">❌ Error cargando datos: ${e.message}</div>`;
+      document.getElementById('content').innerHTML = `<div class="loading" style="color: #e54850;">❌ Error: ${e.message || 'Error desconocido'}</div>`;
     }
   }
 
