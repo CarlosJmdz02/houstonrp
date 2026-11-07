@@ -208,6 +208,18 @@
 
 <script src="assets/auth.js"></script>
 <script>
+  // Verificar autenticación y permisos
+  (async function() {
+    const session = hrpRequireSession();
+    if (!session) return;
+    
+    const hasAccess = await hrpCheckManageAccess(session.id);
+    if (!hasAccess) {
+      document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No tienes permisos para acceder a esta página. Contacta al administrador.</div>';
+      return;
+    }
+  })();
+
   const rankSystem = {
     HPD: [
       { rank: 'Oficial de Policía I', salary: 24 },
@@ -318,6 +330,13 @@
 
   async function loadOfficers() {
     try {
+      // Verificar que el usuario tiene permisos
+      const session = hrpGetSession();
+      if (!session) {
+        document.getElementById('content').innerHTML = '<div class="loading" style="color: #e54850;">❌ No estás autenticado. Por favor, inicia sesión.</div>';
+        return;
+      }
+
       // Cargar datos de police_members con horas
       const members = await supaSelect('police_members', '*', { limit: '1000' });
       
@@ -338,6 +357,15 @@
           let totalSeconds = 0;
           if (shifts && shifts.length > 0) {
             totalSeconds = shifts.reduce((sum, s) => sum + (s.total_seconds || 0), 0);
+          }
+
+          // Obtener horas de adjustments
+          const adjustments = await supaSelect('police_hours_adjustments', 'adjustment_seconds', {
+            discord_id: `eq.${member.discord_id}`
+          });
+          
+          if (adjustments && adjustments.length > 0) {
+            totalSeconds += adjustments.reduce((sum, a) => sum + (a.adjustment_seconds || 0), 0);
           }
 
           const totalHours = Math.round(totalSeconds / 3600);
@@ -367,10 +395,16 @@
       }));
 
       allOfficers = allOfficers.filter(o => o !== null);
+      
+      if (allOfficers.length === 0) {
+        document.getElementById('content').innerHTML = '<div class="loading">No hay oficiales registrados</div>';
+        return;
+      }
+      
       renderOfficersByDepartment();
     } catch (e) {
       console.error('Error cargando oficiales:', e);
-      document.getElementById('content').innerHTML = '<div class="loading">Error cargando datos. Intenta de nuevo.</div>';
+      document.getElementById('content').innerHTML = `<div class="loading" style="color: #e54850;">❌ Error cargando datos: ${e.message}</div>`;
     }
   }
 
@@ -462,10 +496,87 @@
     }
   }
 
-  function updateOfficerHours(username, newHours, name) {
-    // Aquí iría la actualización a Supabase
-    alert(`✓ Horas actualizadas para ${name}: ${newHours}h`);
-    loadOfficers();
+  async function updateOfficerHours(username, newHours, name) {
+    try {
+      // Obtener el discord_id del oficial
+      const officers = await supaSelect('police_members', 'discord_id', { username: `eq.${username}` });
+      if (!officers || officers.length === 0) {
+        alert(`❌ No se encontró el oficial ${name}`);
+        return;
+      }
+      
+      const discordId = officers[0].discord_id;
+      const session = hrpGetSession();
+      const newSeconds = newHours * 3600;
+      
+      // Calcular la diferencia de horas actual
+      const shifts = await supaSelect('police_shift_sessions', 'total_seconds', {
+        discord_id: `eq.${discordId}`,
+        status: 'eq.completed'
+      });
+      
+      let currentSeconds = 0;
+      if (shifts && shifts.length > 0) {
+        currentSeconds = shifts.reduce((sum, s) => sum + (s.total_seconds || 0), 0);
+      }
+      
+      const adjustment = newSeconds - currentSeconds;
+      
+      if (adjustment !== 0) {
+        if (adjustment > 0) {
+          await hrpAddHours(discordId, username, adjustment, `Ajuste manual por ${session?.username || 'Admin'}`, session?.id);
+        } else {
+          await hrpRemoveHours(discordId, username, Math.abs(adjustment), `Ajuste manual por ${session?.username || 'Admin'}`, session?.id);
+        }
+      }
+      
+      alert(`✓ Horas actualizadas para ${name}: ${newHours}h`);
+      loadOfficers();
+    } catch (e) {
+      console.error('Error actualizando horas:', e);
+      alert(`❌ Error: ${e.message}`);
+      loadOfficers();
+    }
+  }
+
+  async function fireOfficer(username, name) {
+    if (!confirm(`¿Despeedir a ${name}? (Se quitarán todas las horas y el rango)`)) {
+      return;
+    }
+    
+    try {
+      const session = hrpGetSession();
+      const officers = await supaSelect('police_members', 'discord_id', { username: `eq.${username}` });
+      if (!officers || officers.length === 0) {
+        alert(`❌ No se encontró el oficial ${name}`);
+        return;
+      }
+      
+      const discordId = officers[0].discord_id;
+      
+      // Obtener las horas actuales
+      const shifts = await supaSelect('police_shift_sessions', 'total_seconds', {
+        discord_id: `eq.${discordId}`,
+        status: 'eq.completed'
+      });
+      
+      let currentSeconds = 0;
+      if (shifts && shifts.length > 0) {
+        currentSeconds = shifts.reduce((sum, s) => sum + (s.total_seconds || 0), 0);
+      }
+      
+      // Remover todas las horas
+      if (currentSeconds > 0) {
+        await hrpRemoveHours(discordId, username, currentSeconds, `Despido de ${name} por ${session?.username || 'Admin'}`, session?.id);
+      }
+      
+      alert(`✓ ${name} ha sido despedido`);
+      loadOfficers();
+    } catch (e) {
+      console.error('Error despidiendo oficial:', e);
+      alert(`❌ Error: ${e.message}`);
+      loadOfficers();
+    }
   }
 
   window.addEventListener('load', loadOfficers);
