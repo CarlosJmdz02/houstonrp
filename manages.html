@@ -426,6 +426,19 @@
       box-shadow: 0 4px 16px rgba(244, 67, 54, 0.3);
     }
 
+    .btn-fire {
+      background: linear-gradient(135deg, #d32f2f, #b71c1c);
+      color: white;
+      font-weight: 600;
+      border: 1px solid rgba(211, 47, 47, 0.5);
+    }
+
+    .btn-fire:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(211, 47, 47, 0.5);
+      background: linear-gradient(135deg, #b71c1c, #8b0000);
+    }
+
     .btn-edit {
       background: linear-gradient(135deg, var(--accent-cyan), #0097a7);
       color: white;
@@ -833,7 +846,7 @@
     <div class="header-top">
       <div>
         <h1 class="header-title">📊 PANEL DE GESTIÓN</h1>
-        <p class="header-subtitle">Administración de recursos humanos</p>
+        <p class="header-subtitle">Sistema de Gestión de Personal Departamental</p>
       </div>
       <button class="btn-mdt" onclick="window.location.href='mdt.html'">
         📱 VOLVER AL MDT
@@ -883,7 +896,16 @@
 
     <!-- SEARCH -->
     <div class="search-box">
-      <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar oficial por nombre o ID Discord...">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar oficial por nombre o ID Discord..." onkeyup="searchOfficers()">
+    </div>
+
+    <!-- AGREGAR OFICIAL POR DISCORD ID -->
+    <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 20px; align-items: end;">
+      <div>
+        <label style="color: var(--text-secondary); font-size: 12px; margin-bottom: 6px; display: block;">➕ Agregar Oficial por Discord ID</label>
+        <input type="text" id="addByDiscordIdInput" placeholder="Ej: 123456789012345678" style="width: 100%; padding: 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-family: 'JetBrains Mono', monospace;">
+      </div>
+      <button class="btn-add" onclick="addOfficialByDiscordId()" style="padding: 10px 20px; white-space: nowrap;">Agregar</button>
     </div>
 
     <!-- TABLE -->
@@ -1085,6 +1107,29 @@
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeModal('endShiftModal')">Cancelar</button>
       <button class="btn-confirm" style="background: var(--accent-red);" onclick="confirmEndShift()">Sí, Terminar Turno</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DESPEDIR OFICIAL -->
+<div id="fireModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">🚪 DESPEDIR OFICIAL</div>
+    <p style="color: var(--accent-red); margin-bottom: 20px; font-size: 14px; font-weight: 600;">
+      ⚠️ ACCIÓN IRREVERSIBLE
+    </p>
+    <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">
+      ¿Estás COMPLETAMENTE SEGURO de que deseas despedir a <strong id="fireOfficialName"></strong>?<br><br>
+      Se eliminarán:<br>
+      • Todas sus horas<br>
+      • Su asignación de departamento<br>
+      • Su rango<br>
+      • Turno activo (si existe)<br>
+      • No aparecerá en la lista de Gestión de Horas
+    </p>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal('fireModal')">Cancelar - No despedir</button>
+      <button class="btn-confirm" style="background: var(--accent-red); border: 2px solid rgba(244, 67, 54, 0.5);" onclick="confirmFire()">✓ Sí, Despedir Oficialmente</button>
     </div>
   </div>
 </div>
@@ -1333,7 +1378,20 @@ function loadHardcodedRanks() {
 
 async function loadOfficers() {
   try {
-    const members = await supaSelect('police_members', '*', { limit: '1000' });
+    // Cargar lista de oficiales despedidos
+    let firedOfficers = [];
+    try {
+      firedOfficers = await supaSelect('fired_officers', 'discord_id', { limit: '10000' });
+    } catch (e) {
+      console.warn('Tabla fired_officers no existe:', e);
+    }
+    
+    const firedDiscordIds = new Set((firedOfficers || []).map(f => f.discord_id));
+    
+    // Cargar miembros y excluir despedidos
+    const allMembers = await supaSelect('police_members', '*', { limit: '1000' });
+    const members = (allMembers || []).filter(m => !firedDiscordIds.has(m.discord_id));
+    
     if (!members || members.length === 0) {
       document.getElementById('officersTable').innerHTML = '<tr><td colspan="8" class="loading">❌ No hay oficiales</td></tr>';
       return;
@@ -1662,7 +1720,7 @@ function filterDept(event, dept) {
   if (dept === 'all') {
     filteredOfficers = allOfficers;
   } else {
-    filteredOfficers = allOfficers.filter(o => o.department === dept);
+    filteredOfficers = allOfficers.filter(o => o.department && o.department.toUpperCase() === dept.toUpperCase());
   }
   
   renderTable();
@@ -1699,16 +1757,95 @@ function renderTable() {
       <td><span class="hours">${formatHours(o.hours)}</span></td>
       <td>${o.shifts}</td>
       <td>${isActive ? '<span class="status-active"><span class="status-dot"></span>TURNO ACTIVO</span>' : '<span style="color: var(--text-dim);">—</span>'}</td>
-      <td>
-        <div class="actions">
-          <button class="btn btn-edit" onclick="openEditModal('${o.discord_id}')">Editar</button>
-          <button class="btn btn-add" onclick="openAddModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Añadir</button>
-          <button class="btn btn-remove" onclick="openRemoveModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Remover</button>
-          <button class="btn btn-reset" onclick="openResetModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Reset</button>
-        </div>
-      </td>
+       <td>
+         <div class="actions">
+           <button class="btn btn-edit" onclick="openEditModal('${o.discord_id}')">Editar</button>
+           <button class="btn btn-add" onclick="openAddModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Añadir</button>
+           <button class="btn btn-remove" onclick="openRemoveModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Remover</button>
+           <button class="btn btn-reset" onclick="openResetModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">Reset</button>
+           <button class="btn btn-fire" onclick="openFireModal('${o.discord_id}', '${o.character_name.replace(/'/g, "\\'")}')">🚪 Despedir</button>
+         </div>
+       </td>
     </tr>
-  `}).join('');
+   `}).join('');
+}
+
+function searchOfficers() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+  
+  if (!searchTerm) {
+    renderTable();
+    return;
+  }
+  
+  // Filtrar por nombre o Discord ID
+  filteredOfficers = allOfficers.filter(o => {
+    const name = (o.character_name || o.username || '').toLowerCase();
+    const discordId = o.discord_id.toLowerCase();
+    return name.includes(searchTerm) || discordId.includes(searchTerm);
+  });
+  
+  renderTable();
+}
+
+async function addOfficialByDiscordId() {
+  const discordIdInput = document.getElementById('addByDiscordIdInput').value.trim();
+  
+  if (!discordIdInput) {
+    alert('❌ Ingresa un Discord ID válido');
+    return;
+  }
+  
+  if (!/^\d{18}$/.test(discordIdInput)) {
+    alert('❌ El Discord ID debe tener 18 dígitos');
+    return;
+  }
+  
+  try {
+    // Buscar usuario en la base de datos
+    const users = await supaSelect('users', '*', { discord_id: `eq.${discordIdInput}` });
+    
+    if (!users || users.length === 0) {
+      alert('❌ No se encontró un usuario con ese Discord ID');
+      return;
+    }
+    
+    const user = users[0];
+    
+    // Buscar si ya existe en police_members
+    const existingMembers = await supaSelect('police_members', '*', { discord_id: `eq.${discordIdInput}` });
+    
+    if (existingMembers && existingMembers.length > 0) {
+      alert('✅ Este oficial ya está en la lista');
+      return;
+    }
+    
+    // Obtener nombre del personaje
+    let characterName = 'Nuevo Oficial';
+    try {
+      const characters = await supaSelect('characters', '*', { user_discord: `eq.${discordIdInput}` });
+      if (characters && characters.length > 0) {
+        characterName = `${characters[0].nombres || ''} ${characters[0].apellidos || ''}`.trim() || 'Nuevo Oficial';
+      }
+    } catch (e) {
+      console.warn('No se pudo obtener nombre del personaje:', e);
+    }
+    
+    // Agregar a police_members
+    await supaInsert('police_members', {
+      discord_id: discordIdInput,
+      username: user.username || 'Usuario',
+      department: null,
+      created_at: new Date().toISOString()
+    });
+    
+    alert(`✅ Oficial "${characterName}" agregado correctamente a la lista`);
+    document.getElementById('addByDiscordIdInput').value = '';
+    loadOfficers();
+  } catch (e) {
+    console.error('Error agregando oficial:', e);
+    alert('❌ Error: ' + e.message);
+  }
 }
 
 function renderActiveShifts() {
@@ -2002,7 +2139,7 @@ async function confirmEdit() {
   
   const dept = document.getElementById('editDepartment').value;
   const rank = document.getElementById('editRank').value;
-  const badge = document.getElementById('editBadge').value;
+  const badgeInput = document.getElementById('editBadge').value.trim();
   
   if (!dept) {
     alert('❌ Debes seleccionar un departamento');
@@ -2010,24 +2147,31 @@ async function confirmEdit() {
   }
   
   try {
-    // Actualizar en rank_members (SIN badge_number)
-    await supaUpdate('rank_members', 
-      { department: dept, rank_key: rank || '' }, 
+    // Actualizar en rank_members
+    const updatePayload = { department: dept, rank_key: rank || '' };
+    
+    const response = await supaUpdate('rank_members', 
+      updatePayload, 
       { discord_id: `eq.${currentOfficer.discord_id}` }
     );
     
-    // Guardar badge en tabla officer_badges
-    if (badge) {
+    console.log('Rank_members actualizado:', response);
+    
+    // Guardar badge en tabla officer_badges con formato "PLACA | Nombre"
+    if (badgeInput) {
+      const charName = currentOfficer.character_name || currentOfficer.username;
+      const formattedBadge = `${badgeInput} | ${charName}`;
+      
       try {
         await supaUpdate('officer_badges', 
-          { badge_number: badge }, 
+          { badge_number: formattedBadge }, 
           { discord_id: `eq.${currentOfficer.discord_id}` }
         );
       } catch (e) {
-        // Si falla, intentar insertar
+        // Si falla update, intentar insertar
         try {
           await supaInsert('officer_badges', 
-            { discord_id: currentOfficer.discord_id, badge_number: badge }
+            { discord_id: currentOfficer.discord_id, badge_number: formattedBadge }
           );
         } catch (e2) {
           console.warn('Error guardando badge:', e2);
@@ -2035,11 +2179,14 @@ async function confirmEdit() {
       }
     }
     
+    console.log('✅ Cambios guardados correctamente');
     alert('✅ Información actualizada correctamente');
     closeModal('editModal');
-    loadOfficers();
+    
+    // Recargar datos después de guardar
+    await loadOfficers();
   } catch (e) {
-    console.error('Error:', e);
+    console.error('Error en confirmEdit:', e);
     alert('❌ Error: ' + e.message);
   }
 }
@@ -2115,6 +2262,70 @@ async function confirmEndShift() {
     }
   } catch (e) {
     console.error('Error:', e);
+    alert('❌ Error: ' + e.message);
+  }
+}
+
+function openFireModal(discordId, name) {
+  currentOfficer = allOfficers.find(o => o.discord_id === discordId);
+  if (!currentOfficer) return;
+  document.getElementById('fireOfficialName').textContent = name;
+  document.getElementById('fireModal').classList.add('active');
+}
+
+async function confirmFire() {
+  if (!currentOfficer) {
+    alert('❌ No hay oficial seleccionado');
+    return;
+  }
+  
+  try {
+    // 1. Eliminar todas las horas (reset)
+    const session = hrpGetSession();
+    await hrpRemoveHours(currentOfficer.discord_id, currentOfficer.username, currentOfficer.hours, 'DESPIDO - Eliminación de horas', session?.id);
+    
+    // 2. Eliminar departamento y rango (usar update con valores vacíos o nulos)
+    await supaUpdate('rank_members',
+      { department: null, rank_key: null },
+      { discord_id: `eq.${currentOfficer.discord_id}` }
+    );
+    
+    // 3. Eliminar placa/badge
+    try {
+      await supaDelete('officer_badges',
+        { discord_id: `eq.${currentOfficer.discord_id}` }
+      );
+    } catch (e) {
+      console.warn('Badge no encontrada:', e);
+    }
+    
+    // 4. Terminar turno activo si existe
+    try {
+      const activeShift = activeShifts.find(s => s.discord_id === currentOfficer.discord_id);
+      if (activeShift && activeShift.id) {
+        await hrpEndShift(activeShift.id, activeShift.start_time, activeShift.break_duration || 0);
+      }
+    } catch (e) {
+      console.warn('Error terminando turno activo:', e);
+    }
+    
+    // 5. Marcar como "despedido" agregando a una lista de despedidos (si existe tabla)
+    try {
+      await supaInsert('fired_officers', {
+        discord_id: currentOfficer.discord_id,
+        username: currentOfficer.username,
+        character_name: currentOfficer.character_name,
+        fired_at: new Date().toISOString()
+      });
+    } catch (e) {
+      console.warn('Tabla fired_officers no existe, continuando:', e);
+    }
+    
+    alert('✅ Oficial despedido correctamente. No aparecerá en la lista hasta que sea reclutado nuevamente.');
+    closeModal('fireModal');
+    loadOfficers();
+  } catch (e) {
+    console.error('Error despidiendo oficial:', e);
     alert('❌ Error: ' + e.message);
   }
 }
