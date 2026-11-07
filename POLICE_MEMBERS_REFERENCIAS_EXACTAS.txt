@@ -1,0 +1,256 @@
+﻿REFERENCIAS COMPLETAS DE police_members EN EL PROYECTO
+========================================================
+
+ARCHIVO 1: schema.sql
+─────────────────────
+Línea 78-94: DEFINICIÓN PRINCIPAL
+CREATE TABLE IF NOT EXISTS police_members (
+  discord_id TEXT PRIMARY KEY,
+  username TEXT,
+  role_id TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+ALTER TABLE police_members ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all on police_members"
+  ON police_members
+  FOR ALL
+  USING (true)
+  WITH CHECK (true);
+
+
+ARCHIVO 2: supabase/migrations/001_police_system.sql
+───────────────────────────────────────────────────
+Línea 27-61: DEFINICIÓN IDÉNTICA (migración original)
+Contiene la función: add_police_member(p_discord_id, p_username, p_role_id)
+
+
+ARCHIVO 3: assets/auth.js
+──────────────────────────
+Línea 845: Comentario sobre fallback a police_members
+Línea 928: Comentario sobre comportamiento similar a guild member
+Línea 961-966: FUNCIÓN hrpEnsureTables() - health check
+  await supaSelect("police_members", "discord_id", { limit: "1" });
+
+Línea 968-980: FUNCIÓN hrpAddPoliceMember() - inserción
+  await supaInsert("police_members", {
+    discord_id: discordId,
+    username: username,
+    role_id: discordPoliceRoleId,
+  });
+
+Línea 1008-1010: Búsqueda MANAGE role
+  const data = await supaSingle("police_members", "discord_id",
+    { discord_id: eq., role_id: eq. }
+  );
+
+Línea 1015-1017: Búsqueda DEV role
+  const devData = await supaSingle("police_members", "discord_id",
+    { discord_id: eq., role_id: eq. }
+  );
+
+Línea 1022-1024: Búsqueda FOUNDATION role
+  const fndData = await supaSingle("police_members", "discord_id",
+    { discord_id: eq., role_id: eq. }
+  );
+
+Línea 1031: Error handling - "police_members table not found"
+Línea 1556-1558: Búsqueda de role_id
+Línea 1812: Comentario sobre autorización de police_members
+Línea 1925: Comentario sobre cómo NO se toca personaje/horas
+
+
+ARCHIVO 4: developer.html
+─────────────────────────
+Línea 509-511: FUNCIÓN hasDeveloperAccess()
+  const d = await supaSingle('police_members', 'discord_id',
+    { discord_id: eq., role_id: eq. });
+  if (d) return true;
+
+Línea 619-622: BÚSQUEDA DIFUSA en searchMembers()
+  supaSelect('police_members', 'discord_id, username', 
+    { username: ilike., limit: '50' }).catch(() => []),
+
+Línea 714: Uso en deleteUser()
+  { table: 'police_members', filter: { discord_id: eq. } },
+
+Línea 775: Búsqueda en queryByName()
+  supaSelect('police_members', 'discord_id, username, role_id', 
+    { discord_id: eq. }).catch(() => []),
+
+Línea 856: Uso en deleteData()
+  { table: 'police_members', name: 'police_members', 
+    filter: { discord_id: eq. } },
+
+Línea 1440: Búsqueda en searchUsers()
+  supaSelect('police_members', 'discord_id,username,role_id', 
+    { discord_id: eq. }),
+
+
+ARCHIVO 5: manage.html
+──────────────────────
+Línea 86: CARGA MASIVA - Todas las columnas
+  const members = await supaSelect('police_members', '*', { limit: '1000' });
+
+Línea 246: Búsqueda por username
+  const officers = await supaSelect('police_members', 'discord_id', 
+    { username: eq. });
+
+
+ARCHIVO 6: dashboard.html
+──────────────────────────
+Línea 2097: VERIFICACIÓN MDT ACCESS
+  const m = await supaSelect('police_members', 'role_id', 
+    { discord_id: 'eq.' + _s.id });
+
+Línea 2127: VERIFICACIÓN ITMDT ACCESS
+  const m = await supaSelect('police_members', 'role_id', 
+    { discord_id: 'eq.' + _s.id });
+
+
+ARCHIVO 7: itmdt.html
+─────────────────────
+Línea 690: Búsqueda de role_id en getRoleSet()
+  const members = await supaSelect('police_members', 'role_id', 
+    { discord_id: 'eq.' + session.id });
+
+Línea 721: Comentario sobre relación con police_members
+
+
+ARCHIVO 8: supabase/functions/fire-officer/index.ts
+──────────────────────────────────────────────────
+Línea 131-135: ELIMINACIÓN al despedir
+  const { error: pmErr } = await sb
+    .from("police_members")
+    .delete()
+    .eq("discord_id", target_discord_id);
+  if (pmErr) console.error("police_members delete:", pmErr.message);
+
+
+ARCHIVO 9: supabase/functions/developer-tools/index.ts
+─────────────────────────────────────────────────────
+Línea 103: Definición en tabla de eliminación
+  { table: "police_members", filter: "discord_id" },
+
+(Luego iterado para delete en línea 109-114)
+
+
+RESUMEN DE UBICACIONES POR TIPO DE OPERACIÓN
+==============================================
+
+SELECT (lectura):
+  ✓ assets/auth.js:961 - health check
+  ✓ assets/auth.js:1008 - manage access
+  ✓ assets/auth.js:1015 - dev access  
+  ✓ assets/auth.js:1022 - foundation access
+  ✓ developer.html:509 - dev access
+  ✓ developer.html:619 - búsqueda fuzzy
+  ✓ developer.html:775 - búsqueda por ID
+  ✓ developer.html:1440 - búsqueda usuarios
+  ✓ manage.html:86 - carga masiva
+  ✓ manage.html:246 - búsqueda por username
+  ✓ dashboard.html:2097 - verificación MDT
+  ✓ dashboard.html:2127 - verificación ITMDT
+  ✓ itmdt.html:690 - obtención de roles
+
+INSERT:
+  ✓ assets/auth.js:970 - agregar miembro
+
+DELETE:
+  ✓ supabase/functions/fire-officer:131 - despido
+  ✓ supabase/functions/developer-tools:103 - eliminación masiva
+
+
+COLUMNAS ACCEDIDAS POR TIPO
+===========================
+
+discord_id (PRIMARY KEY):
+  ← Filtro principal (EXISTS, EQ)
+  ← Retornado por: health check, múltiples búsquedas
+  Ubicaciones: auth.js, developer.html, manage.html, dashboard.html, itmdt.html
+
+username:
+  ← Filtro: ilike.* (búsqueda difusa)
+  ← Retornado por: developer.html:619, manage.html:246
+  ← Usado en insert: auth.js:971
+  Ubicaciones: developer.html, manage.html, developer-tools
+
+role_id (NOT NULL):
+  ← Filtro: eq.ROLE_ID_VALUE
+  ← Retornado por: dashboard.html, itmdt.html
+  ← Valores típicos: "1502940172348690482" (MANAGE), "1425697670495862844" (DEV)
+  Ubicaciones: auth.js, developer.html, dashboard.html, itmdt.html
+
+created_at:
+  ← NO se accede directamente en código
+  ← Generado automáticamente por DEFAULT NOW()
+
+
+ROLES ID TÍPICOS BUSCADOS
+==========================
+
+"1431255106212335686" = POLICE ROLE (acceso general policial)
+"1502940172348690482" = MANAGE ROLE (administración de turnos)
+"1425697670495862844" = DEV ROLE (desarrollo)
+"1430728225423884419" = FOUNDATION ROLE (fundación)
+"1502940318092366056" = DISPATCH ROLE (usado en fire-officer, no en police_members)
+
+
+INFORMACIÓN RELACIONADA
+=======================
+
+Tabla payroll_members (DIFERENTE - contiene rank/department):
+  - Columnas: discord_id, username, department, rank, hired_at, updated_at
+  - Ubicación: schema.sql línea 542-549
+  - manage.html línea 146-147 intenta acceder m.department y m.rank
+    que NO están en police_members (buscar en payroll_members)
+
+Tabla police_shift_sessions:
+  - Relacionada conceptualmente (mismo discord_id)
+  - Ubicación: schema.sql línea 55-76
+
+Tabla police_hours_adjustments:
+  - Relacionada conceptualmente (mismo discord_id)
+  - Ubicación: schema.sql línea 119-137
+
+Función add_police_member():
+  - Ubicación: schema.sql línea 100-112, 001_police_system.sql línea 49-61
+  - Parámetros: p_discord_id, p_username, p_role_id
+  - Acción: INSERT ... ON CONFLICT ... DO UPDATE
+  - Devuelve: BOOLEAN
+
+
+PATRONES DE ERROR DETECTADOS
+============================
+
+En assets/auth.js línea 1030:
+  if (err.message?.includes("does not exist")) {
+    console.warn("police_members table not found");
+  }
+  → Sugiere que el error "does not exist" es posible (RLS denegar, tabla desaparecer)
+
+En manage.html línea 86:
+  limit: '1000' - si hay más de 1000 registros, se trunca silenciosamente
+
+En developer.html línea 619:
+  .catch(() => []) - captura errores silenciosamente, retorna array vacío
+
+
+CONCLUSIÓN SOBRE QUERIES LENTAS
+================================
+
+Si user reporta query lenta o colgada en police_members:
+
+CAUSAS PROBABLES (en orden de probabilidad):
+  1. Búsqueda por role_id SIN índice (SELECT completo)
+  2. Búsqueda por username con ILIKE SIN índice (SELECT completo + pattern)
+  3. Timeout en carga masiva (limit 1000 en manage.html)
+  4. Lock en tabla (transacción abierta)
+  5. RLS policy slowness (poco probable con USING(true))
+
+SOLUCIONES:
+  1. CREATE INDEX idx_police_members_role_id ON police_members(role_id);
+  2. CREATE INDEX idx_police_members_username ON police_members(username);
+  3. Reducir limit en manage.html:86 (de 1000 a 100-500)
+  4. Revisar pg_locks en Supabase
+  5. EXPLAIN ANALYZE cada query lenta
+

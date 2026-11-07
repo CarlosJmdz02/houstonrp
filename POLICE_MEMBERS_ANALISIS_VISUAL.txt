@@ -1,0 +1,260 @@
+﻿╔═══════════════════════════════════════════════════════════════════════════╗
+║          ANÁLISIS COMPLETO: TABLA 'police_members'                        ║
+║          Houston RP - Supabase Schema                                      ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─ DEFINICIÓN DE LA TABLA ──────────────────────────────────────────────────┐
+│                                                                            │
+│ Archivos donde se define:                                                 │
+│   • schema.sql (línea 81-94)                                             │
+│   • supabase/migrations/001_police_system.sql (línea 30-43)             │
+│                                                                            │
+│ CREATE TABLE IF NOT EXISTS police_members (                               │
+│   discord_id TEXT PRIMARY KEY,                                            │
+│   username TEXT,                                                          │
+│   role_id TEXT NOT NULL,                                                  │
+│   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()                           │
+│ );                                                                         │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ COLUMNAS (EXACTAMENTE 4) ────────────────────────────────────────────────┐
+│                                                                            │
+│ 1. discord_id (TEXT, PRIMARY KEY)                                         │
+│    └─ ID único de Discord del usuario                                     │
+│    └─ Filtrado frecuentemente con: eq.                        │
+│                                                                            │
+│ 2. username (TEXT, NULLABLE)                                              │
+│    └─ Nombre de usuario de Discord                                        │
+│    └─ Filtrado con: ilike. (búsqueda difusa)                     │
+│                                                                            │
+│ 3. role_id (TEXT, NOT NULL)                                               │
+│    └─ ID del rol de Discord que autoriza acceso                          │
+│    └─ Valores típicos:                                                    │
+│       • "1502940172348690482" = MANAGE (administración)                   │
+│       • "1425697670495862844" = DEV (desarrollo)                          │
+│       • "1430728225423884419" = FOUNDATION                                │
+│       • "1431255106212335686" = POLICE (acceso policial)                 │
+│                                                                            │
+│ 4. created_at (TIMESTAMPTZ)                                               │
+│    └─ Timestamp de creación automático                                    │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ UBICACIÓN EN EL CÓDIGO (37 referencias encontradas) ─────────────────────┐
+│                                                                            │
+│ assets/auth.js                   [9 referencias]                          │
+│   • hrpEnsureTables() - verificación existencia                           │
+│   • hrpAddPoliceMember() - inserción                                      │
+│   • hrpCheckManageAccess() - validación acceso                            │
+│                                                                            │
+│ developer.html                   [4 referencias]                          │
+│   • Búsqueda por username (ilike)                                         │
+│   • Búsqueda por discord_id                                               │
+│                                                                            │
+│ manage.html                      [2 referencias]                          │
+│   • Carga masiva con SELECT * (límite 1000)                              │
+│   • Búsqueda por username                                                 │
+│                                                                            │
+│ dashboard.html                   [2 referencias]                          │
+│   • Verificación de rol_id para acceso MDT                               │
+│   • Verificación de rol_id para acceso ITMDT                             │
+│                                                                            │
+│ itmdt.html                       [1 referencia]                           │
+│   • Obtención de role_id para verificación                                │
+│                                                                            │
+│ supabase/functions/fire-officer/index.ts   [1 referencia]                │
+│   • DELETE cuando se despide un oficial                                   │
+│                                                                            │
+│ supabase/functions/developer-tools/index.ts [1 referencia]               │
+│   • DELETE en acción de eliminación masiva                                │
+│                                                                            │
+│ schema.sql                       [2 referencias en comentarios]           │
+│ 001_police_system.sql            [2 referencias en comentarios]           │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ QUERIES EXITOSAS - PATRONES ────────────────────────────────────────────┐
+│                                                                            │
+│ TIPO 1: Health Check                                                      │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   supaSelect("police_members", "discord_id", { limit: "1" })             │
+│   → Verifica que la tabla existe y es accesible                           │
+│                                                                            │
+│ TIPO 2: Inserción (UPSERT)                                               │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   supaInsert("police_members", {                                          │
+│     discord_id: "123456789",                                              │
+│     username: "username",                                                 │
+│     role_id: "1431255106212335686"                                       │
+│   })                                                                       │
+│   → Agregar nuevo oficial, actualiza si existe (ON CONFLICT)             │
+│                                                                            │
+│ TIPO 3: Búsqueda por Primary Key                                         │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   supaSingle("police_members", "discord_id",                             │
+│     { discord_id: eq. }                                     │
+│   )                                                                        │
+│   → Obtener registro por Discord ID (más rápido)                          │
+│                                                                            │
+│ TIPO 4: Búsqueda con Múltiples Filtros                                   │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   supaSingle("police_members", "discord_id",                             │
+│     { discord_id: eq., role_id: eq. }                  │
+│   )                                                                        │
+│   → Verificar si usuario tiene rol específico                             │
+│                                                                            │
+│ TIPO 5: Búsqueda Difusa (ILIKE)                                          │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   supaSelect("police_members", "discord_id, username",                   │
+│     { username: ilike., limit: '50' }                           │
+│   )                                                                        │
+│   → Búsqueda insensible a mayúsculas/minúsculas                           │
+│                                                                            │
+│ TIPO 6: Carga Masiva                                                      │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   supaSelect('police_members', '*', { limit: '1000' })                   │
+│   → Obtener todos los oficiales (con límite)                              │
+│                                                                            │
+│ TIPO 7: Eliminación                                                       │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   sb.from("police_members")                                               │
+│     .delete()                                                              │
+│     .eq("discord_id", target_discord_id)                                  │
+│   → Eliminar acceso al ser despedido                                      │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ CONTROL DE ACCESO CON police_members ────────────────────────────────────┐
+│                                                                            │
+│ Se usa para verificar 3 niveles de acceso:                                │
+│                                                                            │
+│ 1. POLICE ACCESS (role_id: "1431255106212335686")                        │
+│    └─ Acceso a MDT (Mobile Data Terminal)                                │
+│    └─ Verificado en: dashboard.html línea 2097                            │
+│    └─ Query: SELECT role_id WHERE discord_id = X                          │
+│                                                                            │
+│ 2. MANAGE ACCESS (role_id: "1502940172348690482")                        │
+│    └─ Acceso a manage-shift (administración de turnos)                    │
+│    └─ Verificado en: assets/auth.js línea 1008                            │
+│    └─ Query: SELECT discord_id WHERE discord_id = X AND role_id = Y      │
+│    └─ Fallbacks a DEV y FOUNDATION si manage no existe                    │
+│                                                                            │
+│ 3. DEVELOPER ACCESS (role_id: "1425697670495862844")                     │
+│    └─ Acceso a developer.html                                             │
+│    └─ Verificado en: developer.html línea 509                             │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ POSIBLE CAUSA DE QUERIES LENTAS O COLGADAS ──────────────────────────────┐
+│                                                                            │
+│ SOSPECHA 1: Falta de índices                                              │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   • Solo existe índice en PRIMARY KEY (discord_id)                        │
+│   • Búsquedas por role_id = SELECT completo (lento si hay muchos registos)│
+│   • Búsquedas por username con ILIKE = SELECT completo + pattern match   │
+│   SOLUCIÓN: Crear índices                                                 │
+│     CREATE INDEX idx_police_members_role_id ON police_members(role_id);  │
+│     CREATE INDEX idx_police_members_username ON police_members(username);│
+│                                                                            │
+│ SOSPECHA 2: Lock en la tabla                                             │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   • Transacción abierta bloqueando escritura/lectura                      │
+│   DIAGNÓSTICO: SELECT * FROM pg_locks;                                   │
+│                                                                            │
+│ SOSPECHA 3: RLS policy lentificada                                       │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   • Policy "Allow all on police_members" es simple USING(true)           │
+│   • Pero si hay sub-queries en funciones, puede ser lenta                │
+│                                                                            │
+│ SOSPECHA 4: Timeout de Supabase PostgREST                                │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   • Límite de 30s o congelamiento de conexión                             │
+│   • Intenta con líhite más bajo (limit: '10' en vez de 'limit: '1000')   │
+│                                                                            │
+│ SOSPECHA 5: Consulta en bucle (N+1 problem)                              │
+│ ────────────────────────────────────────────────────────────────────────  │
+│   • Si manage.html hace SELECT de 1000 + bucle por cada uno = 1001 queries│
+│   • Debería cargar todo en 1 query o usar batch                          │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ PASOS DE DIAGNÓSTICO EN SUPABASE ────────────────────────────────────────┐
+│                                                                            │
+│ 1. Verificar estructura actual                                            │
+│    SELECT column_name, data_type, is_nullable                            │
+│    FROM information_schema.columns                                        │
+│    WHERE table_name = 'police_members'                                    │
+│    ORDER BY ordinal_position;                                             │
+│                                                                            │
+│ 2. Contar registros                                                       │
+│    SELECT COUNT(*) as total_records FROM police_members;                 │
+│                                                                            │
+│ 3. Ver distribución de role_id                                            │
+│    SELECT role_id, COUNT(*) as count                                      │
+│    FROM police_members                                                    │
+│    GROUP BY role_id                                                       │
+│    ORDER BY count DESC;                                                   │
+│                                                                            │
+│ 4. Probar query simple                                                    │
+│    SELECT discord_id, username, role_id FROM police_members LIMIT 10;   │
+│                                                                            │
+│ 5. Analizar plan de ejecución                                             │
+│    EXPLAIN ANALYZE                                                        │
+│    SELECT * FROM police_members                                           │
+│    WHERE role_id = '1502940172348690482';                                │
+│                                                                            │
+│ 6. Revisar locks activos                                                  │
+│    SELECT * FROM pg_locks                                                │
+│    WHERE relation = (                                                     │
+│      SELECT oid FROM pg_class                                             │
+│      WHERE relname = 'police_members'                                     │
+│    );                                                                      │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ INFORMACIÓN IMPORTANTE SOBRE PAYROLL_MEMBERS ────────────────────────────┐
+│                                                                            │
+│ NOTA CRÍTICA: La tabla police_members NO contiene:                        │
+│   ✗ rank (rango: "Officer I", "Sergeant", etc.)                         │
+│   ✗ department (departamento: "hpd", "hcso", "tph", etc.)               │
+│                                                                            │
+│ Esa información ESTÁ EN: payroll_members                                  │
+│                                                                            │
+│ Columnas en payroll_members:                                              │
+│   • discord_id (FK)                                                       │
+│   • username                                                              │
+│   • department (hpd, hcso, tph, hfd, dot, ice)                           │
+│   • rank (officer1, sergeant, captain, chief, etc.)                      │
+│   • hired_at                                                              │
+│   • updated_at                                                            │
+│                                                                            │
+│ Si manage.html accede a rank/department en línea 146-147:                │
+│   m.department || m.dept || 'Sin Asignar'                                │
+│   m.rank || 'Sin Rango'                                                   │
+│                                                                            │
+│ Estos campos NO están en police_members, deben venir de payroll_members  │
+│ o ser combinados en el JOIN.                                              │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                         RESUMEN EJECUTIVO                                 ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Tabla:          police_members
+Propósito:      Control de acceso (solo 4 columnas)
+Columnas:       discord_id (PK), username, role_id (NN), created_at
+Registros:      Centenas a miles
+RLS:            Habilitado pero totalmente abierto USING(true)
+Índices:        Solo PRIMARY KEY (falta índice en role_id, username)
+Operación ++:   SELECT por discord_id (búsqueda rápida)
+Operación +-:   SELECT por role_id sin índice (lento si hay muchos)
+Relacionada:    payroll_members (tiene rank/department)
+
+ACCIONES RECOMENDADAS SI HAY PROBLEMA:
+  1. Crear índices en role_id y username
+  2. Verificar locks con pg_locks
+  3. Limitar queries masivas (usar limit más bajo)
+  4. Revisar plan de ejecución EXPLAIN ANALYZE
+  5. Considerar caché en cliente para datos que no cambian frecuentemente

@@ -1,0 +1,376 @@
+﻿================================================================================
+BÚSQUEDA EXHAUSTIVA - RESULTADO FINAL
+================================================================================
+Fecha: 2026-11-06
+Codebase: C:\Users\13462\OneDrive\Desktop\houston-web1ww
+================================================================================
+
+DOCUMENTOS GENERADOS (Rutas Absolutas):
+=======================================
+
+1. RESUMEN_TABLAS.txt
+   Ruta: C:\Users\13462\OneDrive\Desktop\houston-web1ww\RESUMEN_TABLAS.txt
+   Contenido: Resumen completo de todas las tablas de datos
+   
+2. TABLAS_ESTRUCTURA.txt
+   Ruta: C:\Users\13462\OneDrive\Desktop\houston-web1ww\TABLAS_ESTRUCTURA.txt
+   Contenido: Estructura detallada de cada tabla (14 tablas)
+   
+3. ARCHIVOS_ENCONTRADOS.txt
+   Ruta: C:\Users\13462\OneDrive\Desktop\houston-web1ww\ARCHIVOS_ENCONTRADOS.txt
+   Contenido: Listado de todos los archivos que usan estas tablas
+
+================================================================================
+HALLAZGOS PRINCIPALES
+================================================================================
+
+TABLAS CRÍTICAS IDENTIFICADAS (Activas):
+=========================================
+
+1. ranks
+   Ubicación: Schema.sql línea 20, Migración 019
+   Ruta: C:\Users\13462\OneDrive\Desktop\houston-web1ww\schema.sql
+   Descripción: CATÁLOGO DE RANGOS (7 departamentos, 13-16 rangos cada uno)
+   
+2. rank_members
+   Ubicación: Schema.sql línea 128, Migración 019
+   Descripción: DONDE SE GUARDA EL RANGO ACTUAL DE CADA OFICIAL
+   Clave: discord_id, rank_key, department, hourly
+   
+3. rank_history
+   Ubicación: Schema.sql línea 140, Migración 019
+   Descripción: AUDITORÍA de cambios de rango
+   
+4. pay_shift
+   Ubicación: Schema.sql línea 163, Migración 019
+   Descripción: CÁLCULO DE DINERO PENDIENTE del oficial
+   Fórmula: (accrued_seconds - collected_seconds) * hourly / 600
+   
+5. pay_collections
+   Ubicación: Schema.sql línea 177, Migración 019
+   Descripción: HISTORIAL DE COBROS REALIZADOS
+
+TABLAS OBSOLETAS (No usar):
+===========================
+
+6. payroll_salaries
+   Estado: OBSOLETA (reemplazada por 'ranks')
+   
+7. payroll_members
+   Estado: OBSOLETA (reemplazada por 'rank_members')
+   
+8. payroll_accrual
+   Estado: OBSOLETA (reemplazada por 'pay_shift')
+
+TABLAS RELACIONADAS:
+====================
+
+9. police_shift_sessions (Migración 001)
+   Descripción: Sesiones de turno (activas/completadas)
+   
+10. police_members (Migración 001)
+    Descripción: Control de acceso (roles de Discord)
+    
+11. police_hours_adjustments (Migración 002)
+    Descripción: Ajustes manuales de horas por Alto Mando
+    
+12. admin_requests
+    Descripción: Solicitudes de ascensos y reportes
+    
+13. payroll_config
+    Descripción: Configuración (duración del turno = 7200 segundos)
+    
+14. payroll_payments
+    Descripción: Histórico de pagos antiguos (lectura solo)
+
+================================================================================
+ARCHIVOS CON CONSULTAS A ESTAS TABLAS
+================================================================================
+
+ARCHIVOS SQL:
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\schema.sql
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\supabase\migrations\001_police_system.sql
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\supabase\migrations\002_admin_adjustments.sql
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\supabase\migrations\003_add_departments.sql
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\supabase\migrations\014_payroll.sql
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\supabase\migrations\019_ranks_economy.sql [CRÍTICA]
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\supabase\migrations\023_web_rank_pay.sql [CRÍTICA]
+
+ARCHIVOS JAVASCRIPT:
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\assets\auth.js (1954 líneas) [PRINCIPAL]
+    - Línea 1351: hrpGetRanks()
+    - Línea 1356: hrpGetRankMembers()
+    - Línea 1363: hrpGetMemberRank(discordId)
+    - Línea 1369: hrpGetRankHistory()
+    - Línea 1373: hrpSetUserRank() [ASIGNA RANGO]
+    - Línea 1382: hrpPayWidget() [CALCULA DINERO]
+    - Línea 1395: hrpPayStart() [INICIA TURNO]
+    - Línea 1430: hrpPayEnd() [FINALIZA TURNO]
+    - Línea 1436: hrpPayCollect() [COBRA DINERO]
+    
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\js\app.js (1600+ líneas)
+    - Línea 257-278: Caché de rangos
+    - Línea 269: Organiza rangos por departamento
+    
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\assets\payroll.js (99 líneas)
+    - Notificaciones de pago
+    
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\netlify\functions\rank-admin.js
+    - FUNCIÓN CRÍTICA: Verifica Discord y ejecuta RPC sensibles
+
+ARCHIVOS HTML:
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\manages.html [PRINCIPAL - 1434 líneas]
+    - Línea 850: loadOfficers() → Carga police_members
+    - Línea 984: loadActiveShifts() → Carga police_shift_sessions
+    - Línea 1049: loadRequests() → Carga admin_requests
+    - Línea 1173-1175: Botones para ajustar horas
+    - ESTE ARCHIVO GESTIONA RANGOS Y HORAS
+    
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\itmdt.html (1500+ líneas)
+    - Línea 1383: Carga police_shift_sessions para despacho
+    - Línea 1222: Campo officer_badge (número de placa)
+    
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\incident-report.html (1600+ líneas)
+    - Línea 341: Campo officer_badge [IMPORTANTE]
+    - Campos: officer_rank, officer_badge, officer_dept
+    
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\dispatch.html
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\js\ui.js
+  C:\Users\13462\OneDrive\Desktop\houston-web1ww\assets\payroll.js
+
+================================================================================
+RESPUESTAS A PREGUNTAS ESPECÍFICAS
+================================================================================
+
+1. ¿Dónde se guardan los datos de departamento de oficiales?
+   Respuesta: En tabla 'police_shift_sessions' (columna 'department')
+              En tabla 'rank_members' (columna 'department')
+   Archivos: manages.html (línea 1035), itmdt.html (línea 809, 1384)
+
+2. ¿Dónde se guarda el rango de un oficial?
+   Respuesta: En tabla 'rank_members' (columnas: rank_key, hourly)
+   Actualización: RPC hrp_rank_set_srv() via assets/auth.js línea 1373
+   Auditoría: En tabla 'rank_history'
+
+3. ¿Existe tabla "payroll_members"?
+   Respuesta: Sí, pero ESTÁ OBSOLETA desde migración 019
+              Fue reemplazada por 'rank_members'
+   Ubicación: schema.sql línea 542
+   Estado: NO USAR (mantiene compatibilidad pero no se actualiza)
+
+4. ¿Existe tabla "police_officer_profile"?
+   Respuesta: NO. No existe en el codebase
+              Los datos del oficial se distribuyen en:
+              - rank_members (rango y departamento)
+              - police_shift_sessions (turno actual)
+              - users (avatar y datos Discord)
+              - characters (nombre del personaje)
+
+5. ¿Existe tabla "police_ranks"?
+   Respuesta: SÍ, se llama 'ranks' (no 'police_ranks')
+   Ubicación: schema.sql línea 20
+   Descripción: Catálogo con 7 departamentos y 13-16 rangos cada uno
+
+6. ¿Dónde se usan estas tablas en el código?
+   Respuesta: Principalmente en:
+   - assets/auth.js (20+ funciones de lectura/escritura)
+   - manages.html (Panel de gestión)
+   - js/app.js (Caché de rangos)
+   - netlify/functions/rank-admin.js (Operaciones sensibles)
+
+7. ¿Dónde se guardan los "badges" (placas)?
+   Respuesta: NO EXISTE tabla específica para badges
+              El "badge" (número de placa) se guarda SOLO en:
+              - incident-report.html como variable de formulario
+              - No se persiste en BD, solo en el reporte
+   Archivos: incident-report.html línea 341 (input inc-officer-badge)
+
+8. ¿Cómo se calcula el dinero del oficial?
+   Respuesta: Mediante tabla 'pay_shift' y RPC 'hrp_pay_widget':
+              pending = (accrued_seconds - collected_seconds) * hourly / 600
+              donde:
+              - accrued_seconds = tiempo trabajado (consolidado)
+              - collected_seconds = tiempo ya pagado
+              - hourly = $ por hora in-game
+              - 600 = segundos reales en 1 hora in-game
+   Archivo: assets/auth.js línea 1382
+
+================================================================================
+CONSULTAS SUPABASE USADAS
+================================================================================
+
+SELECT 'ranks':
+  supaSelect('ranks', '*', { order: 'department.asc,sort_order.asc' })
+  Ubicación: assets/auth.js:1351
+
+SELECT 'rank_members':
+  supaSelect('rank_members', '*', { order: 'updated_at.desc', limit: '500' })
+  supaSelect('rank_members', '*', { discord_id: 'eq.123456789', limit: '1' })
+  Ubicación: assets/auth.js:1356, 1363
+
+SELECT 'rank_history':
+  supaSelect('rank_history', '*', { order: 'created_at.desc', limit: '100' })
+  Ubicación: assets/auth.js:1369
+
+SELECT 'police_shift_sessions':
+  supaSelect('police_shift_sessions', '*', { status: 'in.(active,break)' })
+  Ubicación: manages.html:986, js/app.js:223, itmdt.html:1383
+
+SELECT 'police_members':
+  supaSelect('police_members', '*')
+  Ubicación: manages.html:850
+
+SELECT 'police_hours_adjustments':
+  Insertados via botones "Añadir", "Remover", "Reset" en manages.html
+  Ubicación: manages.html:1173-1175
+
+RPC 'hrp_pay_widget':
+  Calcula dinero pendiente
+  Ubicación: assets/auth.js:1382
+
+RPC 'hrp_rank_set_srv':
+  Cambia rango de un oficial
+  Ubicación: assets/auth.js:1373 (via Netlify function)
+  REQUIERE: Verificación de rol en Discord
+
+================================================================================
+MIGRACIONES CRÍTICAS
+================================================================================
+
+001_police_system.sql
+  Crea: police_shift_sessions, police_members
+  
+002_admin_adjustments.sql
+  Crea: police_hours_adjustments
+  
+003_add_departments.sql
+  Añade: Columna 'department' a muchas tablas
+  
+014_payroll.sql
+  Crea: payroll_* (sistema antiguo, OBSOLETO)
+  
+019_ranks_economy.sql [CRÍTICA]
+  Crea: ranks, rank_members, rank_history, pay_shift, pay_collections
+  Descripción: NUEVO SISTEMA DE RANGOS Y SUELDOS
+  
+023_web_rank_pay.sql [CRÍTICA]
+  Recataloga: Todos los rangos oficiales
+  Actualiza: Alinea con servidor de juego
+
+ESTADO: Sistema 019-023 es el ACTIVO
+        Sistema 014 está OBSOLETO
+
+================================================================================
+FUNCIONES RPC MÁS IMPORTANTES
+================================================================================
+
+Para LECTURA (GRANT anon, authenticated, service_role):
+  ✓ hrp_pay_widget(p_discord_id)
+    Retorna: {active, pending, hourly, department, rank_key, accrued_seconds}
+    
+  ✓ hrp_pay_start(p_discord_id, p_username, p_department, p_role_ids)
+    Retorna: Estado de turno
+    
+  ✓ hrp_pay_end(p_discord_id)
+    Retorna: Resumen de acumulado
+
+Para ESCRITURA SENSIBLE (GRANT service_role ONLY):
+  ✓ hrp_pay_collect_srv(p_discord_id) [COBRA DINERO]
+    Requiere: Verificación via Netlify function
+    
+  ✓ hrp_rank_set_srv(p_actor_id, ..., p_rank_key) [CAMBIA RANGO]
+    Requiere: Verificación via Netlify function
+    Regla: p_actor_id ≠ p_target_id (no puedes cambiarte a ti mismo)
+
+================================================================================
+COLUMNAS CLAVE POR TABLA
+================================================================================
+
+ranks:
+  department, rank_key, rank_label, hourly, sort_order, min_hours
+
+rank_members:
+  discord_id (PK), username, department, rank_key, hourly, assigned_by, assigned_at, updated_at
+
+rank_history:
+  id, discord_id, username, department, old_rank, old_rank_label, new_rank, new_rank_label, changed_by, changed_by_name, created_at
+
+pay_shift:
+  discord_id (PK), username, department, rank_key, hourly, accrued_seconds, collected_seconds, active, segment_start, updated_at
+
+pay_collections:
+  id, discord_id, username, department, rank_key, hourly, amount, worked_seconds, created_at
+
+police_shift_sessions:
+  id, discord_id, username, start_time, end_time, status, break_duration, department, status_code, bodycam_active, bodycam_peer_id
+
+police_hours_adjustments:
+  id, discord_id, username, adjustment_seconds, reason, created_by, department, created_at
+
+police_members:
+  discord_id (PK), username, role_id, created_at
+
+admin_requests:
+  id, req_id, type, officer_name, department, target_name, rank_requested, reason, status, created_at
+
+================================================================================
+SEGURIDAD Y NOTAS IMPORTANTES
+================================================================================
+
+1. DATOS SENSIBLES:
+   - hrp_pay_collect_srv() y hrp_rank_set_srv() requieren SOLO service_role
+   - Se ejecutan desde Netlify function después de verificar Discord roles
+   - El cliente JavaScript NO puede llamarlos directamente
+
+2. RLS (Row Level Security):
+   - Todas las tablas tienen RLS enabled
+   - Políticas: SELECT abierto (using: true), UPDATE/DELETE via DEFINER only
+
+3. DEPARTAMENTOS VÁLIDOS:
+   hpd (Houston Police Department)
+   hcso (Harris County Sheriff's Office)
+   ice (Immigration and Customs Enforcement)
+   tph (Texas Highway Patrol)
+   hfd (Houston Fire Department)
+   dot (Department of Transportation)
+   ems (Houston EMS)
+
+4. CONVERSIÓN DE MONEDA:
+   1 segundo real = hourly / 600 dinero
+   2 horas reales (7200s) de rango con hourly=39 = 468 pesos
+
+5. CACHÉ EN CLIENTE:
+   - js/app.js cachea ranks cada 5 minutos
+   - Evita consultas repetidas
+   - Se invalida si hay cambio de rango en manage-shift
+
+6. NO EXISTE "badge" en BD:
+   - Las referencias a "badge" en HTML son elementos UI
+   - El número de placa (officer_badge) se usa solo en reportes
+   - NO se persiste en BD
+
+================================================================================
+CONCLUSIÓN
+================================================================================
+
+SISTEMA ACTIVO: Migraciones 019-023
+TABLAS CRÍTICAS: ranks, rank_members, rank_history, pay_shift, pay_collections
+PRINCIPAL ARCHIVO: assets/auth.js (1954 líneas)
+PANEL DE GESTIÓN: manages.html (1434 líneas)
+
+El sistema usa DOS CONJUNTOS DE TABLAS:
+1. Sistema NUEVO (activo): ranks, rank_members, pay_shift, pay_collections
+2. Sistema ANTIGUO (obsoleto): payroll_* (para compatibilidad)
+
+El rango y sueldo de un oficial se determina por:
+1. Tabla 'rank_members' → rank_key + department
+2. Tabla 'ranks' → hourly ($ por hora in-game)
+3. Tabla 'pay_shift' → acumulación y cálculo de dinero pendiente
+4. RPC 'hrp_pay_widget' → expone el dinero al cliente
+
+Todos los cambios críticos (rango, dinero) se verifican mediante
+Netlify function (rank-admin) y se ejecutan con service_role.
+
+================================================================================
+FIN DEL ANÁLISIS
+================================================================================

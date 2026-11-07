@@ -1,0 +1,304 @@
+﻿GUÍA SQL DE DIAGNÓSTICO Y SOLUCIONES
+Houston RP - Tabla police_members
+=====================================
+
+Si un usuario reporta que queries a police_members fallan o se quedan cargando,
+ejecuta estos scripts en el SQL Editor de Supabase (https://app.supabase.com)
+
+
+1. VERIFICACIÓN BÁSICA - ¿La tabla existe y es accesible?
+──────────────────────────────────────────────────────────
+
+-- Test 1: Ver estructura exacta
+SELECT 
+  column_name,
+  data_type,
+  is_nullable,
+  column_default
+FROM information_schema.columns
+WHERE table_name = 'police_members'
+ORDER BY ordinal_position;
+
+RESULTADO ESPERADO:
+  discord_id | text | NO | NULL
+  username | text | YES | NULL
+  role_id | text | NO | NULL
+  created_at | timestamp with time zone | NO | now()
+
+
+-- Test 2: ¿Cuántos registros hay?
+SELECT COUNT(*) as total_records FROM police_members;
+
+-- Si resultado = 0: tabla vacía (problema potencial)
+-- Si resultado > 10000: considerar partición o índices
+
+
+-- Test 3: Query simple de prueba
+SELECT discord_id, username, role_id FROM police_members LIMIT 5;
+
+-- Debe retornar en < 1 segundo
+
+
+-- Test 4: Ver si RLS está activo
+SELECT schemaname, tablename, rowsecurity
+FROM pg_tables
+WHERE tablename = 'police_members';
+
+RESULTADO ESPERADO: rowsecurity = true
+
+
+2. DIAGNÓSTICO DE PERFORMANCE - ¿Por qué lenta?
+────────────────────────────────────────────────
+
+-- Test 5: Listar todos los índices (mostrará si faltan)
+SELECT
+  indexname,
+  indexdef
+FROM pg_indexes
+WHERE tablename = 'police_members';
+
+RESULTADO ESPERADO:
+  police_members_pkey | CREATE UNIQUE INDEX police_members_pkey ON public.police_members USING btree (discord_id)
+
+Si FALTA índice en role_id o username, ese es el problema.
+
+
+-- Test 6: Simular query más lenta (búsqueda por role_id)
+EXPLAIN ANALYZE
+SELECT discord_id, username 
+FROM police_members 
+WHERE role_id = '1502940172348690482'
+LIMIT 100;
+
+BUSCAR EN RESULTADO:
+  ✗ "Seq Scan" = búsqueda secuencial (LENTO)
+  ✓ "Index Scan" = uso de índice (RÁPIDO)
+
+Si ves Seq Scan, necesitas crear índice:
+  CREATE INDEX idx_police_members_role_id ON police_members(role_id);
+
+
+-- Test 7: Simular búsqueda por username con ILIKE
+EXPLAIN ANALYZE
+SELECT discord_id, username
+FROM police_members
+WHERE username ILIKE '%admin%'
+LIMIT 50;
+
+Si ves Seq Scan, crear índice:
+  CREATE INDEX idx_police_members_username ON police_members(username);
+
+
+-- Test 8: Buscar locks activos (si tabla está bloqueada)
+SELECT 
+  l.locktype,
+  l.database,
+  l.relation::regclass,
+  l.mode,
+  l.granted,
+  a.usename,
+  a.query,
+  a.state
+FROM pg_locks l
+JOIN pg_stat_activity a ON l.pid = a.pid
+WHERE l.relation = (
+  SELECT oid FROM pg_class WHERE relname = 'police_members'
+);
+
+Si hay resultados con granted = false: alguien está bloqueando
+
+
+-- Test 9: Estadísticas de RLS
+SELECT 
+  schemaname,
+  tablename,
+  rowsecurity,
+  forcerowsecurity
+FROM pg_tables
+WHERE tablename = 'police_members';
+
+La política "Allow all on police_members" USING (true) debería ser rápida
+
+
+3. SOLUCIÓN 1: CREAR ÍNDICES FALTANTES
+──────────────────────────────────────
+
+-- Índice en role_id (búsqueda frecuente de permisos)
+CREATE INDEX IF NOT EXISTS idx_police_members_role_id 
+ON police_members(role_id);
+
+-- Índice en username (búsquedas ILIKE)
+CREATE INDEX IF NOT EXISTS idx_police_members_username 
+ON police_members(username);
+
+-- Validar índices creados
+SELECT indexname, indexdef FROM pg_indexes 
+WHERE tablename = 'police_members';
+
+
+4. SOLUCIÓN 2: OPTIMIZAR QUERIES EN FRONTEND
+───────────────────────────────────────────
+
+En manage.html línea 86:
+ACTUAL:
+  const members = await supaSelect('police_members', '*', { limit: '1000' });
+
+MEJORADO (si hay >1000 registros):
+  const members = await supaSelect('police_members', '*', { limit: '500' });
+
+O MEJOR (paginar):
+  const members = await supaSelect('police_members', '*', 
+    { limit: '500', offset: '0' });  // después offset: '500', '1000', etc.
+
+
+En developer.html línea 619:
+ACTUAL (búsqueda difusa):
+  supaSelect('police_members', 'discord_id, username', 
+    { username: ilike., limit: '50' })
+
+MEJORADO (con índice presente, misma query es más rápida):
+  -- La query es igual, pero con índice en username será rápida
+
+
+5. SOLUCIÓN 3: VERIFICAR POLÍTICAS RLS
+──────────────────────────────────────
+
+-- Ver política actual
+SELECT 
+  policyname,
+  permissive,
+  roles,
+  qual,
+  with_check
+FROM pg_policies
+WHERE schemaname = 'public' AND tablename = 'police_members';
+
+RESULTADO ESPERADO:
+  policyname = Allow all on police_members
+  permissive = true
+  roles = {public}
+  qual = true
+  with_check = true
+
+
+-- Si necesitas permitir acceso anón key específicamente:
+DROP POLICY IF EXISTS "Allow all on police_members" ON police_members;
+
+CREATE POLICY "Allow all on police_members"
+  ON police_members
+  FOR ALL
+  USING (true)
+  WITH CHECK (true);
+
+
+6. SOLUCIÓN 4: REVISAR ESTADÍSTICAS DE TABLA
+────────────────────────────────────────────
+
+-- Actualizar estadísticas (si PostgreSQL no las ha recalculado)
+ANALYZE police_members;
+
+-- Ver estadísticas
+SELECT 
+  schemaname,
+  tablename,
+  n_live_tup as live_rows,
+  n_dead_tup as dead_rows,
+  last_vacuum,
+  last_autovacuum
+FROM pg_stat_user_tables
+WHERE tablename = 'police_members';
+
+
+7. SOLUCIÓN 5: BUSCAR BLOAT EN TABLA (si muy antiguo)
+─────────────────────────────────────────────────────
+
+-- Estimar espacio usado
+SELECT 
+  schemaname,
+  tablename,
+  pg_size_pretty(pg_total_relation_size(schemaname || '.' || tablename)) as size
+FROM pg_tables
+WHERE tablename = 'police_members';
+
+Si > 100MB con pocos registros: VACUUM FULL
+
+VACUUM FULL police_members;
+
+
+8. MONITOREAR EN TIEMPO REAL
+────────────────────────────
+
+-- Ver queries activas
+SELECT pid, usename, query, state, wait_event 
+FROM pg_stat_activity
+WHERE query LIKE '%police_members%';
+
+-- Ver queries lentas (si tienes pg_stat_statements habilitado)
+SELECT query, mean_exec_time, calls
+FROM pg_stat_statements
+WHERE query LIKE '%police_members%'
+ORDER BY mean_exec_time DESC;
+
+
+9. CHECKLIST DE DIAGNÓSTICO
+────────────────────────────
+
+☐ Test 1: Estructura - ¿4 columnas correctas?
+☐ Test 2: Registros - ¿Cantidad razonable?
+☐ Test 3: Query simple - ¿< 1 segundo?
+☐ Test 4: RLS - ¿rowsecurity = true?
+☐ Test 5: Índices - ¿Hay índice en role_id y username?
+☐ Test 6: EXPLAIN role_id - ¿Index Scan o Seq Scan?
+☐ Test 7: EXPLAIN username - ¿Index Scan o Seq Scan?
+☐ Test 8: Locks - ¿Hay locks bloqueando?
+☐ Test 9: RLS Stats - ¿Política correcta?
+
+Si todos pasan: problema está en cliente/red, no en DB
+Si alguno falla: aplicar solución correspondiente
+
+
+10. SCRIPT COMPLETO DE DIAGNÓSTICO (copia y ejecuta)
+────────────────────────────────────────────────────
+
+-- 1. Estructura
+\echo '=== ESTRUCTURA ==='
+SELECT column_name, data_type, is_nullable 
+FROM information_schema.columns
+WHERE table_name = 'police_members' ORDER BY ordinal_position;
+
+-- 2. Registros
+\echo '=== REGISTROS ==='
+SELECT COUNT(*) as total_records FROM police_members;
+
+-- 3. Distribución roles
+\echo '=== DISTRIBUCIÓN ROLES ==='
+SELECT role_id, COUNT(*) as count
+FROM police_members GROUP BY role_id ORDER BY count DESC;
+
+-- 4. Índices
+\echo '=== ÍNDICES ==='
+SELECT indexname FROM pg_indexes WHERE tablename = 'police_members';
+
+-- 5. RLS
+\echo '=== ROW LEVEL SECURITY ==='
+SELECT rowsecurity FROM pg_tables WHERE tablename = 'police_members';
+
+-- 6. Tamaño
+\echo '=== TAMAÑO TABLA ==='
+SELECT pg_size_pretty(pg_total_relation_size('police_members')) as size;
+
+-- 7. Test performance
+\echo '=== PERFORMANCE TEST ==='
+EXPLAIN ANALYZE SELECT COUNT(*) FROM police_members;
+
+
+RESULTADO DE DIAGNÓSTICO
+────────────────────────
+
+Si TODO es normal pero user reporta problema:
+  → Problema en cliente (JavaScript error)
+  → Problema en red (timeout)
+  → Problema en Supabase API (status page)
+  → Problema en RLS auth (token expirado)
+
+

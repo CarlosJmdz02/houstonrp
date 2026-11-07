@@ -1,0 +1,147 @@
+﻿# Reporte: Tabla police_members - Schema y Análisis de Queries
+
+Fecha: 6 de Noviembre de 2026
+Proyecto: Houston RP Web Platform
+
+---
+
+## 1. DEFINICIÓN DE LA TABLA
+
+### Estructura Base
+
+La tabla police_members se define en:
+- schema.sql (línea 81-94)
+- supabase/migrations/001_police_system.sql (línea 30-43)
+
+`sql
+CREATE TABLE IF NOT EXISTS police_members (
+  discord_id TEXT PRIMARY KEY,
+  username TEXT,
+  role_id TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+`
+
+### Columnas Actuales
+
+| Columna      | Tipo         | Constraint           | Descripción |
+|--------------|--------------|---------------------|-------------|
+| discord_id   | TEXT         | PRIMARY KEY          | ID único del usuario en Discord |
+| username     | TEXT         | NULL permitido       | Nombre de usuario de Discord |
+| role_id      | TEXT         | NOT NULL             | ID del rol de Discord que autoriza acceso |
+| created_at   | TIMESTAMPTZ  | NOT NULL, DEFAULT NOW() | Timestamp de creación |
+
+NOTA IMPORTANTE: Solo 4 columnas. Esta tabla sirve para CONTROL DE ACCESO solamente.
+
+
+## 2. POLÍTICAS DE ROW LEVEL SECURITY (RLS)
+
+RLS está HABILITADO
+Política: Totalmente abierta (permite SELECT, INSERT, UPDATE, DELETE para todos)
+Implicación: No hay restricciones en nivel de datos
+
+
+## 3. EJEMPLOS DE QUERIES EXITOSAS
+
+### 3.1 Verificación de Tabla (health check)
+Archivo: assets/auth.js (línea 961)
+await supaSelect("police_members", "discord_id", { limit: "1" });
+
+### 3.2 Inserción de Miembro
+Archivo: assets/auth.js (línea 970-974)
+await supaInsert("police_members", {
+  discord_id: discordId,
+  username: username,
+  role_id: discordPoliceRoleId,
+});
+
+### 3.3 Búsqueda por Discord ID (Acceso Manage)
+Archivo: assets/auth.js (línea 1008-1010)
+const data = await supaSingle("police_members", "discord_id",
+  { discord_id: eq., role_id: eq. }
+);
+
+### 3.4 SELECT Todas las Columnas
+Archivo: manage.html (línea 86)
+const members = await supaSelect('police_members', '*', { limit: '1000' });
+
+### 3.5 Búsqueda ILIKE (difusa)
+Archivo: developer.html (línea 619)
+supaSelect('police_members', 'discord_id, username', { 
+  username: ilike., 
+  limit: '50' 
+})
+
+### 3.6 Eliminación en Edge Function
+Archivo: supabase/functions/fire-officer/index.ts (línea 131-135)
+const { error: pmErr } = await sb
+  .from("police_members")
+  .delete()
+  .eq("discord_id", target_discord_id);
+
+
+## 4. CAMPOS BUSCADOS POR QUERIES
+
+1. discord_id (PRIMARY KEY) - MÁS FRECUENTE
+2. role_id - Común para verificar permisos
+3. username - Búsquedas de usuarios
+4. * (todas) - Cargas masivas
+
+Filtros comunes:
+- eq (equals)
+- ilike (case-insensitive LIKE)
+
+
+## 5. TABLAS RELACIONADAS
+
+police_members NO tiene foreign keys, pero se relaciona con:
+
+- users: Datos generales Discord
+- payroll_members: Rango y departamento (NOTA: rank y department están en payroll_members, NO en police_members)
+- police_shift_sessions: Sesiones de trabajo
+- police_hours_adjustments: Ajustes manuales
+- police_records: Registros de arresto/multa
+
+
+## 6. INDICADORES (INDEXES)
+
+NO hay índices explícitamente creados (solo PK en discord_id).
+
+Recomendación: Crear índices en:
+- role_id (muchas búsquedas por rol)
+- username (búsquedas por nombre)
+
+
+## 7. PROBLEMA: Query Lenta o Colgada
+
+Causas Posibles:
+1. RLS Policy lenta (aunque es simple)
+2. Tabla con locks
+3. Índices faltantes (sin índice, SELECT completo es lento)
+4. Problema de conexión a Supabase
+
+Diagnóstico (ejecutar en SQL Editor de Supabase):
+SELECT * FROM information_schema.columns WHERE table_name = 'police_members';
+SELECT COUNT(*) FROM police_members;
+SELECT discord_id, username, role_id FROM police_members LIMIT 1;
+EXPLAIN ANALYZE SELECT * FROM police_members WHERE role_id = '...';
+
+
+## 8. RESUMEN EJECUTIVO
+
+Columnas: 4 (discord_id, username, role_id, created_at)
+Primary Key: discord_id (TEXT)
+RLS: HABILITADO (política abierta)
+Foreign Keys: NINGUNO
+Índices Explícitos: NINGUNO
+Operación Más Frecuente: SELECT por discord_id
+Principal Filtro: discord_id, role_id
+
+
+## 9. RECOMENDACIONES
+
+1. Agregar índices en role_id y username
+2. Monitorear tamaño de tabla
+3. Crear auditoría (trigger)
+4. Test de carga si hay muchas queries simultáneas
+5. Documentar relación clara con payroll_members

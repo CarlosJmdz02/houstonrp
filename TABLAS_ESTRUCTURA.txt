@@ -1,0 +1,425 @@
+﻿# ESTRUCTURA DE TABLAS DE HOUSTON RP - Búsqueda Exhaustiva
+
+## RESUMEN EJECUTIVO
+
+El codebase contiene **DOS SISTEMAS PARALELOS** de gestión de departamentos y rangos:
+
+1. **SISTEMA ANTIGUO (Migración 014)**: payroll_salaries, payroll_members, payroll_accrual, payroll_payments
+2. **SISTEMA NUEVO (Migración 019-023)**: ranks, rank_members, rank_history, pay_shift, pay_collections
+
+---
+
+## TABLA 1: ranks
+Ubicación: Migración 019, Schema.sql
+Catálogo oficial de rangos por departamento
+
+Estructura:
+- department TEXT NOT NULL (hfd, ems, dot, hpd, hcso, ice, tph)
+- rank_key TEXT NOT NULL (officer_1, firefighter, trooper_1, etc.)
+- rank_label TEXT NOT NULL (Police Officer I, Bombero, etc.)
+- hourly BIGINT NOT NULL DEFAULT 0 (por hora IN-GAME)
+- sort_order INTEGER NOT NULL DEFAULT 0 (orden de jerarquía)
+- min_hours BIGINT NOT NULL DEFAULT 0 (horas requeridas para HFD/EMS/DOT)
+- PRIMARY KEY (department, rank_key)
+
+Departamentos:
+- HFD: 13 rangos (Recruit Firefighter → Fire Chief)
+- EMS: 13 rangos (EMT Trainee → EMS Director)
+- DOT: 13 rangos (Trainee → Executive Director)
+- HPD: 11 rangos (Officer I → Chief)
+- HCSO: 11 rangos (Deputy Sheriff → Chief)
+- ICE: 11 rangos (Cadete ICE → Director de ICE)
+- TPH: 16 rangos (Probationary Trooper → Trooper Chief)
+
+Usado por:
+- assets/auth.js línea 1351: hrpGetRanks()
+- js/app.js línea 265: Caché de rangos ordenados por departamento
+- manages.html: Sistema de gestión de rangos
+
+---
+
+## TABLA 2: rank_members
+Ubicación: Migración 019, Schema.sql
+RANGO ACTUAL ASIGNADO A CADA USUARIO
+
+Estructura:
+- discord_id TEXT PRIMARY KEY
+- username TEXT NOT NULL DEFAULT ''
+- department TEXT NOT NULL
+- rank_key TEXT NOT NULL
+- hourly BIGINT NOT NULL DEFAULT 0 (desnormalizado de ranks)
+- assigned_by TEXT NOT NULL DEFAULT ''
+- assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Usado por:
+- assets/auth.js línea 1356: hrpGetRankMembers()
+- assets/auth.js línea 1363: hrpGetMemberRank(discordId)
+- assets/auth.js línea 1374: hrpSetUserRank()
+- js/app.js línea 269: Caché de miembros por departamento
+- manages.html: Panel de gestión de rangos
+
+---
+
+## TABLA 3: rank_history
+Ubicación: Migración 019, Schema.sql
+AUDITORÍA: Historial de cambios de rango
+
+Estructura:
+- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- discord_id TEXT NOT NULL
+- username TEXT NOT NULL DEFAULT ''
+- department TEXT NOT NULL
+- old_rank TEXT
+- old_rank_label TEXT
+- new_rank TEXT NOT NULL
+- new_rank_label TEXT
+- changed_by TEXT NOT NULL DEFAULT ''
+- changed_by_name TEXT NOT NULL DEFAULT ''
+- created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Índices:
+- idx_rank_history_discord ON rank_history(discord_id)
+- idx_rank_history_created ON rank_history(created_at DESC)
+
+Usado por:
+- assets/auth.js línea 1369: hrpGetRankHistory(limit)
+- Función RPC hrp_rank_set_srv (registra automáticamente)
+- manages.html: Panel de gestión
+
+---
+
+## TABLA 4: pay_shift
+Ubicación: Migración 019, Schema.sql
+ACUMULACIÓN DE PAGO POR TURNO (Sistema nuevo)
+
+Estructura:
+- discord_id TEXT PRIMARY KEY
+- username TEXT NOT NULL DEFAULT ''
+- department TEXT NOT NULL DEFAULT ''
+- rank_key TEXT NOT NULL DEFAULT ''
+- hourly BIGINT NOT NULL DEFAULT 0 (por hora in-game)
+- accrued_seconds BIGINT NOT NULL DEFAULT 0 (consolidados)
+- collected_seconds BIGINT NOT NULL DEFAULT 0 (ya pagados)
+- active BOOLEAN NOT NULL DEFAULT false (¿en turno?)
+- segment_start TIMESTAMPTZ (inicio del segmento actual)
+- updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Lógica:
+Pendiente = floor((accrued_seconds - collected_seconds) * hourly / 600)
+Conversión: 1 hora real = 6 horas in-game
+
+Usado por:
+- RPC hrp_pay_widget(): Calcula dinero pendiente
+- RPC hrp_pay_start(): Inicia turno
+- RPC hrp_pay_end(): Finaliza turno
+- RPC hrp_pay_collect_srv(): Cobra dinero (SOLO service_role)
+
+---
+
+## TABLA 5: pay_collections
+Ubicación: Migración 019, Schema.sql
+HISTORIAL DE COBROS/PAGOS REALIZADOS
+
+Estructura:
+- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- discord_id TEXT NOT NULL
+- username TEXT NOT NULL DEFAULT ''
+- department TEXT NOT NULL DEFAULT ''
+- rank_key TEXT NOT NULL DEFAULT ''
+- hourly BIGINT NOT NULL DEFAULT 0
+- amount BIGINT NOT NULL (dinero cobrado)
+- worked_seconds BIGINT NOT NULL DEFAULT 0 (segundos trabajados)
+- created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Índices:
+- idx_pay_collections_discord ON pay_collections(discord_id)
+- idx_pay_collections_created ON pay_collections(created_at DESC)
+
+Usado por:
+- RPC hrp_pay_collect_srv(): Registra cada cobro
+- Dashboard: Historial de pagos recibidos
+
+---
+
+## TABLA 6: payroll_salaries (SISTEMA ANTIGUO)
+Ubicación: Migración 014, Schema.sql
+SALARIOS POR DEPARTAMENTO/RANGO - OBSOLETA
+
+Estado: REEMPLAZADA por tabla 'ranks' en migración 019
+
+Estructura:
+- department TEXT NOT NULL
+- rank TEXT NOT NULL
+- rank_label TEXT NOT NULL
+- salary BIGINT NOT NULL DEFAULT 200 (por turno)
+- PRIMARY KEY (department, rank)
+
+---
+
+## TABLA 7: payroll_members (SISTEMA ANTIGUO)
+Ubicación: Migración 014, Schema.sql
+MIEMBROS CON RANGO - OBSOLETA
+
+Estado: REEMPLAZADA por tabla 'rank_members' en migración 019
+
+Estructura:
+- discord_id TEXT PRIMARY KEY
+- username TEXT NOT NULL DEFAULT ''
+- department TEXT NOT NULL DEFAULT 'hpd'
+- rank TEXT NOT NULL DEFAULT 'cadet'
+- hired_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Usado por:
+- assets/auth.js línea 1502: hrpGetPayrollMembers()
+- assets/auth.js línea 1496: hrpSetPayrollMember()
+
+---
+
+## TABLA 8: payroll_accrual (SISTEMA ANTIGUO)
+Ubicación: Migración 014, Schema.sql
+ACUMULACIÓN DE TIEMPO - OBSOLETA
+
+Estado: REEMPLAZADA por tabla 'pay_shift' en migración 019
+
+Estructura:
+- discord_id TEXT PRIMARY KEY
+- username TEXT NOT NULL DEFAULT ''
+- department TEXT NOT NULL DEFAULT 'hpd'
+- rank TEXT NOT NULL DEFAULT 'cadet'
+- accrued_seconds BIGINT NOT NULL DEFAULT 0
+- active BOOLEAN NOT NULL DEFAULT false
+- segment_start TIMESTAMPTZ
+- updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+---
+
+## TABLA 9: payroll_payments (SISTEMA ANTIGUO)
+Ubicación: Migración 014, Schema.sql
+HISTORIAL DE PAGOS - PARCIALMENTE USADA
+
+Estructura:
+- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- discord_id TEXT NOT NULL
+- username TEXT NOT NULL DEFAULT ''
+- department TEXT NOT NULL
+- rank TEXT NOT NULL
+- amount BIGINT NOT NULL
+- shifts INTEGER NOT NULL DEFAULT 1
+- created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Índices:
+- idx_payroll_payments_discord ON payroll_payments(discord_id)
+- idx_payroll_payments_created ON payroll_payments(created_at DESC)
+
+Usado por:
+- assets/auth.js línea 1509: hrpGetPayments(discordId)
+- assets/auth.js línea 1514: hrpGetAllPayments()
+- NOTA: Aún se usa para mostrar historial antiguo, no se generan nuevos
+
+---
+
+## TABLA 10: payroll_config
+Ubicación: Migración 014, Schema.sql
+CONFIGURACIÓN GLOBAL DEL SISTEMA
+
+Estructura:
+- key TEXT PRIMARY KEY
+- value TEXT NOT NULL
+
+Valores actuales:
+- key: 'shift_seconds', value: '7200' (2 horas reales = 7200 segundos = 1 turno)
+
+Usado por:
+- assets/auth.js línea 1520: hrpGetPayrollConfig()
+- assets/auth.js línea 1529: hrpSetShiftConfig()
+- RPC hrp_payroll_tick(): Usa para calcular cuándo pagar
+
+---
+
+## TABLA 11: police_shift_sessions
+Ubicación: Migración 001, Schema.sql
+SESIONES DE TURNO DE POLICÍAS
+
+Estructura:
+- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- discord_id TEXT NOT NULL
+- username TEXT NOT NULL
+- start_time TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- end_time TIMESTAMPTZ
+- status TEXT NOT NULL DEFAULT 'active' (active, break, completed)
+- break_duration INTEGER DEFAULT 0
+- break_start TIMESTAMPTZ
+- total_seconds INTEGER
+- department TEXT NOT NULL DEFAULT 'hpd' (hcso, hpd, ice, tph, hfd, dot, ems)
+- status_code TEXT
+- bodycam_active BOOLEAN NOT NULL DEFAULT false
+- bodycam_peer_id TEXT DEFAULT ''
+- bodycam_started_at TIMESTAMPTZ
+
+Índices:
+- idx_police_shifts_discord_id ON police_shift_sessions(discord_id)
+- idx_police_shifts_status ON police_shift_sessions(status)
+- idx_shifts_department ON police_shift_sessions(department)
+- idx_shifts_bodycam_live ON police_shift_sessions(bodycam_active)
+
+Usado por:
+- manages.html: Carga sesiones activas
+- itmdt.html: Consulta oficiales en servicio
+- js/app.js línea 223: Obtiene sesiones activas
+- assets/auth.js línea 742: Filtros por departamento
+
+---
+
+## TABLA 12: police_members
+Ubicación: Migración 001, Schema.sql
+CONTROL DE ACCESO: ¿QUIÉN PUEDE VER EL MDT?
+
+Estructura:
+- discord_id TEXT PRIMARY KEY
+- username TEXT
+- role_id TEXT NOT NULL (ID del rol Discord que permite acceso)
+- created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Usado por:
+- assets/auth.js línea 1558: Verifica si usuario tiene rol de admin de nómina
+
+---
+
+## TABLA 13: police_hours_adjustments
+Ubicación: Migración 002, Schema.sql
+AJUSTES MANUALES DE HORAS
+
+Estructura:
+- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- discord_id TEXT NOT NULL
+- username TEXT NOT NULL
+- adjustment_seconds INTEGER NOT NULL
+- reason TEXT DEFAULT ''
+- created_by TEXT NOT NULL
+- created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- department TEXT NOT NULL DEFAULT 'hpd'
+
+Índices:
+- idx_adjustments_discord_id ON police_hours_adjustments(discord_id)
+- idx_adjustments_department ON police_hours_adjustments(department)
+
+Usado por:
+- manages.html: Botones 'Añadir', 'Remover', 'Reset' horas
+- assets/auth.js línea 746: Suma ajustes de horas
+- assets/auth.js línea 1052: hrpAddHours()
+- assets/auth.js línea 1072: hrpRemoveHours()
+- assets/auth.js línea 1117: hrpResetUserHours()
+
+---
+
+## TABLA 14: admin_requests
+Ubicación: Schema.sql
+SOLICITUDES DE ADMINISTRACIÓN (Ascensos, Reportes, K-9)
+
+Estructura:
+- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+- req_id TEXT DEFAULT ''
+- type TEXT NOT NULL DEFAULT 'request' (promotion, report, k9, request)
+- officer_name TEXT NOT NULL DEFAULT ''
+- department TEXT DEFAULT ''
+- target_name TEXT DEFAULT ''
+- rank_requested TEXT DEFAULT ''
+- reason TEXT DEFAULT ''
+- target_discord TEXT DEFAULT ''
+- officer_discord TEXT DEFAULT ''
+- officer_name_label TEXT DEFAULT ''
+- status TEXT NOT NULL DEFAULT 'Pendiente'
+- created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Índices:
+- idx_admin_requests_type ON admin_requests(type)
+- idx_admin_requests_status ON admin_requests(status)
+- idx_admin_requests_created_at ON admin_requests(created_at)
+
+Usado por:
+- manages.html línea 1051: Carga solicitudes pendientes
+- apps-support.html: Crea solicitudes de ascensos/reportes
+
+---
+
+## FLUJO ACTUAL (Sistema 019-023)
+
+1. OFICIAL INICIA TURNO
+   UI (manages.html) → hrpPayStart() → RPC: hrp_pay_start()
+   - Busca rank en rank_members
+   - Crea/actualiza pay_shift (active=true)
+   - Retorna dinero pendiente
+
+2. SISTEMA ACUMULA TIEMPO
+   RPC: hrp_pay_widget() (cada vez que se abre dashboard)
+   - Lee pay_shift: accrued_seconds + (NOW() - segment_start)
+   - Calcula pending = floor((total - collected) * hourly / 600)
+
+3. OFICIAL FINALIZA TURNO
+   UI → hrpPayEnd() → RPC: hrp_pay_end()
+   - Calcula tiempo transcurrido
+   - Suma a accrued_seconds
+   - Marca active=false
+
+4. OFICIAL COBRA DINERO
+   UI → hrpPayCollect() → Netlify function (rank-admin)
+   - Verifica rol en Discord
+   - RPC: hrp_pay_collect_srv() (service_role)
+   - INSERT economy (suma dinero)
+   - INSERT pay_collections (registra cobro)
+   - UPDATE pay_shift (marca como collected)
+
+5. ALTO MANDO CAMBIA RANGO
+   UI (manages.html) → hrpSetUserRank() → Netlify function (rank-admin)
+   - RPC: hrp_rank_set_srv() (service_role)
+   - Valida que rango exista en ranks
+   - UPDATE rank_members (nuevo rank_key, hourly)
+   - UPDATE pay_shift (sella lo acumulado si hay turno activo)
+   - INSERT rank_history (registra el cambio)
+
+---
+
+## FUNCIONES RPC CRÍTICAS
+
+hrp_pay_widget(p_discord_id TEXT)
+- Retorna: {active, pending, hourly, department, rank_key, accrued_seconds}
+- Uso: Dashboard de dinero
+- Seguridad: GRANT anon, authenticated, service_role
+
+hrp_pay_start(p_discord_id, p_username, p_department, p_role_ids)
+- Retorna: Estado de turno + datos de sueldo
+- Uso: Botón 'Iniciar Turno'
+- Seguridad: GRANT anon, authenticated, service_role
+
+hrp_pay_end(p_discord_id TEXT)
+- Retorna: {status, active, pending, accrued_seconds}
+- Uso: Botón 'Finalizar Turno'
+- Seguridad: GRANT anon, authenticated, service_role
+
+hrp_pay_collect_srv(p_discord_id TEXT) - SENSIBLE
+- Retorna: {status, amount, balance}
+- Verificación: Netlify function (rank-admin)
+- Seguridad: GRANT service_role ONLY
+
+hrp_rank_set_srv(p_actor_id, ..., p_department, p_rank_key) - SENSIBLE
+- Retorna: {status, discord_id, department, rank_key, rank_label, hourly}
+- Verificación: Netlify function (rank-admin)
+- Regla: p_actor_id ≠ p_target_id (no cambiarte a ti mismo)
+- Seguridad: GRANT service_role ONLY
+
+---
+
+## ARCHIVOS CLAVE
+
+assets/auth.js - Funciones helper para Supabase (all table queries)
+manages.html - Panel de Alto Mando (rank management, hours adjustments)
+js/app.js - Caché de rangos y datos de sesiones
+assets/payroll.js - Notificaciones de pago
+itmdt.html - MDT de despacho (sesiones activas)
+incident-report.html - Reportes de incidentes
+
+---
+
+NOTA: Este análisis fue generado el 2026-11-06 mediante búsqueda exhaustiva del codebase.

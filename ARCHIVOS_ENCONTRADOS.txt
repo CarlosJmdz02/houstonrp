@@ -1,0 +1,252 @@
+﻿ARCHIVOS ENCONTRADOS CON REFERENCIAS A TABLAS
+==============================================
+
+ARCHIVOS SQL (Definición de tablas):
+====================================
+
+SCHEMA PRINCIPAL:
+- schema.sql (1076 líneas)
+  Contiene: ranks, rank_members, rank_history, pay_shift, pay_collections
+            police_shift_sessions, police_members, police_hours_adjustments
+            payroll_salaries, payroll_members, payroll_accrual, payroll_payments
+            payroll_config, admin_requests, case_seq, bolos
+
+MIGRACIONES:
+- supabase/migrations/001_police_system.sql
+  Contiene: police_shift_sessions, police_members
+
+- supabase/migrations/002_admin_adjustments.sql
+  Contiene: police_hours_adjustments
+
+- supabase/migrations/003_add_departments.sql
+  Añade: Columna 'department' a police_shift_sessions, police_hours_adjustments
+
+- supabase/migrations/014_payroll.sql (435 líneas)
+  Contiene: payroll_salaries, payroll_members, payroll_accrual, payroll_payments
+            payroll_config, economy_adjustments
+
+- supabase/migrations/019_ranks_economy.sql (518 líneas) [TABLA CRÍTICA]
+  Contiene: ranks (CATÁLOGO DE RANGOS)
+            rank_members (RANGO ACTUAL POR USUARIO)
+            rank_history (AUDITORÍA)
+            pay_shift (ACUMULACIÓN DE DINERO)
+            pay_collections (HISTORIAL DE COBROS)
+
+- supabase/migrations/023_web_rank_pay.sql (338 líneas)
+  Re-cataloga: todos los rangos de los 7 departamentos
+  Actualiza: Datos en rank_members y ranks
+
+ARCHIVOS JAVASCRIPT (Consultas a Supabase):
+============================================
+
+PRINCIPAL:
+- assets/auth.js (1954 líneas)
+  Línea 1351: hrpGetRanks() → SELECT 'ranks'
+  Línea 1356: hrpGetRankMembers() → SELECT 'rank_members'
+  Línea 1363: hrpGetMemberRank() → SELECT 'rank_members' WHERE discord_id
+  Línea 1369: hrpGetRankHistory() → SELECT 'rank_history'
+  Línea 1373: hrpSetUserRank() → RPC 'hrp_rank_set_srv'
+  Línea 1382: hrpPayWidget() → RPC 'hrp_pay_widget'
+  Línea 1395: hrpPayStart() → RPC 'hrp_pay_start'
+  Línea 1430: hrpPayEnd() → RPC 'hrp_pay_end'
+  Línea 1436: hrpPayCollect() → Netlify function 'rank-admin'
+  Línea 1483: hrpGetSalaries() → SELECT 'payroll_salaries'
+  Línea 1487: hrpSetSalary() → UPSERT 'payroll_salaries'
+  Línea 1494: hrpSetPayrollMember() → UPSERT 'payroll_members'
+  Línea 1502: hrpGetPayrollMembers() → SELECT 'payroll_members'
+  Línea 1509: hrpGetPayments() → SELECT 'payroll_payments'
+  Línea 1514: hrpGetAllPayments() → SELECT 'payroll_payments'
+  Línea 1520: hrpGetPayrollConfig() → SELECT 'payroll_config'
+  Línea 1527: hrpSetShiftConfig() → UPSERT 'payroll_config'
+
+- js/app.js (1600+ líneas)
+  Línea 180: Usa 'department' de shift
+  Línea 223: SELECT 'police_shift_sessions' WHERE status IN ('active', 'break')
+  Línea 257-278: Caché de ranks (_ranksCache)
+  Línea 262: hrpGetRanks() cada 5 minutos
+  Línea 269: Organiza por departamento
+  Línea 399: Busca rank_label de rank_members
+  Línea 407: Usa rank_key
+
+- assets/payroll.js (99 líneas)
+  Línea 31: Muestra department del pago
+  Línea 32: Muestra rank_label del pago
+
+ARCHIVOS HTML (Interfaz de usuario):
+====================================
+
+PRINCIPAL:
+- manages.html (1434 líneas) [PANEL DE ALTO MANDO]
+  Línea 850: loadOfficers() → SELECT 'police_members'
+  Línea 958: getDepartmentFromRoles() → Determina departamento
+  Línea 984: loadActiveShifts() → SELECT 'police_shift_sessions'
+  Línea 1049: loadRequests() → SELECT 'admin_requests'
+  Línea 1135: Filtra officers por department
+  Línea 1167: Muestra department en tabla
+  Línea 1173-1175: Botones para Añadir/Remover/Reset horas
+
+SECUNDARIOS:
+- itmdt.html (1500+ líneas)
+  Línea 306: CSS para call-mini-badge
+  Línea 558: INPUT inc-officer-badge (número de placa)
+  Línea 709: Carga 'departments'
+  Línea 809: selectDepartment() con currentShift.department
+  Línea 819: Muestra DEPT_LABEL[department]
+  Línea 1016: Muestra status con department
+  Línea 1085: hrpPayStart() con department
+  Línea 1222: Guarda officer_badge en incidente
+  Línea 1237: Campo de placa
+  Línea 1304: Muestra officer_badge y officer_name
+  Línea 1383: SELECT 'police_shift_sessions' para departamentos HFD y DOT
+  Línea 1394: DEPT_LABEL[department]
+  Línea 1395: Muestra department
+
+- incident-report.html (1600+ líneas)
+  Línea 337: INPUT inc-officer-rank
+  Línea 341: INPUT inc-officer-badge [IMPORTANTE]
+  Línea 359: INPUT inc-supervisor-rank
+  Línea 453: Campo officer_badge requerido
+  Línea 483-484: Guardan officer_rank y officer_badge
+  Línea 487: Guardan supervisor_rank
+  Línea 517-518: Muestran officer_name, officer_rank, officer_badge
+  Línea 547: Muestran officer_badge en Discord embed
+  Línea 576-577: IDs de campos a limpiar
+
+- dispatch.html
+  Línea 51: badge-status element para estado
+
+- fines.html, enmiendas.html, licencias.html, etc.
+  Contienen badges visuales (UI elements), no datos de bases de datos
+
+ARCHIVOS RELACIONADOS (Config/Utilidades):
+===========================================
+
+- js/ui.js
+  Línea 28: badgeStatus element
+  Línea 191: Actualiza badgeStatus
+
+- netlify/functions/rank-admin.js
+  FUNCIÓN CRÍTICA: Verifica Discord roles y ejecuta RPC sensibles
+  Ejecuta: hrp_pay_collect_srv()
+  Ejecuta: hrp_rank_set_srv()
+
+================================================================================
+TABLA RESUMEN: ¿QUÉ REFERENCIA QUÉ?
+================================================================================
+
+TABLA 'ranks':
+  - Referenciada en: assets/auth.js, js/app.js, manages.html, manages.html (manage-shift)
+  - Operación: SELECT (lectura)
+  - Frecuencia: Cada 5 minutos (caché)
+  - Propósito: Mostrar catálogo de rangos disponibles
+
+TABLA 'rank_members':
+  - Referenciada en: assets/auth.js, js/app.js, manages.html, manages.html (manage-shift)
+  - Operación: SELECT, UPSERT vía RPC
+  - Propósito: GUARDAR RANGO ACTUAL DEL OFICIAL
+
+TABLA 'rank_history':
+  - Referenciada en: assets/auth.js, manages.html (historial)
+  - Operación: SELECT, INSERT vía RPC
+  - Propósito: Auditoría de cambios de rango
+
+TABLA 'pay_shift':
+  - Referenciada en: assets/auth.js (via RPC), itmdt.html, manages.html
+  - Operación: RPC (lectura, escritura sensible)
+  - Propósito: CALCULAR DINERO PENDIENTE DEL OFICIAL
+
+TABLA 'pay_collections':
+  - Referenciada en: assets/auth.js (via RPC), dashboard
+  - Operación: INSERT vía RPC
+  - Propósito: HISTORIAL DE COBROS REALIZADOS
+
+TABLA 'police_shift_sessions':
+  - Referenciada en: js/app.js, manages.html, itmdt.html, incident-report.html
+  - Operación: SELECT (lectura)
+  - Propósito: Mostrar turnos activos y datos del oficial
+
+TABLA 'police_members':
+  - Referenciada en: assets/auth.js, manages.html
+  - Operación: SELECT
+  - Propósito: Control de acceso (roles de Discord)
+
+TABLA 'police_hours_adjustments':
+  - Referenciada en: manages.html, assets/auth.js
+  - Operación: INSERT (via botones Añadir/Remover/Reset)
+  - Propósito: AJUSTES MANUALES DE HORAS
+
+TABLA 'admin_requests':
+  - Referenciada en: manages.html, apps-support.html
+  - Operación: SELECT, INSERT
+  - Propósito: Solicitudes de ascensos y reportes
+
+TABLA 'payroll_salaries' [OBSOLETA]:
+  - Referenciada en: assets/auth.js
+  - Operación: SELECT, UPSERT
+  - Estado: NO SE USA (reemplazada por 'ranks')
+
+TABLA 'payroll_members' [OBSOLETA]:
+  - Referenciada en: assets/auth.js
+  - Operación: SELECT, UPSERT
+  - Estado: NO SE USA (reemplazada por 'rank_members')
+
+================================================================================
+LÍNEAS DE CÓDIGO CRÍTICAS
+================================================================================
+
+ASIGNACIÓN DE RANGO A UN OFICIAL:
+- assets/auth.js:1373
+  async function hrpSetUserRank(targetId, targetName, department, rankKey)
+  Llama a: hrpRankAdmin('set_rank', {...})
+  Final: RPC hrp_rank_set_srv() → Actualiza 'rank_members'
+
+CÁLCULO DE DINERO PENDIENTE:
+- assets/auth.js:1382
+  async function hrpPayWidget(discordId)
+  Llama a: RPC 'hrp_pay_widget'
+  Lee: pay_shift
+  Calcula: (accrued_seconds - collected_seconds) * hourly / 600
+
+COBRO DE DINERO (SENSIBLE):
+- assets/auth.js:1436
+  async function hrpPayCollect()
+  Llama a: hrpRankAdmin('collect')
+  Verifica: Rol en Discord via Netlify
+  RPC: hrp_pay_collect_srv() → Modifica economy, pay_shift, pay_collections
+
+INICIO DE TURNO:
+- assets/auth.js:1395
+  async function hrpPayStart(discordId, username, department)
+  Llama a: RPC 'hrp_pay_start'
+  Actualiza: pay_shift (active = true)
+
+GESTIÓN DE HORAS MANUALES:
+- manages.html:1173-1175
+  Botones onclick="openAddModal(...)"
+  Resultado: INSERT en 'police_hours_adjustments'
+
+================================================================================
+INFORMACIÓN ADICIONAL
+================================================================================
+
+PATRONES DE CONSULTA:
+  supaSelect(table, columns, filters)
+  supaUpsert(table, data, conflict_keys)
+  supaInsert(table, data)
+  hrpRpc(function_name, params)
+  hrpRankAdmin(action, params) - Netlify proxy para operaciones sensibles
+
+BASES DE DATOS SUPABASE:
+  Proyecto: qqgtroxrkccftlrpqwsk
+  Tablas públicas: RLS enabled pero políticas abiertas para SELECT
+  Funciones RPC: SECURITY DEFINER con permisos específicos
+
+ROLES DE DISCORD VALIDADOS:
+  Policia: discordPoliceRoleId = "1431255106212335686"
+  Manage: discordManageRoleId = "1502940172348690482"
+  Foundation: discordFoundationRoleId = "1430728225423884419"
+  Payroll Admin: discordPayrollAdminRoleId (variante)
+
+================================================================================
+FIN DE LISTADO DE ARCHIVOS
+================================================================================

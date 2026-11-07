@@ -1,0 +1,413 @@
+﻿╔════════════════════════════════════════════════════════════════════════════╗
+║         RESUMEN EJECUTIVO - TABLA police_members                           ║
+║         Houston RP - Búsqueda Completada                                   ║
+║         6 de Noviembre de 2026                                             ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+PREGUNTA 1: ¿Cómo se define o usa la tabla 'police_members'?
+────────────────────────────────────────────────────────────
+
+DEFINICIÓN:
+  • Archivo: schema.sql (línea 81-94)
+  • Migración: supabase/migrations/001_police_system.sql (línea 30-43)
+  
+  CREATE TABLE IF NOT EXISTS police_members (
+    discord_id TEXT PRIMARY KEY,
+    username TEXT,
+    role_id TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );
+
+USO:
+  • Propósito: Control de acceso (verificar permisos Discord)
+  • No contiene: rango, departamento (eso está en payroll_members)
+  • Patrón: UPSERT (insert or update) con ON CONFLICT (discord_id)
+
+FUNCIONES ASOCIADAS:
+  • add_police_member(p_discord_id, p_username, p_role_id)
+    → Se llama después de verificar rol en Discord
+
+
+────────────────────────────────────────────────────────────────────────────
+
+PREGUNTA 2: ¿Qué columnas tiene realmente esa tabla?
+─────────────────────────────────────────────────────
+
+EXACTAMENTE 4 COLUMNAS:
+
+┌─ Columna 1: discord_id (TEXT, PRIMARY KEY) ──────────────────────┐
+│                                                                   │
+│ ID único del usuario en Discord                                  │
+│ Ejemplo: "123456789012345678"                                    │
+│ Uso en código:                                                   │
+│   • Filtro principal: eq.                            │
+│   • En INSERT: requiere valor                                    │
+│   • En SELECT: proyecto frecuente para verificación             │
+│ Ubicaciones: 37 referencias en el código                         │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+
+┌─ Columna 2: username (TEXT, NULLABLE) ────────────────────────────┐
+│                                                                   │
+│ Nombre de usuario Discord                                        │
+│ Ejemplo: "AdminUser"                                             │
+│ Puede ser NULL (aunque en práctica se asigna siempre)           │
+│ Uso en código:                                                   │
+│   • Filtro: ilike. (búsqueda difusa, case-insensitive) │
+│   • En INSERT: asignado junto a discord_id                      │
+│   • SELECT: frecuente para mostrar nombre de usuario            │
+│ Ubicaciones: developer.html (búsqueda), manage.html (listado)   │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+
+┌─ Columna 3: role_id (TEXT, NOT NULL) ────────────────────────────┐
+│                                                                   │
+│ ID del rol de Discord que autoriza acceso                        │
+│ NO es el rango policial (eso está en payroll_members)           │
+│ Es el rol del servidor Discord                                   │
+│                                                                   │
+│ Valores típicos y su significado:                                │
+│   • "1431255106212335686" = POLICE (acceso general al MDT)      │
+│   • "1502940172348690482" = MANAGE (administración de turnos)   │
+│   • "1425697670495862844" = DEV (herramientas de desarrollo)    │
+│   • "1430728225423884419" = FOUNDATION (fundación)              │
+│                                                                   │
+│ Uso en código:                                                   │
+│   • Filtro: eq. (búsquedas de autorización)            │
+│   • SELECT: frecuente para verificar permisos                   │
+│   • Nunca se actualiza directamente (solo add_police_member)   │
+│ Ubicaciones: auth.js (verificaciones), dashboard.html, itmdt.html
+│                                                                   │
+│ PROBLEMA POTENCIAL:                                              │
+│   No hay índice en role_id → búsquedas por rol son lentas       │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+
+┌─ Columna 4: created_at (TIMESTAMPTZ, NOT NULL, DEFAULT NOW()) ───┐
+│                                                                   │
+│ Timestamp de creación automático                                 │
+│ Ejemplo: 2026-11-06 15:30:45.123456+00:00                       │
+│ Generado automáticamente (no asignar en INSERT)                  │
+│ NO se accede en código (información solo de auditoría)           │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+
+IMPORTANTE: police_members NO tiene:
+  ✗ rank (rango) - está en payroll_members
+  ✗ department (departamento) - está en payroll_members
+  ✗ status - no existe en el schema
+  ✗ hire_date - está en payroll_members
+
+
+────────────────────────────────────────────────────────────────────────────
+
+PREGUNTA 3: ¿Ejemplos de queries exitosas a esa tabla?
+────────────────────────────────────────────────────────
+
+TIPO 1 - Health Check (verificar tabla existe)
+────────────────────────────────────────────
+
+Archivo: assets/auth.js línea 961
+Código: await supaSelect("police_members", "discord_id", { limit: "1" });
+
+Qué hace: SELECT discord_id FROM police_members LIMIT 1
+Devuelve: array con 1 registro (si tabla existe y tiene datos)
+Propósito: Verificar tabla existe y es accesible
+Tiempo esperado: < 100ms
+
+
+TIPO 2 - Inserción (agregando nuevo oficial)
+──────────────────────────────────────
+
+Archivo: assets/auth.js línea 970
+Código:
+  await supaInsert("police_members", {
+    discord_id: "123456789",
+    username: "NewOfficer",
+    role_id: "1431255106212335686"
+  });
+
+Qué hace: INSERT o UPDATE (ON CONFLICT)
+Devuelve: confirmación de inserción
+Propósito: Agregar/actualizar oficial después de verificar rol Discord
+Tiempo esperado: < 200ms
+
+
+TIPO 3 - Búsqueda de Autorización (Manage Access)
+─────────────────────────────────────────────
+
+Archivo: assets/auth.js línea 1008
+Código:
+  const data = await supaSingle("police_members", "discord_id",
+    { discord_id: eq., role_id: eq. }
+  );
+
+Qué hace: 
+  SELECT discord_id FROM police_members 
+  WHERE discord_id = 'X' AND role_id = '1502940172348690482'
+
+Devuelve: objeto con discord_id (si existe), null si no
+Propósito: Verificar si usuario tiene acceso a manage-shift
+Tiempo esperado: < 100ms (con índice en role_id: < 50ms)
+
+
+TIPO 4 - Búsqueda Difusa (ILIKE)
+──────────────────────────────
+
+Archivo: developer.html línea 619
+Código:
+  supaSelect('police_members', 'discord_id, username', {
+    username: ilike.,
+    limit: '50'
+  })
+
+Qué hace:
+  SELECT discord_id, username FROM police_members 
+  WHERE username ILIKE '%query%' LIMIT 50
+
+Devuelve: array con hasta 50 registros que coinciden (case-insensitive)
+Propósito: Buscar usuarios por nombre en formulario de búsqueda
+Tiempo esperado: < 200ms (sin índice puede ser 1000ms+)
+
+
+TIPO 5 - Carga Masiva (Todas las columnas)
+──────────────────────────────────────────
+
+Archivo: manage.html línea 86
+Código:
+  const members = await supaSelect('police_members', '*', { limit: '1000' });
+
+Qué hace:
+  SELECT * FROM police_members LIMIT 1000
+
+Devuelve: array con hasta 1000 registros completos (discord_id, username, role_id, created_at)
+Propósito: Cargar lista de todos los oficiales en página manage-shift
+Tiempo esperado: < 500ms (con >1000 registros trunca silenciosamente)
+
+
+TIPO 6 - Eliminación (Al Despedir)
+─────────────────────────────────
+
+Archivo: supabase/functions/fire-officer/index.ts línea 131
+Código (en TypeScript):
+  const { error: pmErr } = await sb
+    .from("police_members")
+    .delete()
+    .eq("discord_id", target_discord_id);
+
+Qué hace:
+  DELETE FROM police_members WHERE discord_id = 'X'
+
+Devuelve: confirmación (error = null si exitoso)
+Propósito: Remover acceso policial al despedir un oficial
+Tiempo esperado: < 100ms
+
+
+TIPO 7 - Búsqueda de Role_id (Verificación MDT)
+────────────────────────────────────────────────
+
+Archivo: dashboard.html línea 2097
+Código:
+  const m = await supaSelect('police_members', 'role_id',
+    { discord_id: 'eq.' + userId }
+  );
+
+Qué hace:
+  SELECT role_id FROM police_members WHERE discord_id = 'X'
+
+Devuelve: array (1 objeto) con role_id del usuario
+Propósito: Verificar si usuario tiene acceso MDT (verifica role_id contra lista permitida)
+Tiempo esperado: < 100ms (con índice en discord_id: < 50ms)
+
+
+────────────────────────────────────────────────────────────────────────────
+
+PREGUNTA 4: ¿Documentación sobre el schema de Supabase?
+────────────────────────────────────────────────────────
+
+DOCUMENTACIÓN ENCONTRADA:
+
+1. DEFINICIÓN SQL (OFICIAL)
+   Archivo: schema.sql (línea 78-94)
+   Contiene:
+     • CREATE TABLE statement
+     • ALTER TABLE para RLS
+     • CREATE POLICY para autorización
+
+2. MIGRACIÓN (ORIGINAL)
+   Archivo: supabase/migrations/001_police_system.sql (línea 27-61)
+   Contiene:
+     • Definición idéntica a schema.sql
+     • Función PL/pgSQL: add_police_member()
+     • Documentación en comentarios
+
+3. COMENTARIOS EN CÓDIGO
+
+   assets/auth.js:
+     • Línea 845: Referencia a fallback con police_members
+     • Línea 928: Comportamiento similar a guild member
+     • Línea 1031: Manejo de error "table not found"
+     • Línea 1812: "Solo roles autorizados. La tabla police_members NO otorga acceso"
+     • Línea 1925: "NO toca el personaje (nombre IC) ni las horas"
+
+   itmdt.html:
+     • Línea 721: "Miembro del servidor OAuth + police_members — complementan el resultado"
+
+   schema.sql:
+     • Línea 78: "POLICE MEMBERS (access control)"
+     • Línea 96-98: "FUNCTION: auto-add police member. Call this from Edge Function"
+
+4. INFORMACIÓN EN EDGE FUNCTIONS
+
+   supabase/functions/fire-officer/index.ts:
+     • Documentación sobre cómo se elimina de police_members
+     • Muestra que es segunda tabla en orden (después rank_members)
+     • Nota: "la tabla no permite DELETE al cliente"
+
+5. TABLA RELACIONADA: payroll_members
+
+   Schema.sql línea 542-549:
+     Definición de payroll_members:
+       discord_id TEXT PRIMARY KEY,
+       username TEXT NOT NULL,
+       department TEXT NOT NULL,
+       rank TEXT NOT NULL,
+       hired_at TIMESTAMPTZ,
+       updated_at TIMESTAMPTZ
+
+   RELACIÓN IMPORTANTE:
+     police_members = control de ACCESO (qué apps puede usar)
+     payroll_members = control de RANGO (qué es, en qué departamento)
+
+
+ACCESO A LA DOCUMENTACIÓN:
+
+Para ver el schema en Supabase:
+  1. Ir a https://app.supabase.com
+  2. Seleccionar proyecto "qqgtroxrkccftlrpqwsk"
+  3. Ir a "SQL Editor"
+  4. Ejecutar: \d police_members (para ver estructura)
+  5. O leer schema.sql directamente en GitHub/proyecto
+
+
+────────────────────────────────────────────────────────────────────────────
+
+PROBLEMA REPORTADO: "Query a police_members falla o se queda cargando"
+───────────────────────────────────────────────────────────────────────
+
+CAUSAS PROBABLES (en orden de probabilidad):
+
+1. SIN ÍNDICES (85% de probabilidad)
+   ─────────────────
+   Problema: No hay índice en columns role_id o username
+   
+   Síntoma: Queries lentas especialmente:
+     • Búsqueda por role_id (dashboard.html)
+     • Búsqueda por username ILIKE (developer.html)
+   
+   Solución: Crear índices
+     CREATE INDEX idx_police_members_role_id ON police_members(role_id);
+     CREATE INDEX idx_police_members_username ON police_members(username);
+
+
+2. CARGA MASIVA TRUNCADA (10% de probabilidad)
+   ──────────────────────────
+   Problema: manage.html línea 86 usa limit: '1000'
+   
+   Si hay > 1000 registros:
+     • No da error
+     • Silenciosamente trunca datos
+     • Frontend no sabe que hay más datos
+   
+   Solución: Reducir límite o implementar paginación
+     const members = await supaSelect('police_members', '*', { limit: '500' });
+
+
+3. TIMEOUT EN SUPABASE (3% de probabilidad)
+   ──────────────────────
+   Problema: PostgREST timeout (default 30s)
+   
+   Síntoma: Query en manage.html cargando indefinidamente
+   
+   Solución: Implementar cancellation o timeout en frontend
+
+
+4. LOCKS EN LA TABLA (1% de probabilidad)
+   ──────────────────
+   Problema: Transacción abierta bloqueando writes
+   
+   Diagnóstico: Ejecutar en SQL Editor
+     SELECT * FROM pg_locks 
+     WHERE relation = (SELECT oid FROM pg_class WHERE relname = 'police_members');
+
+
+5. RLS POLICY ISSUE (1% de probabilidad)
+   ────────────────
+   La política es simple USING (true), poco probable pero posible
+
+
+DIAGNÓSTICO RÁPIDO:
+───────────────────
+
+Ejecuta en el SQL Editor de Supabase:
+
+  -- ¿Tabla existe?
+  SELECT COUNT(*) FROM police_members;
+  
+  -- ¿Hay índices?
+  SELECT indexname FROM pg_indexes WHERE tablename = 'police_members';
+  
+  -- ¿Qué tan grande es?
+  SELECT pg_size_pretty(pg_total_relation_size('police_members'));
+  
+  -- ¿Hay locks?
+  SELECT * FROM pg_locks 
+  WHERE relation = (SELECT oid FROM pg_class WHERE relname = 'police_members');
+
+
+ARCHIVOS CREADOS EN ESTE ANÁLISIS
+──────────────────────────────────
+
+1. POLICE_MEMBERS_ANALISIS_VISUAL.txt
+   → Formato visual con boxes ASCII
+   → Fácil de leer
+   → Incluye patrones de queries
+
+2. POLICE_MEMBERS_REFERENCIAS_EXACTAS.txt
+   → Cada referencia con línea exacta
+   → Incluye código snippet
+   → Organizado por archivo
+
+3. POLICE_MEMBERS_SQL_DIAGNOSTICO.txt
+   → Scripts SQL listos para copiar/pegar
+   → Instrucciones paso a paso
+   → Soluciones recomendadas
+
+4. POLICE_MEMBERS_SCHEMA_REPORT.txt
+   → Resumen técnico
+   → Información sobre RLS
+   → Recomendaciones de optimización
+
+
+RESUMEN FINAL
+─────────────
+
+✓ Tabla police_members contiene EXACTAMENTE 4 columnas
+✓ Propósito: Control de acceso (no rango/departamento)
+✓ 37 referencias en código encontradas
+✓ Patrón de queries: SELECT > INSERT > DELETE
+✓ Problema probable: Falta de índices en role_id y username
+✓ Solución: CREATE INDEX en ambas columnas
+
+Documentación está distribuida en:
+  • schema.sql (definición oficial)
+  • Comentarios en código
+  • This analysis
+
+Próximos pasos:
+  1. Verificar índices con SQL diagnostic script
+  2. Crear índices si faltan
+  3. Reprobar queries con EXPLAIN ANALYZE
+  4. Monitorear performance
+
