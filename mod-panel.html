@@ -1197,35 +1197,49 @@
             editingRuleIndex = -1;
         }
 
-        document.getElementById('ruleForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Event listener para formulario de reglas
+        function attachFormListener() {
+            try {
+                const ruleForm = document.getElementById('ruleForm');
+                if (ruleForm && !ruleForm.dataset.listenerAttached) {
+                    ruleForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
 
-            const rule = {
-                title: document.getElementById('ruleTitle').value.trim().toUpperCase(),
-                code: document.getElementById('ruleCode').value.trim(),
-                description: document.getElementById('ruleDescription').value.trim(),
-                sanction: document.getElementById('ruleSanction').value,
-                section: document.getElementById('ruleSection').value
-            };
+                        const rule = {
+                            title: document.getElementById('ruleTitle').value.trim().toUpperCase(),
+                            code: document.getElementById('ruleCode').value.trim(),
+                            description: document.getElementById('ruleDescription').value.trim(),
+                            sanction: document.getElementById('ruleSanction').value,
+                            section: document.getElementById('ruleSection').value
+                        };
 
-            if (!rule.title || !rule.description || !rule.sanction || !rule.section) {
-                alert('Por favor completa todos los campos requeridos');
-                return;
+                        if (!rule.title || !rule.description || !rule.sanction || !rule.section) {
+                            alert('Por favor completa todos los campos requeridos');
+                            return;
+                        }
+
+                        if (editingRuleIndex >= 0) {
+                            rulesData[editingRuleIndex] = rule;
+                            showSuccess('✅ Regla actualizada correctamente');
+                        } else {
+                            rulesData.push(rule);
+                            showSuccess('✅ Regla agregada correctamente');
+                        }
+
+                        saveRules();
+                        updateStats();
+                        closeRuleModal();
+                        renderRules();
+                    });
+                    ruleForm.dataset.listenerAttached = true;
+                }
+            } catch (err) {
+                console.error('Error al adjuntar listener del formulario:', err);
             }
-
-            if (editingRuleIndex >= 0) {
-                rulesData[editingRuleIndex] = rule;
-                showSuccess('✅ Regla actualizada correctamente');
-            } else {
-                rulesData.push(rule);
-                showSuccess('✅ Regla agregada correctamente');
-            }
-
-            saveRules();
-            updateStats();
-            closeRuleModal();
-            renderRules();
-        });
+        }
+        
+        // Intenta adjuntar listener inmediatamente
+        attachFormListener();
 
         function deleteRule(idx) {
             if (confirm('¿Estás seguro de que deseas eliminar esta regla?')) {
@@ -1252,16 +1266,44 @@
         }
 
         // Event listeners
-        document.getElementById('codeInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') checkAuth();
-        });
+        try {
+            const codeInput = document.getElementById('codeInput');
+            if (codeInput) {
+                codeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') checkAuth();
+                });
+            }
+        } catch (err) {
+            console.error('Error al adjuntar listener del código:', err);
+        }
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeRuleModal();
         });
 
+        // Inicializar cuando el DOM está listo
+        document.addEventListener('DOMContentLoaded', function() {
+            attachFormListener();
+            try {
+                const codeInput = document.getElementById('codeInput');
+                if (codeInput) {
+                    codeInput.focus();
+                }
+            } catch (err) {
+                console.error('Error al enfocar input:', err);
+            }
+        });
+
         window.addEventListener('load', function() {
-            document.getElementById('codeInput').focus();
+            attachFormListener();
+            try {
+                const codeInput = document.getElementById('codeInput');
+                if (codeInput) {
+                    codeInput.focus();
+                }
+            } catch (err) {
+                console.error('Error al cargar:', err);
+            }
         });
 
         // Listener para sincronización con otros tabs
