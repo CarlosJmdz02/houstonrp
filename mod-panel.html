@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod Panel - Houston RP Rules</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --dark-bg: #121212;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Auth Modal */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .auth-box {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
+        }
+
+        .auth-box h1 {
+            font-size: 28px;
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .auth-box p {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .auth-input-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-input-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .auth-input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .auth-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .auth-error.show {
+            display: block;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Main Panel */
+        .mod-panel {
+            display: none;
+        }
+
+        .mod-panel.active {
+            display: block;
+        }
+
+        header {
+            background: #141a30;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #60a5fa;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            font-weight: 800;
+        }
+
+        header .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-back, .btn-logout {
+            background: rgba(96, 165, 250, 0.15);
+            border: 2px solid rgba(96, 165, 250, 0.3);
+            color: #60a5fa;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+
+        .btn-back:hover, .btn-logout:hover {
+            background: rgba(96, 165, 250, 0.25);
+            color: #93c5fd;
+            border-color: #60a5fa;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(96, 165, 250, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 16px;
+            background: rgba(96, 165, 250, 0.15);
+            border: 2px solid rgba(96, 165, 250, 0.3);
+            color: #60a5fa;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: rgba(96, 165, 250, 0.3);
+            color: #93c5fd;
+            border-color: #60a5fa;
+            box-shadow: 0 0 15px rgba(96, 165, 250, 0.3);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-add-rule {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+
+        .btn-add-rule:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Rules Table */
+        .rules-wrapper {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .rules-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .rules-table thead {
+            background: rgba(37, 99, 235, 0.1);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .rules-table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--primary-light);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rules-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s ease;
+        }
+
+        .rules-table tbody tr:hover {
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .rules-table td {
+            padding: 14px 16px;
+            font-size: 14px;
+        }
+
+        .rule-title {
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .rule-description {
+            color: var(--text-secondary);
+            font-size: 13px;
+            max-width: 400px;
+        }
+
+        .sanction-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sanction-kick {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .sanction-banned {
+            background: rgba(127, 29, 29, 0.3);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .sanction-warn {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .sanction-2pt, .sanction-3pt, .sanction-4pt, .sanction-5pt {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+
+        .rule-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-edit:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            color: var(--primary-light);
+            font-size: 20px;
+        }
+
+        .btn-close {
+            background: rgba(239, 68, 68, 0.2);
+            border: none;
+            color: #fca5a5;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-close:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-cancel, .btn-save {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel {
+            background: rgba(96, 165, 250, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(96, 165, 250, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #86efac;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .btn-add-rule {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .rules-table {
+                font-size: 12px;
+            }
+
+            .rules-table th, .rules-table td {
+                padding: 10px;
+            }
+
+            .rule-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Screen -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-box">
+            <h1><i class="fas fa-lock"></i> Mod Panel</h1>
+            <p>Ingresa el código para acceder al panel de edición de reglas</p>
+            <div class="auth-error" id="authError"></div>
+            <div class="auth-input-group">
+                <label for="codeInput">Código de Acceso</label>
+                <input type="password" id="codeInput" placeholder="Ingresa el código..." autocomplete="off">
+            </div>
+            <button class="auth-btn" onclick="checkAuth()">Ingresar</button>
+            <button class="auth-btn" style="background: linear-gradient(135deg, #6366f1, #4f46e5); margin-top: 5px;" onclick="goBackToRules()">
+                <i class="fas fa-arrow-left"></i> Volver a Reglas
+            </button>
+        </div>
+    </div>
+
+    <!-- Mod Panel -->
+    <div class="mod-panel" id="modPanel">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-cogs"></i> Mod Panel - Editor de Reglas</h1>
+                <div class="header-actions">
+                    <button class="btn-back" onclick="goBackToRules()"><i class="fas fa-arrow-left"></i> Volver</button>
+                    <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Salir</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="success-message" id="successMessage"></div>
+
+            <div class="toolbar">
+                <div class="filter-group">
+                    <button class="filter-btn active" onclick="filterRules('ALL')">Todas (0)</button>
+                    <button class="filter-btn" onclick="filterRules('KICK')">KICK (0)</button>
+                    <button class="filter-btn" onclick="filterRules('BANNED')">BANNED (0)</button>
+                    <button class="filter-btn" onclick="filterRules('WARN')">WARN (0)</button>
+                </div>
+                <button class="btn-add-rule" onclick="openAddRuleModal()">
+                    <i class="fas fa-plus"></i> Agregar Regla
+                </button>
+            </div>
+
+            <div class="rules-wrapper">
+                <table class="rules-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Descripción</th>
+                            <th>Sanción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rulesTableBody">
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 30px;">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">📋</div>
+                                    <p>Cargando reglas...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit/Add Rule Modal -->
+    <div class="modal" id="ruleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Agregar Regla</h2>
+                <button class="btn-close" onclick="closeRuleModal()"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="ruleForm">
+                <div class="form-group">
+                    <label for="ruleTitle">Título de la Regla</label>
+                    <input type="text" id="ruleTitle" placeholder="Ej: RDM" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ruleCode">Código (Ej: Random Death Match)</label>
+                    <input type="text" id="ruleCode" placeholder="Ej: Random Death Match">
+                </div>
+
+                <div class="form-group">
+                    <label for="ruleDescription">Descripción de la Regla</label>
+                    <textarea id="ruleDescription" placeholder="Describe detalladamente qué es esta regla..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="ruleSanction">Sanción</label>
+                    <select id="ruleSanction" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="KICK">KICK</option>
+                        <option value="BANNED">BANNED</option>
+                        <option value="WARN">WARN</option>
+                        <option value="1 PUNTO">1 PUNTO</option>
+                        <option value="2 PUNTOS">2 PUNTOS</option>
+                        <option value="3 PUNTOS">3 PUNTOS</option>
+                        <option value="4 PUNTOS">4 PUNTOS</option>
+                        <option value="5 PUNTOS">5 PUNTOS</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ruleIcon">Icono (Ej: fas fa-gun, fas fa-car-crash)</label>
+                    <input type="text" id="ruleIcon" placeholder="Ej: fas fa-gun">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeRuleModal()">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar Regla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const CORRECT_CODE = "AI2026";
+        let isAuthenticated = false;
+        let rulesData = [];
+        let currentFilter = "ALL";
+        let editingRuleIndex = -1;
+
+        // Cargar reglas desde localStorage (simulación de BD)
+        function loadRules() {
+            const stored = localStorage.getItem('houstonRPRules');
+            if (stored) {
+                try {
+                    rulesData = JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error al cargar reglas:', e);
+                    rulesData = getDefaultRules();
+                }
+            } else {
+                rulesData = getDefaultRules();
+                saveRules();
+            }
+        }
+
+        function getDefaultRules() {
+            return [
+                {
+                    title: "RDM",
+                    code: "Random Death Match",
+                    description: "Matar a un jugador sin razón válida de roleplay.",
+                    sanction: "KICK",
+                    icon: "fas fa-gun"
+                },
+                {
+                    title: "VDM",
+                    code: "Vehicle Death Match",
+                    description: "Usar vehículo para golpear o matar sin razón válida.",
+                    sanction: "WARN",
+                    icon: "fas fa-car-crash"
+                },
+                {
+                    title: "MG",
+                    code: "Metagaming",
+                    description: "Usar información fuera del juego para beneficiarte en roleplay.",
+                    sanction: "BANNED",
+                    icon: "fas fa-brain"
+                },
+                {
+                    title: "ZONAS SEGURAS",
+                    code: "Pasaporte Safe Zone",
+                    description: "Las zonas seguras están protegidas. No se permite combate, robos ni actividades delictivas.",
+                    sanction: "KICK",
+                    icon: "fas fa-map-marker-alt"
+                },
+                {
+                    title: "PERSECUCIONES CIVILES",
+                    code: "Razón Válida Requerida",
+                    description: "Para iniciar una persecución como civil, debes tener una razón válida y coherente.",
+                    sanction: "WARN",
+                    icon: "fas fa-car"
+                }
+            ];
+        }
+
+        function saveRules() {
+            localStorage.setItem('houstonRPRules', JSON.stringify(rulesData));
+            showSuccess("Reglas guardadas correctamente");
+        }
+
+        function checkAuth() {
+            const code = document.getElementById('codeInput').value;
+            if (code === CORRECT_CODE) {
+                isAuthenticated = true;
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('modPanel').classList.add('active');
+                loadRules();
+                renderRules();
+            } else {
+                showAuthError("Código incorrecto. Intenta de nuevo.");
+                document.getElementById('codeInput').value = '';
+                document.getElementById('codeInput').focus();
+            }
+        }
+
+        function showAuthError(msg) {
+            const errorEl = document.getElementById('authError');
+            errorEl.textContent = msg;
+            errorEl.classList.add('show');
+            setTimeout(() => {
+                errorEl.classList.remove('show');
+            }, 3000);
+        }
+
+        function showSuccess(msg) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = msg;
+            successEl.classList.add('show');
+            setTimeout(() => {
+                successEl.classList.remove('show');
+            }, 3000);
+        }
+
+        function renderRules() {
+            const filtered = currentFilter === 'ALL' 
+                ? rulesData 
+                : rulesData.filter(r => r.sanction.includes(currentFilter));
+
+            updateFilterCounts();
+
+            if (filtered.length === 0) {
+                document.getElementById('rulesTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 30px;">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <p>No hay reglas con este filtro</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            document.getElementById('rulesTableBody').innerHTML = filtered.map((rule, idx) => {
+                const realIdx = rulesData.indexOf(rule);
+                return `
+                    <tr>
+                        <td class="rule-title"><i class="fas ${rule.icon || 'fa-circle'}"></i> ${rule.title}</td>
+                        <td class="rule-description">${rule.description}</td>
+                        <td>
+                            <span class="sanction-badge sanction-${rule.sanction.toLowerCase().replace(' ', '-')}">${rule.sanction}</span>
+                        </td>
+                        <td>
+                            <div class="rule-actions">
+                                <button class="btn-edit" onclick="openEditRuleModal(${realIdx})">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button class="btn-delete" onclick="deleteRule(${realIdx})">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateFilterCounts() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const filter = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                const count = filter === 'ALL' 
+                    ? rulesData.length 
+                    : rulesData.filter(r => r.sanction.includes(filter)).length;
+                btn.textContent = (filter === 'ALL' ? 'Todas' : filter) + ' (' + count + ')';
+            });
+        }
+
+        function filterRules(type) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.filter-btn').classList.add('active');
+            renderRules();
+        }
+
+        function openAddRuleModal() {
+            editingRuleIndex = -1;
+            document.getElementById('modalTitle').textContent = 'Agregar Nueva Regla';
+            document.getElementById('ruleForm').reset();
+            document.getElementById('ruleModal').classList.add('active');
+        }
+
+        function openEditRuleModal(idx) {
+            editingRuleIndex = idx;
+            const rule = rulesData[idx];
+            document.getElementById('modalTitle').textContent = 'Editar Regla';
+            document.getElementById('ruleTitle').value = rule.title;
+            document.getElementById('ruleCode').value = rule.code || '';
+            document.getElementById('ruleDescription').value = rule.description;
+            document.getElementById('ruleSanction').value = rule.sanction;
+            document.getElementById('ruleIcon').value = rule.icon || '';
+            document.getElementById('ruleModal').classList.add('active');
+        }
+
+        function closeRuleModal() {
+            document.getElementById('ruleModal').classList.remove('active');
+            editingRuleIndex = -1;
+        }
+
+        document.getElementById('ruleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const rule = {
+                title: document.getElementById('ruleTitle').value.trim(),
+                code: document.getElementById('ruleCode').value.trim(),
+                description: document.getElementById('ruleDescription').value.trim(),
+                sanction: document.getElementById('ruleSanction').value,
+                icon: document.getElementById('ruleIcon').value.trim() || 'fas fa-circle'
+            };
+
+            if (!rule.title || !rule.description || !rule.sanction) {
+                alert('Por favor completa todos los campos requeridos');
+                return;
+            }
+
+            if (editingRuleIndex >= 0) {
+                rulesData[editingRuleIndex] = rule;
+                showSuccess('Regla actualizada correctamente');
+            } else {
+                rulesData.push(rule);
+                showSuccess('Regla agregada correctamente');
+            }
+
+            saveRules();
+            closeRuleModal();
+            renderRules();
+        });
+
+        function deleteRule(idx) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta regla?')) {
+                rulesData.splice(idx, 1);
+                saveRules();
+                showSuccess('Regla eliminada correctamente');
+                renderRules();
+            }
+        }
+
+        function logout() {
+            if (confirm('¿Deseas cerrar sesión?')) {
+                isAuthenticated = false;
+                document.getElementById('modPanel').classList.remove('active');
+                document.getElementById('authContainer').style.display = 'flex';
+                document.getElementById('codeInput').value = '';
+                document.getElementById('codeInput').focus();
+            }
+        }
+
+        function goBackToRules() {
+            window.location.href = 'rules.html';
+        }
+
+        // Permitir Enter en input de contraseña
+        document.getElementById('codeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkAuth();
+        });
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeRuleModal();
+            }
+        });
+
+        // Inicializar
+        window.addEventListener('load', function() {
+            document.getElementById('codeInput').focus();
+        });
+    </script>
+</body>
+</html>
