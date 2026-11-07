@@ -2325,7 +2325,15 @@ const FORMATOS = {
   },
   hcso: {
     title: '⭐ HCSO FORMATS',
-    content: '<p style="color: var(--accent-gold); font-weight: 600; margin-bottom: 10px;">Por ahora sin contenido. Los formatos de HCSO se agregarán próximamente.</p>'
+    content: `<div style="margin-bottom: 20px;">
+  <h4 style="color: var(--accent-cyan); margin-bottom: 15px;">SELECCIONA UN RANGO HCSO</h4>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+    <button class="formato-subrango-btn" onclick="openFormatoModal('hcso_deputy_2')">Deputy II</button>
+    <button class="formato-subrango-btn" onclick="openFormatoModal('hcso_deputy_3')">Deputy III</button>
+    <button class="formato-subrango-btn" onclick="openFormatoModal('hcso_corporal')">Corporal</button>
+    <button class="formato-subrango-btn" onclick="openFormatoModal('hcso_sargento')">Sargento</button>
+  </div>
+</div>`
   },
   ice: {
     title: '🔍 ICE FORMATS',
@@ -3550,6 +3558,495 @@ NO COMPARTIR ESTA SECCIÓN CON LOS CANDIDATOS.
 <tr><td><strong style="color: var(--accent-red);">P9</strong></td><td>A</td><td><strong style="color: var(--accent-red);">P19</strong></td><td>B</td><td><strong style="color: var(--accent-red);">P29</strong></td><td>A</td></tr>
 <tr><td><strong style="color: var(--accent-red);">P10</strong></td><td>C</td><td><strong style="color: var(--accent-red);">P20</strong></td><td>D</td><td><strong style="color: var(--accent-red);">P30</strong></td><td>C</td></tr>
 </table>
+</div>`
+  },
+  hcso_deputy_2: {
+    title: '⭐ HARRIS COUNTY SHERIFF\'S OFFICE – DEPUTY II EXAM',
+    content: `<h3 style="color: var(--accent-gold); margin-bottom: 5px; font-family: 'Rajdhani', sans-serif;">HARRIS COUNTY SHERIFF'S OFFICE</h3>
+<h2 style="color: var(--accent-cyan); margin-bottom: 20px; font-family: 'Rajdhani', sans-serif; font-size: 24px;">EXAMEN DE ASCENSO – DEPUTY II (SENIOR OFFICIAL II)</h2>
+
+<p><strong>Instructor a cargo del examen:</strong> ____________________</p>
+
+<p style="margin-top: 15px; margin-bottom: 15px; color: var(--text-secondary); line-height: 1.8;">
+<strong>IMPORTANTE:</strong> El candidato deberá leer cuidadosamente cada pregunta y responder con honestidad. El instructor evaluará sus conocimientos, criterio, comunicación y capacidad para actuar correctamente durante situaciones de patrullaje. No se permite recibir ayuda de otros oficiales durante el examen.
+</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px; font-family: 'Rajdhani', sans-serif;">INTRODUCCIÓN DEL INSTRUCTOR</h3>
+<p style="color: var(--text-secondary); line-height: 2; margin-bottom: 15px;">
+Bienvenido a tu examen de ascenso para Deputy II (Senior Official II) del Harris County Sheriff's Office. Este rango requiere un mayor nivel de responsabilidad, experiencia y conocimiento del departamento. Se evaluará tu capacidad para manejar situaciones complicadas, tomar decisiones bajo presión y mantener una comunicación profesional.
+</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 1 – CONOCIMIENTOS GENERALES</h3>
+
+<ol style="line-height: 2.5; margin-left: 20px;">
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Cuál es una de las principales responsabilidades de un Deputy II?<br>
+A) Realizar únicamente patrullajes individuales.<br>
+B) Evitar participar en situaciones complicadas.<br>
+C) Demostrar experiencia, apoyar a otros oficiales y mantener el cumplimiento de los procedimientos.<br>
+D) Tomar decisiones sin informar a Central.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Si un oficial de menor rango está cometiendo un error durante una intervención, ¿qué debes hacer?<br>
+A) Ignorar la situación mientras no te afecte.<br>
+B) Corregirlo de manera profesional y asegurarte de que la intervención se mantenga bajo control.<br>
+C) Retirarte del lugar.<br>
+D) Discutir con él frente a los ciudadanos.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Explica tres responsabilidades que debe cumplir un Deputy II durante su turno.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Durante una persecución, el oficial principal pierde comunicación con Central. ¿Qué debes hacer?<br>
+A) Continuar la persecución sin comunicar nada.<br>
+B) Ordenar a todos los oficiales que abandonen la persecución.<br>
+C) Cambiar de frecuencia sin informar.<br>
+D) Intentar restablecer la comunicación y transmitir la información necesaria para mantener coordinadas las unidades.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Qué información es importante transmitir a Central al solicitar apoyo en una situación de alto riesgo?<br>
+A) Ubicación, situación, cantidad de personas involucradas y tipo de asistencia necesaria.<br>
+B) Solamente el nombre del oficial.<br>
+C) Únicamente la ubicación inicial.<br>
+D) Información personal que no tenga relación con el incidente.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Un ciudadano presenta una queja contra un oficial. ¿Cuál es la mejor manera de manejarla?<br>
+A) Decirle que no puede presentar quejas.<br>
+B) Defender al oficial sin escuchar los hechos.<br>
+C) Escuchar la queja, documentar la información y seguir el procedimiento correspondiente.<br>
+D) Ignorarla si el oficial tiene un rango superior.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Qué debes hacer antes de iniciar una intervención que puede poner en riesgo a otros oficiales?<br>
+A) Actuar inmediatamente sin informar.<br>
+B) Evaluar la situación, comunicar el plan y solicitar los recursos necesarios.<br>
+C) Esperar a que otro oficial tome todas las decisiones.<br>
+D) Separarte de las demás unidades.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Un oficial te informa que otro miembro está utilizando su rango para intimidar a compañeros. ¿Qué corresponde hacer?<br>
+A) Resolverlo mediante una discusión pública.<br>
+B) Ignorar el reporte si ambos oficiales son amigos.<br>
+C) Retirar inmediatamente el rango del oficial sin revisar los hechos.<br>
+D) Recopilar la información y reportarla por los canales correspondientes.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Explica qué diferencia existe entre una intervención rutinaria y una intervención de alto riesgo.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Qué debes hacer si recibes una instrucción de un superior que parece contradecir el procedimiento del departamento?<br>
+A) Cumplirla sin cuestionar, sin importar las consecuencias.<br>
+B) Ignorar todas las instrucciones del superior.<br>
+C) Solicitar aclaración, comunicar la preocupación y seguir el procedimiento establecido.<br>
+D) Abandonar tu turno.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Durante una parada de tráfico, descubres que el conductor coincide con la descripción de una persona buscada. ¿Qué debes hacer?<br>
+A) Mantener el control de la parada, verificar la información y comunicar la situación a Central.<br>
+B) Arrestarlo inmediatamente sin verificar nada.<br>
+C) Dejarlo ir para evitar problemas.<br>
+D) Permitir que abandone el lugar mientras buscas información.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Qué elementos debe contener un reporte de arresto completo?<br>
+A) Solamente el nombre del detenido.<br>
+B) Los hechos, motivo de la detención, información relevante, evidencias y acciones realizadas.<br>
+C) Únicamente la hora del arresto.<br>
+D) Una opinión personal sobre el detenido.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Si dos oficiales tienen un desacuerdo durante un servicio, ¿cómo debes intervenir?<br>
+A) Tomar partido por el oficial de mayor rango sin escuchar.<br>
+B) Permitir que continúen discutiendo.<br>
+C) Retirarlos del departamento inmediatamente.<br>
+D) Mantener la calma, escuchar ambas versiones y buscar una solución profesional.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Por qué es importante mantener actualizada la información de las unidades durante una emergencia?<br>
+A) Para que Central pueda coordinar recursos y conocer la ubicación y situación de cada unidad.<br>
+B) Para evitar que otros oficiales participen.<br>
+C) Para reducir la cantidad de comunicaciones.<br>
+D) Porque solamente los supervisores necesitan conocerla.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Un oficial realiza una detención y después descubre que la información inicial era incorrecta. ¿Qué debe hacer?<br>
+A) Ocultar el error para evitar problemas.<br>
+B) Mantener la detención aunque no exista fundamento.<br>
+C) Informar a Central, revisar la situación y corregir las acciones según corresponda.<br>
+D) Culpar al ciudadano.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Cuál es la conducta correcta al trabajar con varias unidades durante una emergencia?<br>
+A) Que cada oficial actúe por su cuenta.<br>
+B) Mantener comunicación, coordinar responsabilidades y evitar acciones contradictorias.<br>
+C) Permitir que todas las unidades persigan al mismo vehículo sin coordinación.<br>
+D) Evitar informar los cambios de situación.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Explica qué harías si un oficial de tu misma categoría se niega repetidamente a seguir las instrucciones operativas durante una intervención.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Qué debes hacer si encuentras información que podría demostrar que un detenido no estuvo involucrado en el incidente?<br>
+A) No mencionarla si el arresto ya fue realizado.<br>
+B) Eliminarla del reporte.<br>
+C) Compartirla únicamente con tus amigos.<br>
+D) Comunicarla y asegurarte de que sea considerada en el procedimiento correspondiente.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+Antes de finalizar un servicio, ¿qué debes verificar?<br>
+A) Que las intervenciones estén concluidas, los reportes necesarios estén realizados y Central conozca tu cambio de estado.<br>
+B) Que todos los oficiales hayan abandonado el servidor.<br>
+C) Que no existan ciudadanos cerca de tu unidad.<br>
+D) Que tu patrulla esté estacionada en cualquier lugar.
+</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">
+¿Qué significa ser un ejemplo para los oficiales de menor rango?<br>
+A) Tener autoridad para ignorar las reglas.<br>
+B) Exigir respeto sin demostrarlo.<br>
+C) Mantener una conducta profesional y demostrar con tus acciones cómo deben cumplirse los procedimientos.<br>
+D) Evitar ayudar a los nuevos oficiales.
+</li>
+</ol>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 2 – SITUACIONES OPERATIVAS</h3>
+
+<p style="color: var(--text-secondary); margin-bottom: 15px;"><strong>Instrucciones:</strong> Lee cada situación y explica detalladamente cómo actuarías.</p>
+
+<h4 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 10px;">SITUACIÓN 1 – PERSECUCIÓN Y FALTA DE COORDINACIÓN</h4>
+<p style="color: var(--text-secondary); line-height: 1.8;">
+Durante tu patrullaje, Central informa sobre un vehículo relacionado con un delito. Varias unidades comienzan una persecución. El oficial principal comunica que el vehículo está entrando a una zona concurrida. Otro oficial intenta adelantarse sin autorización y termina bloqueando parcialmente la ruta de las demás unidades. Al mismo tiempo, pierdes comunicación con una de las patrullas.
+</p>
+<p style="color: var(--accent-gold); font-weight: 600; margin-top: 10px;">Como Deputy II, ¿cómo organizarías la situación? Explica qué comunicarías a Central, cómo manejarías las unidades y qué harías para evitar que la intervención se vuelva más peligrosa.</p>
+
+<h4 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 10px;">SITUACIÓN 2 – CONDUCTA INDEBIDA Y RESPONSABILIDAD DEL DEPARTAMENTO</h4>
+<p style="color: var(--text-secondary); line-height: 1.8;">
+Un oficial presenta un reporte contra otro miembro del departamento por presuntamente utilizar su autoridad de manera indebida durante una detención. El oficial señalado es alguien con quien tienes una buena relación. Además, otro compañero te pide que no informes el incidente porque podría afectar la reputación del departamento.
+</p>
+<p style="color: var(--accent-gold); font-weight: 600; margin-top: 10px;">Como Deputy II, explica cómo manejarías el reporte, qué información buscarías, cómo evitarías un conflicto de interés y qué harías si descubres que el comportamiento denunciado realmente ocurrió.</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 3 – EVALUACIÓN PRÁCTICA (RIDE ALONG)</h3>
+
+<p style="color: var(--text-secondary); margin-bottom: 15px; line-height: 1.8;">
+El candidato deberá realizar una patrulla acompañado por el instructor. Durante esta evaluación se observará su comportamiento y capacidad para aplicar los conocimientos del examen. El candidato deberá demostrar: comunicación correcta con Central, inicio y finalización de servicio adecuada, procedimiento de parada de tráfico, manejo de situaciones inesperadas, coordinación con otros oficiales, uso adecuado de la radio, profesionalismo y capacidad para apoyar a oficiales de menor rango.
+</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">RESULTADO DEL EXAMEN</h3>
+
+<p><strong>Resultado:</strong> APROBADO / REPROBADO</p>
+<p><strong>Calificación:</strong> ______ / 20</p>
+<p style="color: var(--text-secondary); margin-top: 20px;"><strong>Observaciones del instructor:</strong></p>
+<p style="border: 1px solid var(--border); padding: 12px; margin-top: 10px; min-height: 60px; color: var(--text-secondary);">_____________________________________________________________________________</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<div style="background: rgba(244, 67, 54, 0.1); border-left: 4px solid var(--accent-red); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<h4 style="color: var(--accent-red); margin-bottom: 10px;">🔴 CLAVE DE RESPUESTAS – SOLO PARA EL INSTRUCTOR</h4>
+<p style="color: var(--accent-red); font-size: 12px; margin-bottom: 15px;"><strong>NO COMPARTIR ESTA SECCIÓN CON EL CANDIDATO.</strong></p>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">Respuestas correctas – Parte 1</h5>
+<div style="background: rgba(244, 67, 54, 0.05); padding: 12px; border-radius: 4px; margin: 12px 0; color: var(--accent-red);">
+<table style="width: 100%; color: var(--accent-red);">
+<tr><td><strong>P1</strong> - C</td><td><strong>P11</strong> - A</td></tr>
+<tr><td><strong>P2</strong> - B</td><td><strong>P12</strong> - B</td></tr>
+<tr><td><strong>P3</strong> - Respuesta abierta</td><td><strong>P13</strong> - D</td></tr>
+<tr><td><strong>P4</strong> - D</td><td><strong>P14</strong> - A</td></tr>
+<tr><td><strong>P5</strong> - A</td><td><strong>P15</strong> - C</td></tr>
+<tr><td><strong>P6</strong> - C</td><td><strong>P16</strong> - B</td></tr>
+<tr><td><strong>P7</strong> - B</td><td><strong>P17</strong> - Respuesta abierta</td></tr>
+<tr><td><strong>P8</strong> - D</td><td><strong>P18</strong> - D</td></tr>
+<tr><td><strong>P9</strong> - Respuesta abierta</td><td><strong>P19</strong> - A</td></tr>
+<tr><td><strong>P10</strong> - C</td><td><strong>P20</strong> - C</td></tr>
+</table>
+</div>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">Guía para evaluar las situaciones</h5>
+<p style="color: var(--accent-red); font-size: 12px; line-height: 1.8;">
+<strong>Situación 1:</strong> El candidato debe demostrar que sabe mantener comunicación con Central, coordinar las unidades, evitar maniobras desorganizadas e informar la pérdida de comunicación.<br><br>
+<strong>Situación 2:</strong> El candidato debe demostrar imparcialidad, responsabilidad, capacidad para documentar hechos y evitar favoritismos al reportar conducta indebida.
+</p>
+</div>
+
+<div style="background: rgba(255, 193, 7, 0.15); border-left: 4px solid var(--accent-gold); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<p style="color: var(--accent-gold); font-weight: 600;">⚠️ RECORDATORIO IMPORTANTE PARA EL INSTRUCTOR</p>
+<p style="color: var(--accent-gold); font-size: 12px;">Envía los resultados del examen al candidato por mensaje directo en Discord dentro de 24 horas.</p>
+</div>`
+  },
+  hcso_deputy_3: {
+    title: '⭐ HARRIS COUNTY SHERIFF\'S OFFICE – DEPUTY III EXAM',
+    content: `<h3 style="color: var(--accent-gold); margin-bottom: 5px; font-family: 'Rajdhani', sans-serif;">HARRIS COUNTY SHERIFF'S OFFICE</h3>
+<h2 style="color: var(--accent-cyan); margin-bottom: 20px; font-family: 'Rajdhani', sans-serif; font-size: 24px;">EXAMEN DE ASCENSO – DEPUTY III (SENIOR OFFICIAL III)</h2>
+
+<p><strong>Instructor a cargo del examen:</strong> ____________________</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px; font-family: 'Rajdhani', sans-serif;">INTRODUCCIÓN DEL INSTRUCTOR</h3>
+<p style="color: var(--text-secondary); line-height: 2; margin-bottom: 15px;">
+Bienvenido a tu examen de ascenso para Deputy III (Senior Official III). Este rango representa un nivel avanzado de experiencia y responsabilidad dentro del departamento. Se espera que puedas manejar situaciones complicadas, apoyar a otros oficiales, tomar decisiones bajo presión y mantener el orden durante las operaciones.
+</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 1 – CONOCIMIENTOS GENERALES</h3>
+
+<ol style="line-height: 2.5; margin-left: 20px;">
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es una de las responsabilidades más importantes de un Deputy III?<br>A) Evitar participar en situaciones de otros oficiales.<br>B) Mantener el liderazgo operativo, apoyar a los oficiales y asegurar que se respeten los procedimientos.<br>C) Tomar el control de todas las unidades sin comunicarlo.<br>D) Utilizar su rango para evitar responsabilidades.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una operación, dos oficiales reciben instrucciones diferentes y comienzan a discutir por la radio. ¿Qué debes hacer?<br>A) Permitir que resuelvan el problema por su cuenta.<br>B) Retirarte de la operación.<br>C) Dar instrucciones sin conocer la situación.<br>D) Aclarar la coordinación, establecer responsabilidades y mantener la comunicación con Central.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Explica qué diferencia existe entre tener autoridad por tu rango y demostrar liderazgo dentro del departamento.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial de menor rango realiza una intervención incorrecta y pone en riesgo a otros compañeros. ¿Cuál es tu prioridad?<br>A) Controlar la situación, proteger a los involucrados y corregir el procedimiento de manera adecuada.<br>B) Esperar hasta que termine la intervención para mencionarlo.<br>C) Defender al oficial sin importar lo ocurrido.<br>D) Ignorar el problema si no hubo consecuencias.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debes hacer cuando una operación involucra varias unidades y diferentes responsabilidades?<br>A) Permitir que cada unidad decida sus propias funciones.<br>B) Evitar comunicar instrucciones para no saturar la radio.<br>C) Coordinar las responsabilidades, mantener informado a Central y evitar conflictos entre unidades.<br>D) Asignar todas las tareas a un solo oficial.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial presenta una acusación contra un supervisor. ¿Cómo debes manejar la situación?<br>A) Rechazar el reporte porque involucra a un rango superior.<br>B) Escuchar la información, documentar los hechos y seguir los canales correspondientes sin favoritismos.<br>C) Informar al supervisor para que decida si acepta la queja.<br>D) Resolverlo mediante una discusión pública.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debes hacer si una operación comienza a perder el control debido a instrucciones contradictorias?<br>A) Ordenar a todas las unidades que abandonen el lugar.<br>B) Dejar que el oficial de mayor antigüedad decida sin consultar.<br>C) Continuar con el plan original aunque ya no sea seguro.<br>D) Detener la desorganización, aclarar las instrucciones y restablecer la coordinación.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es la manera correcta de corregir a un oficial que está cometiendo errores repetidamente?<br>A) Humillarlo frente a todo el departamento.<br>B) Ignorar sus errores para evitar conflictos.<br>C) Explicarle sus errores, orientarlo y documentar o reportar el comportamiento cuando corresponda.<br>D) Retirarle sus responsabilidades sin explicación.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Explica qué información debe recibir Central cuando ocurre una emergencia con varias unidades involucradas.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un superior te solicita que ignores una posible infracción cometida por un oficial cercano a él. ¿Qué debes hacer?<br>A) Ignorar la solicitud y actuar de manera imparcial siguiendo los procedimientos de reporte.<br>B) Cumplir la instrucción para evitar problemas.<br>C) Ocultar la información para proteger al departamento.<br>D) Hablar únicamente con el oficial involucrado y no documentar nada.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una persecución, el oficial principal deja de responder y otra unidad comienza a dar instrucciones diferentes. ¿Qué debes hacer?<br>A) Permitir que ambas unidades continúen dando instrucciones.<br>B) Tomar control sin informar a Central.<br>C) Finalizar la persecución sin evaluar la situación.<br>D) Restablecer la coordinación, confirmar quién dirige la operación y mantener informada a Central.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debe hacer un Deputy III cuando descubre que un reporte oficial contiene información incorrecta?<br>A) Dejarlo como está si ya fue enviado.<br>B) Corregir o comunicar el error por el procedimiento correspondiente, manteniendo un registro transparente.<br>C) Eliminar el reporte sin informar.<br>D) Pedirle a otro oficial que asuma la responsabilidad.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial nuevo está teniendo dificultades para realizar sus funciones. ¿Qué corresponde hacer?<br>A) Retirarlo inmediatamente del departamento.<br>B) Dejar que aprenda sin ninguna orientación.<br>C) Orientarlo, identificar qué necesita mejorar y darle seguimiento a su progreso.<br>D) Permitirle trabajar sin supervisión en situaciones complicadas.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Por qué es importante mantener imparcialidad al supervisar a otros oficiales?<br>A) Porque todos deben recibir el mismo trato profesional y las decisiones deben basarse en hechos, no en amistades.<br>B) Porque los oficiales de mayor rango siempre tienen razón.<br>C) Porque los amigos deben recibir menos sanciones.<br>D) Porque evita tener que revisar reportes.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una emergencia, un oficial abandona su responsabilidad sin informar a nadie. ¿Qué debes hacer?<br>A) Ignorarlo si la emergencia termina bien.<br>B) Castigarlo inmediatamente sin revisar lo ocurrido.<br>C) Permitir que los demás oficiales decidan qué hacer.<br>D) Asegurar que la operación siga coordinada, verificar la situación del oficial y reportar el incidente según corresponda.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es la mejor manera de manejar un conflicto entre dos miembros del departamento?<br>A) Tomar partido por el oficial con más antigüedad.<br>B) Escuchar ambas versiones, revisar los hechos y buscar una solución profesional.<br>C) Permitir que discutan hasta llegar a un acuerdo.<br>D) Expulsar a ambos del servicio sin investigar.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Explica cómo organizarías una operación en la que participan varias unidades y cada una tiene una responsabilidad diferente.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial te informa que otro miembro está alterando reportes para evitar recibir consecuencias. ¿Qué debes hacer?<br>A) Ignorar el reporte hasta tener una queja formal.<br>B) Confrontarlo públicamente y acusarlo.<br>C) Recopilar la información disponible y reportarla por los canales correspondientes para que sea revisada.<br>D) Pedirle que elimine los reportes alterados.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué demuestra que un Deputy III está preparado para asumir mayores responsabilidades?<br>A) Su capacidad para mantener el control, tomar decisiones razonables, orientar a otros y responder por sus acciones.<br>B) La cantidad de veces que utiliza su rango.<br>C) Su capacidad para dar órdenes sin explicaciones.<br>D) Su antigüedad, sin importar su desempeño.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Si una decisión tomada por ti durante una operación resulta ser incorrecta, ¿qué debes hacer?<br>A) Culpar al oficial que estaba contigo.<br>B) Ocultar lo sucedido para proteger tu reputación.<br>C) Evitar hablar del incidente.<br>D) Reconocer el error, informar lo ocurrido y tomar medidas para corregirlo.</li>
+</ol>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 2 – SITUACIONES OPERATIVAS</h3>
+
+<h4 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 10px;">SITUACIÓN 1 – OPERACIÓN DESORGANIZADA Y RESPONSABILIDAD DE MANDO</h4>
+<p style="color: var(--text-secondary); line-height: 1.8;">Central recibe un reporte de un incidente grave. Cuatro unidades responden. Al llegar, descubres que hay instrucciones contradictorias, dos oficiales siguiendo al mismo sospechoso, otro atendiendo a un ciudadano herido y una cuarta unidad dando instrucciones conflictivas. El oficial que coordinaba inicialmente deja de responder.</p>
+<p style="color: var(--accent-gold); font-weight: 600; margin-top: 10px;">Como Deputy III, explica cómo organizarías las unidades, qué información transmitirías a Central, cómo establecerías responsabilidades y cómo manejarías la pérdida de comunicación.</p>
+
+<h4 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 10px;">SITUACIÓN 2 – INVESTIGACIÓN INTERNA Y CONFLICTO DE INTERÉS</h4>
+<p style="color: var(--text-secondary); line-height: 1.8;">Un oficial presenta evidencia de que un miembro del departamento ha estado utilizando su autoridad para beneficiar a sus amigos. La persona señalada es un oficial con experiencia y mantiene buena relación con supervisores. Al revisar, encuentras inconsistencias entre reportes. Un supervisor te pide que no continúes investigando.</p>
+<p style="color: var(--accent-gold); font-weight: 600; margin-top: 10px;">Como Deputy III, explica cómo manejarías la evidencia, cómo evitarías favoritismos, cómo responderías al supervisor y cómo documentarías las inconsistencias.</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<div style="background: rgba(244, 67, 54, 0.1); border-left: 4px solid var(--accent-red); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<h4 style="color: var(--accent-red); margin-bottom: 10px;">🔴 CLAVE DE RESPUESTAS – SOLO PARA EL INSTRUCTOR</h4>
+<p style="color: var(--accent-red); font-size: 12px; margin-bottom: 15px;"><strong>NO COMPARTIR ESTA SECCIÓN CON EL CANDIDATO.</strong></p>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">Respuestas correctas – Parte 1</h5>
+<div style="background: rgba(244, 67, 54, 0.05); padding: 12px; border-radius: 4px; margin: 12px 0; color: var(--accent-red);">
+<table style="width: 100%; color: var(--accent-red);">
+<tr><td><strong>P1</strong> - B</td><td><strong>P11</strong> - D</td></tr>
+<tr><td><strong>P2</strong> - D</td><td><strong>P12</strong> - B</td></tr>
+<tr><td><strong>P3</strong> - Respuesta abierta</td><td><strong>P13</strong> - C</td></tr>
+<tr><td><strong>P4</strong> - A</td><td><strong>P14</strong> - A</td></tr>
+<tr><td><strong>P5</strong> - C</td><td><strong>P15</strong> - D</td></tr>
+<tr><td><strong>P6</strong> - B</td><td><strong>P16</strong> - B</td></tr>
+<tr><td><strong>P7</strong> - D</td><td><strong>P17</strong> - Respuesta abierta</td></tr>
+<tr><td><strong>P8</strong> - C</td><td><strong>P18</strong> - C</td></tr>
+<tr><td><strong>P9</strong> - Respuesta abierta</td><td><strong>P19</strong> - A</td></tr>
+<tr><td><strong>P10</strong> - A</td><td><strong>P20</strong> - D</td></tr>
+</table>
+</div>
+</div>
+
+<div style="background: rgba(255, 193, 7, 0.15); border-left: 4px solid var(--accent-gold); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<p style="color: var(--accent-gold); font-weight: 600;">⚠️ RECORDATORIO IMPORTANTE PARA EL INSTRUCTOR</p>
+<p style="color: var(--accent-gold); font-size: 12px;">Envía los resultados del examen al candidato por mensaje directo en Discord dentro de 24 horas.</p>
+</div>`
+  },
+  hcso_corporal: {
+    title: '⭐ HARRIS COUNTY SHERIFF\'S OFFICE – CORPORAL EXAM',
+    content: `<h3 style="color: var(--accent-gold); margin-bottom: 5px; font-family: 'Rajdhani', sans-serif;">HARRIS COUNTY SHERIFF'S OFFICE</h3>
+<h2 style="color: var(--accent-cyan); margin-bottom: 20px; font-family: 'Rajdhani', sans-serif; font-size: 24px;">EXAMEN DE ASCENSO – CORPORAL (SUPERVISOR)</h2>
+
+<p><strong>Instructor a cargo del examen:</strong> ____________________</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px; font-family: 'Rajdhani', sans-serif;">INTRODUCCIÓN DEL INSTRUCTOR</h3>
+<p style="color: var(--text-secondary); line-height: 2; margin-bottom: 15px;">
+Bienvenido a tu examen de ascenso para Corporal. El rango de Corporal representa una responsabilidad importante dentro del departamento. Se espera que puedas orientar a oficiales, supervisar el trabajo durante los turnos y ayudar a que las operaciones se desarrollen correctamente. Un Corporal debe demostrar liderazgo, madurez y capacidad para tomar decisiones.
+</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 1 – CONOCIMIENTOS GENERALES</h3>
+
+<ol style="line-height: 2.5; margin-left: 20px;">
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es una de las principales responsabilidades de un Corporal?<br>A) Supervisar, orientar y apoyar a los oficiales durante sus funciones.<br>B) Evitar involucrarse en los problemas del departamento.<br>C) Dar órdenes sin explicar los procedimientos.<br>D) Realizar únicamente patrullajes individuales.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial nuevo no conoce correctamente los procedimientos de una parada de tráfico. ¿Qué debes hacer?<br>A) Permitir que continúe sin orientación.<br>B) Retirarlo inmediatamente del departamento.<br>C) Corregirlo de manera profesional y explicarle el procedimiento adecuado.<br>D) Ignorar la situación porque no eres su instructor.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Explica tres responsabilidades que debe cumplir un Corporal durante un turno de patrullaje.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una intervención, un oficial comienza a discutir con un ciudadano y pierde el control de la situación. ¿Qué debes hacer?<br>A) Permitir que continúe para que aprenda.<br>B) Intervenir profesionalmente, controlar la situación y orientar al oficial.<br>C) Retirarte del lugar.<br>D) Discutir también con el ciudadano.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debes hacer cuando un oficial solicita ayuda durante una intervención?<br>A) Ignorar la solicitud si estás ocupado.<br>B) Ordenarle que resuelva todo por su cuenta.<br>C) Acudir sin informar a Central ni verificar la situación.<br>D) Evaluar la solicitud, comunicarte con Central y proporcionar el apoyo necesario.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial comete una infracción durante su turno. ¿Cómo debes manejar la situación?<br>A) Revisar lo ocurrido, hablar con el oficial y seguir el procedimiento correspondiente.<br>B) Ignorarlo si es tu amigo.<br>C) Sancionarlo inmediatamente sin conocer los hechos.<br>D) Permitir que otro oficial decida sin informar a nadie.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es la manera correcta de asignar responsabilidades a los oficiales durante una operación?<br>A) Permitir que todos hagan lo mismo.<br>B) Dar instrucciones diferentes a cada oficial sin coordinación.<br>C) Establecer funciones claras y mantener comunicación con las unidades y Central.<br>D) Evitar dar instrucciones para no asumir responsabilidades.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Dos oficiales tienen un desacuerdo durante el patrullaje. ¿Qué debes hacer?<br>A) Apoyar automáticamente al oficial de mayor antigüedad.<br>B) Escuchar ambas versiones y resolver el problema de manera profesional.<br>C) Permitir que discutan frente a los ciudadanos.<br>D) Ignorar el conflicto.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Explica qué significa mantener una buena comunicación con Central y por qué es importante para un Corporal.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial te pide que ocultes un error que cometió durante una intervención. ¿Qué debes hacer?<br>A) Aceptar para protegerlo.<br>B) Eliminar cualquier información relacionada.<br>C) Pedirle que no vuelva a cometer el error y dejarlo así.<br>D) Actuar con transparencia, informar lo ocurrido y seguir el procedimiento correspondiente.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una emergencia, varias unidades llegan al mismo lugar y comienzan a actuar sin coordinación. ¿Qué debes hacer?<br>A) Ayudar a organizar las unidades, establecer responsabilidades y mantener informada a Central.<br>B) Permitir que cada unidad actúe por su cuenta.<br>C) Retirarte para evitar problemas.<br>D) Ordenar a todos que abandonen el lugar sin evaluar la situación.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué información debe incluir un reporte sobre una intervención?<br>A) Solamente el nombre del oficial.<br>B) Una opinión personal sobre el ciudadano.<br>C) Los hechos, ubicación, personas involucradas y acciones realizadas.<br>D) Únicamente la hora en que terminó el servicio.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial de menor rango te pregunta cómo debe actuar durante una situación que no conoce. ¿Qué corresponde hacer?<br>A) Decirle que lo resuelva por su cuenta.<br>B) Orientarlo y explicarle cómo proceder según los procedimientos del departamento.<br>C) Ignorarlo porque debe aprender solo.<br>D) Darle una instrucción sin conocer la situación.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Por qué un Corporal debe mantener imparcialidad al supervisar a los oficiales?<br>A) Para evitar tener que intervenir en conflictos.<br>B) Porque los amigos deben recibir un trato diferente.<br>C) Porque los oficiales de mayor antigüedad siempre tienen razón.<br>D) Porque las decisiones deben basarse en los hechos y no en amistades o preferencias.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial abandona su unidad durante una operación sin informar a Central. ¿Qué debes hacer?<br>A) Verificar qué ocurrió, asegurar que la operación continúe coordinada y reportar la situación según corresponda.<br>B) Ignorarlo si regresa después.<br>C) Permitir que los demás oficiales hagan lo mismo.<br>D) Ocultar el incidente para evitar problemas.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debes hacer si un oficial se niega repetidamente a seguir instrucciones operativas?<br>A) Discutir con él frente a todos.<br>B) Ignorarlo porque tiene derecho a decidir.<br>C) Hablar con él, dejar constancia del comportamiento y reportarlo por los canales correspondientes.<br>D) Permitirle continuar sin supervisión.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Explica cómo ayudarías a un oficial que tiene dificultades para comunicarse correctamente con Central.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una parada de tráfico, descubres que el oficial a cargo no está siguiendo el procedimiento y la situación comienza a complicarse. ¿Qué debes hacer?<br>A) Esperar hasta que termine la parada.<br>B) Intervenir de manera adecuada, ayudar a controlar la situación y corregir el procedimiento.<br>C) Abandonar el lugar.<br>D) Permitir que continúe aunque exista un riesgo.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué demuestra que una persona está preparada para ser Corporal?<br>A) Que tiene muchos amigos dentro del departamento.<br>B) Que utiliza su rango para controlar a los demás.<br>C) Que evita asumir responsabilidades.<br>D) Que demuestra liderazgo, responsabilidad, conocimiento y profesionalismo.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Si cometes un error mientras supervisas una operación, ¿qué debes hacer?<br>A) Reconocerlo, comunicarlo y tomar las medidas necesarias para corregirlo.<br>B) Culpar a otro oficial.<br>C) Ocultarlo para proteger tu rango.<br>D) Evitar hablar sobre lo sucedido.</li>
+</ol>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 2 – SITUACIONES OPERATIVAS</h3>
+
+<h4 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 10px;">SITUACIÓN 1 – SUPERVISIÓN DE UNA INTERVENCIÓN COMPLICADA</h4>
+<p style="color: var(--text-secondary); line-height: 1.8;">Durante tu turno, tres oficiales responden a una llamada por una alteración del orden en un establecimiento. Descubres que uno está discutiendo con un ciudadano, otro está dando instrucciones diferentes y el tercero no sabe qué responsabilidad debe cumplir. Central solicita una actualización pero los oficiales no están proporcionando información clara.</p>
+<p style="color: var(--accent-gold); font-weight: 600; margin-top: 10px;">Como Corporal, explica cómo recuperarías el control de la intervención, qué instrucciones darías a cada oficial y cómo mantendrías informada a Central.</p>
+
+<h4 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 10px;">SITUACIÓN 2 – CONFLICTO ENTRE OFICIALES Y RESPONSABILIDAD DE SUPERVISIÓN</h4>
+<p style="color: var(--text-secondary); line-height: 1.8;">Dos oficiales que trabajan juntos comienzan a tener conflictos constantemente. Uno presenta una queja informal indicando que el otro no está cumpliendo sus responsabilidades y que sus errores están afectando el trabajo. El oficial señalado dice que es una cuestión personal.</p>
+<p style="color: var(--accent-gold); font-weight: 600; margin-top: 10px;">Como Corporal, explica cómo investigarías la situación, cómo manejarías el conflicto y qué medidas tomarías para evitar que afecte las operaciones.</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<div style="background: rgba(244, 67, 54, 0.1); border-left: 4px solid var(--accent-red); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<h4 style="color: var(--accent-red); margin-bottom: 10px;">🔴 CLAVE DE RESPUESTAS – SOLO PARA EL INSTRUCTOR</h4>
+<p style="color: var(--accent-red); font-size: 12px; margin-bottom: 15px;"><strong>NO COMPARTIR ESTA SECCIÓN CON EL CANDIDATO.</strong></p>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">Respuestas correctas – Parte 1</h5>
+<div style="background: rgba(244, 67, 54, 0.05); padding: 12px; border-radius: 4px; margin: 12px 0; color: var(--accent-red);">
+<table style="width: 100%; color: var(--accent-red);">
+<tr><td><strong>P1</strong> - A</td><td><strong>P11</strong> - A</td></tr>
+<tr><td><strong>P2</strong> - C</td><td><strong>P12</strong> - C</td></tr>
+<tr><td><strong>P3</strong> - Respuesta abierta</td><td><strong>P13</strong> - B</td></tr>
+<tr><td><strong>P4</strong> - B</td><td><strong>P14</strong> - D</td></tr>
+<tr><td><strong>P5</strong> - D</td><td><strong>P15</strong> - A</td></tr>
+<tr><td><strong>P6</strong> - A</td><td><strong>P16</strong> - C</td></tr>
+<tr><td><strong>P7</strong> - C</td><td><strong>P17</strong> - Respuesta abierta</td></tr>
+<tr><td><strong>P8</strong> - B</td><td><strong>P18</strong> - B</td></tr>
+<tr><td><strong>P9</strong> - Respuesta abierta</td><td><strong>P19</strong> - D</td></tr>
+<tr><td><strong>P10</strong> - D</td><td><strong>P20</strong> - A</td></tr>
+</table>
+</div>
+</div>
+
+<div style="background: rgba(255, 193, 7, 0.15); border-left: 4px solid var(--accent-gold); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<p style="color: var(--accent-gold); font-weight: 600;">⚠️ RECORDATORIO IMPORTANTE PARA EL INSTRUCTOR</p>
+<p style="color: var(--accent-gold); font-size: 12px;">Envía los resultados del examen al candidato por mensaje directo en Discord dentro de 24 horas.</p>
+</div>`
+  },
+  hcso_sargento: {
+    title: '⭐ HARRIS COUNTY SHERIFF\'S OFFICE – SARGENTO EXAM',
+    content: `<h3 style="color: var(--accent-gold); margin-bottom: 5px; font-family: 'Rajdhani', sans-serif;">HARRIS COUNTY SHERIFF'S OFFICE</h3>
+<h2 style="color: var(--accent-cyan); margin-bottom: 20px; font-family: 'Rajdhani', sans-serif; font-size: 24px;">EXAMEN DE ASCENSO – SARGENTO</h2>
+
+<div style="background: rgba(244, 67, 54, 0.15); border-left: 4px solid var(--accent-red); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<p style="color: var(--accent-red); font-weight: 600;">⚠️ ADVERTENCIA IMPORTANTE</p>
+<p style="color: var(--accent-red); font-size: 12px; line-height: 1.8;">Este examen contiene 30 preguntas de conocimientos, 2 situaciones operativas avanzadas y una evaluación práctica. Si el candidato responde incorrectamente una sola pregunta, quedará automáticamente REPROBADO y deberá esperar hasta el próximo entrenamiento para volver a presentar su examen de ascenso.</p>
+</div>
+
+<p><strong>Instructor a cargo del examen:</strong> ____________________</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px; font-family: 'Rajdhani', sans-serif;">INTRODUCCIÓN DEL INSTRUCTOR</h3>
+<p style="color: var(--text-secondary); line-height: 2; margin-bottom: 15px;">
+Bienvenido a tu examen de ascenso para Sargento. Este rango representa un nivel de supervisión avanzado con mayores responsabilidades sobre las operaciones y los oficiales del departamento. Deberás saber manejar situaciones complicadas, corregir errores, resolver problemas entre oficiales y tomar decisiones que afecten operativos completos. Recuerda que si fallas una sola pregunta no podrás continuar.
+</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 1 – EXAMEN DE CONOCIMIENTOS (30 PREGUNTAS)</h3>
+
+<p style="color: var(--accent-gold); margin-bottom: 15px;"><strong>⚠️ UNA SOLA RESPUESTA INCORRECTA = REPROBADO</strong></p>
+
+<ol style="line-height: 2.5; margin-left: 20px;">
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una operación, dos Corporales comienzan a dar instrucciones diferentes a las mismas unidades. ¿Qué debes hacer como Sargento?<br>A) Permitir que ambos continúen dando instrucciones.<br>B) Retirar a los dos Corporales inmediatamente.<br>C) Aclarar quién está coordinando la operación, establecer responsabilidades y comunicarlo a Central.<br>D) Ignorar el conflicto mientras la operación continúe.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial realiza una detención sin explicar el motivo y posteriormente descubres que no existía una justificación válida. ¿Qué debes hacer?<br>A) Mantener la detención para proteger al oficial.<br>B) Pedirle que elimine su reporte.<br>C) Esperar hasta el final del turno sin intervenir.<br>D) Revisar la situación, corregir la detención según corresponda y documentar el incidente.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es una de las responsabilidades más importantes de un Sargento?<br>A) Supervisar a los oficiales, coordinar operaciones y asegurar el cumplimiento de los procedimientos.<br>B) Realizar únicamente patrullajes individuales.<br>C) Permitir que los oficiales resuelvan todos los problemas sin supervisión.<br>D) Utilizar su rango para evitar recibir reportes.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un Corporal te informa que un oficial está ignorando instrucciones durante una emergencia. ¿Cuál es tu primera responsabilidad?<br>A) Suspender inmediatamente al oficial.<br>B) Recuperar la coordinación de la operación, verificar los hechos y atender el comportamiento del oficial.<br>C) Ignorar el reporte porque proviene de un Corporal.<br>D) Ordenar que todas las unidades abandonen la emergencia.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una persecución, Central pierde comunicación con tres unidades. ¿Qué debes hacer?<br>A) Continuar sin intentar contactarlas.<br>B) Permitir que otras unidades se incorporen sin coordinación.<br>C) Intentar restablecer la comunicación, verificar la ubicación de las unidades y evaluar si la persecución puede continuar de manera segura.<br>D) Abandonar el operativo sin informar.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial presenta una queja contra un amigo cercano tuyo. ¿Cómo debes actuar?<br>A) Rechazar la queja.<br>B) Defender a tu amigo.<br>C) Permitir que tu amigo decida qué hacer.<br>D) Mantener la imparcialidad, documentar los hechos y comunicar cualquier conflicto de interés.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debes hacer cuando una emergencia requiere la participación de varias unidades?<br>A) Permitir que cada oficial actúe individualmente.<br>B) Organizar las responsabilidades, mantener la comunicación y supervisar el desarrollo de la operación.<br>C) Ordenar que todos los oficiales se concentren en una sola tarea.<br>D) Evitar comunicar instrucciones.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial utiliza fuerza innecesaria durante una intervención. ¿Cuál es la respuesta adecuada?<br>A) Detener la conducta si es seguro hacerlo, atender a los afectados y reportar lo ocurrido.<br>B) Ignorar la situación si el detenido cometió un delito.<br>C) Defender al oficial sin revisar los hechos.<br>D) Eliminar las evidencias.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué información debe conocer un Sargento durante una operación importante?<br>A) Únicamente el nombre del oficial principal.<br>B) Solamente la ubicación inicial.<br>C) La ubicación de las unidades, situación actual, riesgos, recursos disponibles y necesidades de apoyo.<br>D) Únicamente cuántos vehículos participan.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un superior te ordena ocultar una infracción cometida por otro miembro del departamento. ¿Qué debes hacer?<br>A) Cumplir la orden.<br>B) Ignorar el incidente.<br>C) Pedirle al oficial que no vuelva a hacerlo.<br>D) Rechazar el encubrimiento y reportar la situación mediante los canales correspondientes.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una operación, un oficial abandona su posición sin comunicarlo. ¿Qué debes hacer?<br>A) Ignorarlo si regresa.<br>B) Verificar su situación, reorganizar las responsabilidades y revisar por qué abandonó su posición.<br>C) Ordenar inmediatamente su expulsión.<br>D) Permitir que las demás unidades también se retiren.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es la mejor manera de corregir a un Corporal que está tomando decisiones incorrectas?<br>A) Humillarlo frente a los oficiales.<br>B) Ignorarlo porque también tiene un rango de liderazgo.<br>C) Intervenir cuando sea necesario, explicarle el error y darle seguimiento a su desempeño.<br>D) Retirarle su rango sin revisar los hechos.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un ciudadano presenta evidencia que contradice el reporte de un oficial. ¿Qué debes hacer?<br>A) Revisar la evidencia de manera imparcial y asegurar que la información sea considerada.<br>B) Rechazarla automáticamente.<br>C) Eliminar el reporte original.<br>D) Defender al oficial por pertenecer al departamento.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debe hacer un Sargento cuando recibe instrucciones contradictorias de dos superiores?<br>A) Elegir la instrucción que más le convenga.<br>B) No cumplir ninguna instrucción.<br>C) Pedir a los oficiales que decidan.<br>D) Solicitar aclaración por los canales correspondientes y comunicar cualquier riesgo inmediato.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial nuevo comete errores repetidos durante el patrullaje. ¿Qué debes hacer?<br>A) Ignorar sus errores.<br>B) Evaluar su desempeño, proporcionarle orientación y determinar si necesita entrenamiento adicional.<br>C) Permitir que continúe sin supervisión.<br>D) Retirarlo inmediatamente del departamento.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es una señal de liderazgo inadecuado?<br>A) Escuchar las preocupaciones de los oficiales.<br>B) Reconocer errores propios.<br>C) Orientar a los compañeros.<br>D) Utilizar el rango para intimidar y evitar recibir críticas.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una emergencia, dos unidades solicitan asistencia al mismo tiempo. ¿Cómo debes decidir cuál atender primero?<br>A) Ayudar a la unidad con mayor rango.<br>B) Elegir la que esté más cerca de ti sin conocer la situación.<br>C) Evaluar la gravedad, los riesgos y los recursos disponibles para establecer prioridades.<br>D) Ignorar ambas solicitudes.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un Corporal te informa que un oficial alteró información en un reporte. ¿Qué debes hacer?<br>A) Preservar la información disponible y comunicar el incidente para que sea revisado formalmente.<br>B) Eliminar el reporte.<br>C) Resolverlo únicamente mediante una conversación informal.<br>D) Ignorarlo si el oficial tiene experiencia.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debes hacer si una operación comienza a poner en peligro innecesariamente a ciudadanos?<br>A) Continuar sin modificar nada.<br>B) Priorizar la seguridad, reevaluar las acciones y modificar o detener la operación cuando corresponda.<br>C) Permitir que cada oficial tome su propia decisión.<br>D) Ignorar los riesgos si el sospechoso es peligroso.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial cuestiona una instrucción tuya porque considera que puede ser insegura. ¿Cómo debes responder?<br>A) Sancionarlo inmediatamente.<br>B) Ordenarle que guarde silencio.<br>C) Retirarlo de la operación sin escucharlo.<br>D) Escuchar su preocupación, evaluar el riesgo y aclarar o corregir la instrucción.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debe hacer un Sargento después de una operación importante en la que ocurrieron varios errores?<br>A) Ignorar los errores si terminó bien.<br>B) Culpar al oficial de menor rango.<br>C) Revisar lo ocurrido, identificar fallas y establecer medidas para mejorar.<br>D) Evitar hablar del incidente.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial informa por radio que necesita asistencia urgente, pero no proporciona su ubicación. ¿Qué debes hacer?<br>A) Esperar hasta que vuelva a llamar.<br>B) Intentar establecer comunicación, obtener su ubicación y coordinar apoyo con Central.<br>C) Ordenarle que termine su turno.<br>D) Ignorar la llamada por falta de información.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es la manera correcta de manejar una acusación grave contra un oficial?<br>A) Publicarla inmediatamente en todos los canales.<br>B) Resolverla sin revisar evidencias.<br>C) Permitir que el acusado investigue su propio caso.<br>D) Documentar los hechos, preservar la información y remitirla a quien corresponda.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial te informa que cometió un error durante una detención y quiere corregirlo. ¿Qué debes hacer?<br>A) Ayudar a revisar la situación, corregir lo necesario y asegurar que quede documentado.<br>B) Ordenarle que lo oculte.<br>C) Ignorarlo porque reconoció su error.<br>D) Sancionarlo sin conocer los hechos.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué demuestra que un Sargento está preparado para dirigir una operación?<br>A) Dar órdenes constantemente.<br>B) Mantener el control, comunicarse claramente, evaluar riesgos y responder por sus decisiones.<br>C) Tener más antigüedad que todos.<br>D) Evitar pedir ayuda.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Un oficial está actuando correctamente, pero otro supervisor intenta sancionarlo por un conflicto personal. ¿Qué debes hacer?<br>A) Apoyar automáticamente al supervisor.<br>B) Permitir la sanción para evitar problemas.<br>C) Solicitar una revisión imparcial de los hechos y reportar cualquier posible abuso de autoridad.<br>D) Ignorar la situación.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">Durante una persecución, una unidad solicita realizar una maniobra que podría poner en riesgo a terceros. ¿Qué debes hacer?<br>A) Autorizarla sin conocer las circunstancias.<br>B) Permitir que el oficial decida sin comunicarlo.<br>C) Ignorar la solicitud.<br>D) Evaluar los riesgos y las normas del departamento antes de autorizar o rechazar la maniobra.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debes hacer si un oficial de menor rango demuestra mejores conocimientos que tú en un procedimiento específico?<br>A) Ignorarlo para mantener tu autoridad.<br>B) Escuchar su información, verificarla y utilizarla si ayuda a tomar una decisión correcta.<br>C) Prohibirle participar.<br>D) Regañarlo por corregirte.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Cuál es la responsabilidad de un Sargento al finalizar una operación?<br>A) Verificar que las unidades estén contabilizadas, que Central tenga la información necesaria y que se completen los reportes correspondientes.<br>B) Retirarse inmediatamente.<br>C) Dejar toda la documentación a los oficiales nuevos.<br>D) Eliminar los registros de la operación.</li>
+<li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(33, 150, 243, 0.2);">¿Qué debe hacer un Sargento cuando descubre que una decisión suya provocó un problema importante?<br>A) Culpar a otro oficial.<br>B) Ocultar su participación.<br>C) Reconocer el error, informar lo ocurrido y tomar medidas para corregirlo.<br>D) Evitar responder preguntas.</li>
+</ol>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 15px;">PARTE 2 – SITUACIONES OPERATIVAS AVANZADAS</h3>
+
+<h4 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 10px;">SITUACIÓN 1 – EMERGENCIA GRAVE, DESORGANIZACIÓN Y DECISIONES CRÍTICAS</h4>
+<p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+Central recibe múltiples llamadas relacionadas con un incidente grave en una zona comercial. Seis unidades responden. Al llegar descubres: dos oficiales persiguiendo a un sospechoso sin informar ubicación, un Corporal dando instrucciones que contradicen a otro oficial, un ciudadano herido necesitando asistencia médica, un oficial abandonó su posición sin avisar, Central pierde comunicación con dos unidades, otro supervisor te ordena continuar con la operación aunque todavía no tienes información de riesgos.
+</p>
+<p style="color: var(--accent-gold); font-weight: 600; margin-bottom: 15px;"><strong>Como Sargento, explica:</strong> Tu primera decisión, cómo recuperarías control, qué comunicarías a Central, cómo manejarías instrucciones contradictorias, acción con ciudadano herido, cómo localizarías unidades sin comunicación, respuesta al otro supervisor, acción con oficial que abandonó posición, cómo evaluarías si operación puede continuar, medidas después de finalizar.</p>
+
+<h4 style="color: var(--accent-cyan); margin-top: 15px; margin-bottom: 10px;">SITUACIÓN 2 – INVESTIGACIÓN COMPLEJA, CONFLICTOS DE INTERÉS Y PRESIÓN EXTERNA</h4>
+<p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+Un Corporal presenta un reporte indicando que varios oficiales podrían estar utilizando su autoridad de manera indebida. Descubrimientos iniciales: uno de los involucrados es amigo tuyo, diferencias importantes entre reportes presentados, un ciudadano afirma tener evidencia, otro oficial asegura recibió instrucciones de modificar información, un supervisor te pide NO continúes revisando, oficiales comienzan a discutir acusándose entre ellos, uno de los involucrados amenaza con abandonar el departamento si hay investigación formal.
+</p>
+<p style="color: var(--accent-gold); font-weight: 600; margin-bottom: 15px;"><strong>Como Sargento, explica:</strong> Cómo comenzarías a manejar el incidente, qué harías con evidencia del ciudadano, cómo manejarías conflicto de interés con amigo, acción ante posible modificación de reportes, respuesta al supervisor, cómo controlarías conflicto entre oficiales, manejo de amenaza de renuncia, información a documentar, a quién comunicarías, cómo protegerías integridad departamental sin ocultar información.</p>
+
+<hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+<div style="background: rgba(244, 67, 54, 0.1); border-left: 4px solid var(--accent-red); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<h4 style="color: var(--accent-red); margin-bottom: 10px;">🔴 CLAVE DE RESPUESTAS – SOLO PARA EL INSTRUCTOR</h4>
+<p style="color: var(--accent-red); font-size: 12px; margin-bottom: 15px;"><strong>NO COMPARTIR ESTA SECCIÓN CON EL CANDIDATO. UNA SOLA RESPUESTA INCORRECTA = REPROBADO</strong></p>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">Respuestas correctas – Parte 1 (30 preguntas)</h5>
+<div style="background: rgba(244, 67, 54, 0.05); padding: 12px; border-radius: 4px; margin: 12px 0; color: var(--accent-red);">
+<table style="width: 100%; color: var(--accent-red);">
+<tr><td><strong>P1</strong> - C</td><td><strong>P11</strong> - B</td><td><strong>P21</strong> - C</td></tr>
+<tr><td><strong>P2</strong> - D</td><td><strong>P12</strong> - C</td><td><strong>P22</strong> - B</td></tr>
+<tr><td><strong>P3</strong> - A</td><td><strong>P13</strong> - A</td><td><strong>P23</strong> - D</td></tr>
+<tr><td><strong>P4</strong> - B</td><td><strong>P14</strong> - D</td><td><strong>P24</strong> - A</td></tr>
+<tr><td><strong>P5</strong> - C</td><td><strong>P15</strong> - B</td><td><strong>P25</strong> - B</td></tr>
+<tr><td><strong>P6</strong> - D</td><td><strong>P16</strong> - D</td><td><strong>P26</strong> - C</td></tr>
+<tr><td><strong>P7</strong> - B</td><td><strong>P17</strong> - C</td><td><strong>P27</strong> - D</td></tr>
+<tr><td><strong>P8</strong> - A</td><td><strong>P18</strong> - A</td><td><strong>P28</strong> - B</td></tr>
+<tr><td><strong>P9</strong> - C</td><td><strong>P19</strong> - B</td><td><strong>P29</strong> - A</td></tr>
+<tr><td><strong>P10</strong> - D</td><td><strong>P20</strong> - D</td><td><strong>P30</strong> - C</td></tr>
+</table>
+</div>
+
+<h5 style="color: var(--accent-red); margin-top: 15px; margin-bottom: 10px;">REGLA CRÍTICA DE APROBACIÓN</h5>
+<p style="color: var(--accent-red); font-size: 11px; line-height: 1.8;">Para aprobar el examen de Sargento, el candidato DEBE: Responder correctamente las 30 preguntas, Aprobar las dos situaciones operativas, Aprobar el Ride Along y demostrar liderazgo constante. <strong>Si falla una sola pregunta, situación o evaluación práctica, quedará REPROBADO.</strong></p>
+</div>
+
+<div style="background: rgba(255, 193, 7, 0.15); border-left: 4px solid var(--accent-gold); padding: 15px; margin: 20px 0; border-radius: 4px;">
+<p style="color: var(--accent-gold); font-weight: 600;">⚠️ RECORDATORIO IMPORTANTE PARA EL INSTRUCTOR</p>
+<p style="color: var(--accent-gold); font-size: 12px;">Este examen es EL MÁS DIFÍCIL del departamento. Verifica cuidadosamente cada respuesta. Los Sargentos son supervisores críticos del departamento.</p>
 </div>`
   }
 };
