@@ -129,48 +129,60 @@
 
       <!-- ── PANEL LATERAL (llamadas + unidades) ── -->
       <div id="side-panel">
-        <div class="panel-section">
-          <div class="panel-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e54850" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M22 14l-6 6"/><path d="M20 16l2 2-2 2"/></svg>
-              Llamadas 911
-            </h3>
-            <span class="panel-count" id="calls-count">0</span>
-          </div>
-          <div id="calls-list" class="calls-list">
-            <div class="empty-state">Conectando…</div>
-          </div>
-        </div>
-        <div class="panel-section">
-          <div class="panel-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#3b6fb6" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              Unidades en servicio
-            </h3>
-            <span class="panel-count" id="players-count">0</span>
-          </div>
-          <div id="players-list" class="players-list">
-            <div class="empty-state">Conectando…</div>
-          </div>
-        </div>
+         <div class="panel-section">
+           <div class="panel-header">
+             <h3>
+               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e54850" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M22 14l-6 6"/><path d="M20 16l2 2-2 2"/></svg>
+               Llamadas 911
+             </h3>
+             <span class="panel-count" id="calls-count">0</span>
+           </div>
+           <div id="calls-list" class="calls-list">
+             <div class="empty-state">Conectando…</div>
+           </div>
+           <div class="scroll-controls" id="calls-scroll-controls">
+             <button class="scroll-btn" id="calls-scroll-up" title="Scroll arriba">▲</button>
+             <button class="scroll-btn" id="calls-scroll-down" title="Scroll abajo">▼</button>
+           </div>
+         </div>
+         <div class="panel-section">
+           <div class="panel-header">
+             <h3>
+               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#3b6fb6" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+               Unidades en servicio
+             </h3>
+             <span class="panel-count" id="players-count">0</span>
+           </div>
+           <div id="players-list" class="players-list">
+             <div class="empty-state">Conectando…</div>
+           </div>
+           <div class="scroll-controls" id="players-scroll-controls">
+             <button class="scroll-btn" id="players-scroll-up" title="Scroll arriba">▲</button>
+             <button class="scroll-btn" id="players-scroll-down" title="Scroll abajo">▼</button>
+           </div>
+         </div>
 
-        <!-- ── BODYCAMS EN VIVO (solo Central / Dispatch) ── -->
-        <div class="panel-section bc-roster-section">
-          <div class="panel-header">
-            <h3>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e54850" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-              Bodycams en vivo
-            </h3>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span class="panel-count" id="bc-live-count">0</span>
-              <button class="toggle-status-btn" id="bc-open-all" title="Abrir TODAS las bodycams activas en el panel" style="display:none;">Todas</button>
-              <button class="toggle-status-btn" id="bc-panel-open" title="Abrir el panel de bodycams">Panel</button>
-            </div>
-          </div>
-          <div id="bc-roster" class="bc-roster">
-            <div class="empty-state">Ninguna bodycam activa</div>
-          </div>
-        </div>
+         <!-- ── BODYCAMS EN VIVO (solo Central / Dispatch) ── -->
+         <div class="panel-section bc-roster-section">
+           <div class="panel-header">
+             <h3>
+               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e54850" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+               Bodycams en vivo
+             </h3>
+             <div style="display:flex;align-items:center;gap:6px;">
+               <span class="panel-count" id="bc-live-count">0</span>
+               <button class="toggle-status-btn" id="bc-open-all" title="Abrir TODAS las bodycams activas en el panel" style="display:none;">Todas</button>
+               <button class="toggle-status-btn" id="bc-panel-open" title="Abrir el panel de bodycams">Panel</button>
+             </div>
+           </div>
+           <div id="bc-roster" class="bc-roster">
+             <div class="empty-state">Ninguna bodycam activa</div>
+           </div>
+           <div class="scroll-controls" id="bc-scroll-controls">
+             <button class="scroll-btn" id="bc-scroll-up" title="Scroll arriba">▲</button>
+             <button class="scroll-btn" id="bc-scroll-down" title="Scroll abajo">▼</button>
+           </div>
+         </div>
       </div>
 
       <!-- ── MAPA ── -->
@@ -221,17 +233,25 @@
           <div id="status-list">
             <div class="empty-state">No hay unidades en servicio</div>
           </div>
+          <div class="scroll-controls" id="status-scroll-controls">
+            <button class="scroll-btn" id="status-scroll-up" title="Scroll arriba">▲</button>
+            <button class="scroll-btn" id="status-scroll-down" title="Scroll abajo">▼</button>
+          </div>
         </div>
         <div class="panel-section">
           <div class="panel-header">
             <h3>
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#e6a868" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>
-              Registro de despacho
-            </h3>
-            <span class="panel-count" id="log-count">0</span>
-          </div>
-          <div id="dispatch-log" class="dispatch-log" style="padding:8px;"></div>
-        </div>
+               Registro de despacho
+             </h3>
+             <span class="panel-count" id="log-count">0</span>
+           </div>
+           <div id="dispatch-log" class="dispatch-log" style="padding:8px;"></div>
+           <div class="scroll-controls" id="log-scroll-controls">
+             <button class="scroll-btn" id="log-scroll-up" title="Scroll arriba">▲</button>
+             <button class="scroll-btn" id="log-scroll-down" title="Scroll abajo">▼</button>
+           </div>
+         </div>
       </div>
     </div>
   </div>
@@ -364,6 +384,35 @@ window.releaseCallAssignment = async function (callId) {
     alert('Error al liberar la unidad: ' + e.message);
   }
 };
+
+// ── SCROLL CONTROLS ──
+function initScrollControls() {
+  const scrollConfigs = [
+    { listId: 'calls-list', upId: 'calls-scroll-up', downId: 'calls-scroll-down' },
+    { listId: 'players-list', upId: 'players-scroll-up', downId: 'players-scroll-down' },
+    { listId: 'bc-roster', upId: 'bc-scroll-up', downId: 'bc-scroll-down' },
+    { listId: 'status-list', upId: 'status-scroll-up', downId: 'status-scroll-down' },
+    { listId: 'dispatch-log', upId: 'log-scroll-up', downId: 'log-scroll-down' }
+  ];
+
+  scrollConfigs.forEach(config => {
+    const listEl = document.getElementById(config.listId);
+    const upBtn = document.getElementById(config.upId);
+    const downBtn = document.getElementById(config.downId);
+
+    if (!listEl || !upBtn || !downBtn) return;
+
+    upBtn.addEventListener('click', () => {
+      listEl.scrollBy({ top: -50, behavior: 'smooth' });
+    });
+
+    downBtn.addEventListener('click', () => {
+      listEl.scrollBy({ top: 50, behavior: 'smooth' });
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initScrollControls);
 </script>
 
 <!-- ── MÓDULOS DEL CAD (mapa, paneles, estado) ── -->
