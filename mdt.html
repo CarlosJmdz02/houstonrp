@@ -246,8 +246,17 @@
 
  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
 
- /* òÉòÉòÉ SCROLLING MAIN òÉòÉòÉ */
- .tablet-main { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 22px 18px 40px; background: #121212 !important; }
+  /* òÉòÉòÉ SCROLLING MAIN òÉòÉòÉ */
+  .tablet-main { 
+    flex: 1 1 auto; 
+    min-height: 0; 
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    padding: 22px 18px 40px; 
+    background: #121212 !important;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
 
  .page-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent-cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
  .page-title { font-family: 'Rajdhani', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: 1px; color: var(--text-primary); }
@@ -854,17 +863,21 @@ OPERATIONS MODULES òÉòÉòÉ */
  .btn-radio:hover { background: rgba(56,189,248,.18); transform: translateY(-1px); }
  .btn-radio.active { background: rgba(56,189,248,.24); border-color: rgba(56,189,248,.7); box-shadow: 0 0 18px rgba(56,189,248,.3); }
 
- .radio-panel {
- position: fixed; right: 18px; bottom: 18px; z-index: 220;
- width: 330px; max-width: calc(100vw - 24px);
- background: linear-gradient(160deg, #1a1a1a, #121212);
- border: 1px solid rgba(56,189,248,.45);
- border-radius: 14px;
- box-shadow: 0 26px 60px rgba(0,0,0,.65), 0 0 0 1px rgba(56,189,248,.10);
- overflow: hidden;
- animation: cadRise .25s ease both;
- }
- #radio-panel.hidden { display: none; }
+  .radio-panel {
+  position: fixed; right: 18px; bottom: 18px; z-index: 220;
+  width: 330px; max-width: calc(100vw - 24px);
+  background: linear-gradient(160deg, #1a1a1a, #121212);
+  border: 1px solid rgba(56,189,248,.45);
+  border-radius: 14px;
+  box-shadow: 0 26px 60px rgba(0,0,0,.65), 0 0 0 1px rgba(56,189,248,.10);
+  overflow: hidden;
+  animation: cadRise .25s ease both;
+  pointer-events: auto;
+  }
+  #radio-panel.hidden { 
+    display: none !important; 
+    pointer-events: none !important;
+  }
  .radio-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(6,13,28,.85); border-bottom: 1px solid var(--border); }
  .radio-title { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
  .radio-chip { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 6px; background: rgba(56,189,248,.16); border: 1px solid rgba(56,189,248,.4); color: var(--accent-cyan); white-space: nowrap; }
@@ -3454,15 +3467,27 @@ OPERATIONS MODULES òÉòÉòÉ */
  // (en ventanas bajas estorbaba y no dejaba trabajar).
  (function () {
  function bindDockScroll() {
- const main = document.getElementById('tablet-main');
- const dock = document.querySelector('.control-dock');
- if (!main || !dock || dock._bound) return;
- dock._bound = true;
- main.addEventListener('scroll', function () {
- if (main.scrollTop > 70) dock.classList.add('dock-collapsed');
- else dock.classList.remove('dock-collapsed');
- }, { passive: true });
- }
+  const main = document.getElementById('tablet-main');
+  const dock = document.querySelector('.control-dock');
+  if (!main || !dock || dock._bound) return;
+  dock._bound = true;
+  
+  let scrollTimeout = null;
+  let isCollapsed = false;
+  
+  main.addEventListener('scroll', function () {
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    
+    const shouldCollapse = main.scrollTop > 70;
+    if (shouldCollapse !== isCollapsed) {
+      isCollapsed = shouldCollapse;
+      scrollTimeout = setTimeout(() => {
+        if (isCollapsed) dock.classList.add('dock-collapsed');
+        else dock.classList.remove('dock-collapsed');
+      }, 50);
+    }
+  }, { passive: true });
+  }
  document.addEventListener('DOMContentLoaded', bindDockScroll);
  bindDockScroll();
  })();
