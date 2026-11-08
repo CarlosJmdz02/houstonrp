@@ -1032,7 +1032,7 @@ export class MapController {
       const x = mapPos.x;
       const y = mapPos.y;
       const isHovered = this.hoveredMarker === marker;
-      const radius = isHovered ? 12 : 9;
+      const radius = isHovered ? 6 : 4;
       const pulseRadius = radius * (1 + (1 - pulsePhase) * 0.4);
       const isPanic = marker.statusCode === '10-100';
 
@@ -1041,6 +1041,18 @@ export class MapController {
 
       if (isPanic) {
         ctx.save();
+        // Ondas rojas concéntricas para 10-100
+        const wavePhase = (now % 1000) / 1000;
+        const waveCount = 3;
+        for (let w = 0; w < waveCount; w++) {
+          const waveRadius = radius + (wavePhase + w / waveCount) * 40;
+          const waveAlpha = Math.max(0, 1 - ((wavePhase + w / waveCount) % 1));
+          ctx.strokeStyle = `rgba(229, 72, 80, ${waveAlpha * 0.6})`;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(x, y, waveRadius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
         ctx.globalAlpha = rapidFlash;
       }
 
@@ -1173,10 +1185,10 @@ export class MapController {
       const x = mapPos.x;
       const y = mapPos.y;
       const isHovered = this.hoveredMarker === c;
-      const radius = isHovered ? 14 : 11;
+      const radius = isHovered ? 7 : 5;
 
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius * 3.2);
-      gradient.addColorStop(0, 'rgba(229,72,80,0.35)');
+      gradient.addColorStop(0, 'rgba(229,72,80,0.25)');
       gradient.addColorStop(1, 'rgba(229,72,80,0)');
       ctx.fillStyle = gradient;
       ctx.beginPath();
@@ -1184,7 +1196,7 @@ export class MapController {
       ctx.fill();
 
       ctx.strokeStyle = 'rgba(229,72,80,0.8)';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 1.5;
       ctx.globalAlpha = 0.4 * pulsePhase + 0.3;
       ctx.beginPath();
       ctx.arc(x, y, radius * 1.5, 0, Math.PI * 2);
@@ -1193,24 +1205,34 @@ export class MapController {
 
       ctx.fillStyle = '#e54850';
       ctx.shadowColor = '#e54850';
-      ctx.shadowBlur = isHovered ? 22 : 12;
+      ctx.shadowBlur = isHovered ? 16 : 8;
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
 
+      // Determinar icon según tipo de llamada
+      let icon = '!';
+      if (c.type && typeof c.type === 'string') {
+        if (c.type.toLowerCase().includes('choque') || c.type.toLowerCase().includes('accident') || c.type.toLowerCase().includes('crash')) icon = '🚗';
+        else if (c.type.toLowerCase().includes('arma') || c.type.toLowerCase().includes('gun') || c.type.toLowerCase().includes('weapon')) icon = '🔫';
+        else if (c.type.toLowerCase().includes('robo') || c.type.toLowerCase().includes('steal') || c.type.toLowerCase().includes('theft')) icon = '💰';
+        else if (c.type.toLowerCase().includes('pelea') || c.type.toLowerCase().includes('fight') || c.type.toLowerCase().includes('assault')) icon = '👊';
+        else if (c.type.toLowerCase().includes('médico') || c.type.toLowerCase().includes('medical') || c.type.toLowerCase().includes('ems')) icon = '🏥';
+      }
+
       ctx.fillStyle = '#fff';
-      ctx.font = `bold ${Math.max(8, radius * 0.8)}px sans-serif`;
+      ctx.font = `bold ${Math.max(6, radius * 0.9)}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('!', x, y + 1);
+      ctx.fillText(icon, x, y + 1);
 
       if (isHovered) {
         ctx.fillStyle = '#e54850';
-        ctx.font = 'bold 10px sans-serif';
+        ctx.font = 'bold 9px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(c.playerName, x, y + radius + 4);
+        ctx.fillText(c.playerName, x, y + radius + 3);
       }
     }
   }
