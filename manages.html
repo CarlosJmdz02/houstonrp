@@ -1440,12 +1440,13 @@ function loadHardcodedRanks() {
 async function loadOfficers() {
   try {
     // Cargar lista de oficiales despedidos
-    let firedOfficers = [];
-    try {
-      firedOfficers = await supaSelect('fired_officers', 'discord_id', { limit: '10000' });
-    } catch (e) {
-      console.warn('Tabla fired_officers no existe:', e);
-    }
+     let firedOfficers = [];
+     try {
+       firedOfficers = await supaSelect('fired_officers', 'discord_id', { limit: '10000' });
+     } catch (e) {
+       // Tabla opcional - ignorar error 404
+       if (e.status !== 404) console.warn('Error cargando fired_officers:', e.message);
+     }
     
     const firedDiscordIds = new Set((firedOfficers || []).map(f => f.discord_id));
     
@@ -1497,14 +1498,16 @@ async function loadOfficers() {
     try {
       badgeMembers = await supaSelect('officer_badges', 'discord_id, badge_number', { limit: '10000' });
     } catch (e) {
-      console.warn('Badge members error - tabla no existe, crearemos:', e);
+      // Tabla opcional - ignorar error 404
+      if (e.status !== 404) console.warn('Error cargando officer_badges:', e.message);
     }
 
     let guildMembers = [];
     try {
       guildMembers = await supaSelect('guild_members', 'discord_id, roles_json', { limit: '10000' });
     } catch (e) {
-      console.warn('Guild members error:', e);
+      // Tabla opcional - ignorar error 404
+      if (e.status !== 404) console.warn('Error cargando guild_members:', e.message);
     }
 
     const userMap = {};
@@ -2109,18 +2112,39 @@ function updateRankSelect(dept) {
   const select = document.getElementById('editRank');
   select.innerHTML = '<option value="">Seleccionar rango...</option>';
   
-  if (dept && ranks[dept]) {
+  // Si no hay departamento seleccionado, mostrar todos los rangos
+  if (!dept || !ranks[dept]) {
+    // Agregar todos los rangos disponibles
+    const allRanks = [];
+    for (const deptKey in ranks) {
+      if (ranks[deptKey] && Array.isArray(ranks[deptKey])) {
+        for (const r of ranks[deptKey]) {
+          if (!allRanks.find(x => x.key === r.key)) {
+            allRanks.push(r);
+          }
+        }
+      }
+    }
+    
+    for (const r of allRanks) {
+      const opt = document.createElement('option');
+      opt.value = r.key;
+      opt.textContent = r.label;
+      select.appendChild(opt);
+    }
+  } else {
+    // Si hay departamento seleccionado, mostrar solo rangos de ese departamento
     for (const r of ranks[dept]) {
       const opt = document.createElement('option');
       opt.value = r.key;
       opt.textContent = r.label;
       select.appendChild(opt);
     }
-    
-    // Seleccionar rango actual
-    if (currentOfficer && currentOfficer.rank_key) {
-      select.value = currentOfficer.rank_key;
-    }
+  }
+  
+  // Seleccionar rango actual
+  if (currentOfficer && currentOfficer.rank_key) {
+    select.value = currentOfficer.rank_key;
   }
 }
 
@@ -4335,11 +4359,61 @@ function openFormatoModal(tipo) {
 // ── REGISTRO DE TURNOS ──
 let shiftHistory = [];
 
-function loadShiftHistory() {
+async function loadShiftHistory() {
+  // Cargar datos desde localStorage
   const stored = localStorage.getItem('shiftHistory');
   if (stored) {
     shiftHistory = JSON.parse(stored);
   }
+  
+  // Intentar cargar datos desde Supabase (último mes)
+  try {
+    const twoWeeksAgo = new Date();
+    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+    const dateString = twoWeeksAgo.toISOString().split('T')[0];
+    
+    // Cargar shifts completados de las últimas 2 semanas
+    const recentShifts = await supaSelect('shifts', '*', { 
+      limit: '1000',
+      order: 'created_at.desc'
+    });
+    
+    if (recentShifts && Array.isArray(recentShifts)) {
+      for (const shift of recentShifts) {
+        if (shift.end_time) {
+          const shiftDate = new Date(shift.created_at);
+          const twoWeeksDate = new Date();
+          twoWeeksDate.setDate(twoWeeksDate.getDate() - 14);
+          
+          if (shiftDate >= twoWeeksDate) {
+            const officer = shift.officer_name || 'Desconocido';
+            const date = new Date(shift.created_at).toLocaleDateString('es-ES');
+            const startTime = shift.start_time || '00:00';
+            const endTime = shift.end_time || '00:00';
+            const duration = calculateDuration(startTime, endTime);
+            
+            // Evitar duplicados
+            if (!shiftHistory.find(s => s.officer === officer && s.date === date && s.startTime === startTime)) {
+              shiftHistory.unshift({
+                id: shift.id,
+                officer: officer,
+                date: date,
+                startTime: startTime,
+                endTime: endTime,
+                duration: duration,
+                status: 'Completado'
+              });
+            }
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Error cargando shifts desde Supabase (tabla opcional):', e.message);
+  }
+  
+  // Guardar en localStorage
+  localStorage.setItem('shiftHistory', JSON.stringify(shiftHistory));
   renderShiftHistory();
 }
 

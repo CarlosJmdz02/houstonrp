@@ -700,7 +700,7 @@
 
   function initTacticalDisplay() {
     logEvent('SISTEMA', 'Conectado a la red de radio HPD.', 'sys');
-    logEvent('SISTEMA', channelLabel(n) + ' en escucha.', 'sys');
+    logEvent('SISTEMA', channelLabel(state.channel) + ' en escucha.', 'sys');
     setInterval(tacTick, 400);
     tacTick();
   }
