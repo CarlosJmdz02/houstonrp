@@ -857,6 +857,7 @@
   <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="switchTab('horas')">📊 GESTIÓN DE HORAS</button>
+    <button class="tab" onclick="switchTab('registro-turnos')">📜 REGISTRO DE TURNOS</button>
     <button class="tab" onclick="switchTab('turnos')">🔴 TURNOS ACTIVOS</button>
     <button class="tab" onclick="switchTab('solicitudes')">📋 SOLICITUDES</button>
     <button class="tab" onclick="switchTab('disciplina')">⚖️ DISCIPLINA</button>
@@ -926,6 +927,66 @@
         <tbody id="officersTable">
           <tr>
             <td colspan="8" class="loading">⏳ Cargando datos...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+   </div>
+
+  <!-- TAB: REGISTRO DE TURNOS -->
+  <div id="registro-turnos" class="tab-content">
+    <!-- SEARCH BAR PARA BUSCAR OFICIALES -->
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchOfficerInput" placeholder="🔍 Buscar oficial (ej: Carlos Carlos)..." onkeyup="searchOfficer()">
+    </div>
+
+    <!-- ESTADÍSTICAS DEL OFICIAL BUSCADO -->
+    <div id="officerStatsContainer" style="display: none; margin-bottom: 20px;">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Oficial</div>
+          <div class="stat-value" id="officerName">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Horas Esta Semana</div>
+          <div class="stat-value" id="weekHours">0h</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total de Horas</div>
+          <div class="stat-value" id="totalOfficerHours">0h</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Turnos Completados</div>
+          <div class="stat-value" id="completedShifts">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Horas Promedio/Turno</div>
+          <div class="stat-value" id="avgHours">0h</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Turno Activo</div>
+          <div class="stat-value" id="hasActiveShift">No</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA DE ÚLTIMOS TURNOS -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Oficial</th>
+            <th>Fecha</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Duración</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="shiftHistoryTable">
+          <tr>
+            <td colspan="7" class="loading">⏳ Cargando registro de turnos...</td>
           </tr>
         </tbody>
       </table>
@@ -4271,7 +4332,149 @@ function openFormatoModal(tipo) {
   document.getElementById('formatoModal').classList.add('active');
 }
 
-document.addEventListener('DOMContentLoaded', loadData);
+// ── REGISTRO DE TURNOS ──
+let shiftHistory = [];
+
+function loadShiftHistory() {
+  const stored = localStorage.getItem('shiftHistory');
+  if (stored) {
+    shiftHistory = JSON.parse(stored);
+  }
+  renderShiftHistory();
+}
+
+function saveShift(officerName, startTime, endTime) {
+  const shift = {
+    id: Date.now(),
+    officer: officerName,
+    date: new Date().toLocaleDateString('es-ES'),
+    startTime: startTime,
+    endTime: endTime,
+    duration: calculateDuration(startTime, endTime),
+    status: 'Completado'
+  };
+  
+  shiftHistory.unshift(shift);
+  localStorage.setItem('shiftHistory', JSON.stringify(shiftHistory));
+  renderShiftHistory();
+}
+
+function calculateDuration(start, end) {
+  if (!start || !end) return '0h 0m';
+  
+  const [startH, startM] = start.split(':').map(Number);
+  const [endH, endM] = end.split(':').map(Number);
+  
+  let hours = endH - startH;
+  let mins = endM - startM;
+  
+  if (mins < 0) {
+    hours--;
+    mins += 60;
+  }
+  if (hours < 0) hours += 24;
+  
+  return `${hours}h ${mins}m`;
+}
+
+function renderShiftHistory() {
+  const tbody = document.getElementById('shiftHistoryTable');
+  
+  if (!shiftHistory || shiftHistory.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="loading">No hay turnos registrados</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = shiftHistory.map((shift, idx) => `
+    <tr>
+      <td>${idx + 1}</td>
+      <td>${shift.officer}</td>
+      <td>${shift.date}</td>
+      <td>${shift.startTime}</td>
+      <td>${shift.endTime}</td>
+      <td><span class="hours">${shift.duration}</span></td>
+      <td><span class="status-active">${shift.status}</span></td>
+    </tr>
+  `).join('');
+}
+
+function searchOfficer() {
+  const searchTerm = document.getElementById('searchOfficerInput').value.toLowerCase().trim();
+  const statsContainer = document.getElementById('officerStatsContainer');
+  
+  if (!searchTerm) {
+    statsContainer.style.display = 'none';
+    renderShiftHistory();
+    return;
+  }
+  
+  // Filtrar turnos del oficial buscado
+  const officerShifts = shiftHistory.filter(s => s.officer.toLowerCase().includes(searchTerm));
+  
+  if (officerShifts.length === 0) {
+    statsContainer.style.display = 'none';
+    document.getElementById('shiftHistoryTable').innerHTML = '<tr><td colspan="7" class="loading">No se encontraron turnos para este oficial</td></tr>';
+    return;
+  }
+  
+  // Calcular estadísticas
+  const totalHours = calculateTotalHours(officerShifts);
+  const weekHours = calculateWeekHours(officerShifts);
+  const avgHours = Math.floor(totalHours / officerShifts.length);
+  
+  // Mostrar estadísticas
+  document.getElementById('officerName').textContent = officerShifts[0].officer;
+  document.getElementById('weekHours').textContent = weekHours + 'h';
+  document.getElementById('totalOfficerHours').textContent = totalHours + 'h';
+  document.getElementById('completedShifts').textContent = officerShifts.length;
+  document.getElementById('avgHours').textContent = avgHours + 'h';
+  document.getElementById('hasActiveShift').textContent = 'No';
+  
+  statsContainer.style.display = 'grid';
+  
+  // Renderizar solo los turnos del oficial
+  const tbody = document.getElementById('shiftHistoryTable');
+  tbody.innerHTML = officerShifts.map((shift, idx) => `
+    <tr>
+      <td>${idx + 1}</td>
+      <td>${shift.officer}</td>
+      <td>${shift.date}</td>
+      <td>${shift.startTime}</td>
+      <td>${shift.endTime}</td>
+      <td><span class="hours">${shift.duration}</span></td>
+      <td><span class="status-active">${shift.status}</span></td>
+    </tr>
+  `).join('');
+}
+
+function calculateTotalHours(shifts) {
+  let total = 0;
+  shifts.forEach(s => {
+    const [h, m] = s.duration.replace('h', '').replace('m', '').trim().split(' ');
+    total += parseInt(h || 0) + (parseInt(m || 0) / 60);
+  });
+  return Math.round(total);
+}
+
+function calculateWeekHours(shifts) {
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  
+  let total = 0;
+  shifts.forEach(s => {
+    const shiftDate = new Date(s.date.split('/').reverse().join('-'));
+    if (shiftDate >= sevenDaysAgo) {
+      const [h, m] = s.duration.replace('h', '').replace('m', '').trim().split(' ');
+      total += parseInt(h || 0) + (parseInt(m || 0) / 60);
+    }
+  });
+  return Math.round(total);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadData();
+  loadShiftHistory();
+});
 setInterval(loadActiveShifts, 10000);
 setInterval(loadRequests, 15000);
 </script>
