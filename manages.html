@@ -1444,8 +1444,8 @@ async function loadOfficers() {
      try {
        firedOfficers = await supaSelect('fired_officers', 'discord_id', { limit: '10000' });
      } catch (e) {
-       // Tabla opcional - ignorar error 404
-       if (e.status !== 404) console.warn('Error cargando fired_officers:', e.message);
+       // Tabla opcional - ignorar silenciosamente
+       // console.warn('fired_officers tabla no existe (opcional)');
      }
     
     const firedDiscordIds = new Set((firedOfficers || []).map(f => f.discord_id));
@@ -1463,51 +1463,51 @@ async function loadOfficers() {
     try {
       shifts = await supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' });
     } catch (e) {
-      console.warn('Shifts error:', e);
+      // Tabla opcional - ignorar silenciosamente
     }
 
     let adjustments = [];
     try {
       adjustments = await supaSelect('police_hours_adjustments', 'discord_id, adjustment_seconds', { limit: '10000' });
     } catch (e) {
-      console.warn('Adjustments error:', e);
+      // Tabla opcional - ignorar silenciosamente
     }
 
     let users = [];
     try {
       users = await supaSelect('users', 'discord_id, avatar', { limit: '10000' });
     } catch (e) {
-      console.warn('Users error:', e);
+      // Tabla opcional - ignorar silenciosamente
     }
 
     let characters = [];
     try {
       characters = await supaSelect('characters', 'user_discord, nombres, apellidos', { limit: '10000' });
     } catch (e) {
-      console.warn('Characters error:', e);
+      // Tabla opcional - ignorar silenciosamente
     }
 
     let rankMembers = [];
     try {
       rankMembers = await supaSelect('rank_members', 'discord_id, rank_key, department', { limit: '10000' });
     } catch (e) {
-      console.warn('Rank members error:', e);
+      // Tabla opcional - ignorar silenciosamente
     }
 
     let badgeMembers = [];
     try {
       badgeMembers = await supaSelect('officer_badges', 'discord_id, badge_number', { limit: '10000' });
     } catch (e) {
-      // Tabla opcional - ignorar error 404
-      if (e.status !== 404) console.warn('Error cargando officer_badges:', e.message);
+      // Tabla opcional - ignorar silenciosamente
+      // console.warn('officer_badges tabla no existe (opcional)');
     }
 
     let guildMembers = [];
     try {
       guildMembers = await supaSelect('guild_members', 'discord_id, roles_json', { limit: '10000' });
     } catch (e) {
-      // Tabla opcional - ignorar error 404
-      if (e.status !== 404) console.warn('Error cargando guild_members:', e.message);
+      // Tabla opcional - ignorar silenciosamente
+      // console.warn('guild_members tabla no existe (opcional)');
     }
 
     const userMap = {};
@@ -4408,9 +4408,10 @@ async function loadShiftHistory() {
         }
       }
     }
-  } catch (e) {
-    console.warn('Error cargando shifts desde Supabase (tabla opcional):', e.message);
-  }
+   } catch (e) {
+     // Tabla opcional - ignorar silenciosamente
+     // console.warn('shifts tabla no existe (opcional)');
+   }
   
   // Guardar en localStorage
   localStorage.setItem('shiftHistory', JSON.stringify(shiftHistory));
