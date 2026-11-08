@@ -5,11 +5,11 @@
 
 /* --- Variables Globales --- */
 :root {
-  --bg-primary: #121212;
-  --bg-secondary: #121212;
-  --bg-card: rgba(18, 18, 18, 0.8);
-  --bg-glass: rgba(18, 18, 18, 0.85);
-  --bg-glass-hover: rgba(40, 40, 40, 0.9);
+  --bg-primary: #0a1628;
+  --bg-secondary: #0a1628;
+  --bg-card: rgba(10, 22, 40, 0.8);
+  --bg-glass: rgba(10, 22, 40, 0.85);
+  --bg-glass-hover: rgba(20, 35, 60, 0.9);
   --border-glass: rgba(50, 50, 50, 0.8);
   --border-glass-hover: rgba(59, 111, 182, 0.3);
   --neon-blue: #3b6fb6;
@@ -47,7 +47,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: var(--font-main);
-  background: #121212 !important;
+  background: #0a1628 !important;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1154,7 +1154,7 @@ html, body {
   flex: 1;
   position: relative;
   overflow: hidden;
-  background: #121212;
+  background: #0a1628;
 }
 
 #map-canvas-container {
