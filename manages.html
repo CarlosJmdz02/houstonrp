@@ -1089,13 +1089,13 @@
   </div>
 </div>
 
-<!-- MODAL EDITAR DEPARTAMENTO/RANGO/PLACA -->
+<!-- MODAL EDITAR DEPARTAMENTO/RANGO -->
 <div id="editModal" class="modal">
   <div class="modal-content">
-    <div class="modal-title">✏️ Editar Información del Oficial</div>
+    <div class="modal-title">✏️ Editar Oficial</div>
     <div class="form-group">
       <label>Oficial</label>
-      <input type="text" id="editOfficialName" placeholder="Nombre del oficial">
+      <input type="text" id="editOfficialName" disabled style="background: #2a2a2a; cursor: not-allowed;">
     </div>
     <div class="form-group">
       <label>Departamento</label>
@@ -1112,10 +1112,6 @@
       <select id="editRank">
         <option value="">Seleccionar rango...</option>
       </select>
-    </div>
-    <div class="form-group">
-      <label>Placa (Ej: 1K-01)</label>
-      <input type="text" id="editBadge" placeholder="Ej: 1K-01">
     </div>
     <div class="modal-buttons">
       <button class="btn-cancel" onclick="closeModal('editModal')">Cancelar</button>
@@ -2273,16 +2269,12 @@ async function confirmEdit() {
     return;
   }
   
-  const newName = document.getElementById('editOfficialName').value.trim();
   const dept = document.getElementById('editDepartment').value;
   const rank = document.getElementById('editRank').value;
-  const badgeInput = document.getElementById('editBadge').value.trim();
   
   showDebug('📋 Oficial: ' + currentOfficer.discord_id);
-  showDebug('📋 Nuevo nombre: ' + newName);
   showDebug('📋 Departamento: ' + dept);
   showDebug('📋 Rango: ' + rank);
-  showDebug('📋 Placa: ' + badgeInput);
   
   if (!dept) {
     showDebug('❌ Error: Debes seleccionar departamento');
@@ -2290,115 +2282,53 @@ async function confirmEdit() {
     return;
   }
   
-  if (!newName) {
-    showDebug('❌ Error: Nombre vacío');
-    alert('❌ El nombre no puede estar vacío');
-    return;
-  }
-  
   try {
     let updateSuccess = false;
     
-    // 1. Intentar UPSERT en RANK_MEMBERS (crear si no existe, actualizar si existe)
-    showDebug('📤 [1] Intentando UPSERT en rank_members...');
+    // ÚNICA ACTUALIZACIÓN: rank_members (que es donde se guarda dept y rank)
+    showDebug('📤 [1] Actualizando rank_members...');
     try {
       const rankPayload = { 
-        discord_id: currentOfficer.discord_id,
         department: dept, 
         rank_key: rank || null 
       };
       showDebug('    Payload: ' + JSON.stringify(rankPayload));
+      showDebug('    Filtro: discord_id = eq.' + currentOfficer.discord_id);
       
-      const response = await supaUpsert('rank_members', 
-        rankPayload,
-        'discord_id'  // Usar discord_id como clave para conflict resolution
+      const response = await supaUpdate('rank_members', 
+        rankPayload, 
+        { discord_id: `eq.${currentOfficer.discord_id}` }
       );
-      showDebug('✅ [1] Rank_members UPSERT exitoso');
+      showDebug('✅ [1] Rank_members actualizado correctamente');
       updateSuccess = true;
     } catch (e) {
-      showDebug('⚠️  [1] Error en rank_members UPSERT: ' + e.message);
+      showDebug('❌ [1] Error: ' + e.message);
       
-      // Si UPSERT falla, intentar UPDATE tradicional
-      showDebug('📤 [1b] Intentando UPDATE como fallback...');
+      // Si falla, el registro no existe - intentar CREAR
+      showDebug('📤 [1b] Registro no existe, intentando crear en rank_members...');
       try {
-        const rankPayload = { department: dept, rank_key: rank || null };
-        const response = await supaUpdate('rank_members', 
-          rankPayload, 
-          { discord_id: `eq.${currentOfficer.discord_id}` }
-        );
-        showDebug('✅ [1b] UPDATE en rank_members exitoso');
+        const rankPayload = { 
+          discord_id: currentOfficer.discord_id,
+          department: dept, 
+          rank_key: rank || null 
+        };
+        showDebug('    Payload: ' + JSON.stringify(rankPayload));
+        
+        const response = await supaInsert('rank_members', rankPayload);
+        showDebug('✅ [1b] Registro creado en rank_members');
         updateSuccess = true;
       } catch (e2) {
-        showDebug('⚠️  [1b] UPDATE también falló: ' + e2.message);
-      }
-    }
-    
-    // 2. Intentar UPSERT en POLICE_MEMBERS
-    showDebug('📤 [2] Intentando UPSERT en police_members...');
-    try {
-      const charPayload = { 
-        discord_id: currentOfficer.discord_id,
-        character_name: newName,
-        department: dept
-      };
-      showDebug('    Payload: ' + JSON.stringify(charPayload));
-      
-      const response = await supaUpsert('police_members', 
-        charPayload,
-        'discord_id'
-      );
-      showDebug('✅ [2] Police_members UPSERT exitoso');
-      updateSuccess = true;
-    } catch (e) {
-      showDebug('⚠️  [2] Error en police_members UPSERT: ' + e.message);
-      
-      // Fallback a UPDATE
-      showDebug('📤 [2b] Intentando UPDATE como fallback...');
-      try {
-        const charPayload = { character_name: newName };
-        const response = await supaUpdate('police_members', 
-          charPayload, 
-          { discord_id: `eq.${currentOfficer.discord_id}` }
-        );
-        showDebug('✅ [2b] UPDATE en police_members exitoso');
-        updateSuccess = true;
-      } catch (e2) {
-        showDebug('⚠️  [2b] UPDATE también falló: ' + e2.message);
-      }
-    }
-    
-    // 3. Guardar badge
-    if (badgeInput) {
-      const formattedBadge = `${badgeInput} | ${newName}`;
-      showDebug('📤 [3] Intentando guardar badge: ' + formattedBadge);
-      
-      try {
-        await supaUpdate('officer_badges', 
-          { badge_number: formattedBadge }, 
-          { discord_id: `eq.${currentOfficer.discord_id}` }
-        );
-        showDebug('✅ [3] Badge actualizado');
-      } catch (e) {
-        showDebug('⚠️  [3] Update falló, intentando insert...');
-        try {
-          await supaInsert('officer_badges', 
-            { discord_id: currentOfficer.discord_id, badge_number: formattedBadge }
-          );
-          showDebug('✅ [3] Badge creado');
-        } catch (e2) {
-          showDebug('⚠️  [3] Insert también falló: ' + e2.message);
-        }
+        showDebug('❌ [1b] Error al crear: ' + e2.message);
       }
     }
     
     if (!updateSuccess) {
-      showDebug('❌ Error: No se pudo actualizar ninguna tabla');
-      throw new Error('No se pudo actualizar ninguna tabla');
+      showDebug('❌ Error: No se pudo guardar en rank_members');
+      throw new Error('No se pudo guardar el rango y departamento');
     }
     
-    showDebug('✅ ¡Cambios guardados! Recargando...');
-    alert('✅ Información actualizada correctamente:\n' + 
-          'Nombre: ' + newName + '\n' + 
+    showDebug('✅ ¡Cambios guardados correctamente!');
+    alert('✅ Rango y Departamento actualizado correctamente:\n' + 
           'Departamento: ' + dept + '\n' + 
           'Rango: ' + (rank || 'Sin asignar'));
     
