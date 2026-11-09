@@ -2130,23 +2130,48 @@ document.getElementById('searchDisciplineInput').addEventListener('input', (e) =
 });
 
 function openEditModal(discordId) {
-  // Buscar por discord_id en lugar de índice
-  currentOfficer = allOfficers.find(o => o.discord_id === discordId);
-  if (!currentOfficer) {
-    console.error('Oficial no encontrado:', discordId);
-    return;
+  try {
+    showDebug('🔓 Abriendo modal de editar para: ' + discordId);
+    
+    // Buscar por discord_id
+    currentOfficer = allOfficers.find(o => o.discord_id === discordId);
+    if (!currentOfficer) {
+      showDebug('❌ Oficial no encontrado: ' + discordId);
+      console.error('Oficial no encontrado:', discordId);
+      return;
+    }
+    
+    showDebug('✅ Oficial encontrado: ' + currentOfficer.character_name);
+    
+    // Mostrar el nombre correcto del oficial
+    const displayName = currentOfficer.character_name || currentOfficer.username;
+    const editName = document.getElementById('editOfficialName');
+    if (editName) {
+      editName.value = displayName;
+      showDebug('✓ Nombre mostrado: ' + displayName);
+    }
+    
+    const editDept = document.getElementById('editDepartment');
+    if (editDept) {
+      editDept.value = currentOfficer.department || '';
+      showDebug('✓ Departamento mostrado: ' + (currentOfficer.department || 'Sin asignar'));
+    }
+    
+    // Cargar rangos según el departamento
+    updateRankSelect(currentOfficer.department);
+    showDebug('✓ Rangos cargados');
+    
+    const modal = document.getElementById('editModal');
+    if (modal) {
+      modal.classList.add('active');
+      showDebug('✅ Modal abierto correctamente');
+    } else {
+      showDebug('❌ Modal no encontrado en el DOM');
+    }
+  } catch (e) {
+    showDebug('❌ Error abriendo modal: ' + e.message);
+    console.error(e);
   }
-  
-  // Mostrar el nombre correcto del oficial que se está editando
-  const displayName = currentOfficer.character_name || currentOfficer.username;
-  document.getElementById('editOfficialName').value = displayName;
-  document.getElementById('editDepartment').value = currentOfficer.department || '';
-  document.getElementById('editBadge').value = currentOfficer.badge || '';
-  
-  // Cargar rangos según el departamento
-  updateRankSelect(currentOfficer.department);
-  
-  document.getElementById('editModal').classList.add('active');
 }
 
 function updateRankSelect(dept) {
