@@ -1645,12 +1645,18 @@ async function loadOfficers() {
        }
        
        // Determinar etiqueta de rango
+       // IMPORTANTE: dept puede venir en mayúsculas (HPD) pero ranks usa minúsculas (hpd)
        let rankLabel = '';
-       if (rankKey && ranks[dept]) {
-         const rankObj = ranks[dept].find(r => r.key === rankKey);
+       const deptLower = dept ? dept.toLowerCase() : '';
+       if (rankKey && deptLower && ranks[deptLower]) {
+         const rankObj = ranks[deptLower].find(r => r.key === rankKey);
          rankLabel = rankObj ? rankObj.label : rankKey;
          if (m.discord_id === '1052306091565928498') {
-           showDebug('🏅 Rango encontrado: ' + rankLabel);
+           showDebug('🏅 Rango encontrado: ' + rankLabel + ' (busqué en dept=' + deptLower + ')');
+         }
+       } else {
+         if (m.discord_id === '1052306091565928498') {
+           showDebug('❌ No encontré rango: rankKey=' + rankKey + ', deptLower=' + deptLower + ', ranks existe=' + (ranks[deptLower] ? 'sí' : 'no'));
          }
        }
       
