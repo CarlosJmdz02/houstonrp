@@ -694,7 +694,7 @@ body::after {
             <div class="panel-title"><span class="ico">⛓️</span> Historial de Arrestos</div>
             <span class="panel-badge" style="background:rgba(229,72,80,.12);color:var(--accent-red);border:1px solid rgba(229,72,80,.25);">Récord</span>
           </div>
-          <div class="panel-bodydydy" id="arrests-container">
+          <div class="panel-body" id="arrests-container">
              <div class="loading-spinner"><div class="spinner"></div>Cargando arrestos...</div>
            </div>
         </div>
@@ -714,7 +714,7 @@ body::after {
             <input id="alias-input" type="text" placeholder="🔎 Si no ves tus multas, escribí tu usuario de Roblox…" autocomplete="off" spellcheck="false">
             <button class="alias-btn" onclick="saveAlias()">Buscar</button>
           </div>
-          <div class="panel-bodydydy" id="fines-container">
+          <div class="panel-body" id="fines-container">
              <div class="loading-spinner"><div class="spinner"></div>Cargando multas...</div>
            </div>
         </div>
@@ -725,7 +725,7 @@ body::after {
              <div class="panel-title"><span class="ico">💸</span> Transferencias Anteriores</div>
              <span class="panel-badge success">Historial</span>
            </div>
-           <div class="panel-bodydydy" id="payments-container">
+           <div class="panel-body" id="payments-container">
               <div class="empty-state">
                 <div class="big-icon">💳</div>
                 <p>No hay transferencias registradas</p>
@@ -1457,17 +1457,23 @@ async function loadPassports(){
 }
 
 // ── BANCO FUNCTIONS ──
-function loadBalance(){
+function loadBankBalance(){
   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
   const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
   
-  $('balance-cash').textContent = '$' + cashBalance.toLocaleString();
-  $('balance-card').textContent = '$' + cardBalance.toLocaleString();
-  $('balance-cash-pct').textContent = cashBalance.toLocaleString() + ' disponible';
-  $('balance-card-pct').textContent = cardBalance.toLocaleString() + ' disponible';
+  const cashEl = $('balance-cash');
+  const cardEl = $('balance-card');
+  const cashSubEl = $('balance-cash-pct');
+  const cardSubEl = $('balance-card-pct');
+  const cardNameEl = $('card-name');
   
-  if(userName){
-    $('card-name').textContent = userName.toUpperCase();
+  if(cashEl) cashEl.textContent = '$' + cashBalance.toLocaleString();
+  if(cardEl) cardEl.textContent = '$' + cardBalance.toLocaleString();
+  if(cashSubEl) cashSubEl.textContent = cashBalance.toLocaleString() + ' disponible';
+  if(cardSubEl) cardSubEl.textContent = cardBalance.toLocaleString() + ' disponible';
+  
+  if(cardNameEl && userName){
+    cardNameEl.textContent = userName.toUpperCase();
   }
 }
 
@@ -1503,10 +1509,10 @@ function processTransfer(){
   });
   localStorage.setItem('hrp_transfers_'+userId, JSON.stringify(transfers.slice(0, 50)));
   
-  $('transfer-amount').value = '';
-  $('transfer-user').value = '';
-  loadBalance();
-  loadTransferHistory();
+   $('transfer-amount').value = '';
+   $('transfer-user').value = '';
+   loadBankBalance();
+   loadTransferHistory();
   showToast('✅ Transferencia de $' + amount.toLocaleString() + ' a ' + receiver + ' completada', 'success');
 }
 
@@ -1526,11 +1532,11 @@ function openCashWithdraw(){
   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
   const newCashBalance = cashBalance + withdrawAmount;
   
-  localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
-  localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
-  
-  loadBalance();
-  showToast('✅ Retiraste $' + withdrawAmount.toLocaleString() + ' a efectivo', 'success');
+   localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
+   localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
+   
+   loadBankBalance();
+   showToast('✅ Retiraste $' + withdrawAmount.toLocaleString() + ' a efectivo', 'success');
 }
 
 function openCashDeposit(){
@@ -1549,11 +1555,11 @@ function openCashDeposit(){
   const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
   const newCardBalance = cardBalance + depositAmount;
   
-  localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
-  localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
-  
-  loadBalance();
-  showToast('✅ Depositaste $' + depositAmount.toLocaleString() + ' en tu tarjeta', 'success');
+   localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
+   localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
+   
+   loadBankBalance();
+   showToast('✅ Depositaste $' + depositAmount.toLocaleString() + ' en tu tarjeta', 'success');
 }
 
 function loadTransferHistory(){
@@ -1616,10 +1622,11 @@ async function init(){
   const hs=$('hero-sub');if(hs)hs.textContent='Portal Cívico — ID: '+userId.slice(0,8)+'...';
   const hi=$('hero-id');if(hi)hi.textContent=userId.slice(0,8)+'...';
 
-   loadBalance();
-   loadAllData();
-   loadDocuments();
-   loadTransferHistory();
+    loadBalance();
+    loadAllData();
+    loadDocuments();
+    loadBankBalance();
+    loadTransferHistory();
 
    document.querySelectorAll('.nav-item').forEach(a=>{
     if(a.getAttribute('href')===window.location.pathname.split('/').pop())a.classList.add('active')
