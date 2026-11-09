@@ -365,21 +365,22 @@ body::after {
 .doc-duo-cell{display:grid;grid-template-columns:1fr 1.1fr;gap:24px;align-items:center}
 /* ── REALISTIC PASSPORT ── */
 .passport-card{
-   position:relative;width:330px;aspect-ratio:0.68;border-radius:12px;overflow:hidden;
+   position:relative;width:420px;aspect-ratio:1.4;border-radius:12px;overflow:hidden;
    background:linear-gradient(135deg,#3d3d3d,#1a1a1a);
    border:1.5px solid #5a5a5a;
    box-shadow:0 12px 32px rgba(0,0,0,0.7);
    transition:all 0.4s ease;
-   display:flex;flex-direction:column;
+   display:flex;flex-direction:row;
    margin: 0 auto;
  }
 .passport-card:hover{transform:translateY(-6px);box-shadow:0 24px 64px rgba(0,0,0,0.9)}
 
 .passport-cover{
    background:linear-gradient(180deg,#1f4788,#0a2460);
-   padding:20px 14px;
+   padding:16px 14px;
    display:flex;flex-direction:column;align-items:center;justify-content:center;
-   text-align:center;color:white;flex:0.35;border-bottom:3px solid #c0a000;
+   text-align:center;color:white;flex:0.22;border-right:3px solid #c0a000;
+   min-width:0;
  }
 .passport-eagle{font-size:32px;line-height:1}
 .passport-title{
@@ -392,18 +393,18 @@ body::after {
  }
 
 .passport-interior{
-   flex:1;padding:14px;display:flex;flex-direction:column;background:#e8e8e0;color:#000;
-   font-family:'Courier New',monospace;font-size:9px;overflow:hidden
+   flex:1;padding:12px 16px;display:grid;grid-template-columns:100px 1fr;gap:12px;background:#e8e8e0;color:#000;
+   font-family:'Courier New',monospace;font-size:7.5px;overflow:hidden;align-items:start
  }
 
 .passport-bio-top{
-   display:flex;gap:6px;margin-bottom:10px
+   display:flex;flex-direction:column;gap:4px;justify-content:center;align-items:center;grid-column:1
  }
 .passport-photo-section{
-   flex-shrink:0
+   flex-shrink:0;width:100%;display:flex;justify-content:center
  }
 .passport-photo{
-   width:56px;height:72px;border:3px solid #000;display:flex;align-items:center;justify-content:center;
+   width:80px;height:100px;border:2px solid #000;display:flex;align-items:center;justify-content:center;
    background:linear-gradient(135deg,#666,#333);position:relative
  }
 .passport-photo img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s}
@@ -414,22 +415,21 @@ body::after {
  }
 
 .passport-bio-data{
-   flex:1;overflow-y:auto;font-size:8px;line-height:1.4
+   flex:1;overflow-y:auto;font-size:7px;line-height:1.3;grid-column:2;grid-row:1/3;display:flex;flex-direction:column;gap:1px
  }
 .bio-line{
-   display:grid;grid-template-columns:0.8fr 1.5fr;gap:4px;margin-bottom:2px;
-   padding-bottom:2px;border-bottom:0.8px solid #999
+   display:grid;grid-template-columns:0.7fr 1.2fr;gap:2px;padding-bottom:1px;border-bottom:0.5px solid #999
  }
 .bio-label{
-   font-weight:bold;text-transform:uppercase;color:#333;font-size:7px
+   font-weight:bold;text-transform:uppercase;color:#333;font-size:6px
  }
 .bio-value{
-   font-weight:500;color:#000
+   font-weight:500;color:#000;word-break:break-word
  }
 
 .passport-mrz{
-   margin-top:auto;background:#000;color:#fff;padding:5px;font-size:9px;
-   line-height:1.3;letter-spacing:0.5px;word-break:break-all
+   grid-column:1/3;background:#000;color:#fff;padding:4px;font-size:6px;
+   line-height:1.2;letter-spacing:0.3px;word-break:break-all;margin-top:auto
  }
 
 /* ── RESPONSIVE ── */
@@ -476,22 +476,22 @@ body::after {
 
 .hidden{display:none!important}
   /* ── Búsqueda manual de registros por usuario de Roblox ── */
-  .record-search{display:flex;gap:8px;align-items:center;padding:0 0 12px;border-bottom:1px solid var(--border);margin-bottom:12px;flex-wrap:wrap}
-  .record-search input{
-    flex:1;min-width:180px;padding:9px 12px;border-radius:9px;font-size:12.5px;
-    background:#121212;border:1px solid var(--border);color:var(--text-primary);
-    font-family:inherit;transition:border-color .15s ease
-  }
-  .record-search input:focus{outline:none;border-color:var(--accent-cyan)}
-  .record-search input::placeholder{color:var(--text-dim)}
-  .alias-btn{
-    padding:9px 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;
-    background:linear-gradient(180deg,#3b82f6,#2563eb);border:1px solid transparent;
-    color:#fff;font-family:'Rajdhani',sans-serif;letter-spacing:.05em;text-transform:uppercase;
-    transition:all .15s ease
-  }
-  .alias-btn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(59,130,246,.4)}
-  .alias-hint{font-size:11px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;width:100%}
+   .record-search{display:flex;gap:12px;align-items:center;padding:0 0 16px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+   .record-search input{
+     flex:1;min-width:220px;padding:12px 16px;border-radius:10px;font-size:13px;
+     background:#121212;border:1px solid var(--border);color:var(--text-primary);
+     font-family:inherit;transition:border-color .15s ease
+   }
+   .record-search input:focus{outline:none;border-color:var(--accent-cyan);background:var(--bg-card)}
+   .record-search input::placeholder{color:var(--text-dim)}
+   .alias-btn{
+     padding:12px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;
+     background:linear-gradient(180deg,#3b82f6,#2563eb);border:1px solid transparent;
+     color:#fff;font-family:'Rajdhani',sans-serif;letter-spacing:.05em;text-transform:uppercase;
+     transition:all .15s ease;white-space:nowrap
+   }
+   .alias-btn:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(59,130,246,.4)}
+   .alias-hint{font-size:12px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;width:100%;margin-top:8px}
 
   /* ── DEBIT CARD ── */
    /* ── BANK SECTION ── */
@@ -504,25 +504,25 @@ body::after {
      .bank-card-section{display:grid;grid-template-columns:1fr 240px;gap:12px;align-items:flex-start}
     
     /* ── DEBIT CARD NEW ── */
-    .debit-card-premium-new{position:relative;width:410px;aspect-ratio:1.59;background:linear-gradient(135deg,#0d7d2a 0%,#1a9c3a 50%,#2bb84f 100%);border-radius:20px;padding:28px;color:white;font-family:'JetBrains Mono',monospace;box-shadow:0 24px 72px rgba(13,125,42,0.5),inset 0 1px 0 rgba(255,255,255,0.12);display:flex;flex-direction:column;justify-content:space-between;border:1px solid rgba(255,255,255,0.25);transition:all 0.4s ease}
+     .debit-card-premium-new{position:relative;width:480px;aspect-ratio:1.59;background:linear-gradient(135deg,#0d7d2a 0%,#1a9c3a 50%,#2bb84f 100%);border-radius:22px;padding:32px;color:white;font-family:'JetBrains Mono',monospace;box-shadow:0 24px 72px rgba(13,125,42,0.5),inset 0 1px 0 rgba(255,255,255,0.12);display:flex;flex-direction:column;justify-content:space-between;border:1px solid rgba(255,255,255,0.25);transition:all 0.4s ease}
     .debit-card-premium-new:hover{transform:translateY(-8px);box-shadow:0 32px 96px rgba(13,125,42,0.6)}
     
-    .card-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-    .card-logo{width:44px;height:44px;opacity:0.95}
-    .card-bank-name-new{font-size:14px;font-weight:700;letter-spacing:2.8px;text-transform:uppercase}
+     .card-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+     .card-logo{width:50px;height:50px;opacity:0.95}
+     .card-bank-name-new{font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
+     
+     .card-chip-new{width:62px;height:46px;background:linear-gradient(135deg,#daa520 0%,#f0e68c 100%);border-radius:8px;box-shadow:0 6px 16px rgba(0,0,0,0.5);margin-bottom:20px}
+     
+     .card-number-new{font-size:26px;letter-spacing:3.5px;font-weight:600;margin-bottom:16px;font-family:'JetBrains Mono',monospace}
     
-    .card-chip-new{width:54px;height:40px;background:linear-gradient(135deg,#daa520 0%,#f0e68c 100%);border-radius:8px;box-shadow:0 6px 16px rgba(0,0,0,0.5);margin-bottom:16px}
-    
-    .card-number-new{font-size:22px;letter-spacing:3px;font-weight:600;margin-bottom:12px;font-family:'JetBrains Mono',monospace}
-    
-    /* BALANCE INSIDE CARD */
-    .card-balance-inside{background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;margin-bottom:16px;text-align:center;backdrop-filter:blur(10px)}
-    .balance-label-card{font-size:9px;letter-spacing:1.5px;opacity:0.9;text-transform:uppercase}
-    .balance-amount-card{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;margin-top:4px}
-    
-    .card-info-row-new{display:flex;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2)}
-    .card-label-small-new{font-size:8px;letter-spacing:1.5px;opacity:0.85;text-transform:uppercase}
-    .card-value-large-new{font-size:13px;letter-spacing:0.5px;font-weight:700;margin-top:4px}
+     /* BALANCE INSIDE CARD */
+     .card-balance-inside{background:rgba(255,255,255,0.1);border-radius:12px;padding:14px;margin-bottom:20px;text-align:center;backdrop-filter:blur(10px)}
+     .balance-label-card{font-size:10px;letter-spacing:1.6px;opacity:0.9;text-transform:uppercase}
+     .balance-amount-card{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;margin-top:6px}
+     
+     .card-info-row-new{display:flex;justify-content:space-between;padding-top:16px;border-top:1px solid rgba(255,255,255,0.2)}
+     .card-label-small-new{font-size:9px;letter-spacing:1.6px;opacity:0.85;text-transform:uppercase}
+     .card-value-large-new{font-size:15px;letter-spacing:0.5px;font-weight:700;margin-top:5px;word-break:break-word}
     
     /* CASH ON RIGHT */
     .cash-display-right{background:#121212;border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
@@ -552,27 +552,39 @@ body::after {
     .char-suggestion-item{padding:10px 13px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);font-size:11px;transition:background 0.15s}
     .char-suggestion-item:hover{background:rgba(76,175,80,0.15)}
     
-    /* ── TRANSACTIONS ── */
-    .transactions-display-new{background:#121212;border:1px solid var(--border);border-radius:14px;padding:18px}
-    .transactions-list-new{max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:rgba(0,0,0,0.3);padding:12px}
-    .transaction-item{padding:10px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;font-size:11px;transition:background 0.2s}
-    .transaction-item:hover{background:rgba(76,175,80,0.1)}
+     /* ── STATUS CHART ── */
+     .bank-status-chart{background:#121212;border:1px solid var(--border);border-radius:14px;padding:18px;margin-top:20px}
+     .status-chart-title{font-size:11px;color:var(--text-secondary);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;font-weight:600}
+     .status-bars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+     .status-item{display:flex;flex-direction:column}
+     .status-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+     .status-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;border:1px solid var(--border)}
+     .status-fill{height:100%;background:linear-gradient(90deg,#4acf8f,#2bb84f);border-radius:3px;transition:width 0.3s ease}
+     .status-fill.status-transfers{background:linear-gradient(90deg,#3b82f6,#2563eb)}
+     .status-fill.status-withdrawals{background:linear-gradient(90deg,#daa520,#f0e68c)}
+     .status-value{font-size:10px;color:var(--text-secondary);margin-top:6px;font-family:'Rajdhani',sans-serif;font-weight:600}
+     
+     /* ── TRANSACTIONS ── */
+     .transactions-display-new{background:#121212;border:1px solid var(--border);border-radius:14px;padding:18px}
+     .transactions-list-new{max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:rgba(0,0,0,0.3);padding:12px}
+     .transaction-item{padding:10px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;font-size:11px;transition:background 0.2s}
+     .transaction-item:hover{background:rgba(76,175,80,0.1)}
     .transaction-item:last-child{border-bottom:none}
     .transaction-type{display:flex;gap:8px;align-items:center;flex:1}
      .transaction-meta{color:var(--text-dim);font-size:9px;margin-top:2px}
      .transaction-amount{font-weight:700;font-family:'Rajdhani',sans-serif;font-size:12px}
      
      /* ── FLIP CARD ── */
-     .card-flip-container{perspective:1000px;position:relative;width:410px;height:calc(410px / 1.59)}
+     .card-flip-container{perspective:1000px;position:relative;width:480px;height:calc(480px / 1.59)}
      .card-flipper{position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d}
      .card-flipper.flipped{transform:rotateY(180deg)}
      .card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:space-between}
-     .card-back{transform:rotateY(180deg);background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);border-radius:20px;padding:28px;border:1px solid rgba(255,255,255,0.15)}
-     .cvv-section{text-align:right;padding:20px 28px}
-     .cvv-label{font-size:9px;color:rgba(255,255,255,0.7);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
-     .cvv-code{font-size:28px;font-weight:700;color:white;letter-spacing:6px}
-     .barcode-section{display:flex;justify-content:center;padding:20px 0}
-     .barcode{width:280px;height:60px;background:repeating-linear-gradient(90deg,#333 0,#333 2px,#666 2px,#666 4px,#555 4px,#555 6px);border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,0.5)}
+      .card-back{transform:rotateY(180deg);background:linear-gradient(135deg,#0d7d2a 0%,#1a9c3a 50%,#2bb84f 100%);border-radius:22px;padding:32px;border:1px solid rgba(255,255,255,0.15)}
+      .cvv-section{text-align:right;padding:24px 32px}
+      .cvv-label{font-size:10px;color:rgba(255,255,255,0.8);letter-spacing:1.6px;text-transform:uppercase;margin-bottom:10px}
+      .cvv-code{font-size:32px;font-weight:700;color:white;letter-spacing:8px}
+      .barcode-section{display:flex;justify-content:center;padding:24px 0}
+      .barcode{width:320px;height:70px;background:white;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,0.5);display:flex;align-items:center;padding:8px;gap:2px}
      .flip-button-small{position:absolute;top:12px;right:12px;z-index:10;width:32px;height:32px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:white;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-family:'Inter',sans-serif}
      .flip-button-small:hover{background:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.5)}
      
@@ -756,6 +768,34 @@ body::after {
               <div id="statement-container" class="transactions-list-new">
                 <div style="text-align:center;color:var(--text-dim);padding:12px;font-size:10px">Sin movimientos</div>
               </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- STATUS CHART -->
+        <div class="bank-status-chart">
+          <div class="status-chart-title">ESTADO DE CUENTA</div>
+          <div class="status-bars">
+            <div class="status-item">
+              <div class="status-label">Gastado Este Mes</div>
+              <div class="status-bar">
+                <div class="status-fill" id="spent-bar" style="width: 25%"></div>
+              </div>
+              <div class="status-value" id="spent-amount">$0 de $10,000</div>
+            </div>
+            <div class="status-item">
+              <div class="status-label">Transferencias Realizadas</div>
+              <div class="status-bar">
+                <div class="status-fill status-transfers" id="transfers-bar" style="width: 15%"></div>
+              </div>
+              <div class="status-value" id="transfers-amount">0 transferencias</div>
+            </div>
+            <div class="status-item">
+              <div class="status-label">Retiros en Efectivo</div>
+              <div class="status-bar">
+                <div class="status-fill status-withdrawals" id="withdrawals-bar" style="width: 10%"></div>
+              </div>
+              <div class="status-value" id="withdrawals-amount">$0</div>
             </div>
           </div>
         </div>
@@ -1629,8 +1669,8 @@ async function loadBankBalance(){
     cardBalance = 0;
   }
   
-   // Cash balance (local, starting 0)
-  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '0');
+   // Cash balance (local, starting 500)
+  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '500');
   
   // Get character name (primary character)
   let charName = 'CARDHOLDER';
@@ -1689,12 +1729,49 @@ async function loadBankBalance(){
      cvvEl.textContent = cvvCode;
    }
    
-   // Generate barcode pattern (fake barcode for aesthetics)
-   const barcodeEl = $('card-barcode');
-   if(barcodeEl){
-     barcodeEl.style.backgroundImage = 'repeating-linear-gradient(90deg,' + 
-       ['#333','#666','#555','#777','#444','#888','#555','#666'].map(c => c + ' ' + Math.floor(Math.random()*8+2) + 'px').join(',') + ')';
-   }
+     // Generate barcode pattern with lines
+     const barcodeEl = $('card-barcode');
+     if(barcodeEl){
+       barcodeEl.innerHTML = '';
+       for(let i = 0; i < 50; i++){
+         const line = document.createElement('div');
+         const height = Math.random() > 0.5 ? 40 : 60;
+         line.style.width = Math.random() > 0.7 ? '3px' : '2px';
+         line.style.height = height + 'px';
+         line.style.backgroundColor = '#000';
+         line.style.display = 'flex';
+         barcodeEl.appendChild(line);
+       }
+     }
+     
+     // Update status chart
+     const transfers = JSON.parse(localStorage.getItem('hrp_transfers_'+userId) || '[]');
+     const withdrawals = JSON.parse(localStorage.getItem('hrp_withdrawals_'+userId) || '[]');
+     const totalSpent = withdrawals.reduce((s, w) => s + (w.amount || 0), 0);
+     
+     const spentBar = $('spent-bar');
+     const spentAmount = $('spent-amount');
+     if(spentBar && spentAmount){
+       const percentage = Math.min((totalSpent / 10000) * 100, 100);
+       spentBar.style.width = percentage + '%';
+       spentAmount.textContent = '$' + totalSpent.toLocaleString() + ' de $10,000';
+     }
+     
+     const transfersBar = $('transfers-bar');
+     const transfersAmount = $('transfers-amount');
+     if(transfersBar && transfersAmount){
+       const transferPct = Math.min((transfers.length / 20) * 100, 100);
+       transfersBar.style.width = transferPct + '%';
+       transfersAmount.textContent = transfers.length + ' transferencias';
+     }
+     
+     const withdrawalsBar = $('withdrawals-bar');
+     const withdrawalsAmount = $('withdrawals-amount');
+     if(withdrawalsBar && withdrawalsAmount){
+       const withdrawalPct = Math.min((totalSpent / 5000) * 100, 100);
+       withdrawalsBar.style.width = withdrawalPct + '%';
+       withdrawalsAmount.textContent = '$' + totalSpent.toLocaleString();
+     }
 }
 
 async function processTransfer(){
@@ -1741,10 +1818,28 @@ async function processTransfer(){
   localStorage.setItem('hrp_transfers_'+userId, JSON.stringify(transfers.slice(0, 100)));
   
    $('transfer-amount').value = '';
-   $('transfer-recipient').value = '';
-   await loadBankBalance();
-   loadTransferHistory();
-  showToast('✅ Transferred $' + amount.toLocaleString() + ' to ' + receiver, 'success');
+    $('transfer-recipient').value = '';
+    
+    // Send Discord webhook
+    try {
+      const webhookUrl = 'https://discord.com/api/webhooks/1558266220590137415/TPmXqVnXT6ZvhTUkCUijEk1Qbs0my9F5lUVXCbSJDVKVH94eZIwezKer38x74GwR66eo';
+      const senderName = userName || 'Unknown';
+      const message = {
+        content: `**${senderName}** le transferio **$${amount.toLocaleString()}** a **${receiver}**`,
+        username: 'Houston Bank Transfer'
+      };
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(message)
+      }).catch(e => console.log('Webhook error:', e));
+    } catch(e){
+      console.log('Webhook send error:', e);
+    }
+    
+    await loadBankBalance();
+    loadTransferHistory();
+   showToast('✅ Transferred $' + amount.toLocaleString() + ' to ' + receiver, 'success');
 }
 
 async function openCashWithdraw(){
@@ -1774,8 +1869,8 @@ async function openCashWithdraw(){
      return;
    }
    
-    const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '0');
-    const newCashBalance = cashBalance + withdrawAmount;
+     const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '500');
+     const newCashBalance = cashBalance + withdrawAmount;
     localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
     
     // Save to statement
@@ -1795,8 +1890,8 @@ async function openCashDeposit(){
    const amount = prompt('How much cash do you want to deposit?', '1000');
    if(!amount || parseInt(amount) <= 0) return;
    
-    const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '0');
-    const depositAmount = parseInt(amount);
+     const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '500');
+     const depositAmount = parseInt(amount);
    
    if(depositAmount > cashBalance){
      showToast('You do not have that much cash available', 'error');
