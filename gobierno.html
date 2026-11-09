@@ -450,80 +450,144 @@ body::after {
   .alias-hint{font-size:11px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;width:100%}
 
   /* ── DEBIT CARD ── */
-  .debit-card {
-    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #1565c0 100%);
-    border-radius: 12px;
-    padding: 24px;
-    color: white;
-    box-shadow: 0 8px 32px rgba(13,71,161,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.15);
-  }
-  .debit-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
-    animation: shine 3s infinite;
-  }
-  @keyframes shine {
-    0% { transform: translate(-50%, -50%); }
-    100% { transform: translate(50%, 50%); }
-  }
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-    position: relative;
-    z-index: 1;
-  }
-  .card-number {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 20px;
-    letter-spacing: 4px;
-    margin-bottom: 32px;
-    position: relative;
-    z-index: 1;
-  }
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    position: relative;
-    z-index: 1;
-  }
+   /* ── BANK SECTION ── */
+   .bank-section {
+     background: var(--bg-panel);
+     border: 1px solid var(--border);
+     border-radius: 16px;
+     padding: 32px;
+     margin-top: 32px;
+   }
+   .bank-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 28px;
+     padding-bottom: 16px;
+     border-bottom: 2px solid var(--border);
+   }
+   .bank-main-grid {
+     display: grid;
+     grid-template-columns: 1fr 1.2fr;
+     gap: 32px;
+     align-items: start;
+   }
 
-  /* ── BALANCE BOX ── */
-  .balance-box {
-    background: var(--bg-hover);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-  }
-  .balance-label {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .balance-amount {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--accent-blue);
-    margin-bottom: 4px;
-  }
-  .balance-sub {
-    font-size: 11px;
-    color: var(--text-dim);
-  }
+   /* CARD STYLING */
+   .bank-card-container {
+     perspective: 1000px;
+   }
+   .bank-card {
+     position: relative;
+     width: 100%;
+     aspect-ratio: 1.586;
+     border-radius: 16px;
+     overflow: hidden;
+     background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #43a047 100%);
+     box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+     transition: transform 0.4s ease;
+   }
+   .bank-card:hover {
+     transform: translateY(-8px) rotateY(2deg);
+   }
+   .card-bg {
+     position: absolute;
+     inset: 0;
+     background: 
+       radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15), transparent 40%),
+       radial-gradient(circle at 80% 70%, rgba(0,0,0,0.2), transparent 40%);
+   }
+   .card-content {
+     position: relative;
+     height: 100%;
+     padding: 24px;
+     display: flex;
+     flex-direction: column;
+     color: white;
+     font-family: 'JetBrains Mono', monospace;
+     z-index: 2;
+   }
+   .card-top {
+     display: flex;
+     justify-content: space-between;
+     align-items: flex-start;
+     margin-bottom: 40px;
+   }
+   .chip {
+     width: 50px;
+     height: 40px;
+     background: linear-gradient(135deg, #c0a000 0%, #deb700 50%, #f0d000 100%);
+     border-radius: 6px;
+     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+   }
+   .card-middle {
+     margin-bottom: 40px;
+   }
+   .card-number-display {
+     font-size: 24px;
+     letter-spacing: 3px;
+     font-weight: 600;
+     margin-bottom: 8px;
+     display: block;
+   }
+   .card-label {
+     font-size: 10px;
+     letter-spacing: 2px;
+     opacity: 0.8;
+     text-transform: uppercase;
+   }
+   .card-bottom {
+     display: flex;
+     justify-content: space-between;
+     align-items: flex-end;
+     margin-top: auto;
+     padding-top: 20px;
+     border-top: 1px solid rgba(255,255,255,0.2);
+   }
+   .card-value {
+     font-size: 13px;
+     letter-spacing: 1px;
+     margin-top: 4px;
+   }
+   .card-back-info {
+     position: absolute;
+     bottom: 24px;
+     right: 24px;
+     text-align: right;
+     opacity: 0.9;
+     font-size: 10px;
+   }
+
+   /* BALANCE DISPLAYS */
+   .balance-display {
+     background: rgba(74,207,143,0.1);
+     border: 1px solid rgba(74,207,143,0.3);
+     border-radius: 12px;
+     padding: 20px;
+     margin-top: 20px;
+   }
+   .balance-card-box {
+     background: var(--bg-hover);
+     border: 1px solid var(--border);
+     border-radius: 12px;
+     padding: 20px;
+   }
+
+   /* TRANSFER & STATEMENT */
+   .transfer-section {
+     background: var(--bg-hover);
+     border: 1px solid var(--border);
+     border-radius: 12px;
+     padding: 20px;
+     margin-top: 20px;
+   }
+   .statement-section {
+     margin-top: 20px;
+   }
+   .bank-right {
+     display: flex;
+     flex-direction: column;
+   }
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
@@ -596,90 +660,108 @@ body::after {
           <span>ID: <strong id="hero-id">---</strong></span>
         </div>
       </div>
-      <div class="hero-stats">
-        <div class="hero-stat" style="animation-delay:.05s; opacity: 0.5;">
-           <div class="lbl">Multas Activas</div>
-         </div>
-         <div class="hero-stat" style="animation-delay:.1s; opacity: 0.5;">
-           <div class="lbl">Arrestos</div>
-         </div>
-         <div class="hero-stat" style="animation-delay:.15s; opacity: 0.5;">
-           <div class="lbl">Total Pendiente</div>
-         </div>
-         <div class="hero-stat" style="animation-delay:.2s; opacity: 0.5;">
-           <div class="lbl">Total Pagado</div>
-         </div>
-      </div>
+
 </div>
 
     <!-- TUS DOCUMENTOS (ID + Pasaporte) -->
     <div id="documents-section"></div>
 
-    <!-- BANCO SECTION -->
-    <div class="panel" style="animation-delay:.2s;margin-top:28px;">
-      <div class="panel-header">
-        <div class="panel-title"><span class="ico">🏦</span> Mi Banco</div>
-        <span class="panel-badge success">Activo</span>
-      </div>
-      <div class="panel-body">
-         <!-- DEBIT CARD -->
-        <div style="margin-bottom: 28px;">
-          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Tu Tarjeta de Débito</div>
-          <div class="debit-card">
-            <div class="card-header">
-              <span style="font-weight: 700; font-size: 18px;">AMERICAN BANK</span>
-              <span style="font-size: 11px; opacity: 0.7;">💳 DEBIT</span>
-            </div>
-            <div class="card-number">
-              <span id="card-number-display">•••• •••• •••• 4928</span>
-            </div>
-            <div class="card-footer">
-              <div>
-                <div style="font-size: 9px; color: rgba(255,255,255,0.6);">TITULAR</div>
-                <div style="font-weight: 600; font-size: 14px;" id="card-name">Tu Nombre</div>
-              </div>
-              <div style="text-align: right;">
-                <div style="font-size: 9px; color: rgba(255,255,255,0.6);">VÁLIDA HASTA</div>
-                <div style="font-weight: 600; font-size: 14px;">12/28</div>
-              </div>
-            </div>
-          </div>
-        </div>
+     <!-- BANCO SECTION - Professional Banking Interface -->
+     <div class="bank-section">
+       <!-- Header -->
+       <div class="bank-header">
+         <h3 style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text-primary);margin:0">Mi Cuenta Bancaria</h3>
+         <span style="font-size:12px;color:var(--accent-green)">● Estado: Activa</span>
+       </div>
 
-        <!-- SALDOS -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
-          <div class="balance-box">
-            <div class="balance-label">💵 Efectivo</div>
-            <div class="balance-amount" id="balance-cash">$0</div>
-            <div class="balance-sub" id="balance-cash-pct">0 disponible</div>
-          </div>
-          <div class="balance-box">
-            <div class="balance-label">💳 Tarjeta</div>
-            <div class="balance-amount" id="balance-card">$0</div>
-            <div class="balance-sub" id="balance-card-pct">0 disponible</div>
-          </div>
-        </div>
+       <!-- Main Grid: Card + Balances + Statement -->
+       <div class="bank-main-grid">
+         <!-- LEFT: Debit Card + Available Balance -->
+         <div class="bank-left">
+           <!-- Realistic Debit Card -->
+           <div class="bank-card-container">
+             <div class="bank-card">
+               <!-- Card Background with Gradient -->
+               <div class="card-bg"></div>
+               
+               <!-- Card Content -->
+               <div class="card-content">
+                 <!-- Top: Logo + Chip -->
+                 <div class="card-top">
+                   <img src="images/logo.png" alt="HCRP" style="width:50px;height:auto;opacity:0.9">
+                   <div class="chip"></div>
+                 </div>
 
-        <!-- TRANSFERENCIAS -->
-        <div style="border-top: 1px solid var(--border); padding-top: 20px;">
-          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">Transferir Dinero</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-            <input type="number" id="transfer-amount" placeholder="Monto" min="0" style="padding: 10px; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px;">
-            <input type="text" id="transfer-user" placeholder="Usuario receptor" style="padding: 10px; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px;">
-          </div>
-          <button onclick="processTransfer()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s;">💸 Transferir Ahora</button>
-        </div>
+                 <!-- Middle: Account Number -->
+                 <div class="card-middle">
+                   <div class="card-number-display" id="card-account-number">4532 •••• •••• 8901</div>
+                   <div class="card-label">Card Account Number</div>
+                 </div>
 
-        <!-- RETIROS/DEPÓSITOS -->
-        <div style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px;">
-          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">Operaciones</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <button onclick="openCashWithdraw()" style="padding: 12px; background: rgba(230,168,104,0.15); border: 1px solid rgba(230,168,104,0.3); border-radius: 8px; color: var(--accent-gold); font-weight: 600; cursor: pointer; transition: all 0.2s;">💵 Retirar a Efectivo</button>
-            <button onclick="openCashDeposit()" style="padding: 12px; background: rgba(74,207,143,0.15); border: 1px solid rgba(74,207,143,0.3); border-radius: 8px; color: var(--accent-green); font-weight: 600; cursor: pointer; transition: all 0.2s;">🏧 Depositar Efectivo</button>
-          </div>
-        </div>
-      </div>
-    </div>
+                 <!-- Bottom: Cardholder Info -->
+                 <div class="card-bottom">
+                   <div>
+                     <div class="card-label">CARDHOLDER NAME</div>
+                     <div class="card-value" id="card-cardholder" style="font-size:14px">HOUSTON RP</div>
+                   </div>
+                   <div style="text-align:right">
+                     <div class="card-label">VALID THRU</div>
+                     <div class="card-value" id="card-valid-date">02/28</div>
+                   </div>
+                 </div>
+
+                 <!-- Back of Card Info -->
+                 <div class="card-back-info">
+                   <div class="card-label">Soft Code</div>
+                   <div style="font-size:12px;color:var(--text-primary)" id="card-soft-code">2024-0892</div>
+                 </div>
+               </div>
+             </div>
+           </div>
+
+           <!-- Cash Balance Display -->
+           <div class="balance-display">
+             <div style="font-size:13px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Cash on Hand</div>
+             <div style="font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--accent-green);margin-bottom:4px" id="balance-cash-display">$5,000</div>
+             <div style="font-size:11px;color:var(--text-dim)">Available Cash Balance</div>
+           </div>
+         </div>
+
+         <!-- RIGHT: Card Balance + Transfer + Statement -->
+         <div class="bank-right">
+           <!-- Card Balance -->
+           <div class="balance-card-box">
+             <div style="font-size:13px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Current Account Balance</div>
+             <div style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:var(--accent-green)" id="balance-card-display">$10,000</div>
+             <div style="font-size:11px;color:var(--text-dim);margin-top:8px">Available Balance in Card</div>
+
+             <!-- Quick Actions -->
+             <div class="quick-actions" style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+               <button onclick="openCashWithdraw()" style="padding:10px;background:rgba(74,207,143,0.15);border:1px solid rgba(74,207,143,0.4);border-radius:8px;color:var(--accent-green);font-weight:600;font-size:12px;cursor:pointer;transition:all 0.2s">Withdraw Cash</button>
+               <button onclick="openCashDeposit()" style="padding:10px;background:rgba(74,207,143,0.15);border:1px solid rgba(74,207,143,0.4);border-radius:8px;color:var(--accent-green);font-weight:600;font-size:12px;cursor:pointer;transition:all 0.2s">Deposit Cash</button>
+             </div>
+           </div>
+
+           <!-- Transfer Section -->
+           <div class="transfer-section">
+             <div style="font-size:13px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-weight:600">Send Money to User</div>
+             <div style="display:grid;gap:10px;margin-bottom:14px">
+               <input type="number" id="transfer-amount" placeholder="Amount" min="0" style="padding:11px;background:var(--bg-hover);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:13px">
+               <input type="text" id="transfer-recipient" placeholder="Recipient Username" style="padding:11px;background:var(--bg-hover);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:13px">
+             </div>
+             <button onclick="processTransfer()" style="width:100%;padding:12px;background:linear-gradient(135deg,rgba(74,207,143,0.8),rgba(76,175,80,0.8));border:none;border-radius:8px;color:white;font-weight:600;cursor:pointer;transition:all 0.2s">Transfer Now</button>
+           </div>
+
+           <!-- Statement / Transactions -->
+           <div class="statement-section">
+             <div style="font-size:13px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-weight:600">Recent Transactions (Statement)</div>
+             <div id="statement-container" style="max-height:350px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:12px;background:rgba(0,0,0,0.3)">
+               <div style="text-align:center;color:var(--text-dim);padding:20px;font-size:12px">Loading transactions...</div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
 
     <!-- MAIN GRID -->
     <div class="gov-grid">
@@ -1458,28 +1540,65 @@ async function loadPassports(){
 
 // ── BANCO FUNCTIONS ──
 function loadBankBalance(){
+  // Get or create account number
+  let accountNumber = localStorage.getItem('hrp_account_number_'+userId);
+  if(!accountNumber){
+    const num1 = String(Math.floor(Math.random()*10000)).padStart(4,'0');
+    const num2 = String(Math.floor(Math.random()*10000)).padStart(4,'0');
+    const num3 = String(Math.floor(Math.random()*10000)).padStart(4,'0');
+    const num4 = String(Math.floor(Math.random()*10000)).padStart(4,'0');
+    accountNumber = num1 + num2 + num3 + num4;
+    localStorage.setItem('hrp_account_number_'+userId, accountNumber);
+  }
+  
+  // Get or create soft code (issue date)
+  let softCode = localStorage.getItem('hrp_soft_code_'+userId);
+  if(!softCode){
+    const year = new Date().getFullYear();
+    const month = String(new Date().getMonth()+1).padStart(2,'0');
+    const day = String(new Date().getDate()).padStart(2,'0');
+    const random = String(Math.floor(Math.random()*10000)).padStart(4,'0');
+    softCode = year + '-' + random;
+    localStorage.setItem('hrp_soft_code_'+userId, softCode);
+  }
+  
+  // Get balances
   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
   const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
   
-  const cashEl = $('balance-cash');
-  const cardEl = $('balance-card');
-  const cashSubEl = $('balance-cash-pct');
-  const cardSubEl = $('balance-card-pct');
-  const cardNameEl = $('card-name');
+  // Update Card Display
+  const cardAccountEl = $('card-account-number');
+  const cardCardholder = $('card-cardholder');
+  const cardValidDate = $('card-valid-date');
+  const cardSoftCode = $('card-soft-code');
   
-  if(cashEl) cashEl.textContent = '$' + cashBalance.toLocaleString();
-  if(cardEl) cardEl.textContent = '$' + cardBalance.toLocaleString();
-  if(cashSubEl) cashSubEl.textContent = cashBalance.toLocaleString() + ' disponible';
-  if(cardSubEl) cardSubEl.textContent = cardBalance.toLocaleString() + ' disponible';
-  
-  if(cardNameEl && userName){
-    cardNameEl.textContent = userName.toUpperCase();
+  if(cardAccountEl){
+    const masked = accountNumber.substring(0,4) + ' •••• •••• ' + accountNumber.substring(12);
+    cardAccountEl.textContent = masked;
   }
+  if(cardCardholder && userName){
+    cardCardholder.textContent = userName.toUpperCase();
+  }
+  if(cardValidDate){
+    const expMonth = String((new Date().getMonth()+1)).padStart(2,'0');
+    const expYear = (new Date().getFullYear() + 4).toString().substring(2);
+    cardValidDate.textContent = expMonth + '/' + expYear;
+  }
+  if(cardSoftCode){
+    cardSoftCode.textContent = softCode;
+  }
+  
+  // Update Balance Display
+  const cashDisplay = $('balance-cash-display');
+  const cardDisplay = $('balance-card-display');
+  
+  if(cashDisplay) cashDisplay.textContent = '$' + cashBalance.toLocaleString();
+  if(cardDisplay) cardDisplay.textContent = '$' + cardBalance.toLocaleString();
 }
 
 function processTransfer(){
   const amount = parseInt($('transfer-amount').value || '0');
-  const receiver = ($('transfer-user').value || '').trim();
+  const receiver = ($('transfer-recipient').value || '').trim();
   
   if(amount <= 0){
     showToast('Ingresa un monto válido', 'error');
@@ -1510,84 +1629,156 @@ function processTransfer(){
   localStorage.setItem('hrp_transfers_'+userId, JSON.stringify(transfers.slice(0, 50)));
   
    $('transfer-amount').value = '';
-   $('transfer-user').value = '';
+   $('transfer-recipient').value = '';
    loadBankBalance();
    loadTransferHistory();
   showToast('✅ Transferencia de $' + amount.toLocaleString() + ' a ' + receiver + ' completada', 'success');
 }
 
 function openCashWithdraw(){
-  const amount = prompt('¿Cuánto deseas retirar a efectivo?', '1000');
-  if(!amount || parseInt(amount) <= 0) return;
-  
-  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
-  const withdrawAmount = parseInt(amount);
-  
-  if(withdrawAmount > cardBalance){
-    showToast('Saldo insuficiente en tu tarjeta', 'error');
-    return;
-  }
-  
-  const newCardBalance = cardBalance - withdrawAmount;
-  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
-  const newCashBalance = cashBalance + withdrawAmount;
-  
-   localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
-   localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
+   const amount = prompt('How much cash do you want to withdraw?', '1000');
+   if(!amount || parseInt(amount) <= 0) return;
    
-   loadBankBalance();
-   showToast('✅ Retiraste $' + withdrawAmount.toLocaleString() + ' a efectivo', 'success');
+   const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
+   const withdrawAmount = parseInt(amount);
+   
+   if(withdrawAmount > cardBalance){
+     showToast('Insufficient balance in your account', 'error');
+     return;
+   }
+   
+   const newCardBalance = cardBalance - withdrawAmount;
+   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
+   const newCashBalance = cashBalance + withdrawAmount;
+   
+    localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
+    localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
+    
+    // Save to statement
+    const withdrawals = JSON.parse(localStorage.getItem('hrp_withdrawals_'+userId) || '[]');
+    withdrawals.unshift({
+      amount: withdrawAmount,
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('hrp_withdrawals_'+userId, JSON.stringify(withdrawals.slice(0,100)));
+    
+    loadBankBalance();
+    loadTransferHistory();
+    showToast('✅ Withdrew $' + withdrawAmount.toLocaleString() + ' in cash', 'success');
 }
 
 function openCashDeposit(){
-  const amount = prompt('¿Cuánto efectivo deseas depositar?', '1000');
-  if(!amount || parseInt(amount) <= 0) return;
-  
-  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
-  const depositAmount = parseInt(amount);
-  
-  if(depositAmount > cashBalance){
-    showToast('No tienes ese efectivo disponible', 'error');
-    return;
-  }
-  
-  const newCashBalance = cashBalance - depositAmount;
-  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
-  const newCardBalance = cardBalance + depositAmount;
-  
-   localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
-   localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
+   const amount = prompt('How much cash do you want to deposit?', '1000');
+   if(!amount || parseInt(amount) <= 0) return;
    
-   loadBankBalance();
-   showToast('✅ Depositaste $' + depositAmount.toLocaleString() + ' en tu tarjeta', 'success');
+   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
+   const depositAmount = parseInt(amount);
+   
+   if(depositAmount > cashBalance){
+     showToast('You do not have that much cash available', 'error');
+     return;
+   }
+   
+   const newCashBalance = cashBalance - depositAmount;
+   const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
+   const newCardBalance = cardBalance + depositAmount;
+   
+    localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
+    localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
+    
+    // Save to statement
+    const deposits = JSON.parse(localStorage.getItem('hrp_deposits_'+userId) || '[]');
+    deposits.unshift({
+      amount: depositAmount,
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('hrp_deposits_'+userId, JSON.stringify(deposits.slice(0,100)));
+    
+    loadBankBalance();
+    loadTransferHistory();
+    showToast('✅ Deposited $' + depositAmount.toLocaleString() + ' to your account', 'success');
 }
 
 function loadTransferHistory(){
-  const container = $('payments-container');
-  const transfers = JSON.parse(localStorage.getItem('hrp_transfers_'+userId) || '[]');
-  
-  if(!transfers || transfers.length === 0){
-    container.innerHTML = `<div class="empty-state">
-      <div class="big-icon">💸</div>
-      <p>No hay transferencias registradas</p>
-      <div class="sub">Tus transferencias aparecerán aquí</div>
-    </div>`;
-    return;
-  }
-  
-  container.innerHTML = transfers.map(t => {
-    const date = new Date(t.timestamp);
-    const timeStr = date.toLocaleString('es-ES', {
-      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-    });
-    return `<div class="fine-item" style="padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <div style="color: var(--text-primary); font-weight: 600;">Transferencia a ${esc(t.to)}</div>
-        <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">${timeStr}</div>
-      </div>
-      <div style="text-align: right; color: var(--accent-gold); font-weight: 700;">-$${t.amount.toLocaleString()}</div>
-    </div>`;
-  }).join('');
+   const container = $('statement-container');
+   if(!container) return;
+   
+   // Collect all transactions
+   const transfers = JSON.parse(localStorage.getItem('hrp_transfers_'+userId) || '[]') || [];
+   const deposits = JSON.parse(localStorage.getItem('hrp_deposits_'+userId) || '[]') || [];
+   const withdrawals = JSON.parse(localStorage.getItem('hrp_withdrawals_'+userId) || '[]') || [];
+   
+   // Combine and sort by timestamp
+   let allTransactions = [];
+   
+   transfers.forEach(t => {
+     allTransactions.push({
+       type: 'transfer',
+       to: t.to,
+       amount: t.amount,
+       timestamp: t.timestamp,
+       icon: '➡️'
+     });
+   });
+   
+   deposits.forEach(d => {
+     allTransactions.push({
+       type: 'deposit',
+       amount: d.amount,
+       timestamp: d.timestamp,
+       icon: '💰'
+     });
+   });
+   
+   withdrawals.forEach(w => {
+     allTransactions.push({
+       type: 'withdrawal',
+       amount: w.amount,
+       timestamp: w.timestamp,
+       icon: '🏧'
+     });
+   });
+   
+   allTransactions.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+   
+   if(allTransactions.length === 0){
+     container.innerHTML = `<div style="text-align:center;color:var(--text-dim);padding:30px;font-size:12px">
+       <div style="font-size:24px;margin-bottom:8px">📋</div>
+       No transactions yet. Your statement will appear here.
+     </div>`;
+     return;
+   }
+   
+   container.innerHTML = allTransactions.map((t,i) => {
+     const date = new Date(t.timestamp);
+     const timeStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' + date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+     
+     let description = '';
+     let amountColor = 'color:var(--accent-green)';
+     let amountPrefix = '+';
+     
+     if(t.type === 'transfer'){
+       description = `Transfer to ${esc(t.to)}`;
+       amountColor = 'color:var(--accent-red)';
+       amountPrefix = '-';
+     } else if(t.type === 'deposit'){
+       description = 'Deposit to Account';
+       amountColor = 'color:var(--accent-green)';
+       amountPrefix = '+';
+     } else if(t.type === 'withdrawal'){
+       description = 'Cash Withdrawal';
+       amountColor = 'color:var(--accent-red)';
+       amountPrefix = '-';
+     }
+     
+     return `<div style="padding:12px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;font-size:12px;transition:all 0.2s">
+       <div style="flex:1">
+         <div style="color:var(--text-primary);font-weight:500;margin-bottom:3px">${t.icon} ${description}</div>
+         <div style="color:var(--text-dim);font-size:10px">${timeStr}</div>
+       </div>
+       <div style="text-align:right;${amountColor};font-weight:700;font-family:'Rajdhani',sans-serif;font-size:13px">${amountPrefix}$${t.amount.toLocaleString()}</div>
+     </div>`;
+   }).join('');
 }
 
 async function init(){
