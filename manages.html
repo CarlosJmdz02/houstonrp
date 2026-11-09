@@ -841,6 +841,32 @@
 </head>
 <body>
 
+<!-- PANEL DE DEBUG VISUAL -->
+<div id="debugPanel" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  max-height: 300px;
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid #00BCD4;
+  border-radius: 8px;
+  padding: 15px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #00BCD4;
+  overflow-y: auto;
+  z-index: 10000;
+  display: none;
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #00BCD4; padding-bottom: 5px;">
+    <strong>DEBUG LOG</strong>
+    <button onclick="document.getElementById('debugPanel').innerHTML = ''; document.getElementById('debugPanel').style.display = 'none';" style="background: none; border: none; color: #00BCD4; cursor: pointer; font-size: 14px;">✕</button>
+  </div>
+  <div id="debugLog"></div>
+</div>
+
 <div class="container">
   <div class="header">
     <div class="header-top">
@@ -1069,7 +1095,7 @@
     <div class="modal-title">✏️ Editar Información del Oficial</div>
     <div class="form-group">
       <label>Oficial</label>
-      <input type="text" id="editOfficialName" disabled>
+      <input type="text" id="editOfficialName" placeholder="Nombre del oficial">
     </div>
     <div class="form-group">
       <label>Departamento</label>
@@ -1291,6 +1317,25 @@ let ranks = {};
 let currentDept = 'all';
 let currentAction = null;
 let currentOfficer = null;
+
+// 🔧 SISTEMA DE DEBUG VISUAL
+function showDebug(msg) {
+  console.log(msg);
+  const debugLog = document.getElementById('debugLog');
+  if (debugLog) {
+    const debugPanel = document.getElementById('debugPanel');
+    debugPanel.style.display = 'block';
+    const line = document.createElement('div');
+    line.textContent = msg;
+    line.style.marginBottom = '5px';
+    if (msg.includes('✅')) line.style.color = '#4CAF50';
+    if (msg.includes('❌')) line.style.color = '#F44336';
+    if (msg.includes('📤')) line.style.color = '#FFC107';
+    if (msg.includes('⚠️')) line.style.color = '#FF9800';
+    debugLog.appendChild(line);
+    debugLog.scrollTop = debugLog.scrollHeight;
+  }
+}
 
 async function loadData() {
   console.log('🔄 Cargando datos...');
@@ -2220,7 +2265,10 @@ function closeModal(modalId) {
 }
 
 async function confirmEdit() {
+  showDebug('📝 ===== INICIANDO EDICIÓN =====');
+  
   if (!currentOfficer) {
+    showDebug('❌ Error: No hay oficial seleccionado');
     alert('❌ No hay oficial seleccionado');
     return;
   }
@@ -2230,83 +2278,89 @@ async function confirmEdit() {
   const rank = document.getElementById('editRank').value;
   const badgeInput = document.getElementById('editBadge').value.trim();
   
+  showDebug('📋 Oficial: ' + currentOfficer.discord_id);
+  showDebug('📋 Nuevo nombre: ' + newName);
+  showDebug('📋 Departamento: ' + dept);
+  showDebug('📋 Rango: ' + rank);
+  showDebug('📋 Placa: ' + badgeInput);
+  
   if (!dept) {
+    showDebug('❌ Error: Debes seleccionar departamento');
     alert('❌ Debes seleccionar un departamento');
     return;
   }
   
   if (!newName) {
+    showDebug('❌ Error: Nombre vacío');
     alert('❌ El nombre no puede estar vacío');
     return;
   }
   
   try {
-    console.log('📝 Iniciando edición de oficial:', currentOfficer.discord_id);
-    console.log('Nuevo nombre:', newName, 'Departamento:', dept, 'Rango:', rank);
+    let updateSuccess = false;
     
-    // 1. Actualizar departamento y rango en rank_members
-    const rankPayload = {
-      department: dept,
-      rank_key: rank || null
-    };
-    
-    console.log('📤 Actualizando rank_members con:', rankPayload);
-    
-    let rankUpdateSuccess = false;
+    // 1. Intentar actualizar RANK_MEMBERS
+    showDebug('📤 [1] Intentando actualizar rank_members...');
     try {
+      const rankPayload = { department: dept, rank_key: rank || null };
+      showDebug('    Payload: ' + JSON.stringify(rankPayload));
+      
       const response = await supaUpdate('rank_members', 
         rankPayload, 
         { discord_id: `eq.${currentOfficer.discord_id}` }
       );
-      console.log('✅ Rank_members actualizado:', response);
-      rankUpdateSuccess = true;
-    } catch (e1) {
-      console.warn('Rank_members error (tabla opcional):', e1.message);
-      // Tabla opcional, continuar
+      showDebug('✅ [1] Rank_members actualizado correctamente');
+      updateSuccess = true;
+    } catch (e) {
+      showDebug('⚠️  [1] Error en rank_members: ' + e.message);
     }
     
-    // 2. Actualizar nombre del personaje en police_members o characters
-    if (newName && newName !== currentOfficer.character_name) {
-      console.log('📤 Intentando actualizar nombre del personaje...');
-      try {
-        // Intentar actualizar character_name en police_members
-        const charPayload = { character_name: newName };
-        const response = await supaUpdate('police_members', 
-          charPayload, 
-          { discord_id: `eq.${currentOfficer.discord_id}` }
-        );
-        console.log('✅ Nombre actualizado en police_members:', response);
-      } catch (e) {
-        console.warn('No se pudo actualizar nombre en police_members:', e.message);
-      }
+    // 2. Intentar actualizar POLICE_MEMBERS
+    showDebug('📤 [2] Intentando actualizar police_members...');
+    try {
+      const charPayload = { character_name: newName };
+      showDebug('    Payload: ' + JSON.stringify(charPayload));
+      
+      const response = await supaUpdate('police_members', 
+        charPayload, 
+        { discord_id: `eq.${currentOfficer.discord_id}` }
+      );
+      showDebug('✅ [2] Police_members actualizado correctamente');
+      updateSuccess = true;
+    } catch (e) {
+      showDebug('⚠️  [2] Error en police_members: ' + e.message);
     }
     
-    // 2. Guardar badge en tabla officer_badges con formato "PLACA | Nombre"
+    // 3. Guardar badge
     if (badgeInput) {
       const formattedBadge = `${badgeInput} | ${newName}`;
-      
-      console.log('📤 Guardando badge:', formattedBadge);
+      showDebug('📤 [3] Intentando guardar badge: ' + formattedBadge);
       
       try {
         await supaUpdate('officer_badges', 
           { badge_number: formattedBadge }, 
           { discord_id: `eq.${currentOfficer.discord_id}` }
         );
-        console.log('✅ Badge actualizado');
+        showDebug('✅ [3] Badge actualizado');
       } catch (e) {
-        // Si falla update, intentar insertar
+        showDebug('⚠️  [3] Update falló, intentando insert...');
         try {
           await supaInsert('officer_badges', 
             { discord_id: currentOfficer.discord_id, badge_number: formattedBadge }
           );
-          console.log('✅ Badge creado');
+          showDebug('✅ [3] Badge creado');
         } catch (e2) {
-          console.warn('Error guardando badge:', e2.message);
+          showDebug('⚠️  [3] Insert también falló: ' + e2.message);
         }
       }
     }
     
-    console.log('✅ Cambios guardados correctamente');
+    if (!updateSuccess) {
+      showDebug('❌ Error: No se pudo actualizar ninguna tabla');
+      throw new Error('No se pudo actualizar ninguna tabla');
+    }
+    
+    showDebug('✅ ¡Cambios guardados! Recargando...');
     alert('✅ Información actualizada correctamente:\n' + 
           'Nombre: ' + newName + '\n' + 
           'Departamento: ' + dept + '\n' + 
@@ -2314,12 +2368,12 @@ async function confirmEdit() {
     
     closeModal('editModal');
     
-    // Recargar datos después de guardar
-    console.log('🔄 Recargando oficiales...');
+    showDebug('🔄 Recargando lista de oficiales...');
     await loadOfficers();
+    showDebug('✅ ===== FIN DE EDICIÓN =====');
     
   } catch (e) {
-    console.error('❌ Error en confirmEdit:', e);
+    showDebug('❌ Error general: ' + e.message);
     alert('❌ Error: ' + e.message);
   }
 }
