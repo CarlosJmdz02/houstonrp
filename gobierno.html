@@ -496,275 +496,71 @@ body::after {
   /* ── DEBIT CARD ── */
    /* ── BANK SECTION ── */
    /* ── BANK SECTION PROFESSIONAL ── */
-   .bank-section {
-     background: var(--bg-card);
-     border: 1.5px solid var(--border-strong);
-     border-radius: 20px;
-     padding: 36px;
-     margin-top: 36px;
-     box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-   }
-   .bank-header {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     margin-bottom: 32px;
-     padding-bottom: 16px;
-     border-bottom: 2px solid var(--border-strong);
-   }
-   .bank-grid {
-     display: grid;
-     grid-template-columns: 380px 1fr;
-     gap: 40px;
-     align-items: start;
-   }
-
-   /* ── DEBIT CARD PREMIUM ── */
-   .bank-card-wrapper {
-     perspective: 1200px;
-   }
-   .debit-card-premium {
-     position: relative;
-     width: 360px;
-     aspect-ratio: 1.59;
-     background: linear-gradient(135deg, #0d7d2a 0%, #1a9c3a 50%, #2bb84f 100%);
-     border-radius: 18px;
-     padding: 20px;
-     color: white;
-     font-family: 'JetBrains Mono', monospace;
-     box-shadow: 0 20px 60px rgba(13,125,42,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
-     border: 1px solid rgba(255,255,255,0.2);
-     transition: all 0.4s ease;
-   }
-   .debit-card-premium:hover {
-     transform: translateY(-6px);
-     box-shadow: 0 28px 80px rgba(13,125,42,0.5);
-   }
-   .card-bank-name {
-     font-size: 13px;
-     font-weight: 700;
-     letter-spacing: 2.5px;
-     margin-bottom: 20px;
-     text-transform: uppercase;
-   }
-   .card-chip {
-     width: 48px;
-     height: 36px;
-     background: linear-gradient(135deg, #c9a000 0%, #e6c200 100%);
-     border-radius: 6px;
-     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-     margin-bottom: 12px;
-   }
-   .card-number-large {
-     font-size: 20px;
-     letter-spacing: 2.5px;
-     font-weight: 600;
-     margin-bottom: 24px;
-     font-family: 'JetBrains Mono', monospace;
-   }
-   .card-info-row {
-     display: flex;
-     justify-content: space-between;
-     align-items: flex-end;
-     padding-top: 12px;
-     border-top: 1px solid rgba(255,255,255,0.15);
-   }
-   .card-label-small {
-     font-size: 8px;
-     letter-spacing: 1.5px;
-     opacity: 0.85;
-     text-transform: uppercase;
-   }
-   .card-value-large {
-     font-size: 12px;
-     letter-spacing: 0.5px;
-     font-weight: 600;
-     margin-top: 3px;
-   }
-
-   /* ── BALANCE UNDER CARD ── */
-   .card-balance-box {
-     background: rgba(13,125,42,0.3);
-     border: 1px solid rgba(76,175,80,0.4);
-     border-radius: 12px;
-     padding: 14px;
-     margin-top: 18px;
-     text-align: center;
-   }
-   .balance-label-small {
-     font-size: 10px;
-     color: var(--text-secondary);
-     letter-spacing: 1.5px;
-     text-transform: uppercase;
-     margin-bottom: 6px;
-   }
-   .balance-big-green {
-     font-family: 'Rajdhani', sans-serif;
-     font-size: 28px;
-     font-weight: 700;
-     color: #4acf8f;
-   }
-
-   /* ── BANK OPERATIONS RIGHT SIDE ── */
-   .bank-operations {
-     display: grid;
-     grid-template-columns: 1fr 1fr;
-     gap: 20px;
-   }
-
-   /* ── CASH DISPLAY ── */
-   .cash-display-box {
-     background: var(--bg-card-2);
-     border: 1px solid var(--border);
-     border-radius: 14px;
-     padding: 18px;
-     grid-column: 1 / 2;
-   }
-   .cash-label {
-     font-size: 11px;
-     color: var(--text-secondary);
-     letter-spacing: 1.5px;
-     text-transform: uppercase;
-     margin-bottom: 8px;
-   }
-   .cash-amount {
-     font-family: 'Rajdhani', sans-serif;
-     font-size: 24px;
-     font-weight: 700;
-     color: var(--accent-green);
-   }
-
-   /* ── BANK BUTTONS ── */
-   .bank-buttons {
-     display: grid;
-     grid-template-columns: 1fr 1fr;
-     gap: 12px;
-     grid-column: 1 / 3;
-   }
-   .bank-btn {
-     padding: 12px 16px;
-     border: none;
-     border-radius: 10px;
-     font-weight: 600;
-     font-size: 11px;
-     cursor: pointer;
-     transition: all 0.2s;
-     text-transform: uppercase;
-     letter-spacing: 0.5px;
-   }
-   .bank-btn.withdraw {
-     background: rgba(230,168,104,0.2);
-     color: #daa520;
-     border: 1px solid rgba(230,168,104,0.4);
-   }
-   .bank-btn.withdraw:hover {
-     background: rgba(230,168,104,0.3);
-     transform: translateY(-2px);
-   }
-   .bank-btn.deposit {
-     background: rgba(74,207,143,0.2);
-     color: var(--accent-green);
-     border: 1px solid rgba(74,207,143,0.4);
-   }
-   .bank-btn.deposit:hover {
-     background: rgba(74,207,143,0.3);
-     transform: translateY(-2px);
-   }
-   .bank-btn.transfer {
-     background: linear-gradient(135deg, rgba(76,175,80,0.6), rgba(74,207,143,0.6));
-     color: white;
-     border: none;
-     width: 100%;
-     grid-column: 1 / 3;
-   }
-   .bank-btn.transfer:hover {
-     background: linear-gradient(135deg, rgba(76,175,80,0.8), rgba(74,207,143,0.8));
-     transform: translateY(-2px);
-   }
-
-   /* ── TRANSFER ZONE ── */
-   .transfer-zone {
-     grid-column: 1 / 3;
-     background: var(--bg-card-2);
-     border: 1px solid var(--border);
-     border-radius: 14px;
-     padding: 18px;
-   }
-   .zone-title {
-     font-size: 11px;
-     color: var(--text-secondary);
-     letter-spacing: 1.5px;
-     text-transform: uppercase;
-     margin-bottom: 12px;
-     font-weight: 600;
-   }
-   .bank-input {
-     width: 100%;
-     padding: 10px 12px;
-     background: var(--bg-hover);
-     border: 1px solid var(--border);
-     border-radius: 8px;
-     color: var(--text-primary);
-     font-size: 12px;
-     margin-bottom: 10px;
-     font-family: inherit;
-   }
-   .bank-input:focus {
-     outline: none;
-     border-color: var(--accent-green);
-     background: var(--bg-card);
-   }
-
-   /* ── TRANSACTIONS DISPLAY ── */
-   .transactions-display {
-     grid-column: 1 / 3;
-     background: var(--bg-card-2);
-     border: 1px solid var(--border);
-     border-radius: 14px;
-     padding: 18px;
-   }
-   .transactions-list {
-     max-height: 300px;
-     overflow-y: auto;
-     border: 1px solid var(--border);
-     border-radius: 8px;
-     background: rgba(0,0,0,0.2);
-     padding: 12px;
-   }
-   .transaction-item {
-     padding: 10px;
-     border-bottom: 1px solid rgba(255,255,255,0.05);
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     font-size: 11px;
-     transition: background 0.2s;
-   }
-   .transaction-item:hover {
-     background: rgba(76,175,80,0.1);
-   }
-   .transaction-item:last-child {
-     border-bottom: none;
-   }
-   .transaction-type {
-     display: flex;
-     gap: 8px;
-     align-items: center;
-     flex: 1;
-   }
-   .transaction-meta {
-     color: var(--text-dim);
-     font-size: 9px;
-     margin-top: 2px;
-   }
-   .transaction-amount {
-     font-weight: 700;
-     font-family: 'Rajdhani', sans-serif;
-     font-size: 12px;
-   }
+    .bank-section{background:#121212;border:1.5px solid var(--border-strong);border-radius:20px;padding:36px;margin-top:36px;box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+    .bank-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;padding-bottom:16px;border-bottom:2px solid var(--border-strong)}
+    
+    /* ── CARD + CASH LAYOUT ── */
+    .bank-grid-main{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+    .bank-card-section{display:grid;grid-template-columns:1fr 240px;gap:24px;align-items:flex-start}
+    
+    /* ── DEBIT CARD NEW ── */
+    .debit-card-premium-new{position:relative;width:410px;aspect-ratio:1.59;background:linear-gradient(135deg,#0d7d2a 0%,#1a9c3a 50%,#2bb84f 100%);border-radius:20px;padding:28px;color:white;font-family:'JetBrains Mono',monospace;box-shadow:0 24px 72px rgba(13,125,42,0.5),inset 0 1px 0 rgba(255,255,255,0.12);display:flex;flex-direction:column;justify-content:space-between;border:1px solid rgba(255,255,255,0.25);transition:all 0.4s ease}
+    .debit-card-premium-new:hover{transform:translateY(-8px);box-shadow:0 32px 96px rgba(13,125,42,0.6)}
+    
+    .card-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .card-logo{width:44px;height:44px;opacity:0.95}
+    .card-bank-name-new{font-size:14px;font-weight:700;letter-spacing:2.8px;text-transform:uppercase}
+    
+    .card-chip-new{width:54px;height:40px;background:linear-gradient(135deg,#daa520 0%,#f0e68c 100%);border-radius:8px;box-shadow:0 6px 16px rgba(0,0,0,0.5);margin-bottom:16px}
+    
+    .card-number-new{font-size:22px;letter-spacing:3px;font-weight:600;margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+    
+    /* BALANCE INSIDE CARD */
+    .card-balance-inside{background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;margin-bottom:16px;text-align:center;backdrop-filter:blur(10px)}
+    .balance-label-card{font-size:9px;letter-spacing:1.5px;opacity:0.9;text-transform:uppercase}
+    .balance-amount-card{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;margin-top:4px}
+    
+    .card-info-row-new{display:flex;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2)}
+    .card-label-small-new{font-size:8px;letter-spacing:1.5px;opacity:0.85;text-transform:uppercase}
+    .card-value-large-new{font-size:13px;letter-spacing:0.5px;font-weight:700;margin-top:4px}
+    
+    /* CASH ON RIGHT */
+    .cash-display-right{background:#121212;border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+    .cash-label{font-size:10px;color:var(--text-secondary);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
+    .cash-amount-big{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--accent-green)}
+    
+    /* ── OPERATIONS PANEL ── */
+    .bank-operations-panel{display:grid;grid-template-columns:1fr;gap:20px}
+    
+    .bank-buttons-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .bank-btn-action{padding:12px 16px;border:none;border-radius:10px;font-weight:700;font-size:11px;cursor:pointer;transition:all 0.2s;text-transform:uppercase;letter-spacing:0.5px}
+    .withdraw-btn{background:rgba(230,168,104,0.2);color:#daa520;border:1px solid rgba(230,168,104,0.4)}
+    .withdraw-btn:hover{background:rgba(230,168,104,0.3);transform:translateY(-2px)}
+    .deposit-btn{background:rgba(74,207,143,0.2);color:var(--accent-green);border:1px solid rgba(74,207,143,0.4)}
+    .deposit-btn:hover{background:rgba(74,207,143,0.3);transform:translateY(-2px)}
+    
+    /* ── TRANSFER ── */
+    .transfer-zone-new{background:#121212;border:1px solid var(--border);border-radius:14px;padding:18px}
+    .zone-title-new{font-size:11px;color:var(--text-secondary);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;font-weight:600}
+    .bank-input-new{width:100%;padding:11px 13px;background:var(--bg-hover);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:12px;margin-bottom:10px}
+    .bank-input-new:focus{outline:none;border-color:var(--accent-green);background:var(--bg-card)}
+    .bank-btn-transfer{width:100%;padding:12px;background:linear-gradient(135deg,rgba(76,175,80,0.7),rgba(74,207,143,0.7));border:none;border-radius:10px;color:white;font-weight:700;font-size:11px;cursor:pointer;transition:all 0.2s;text-transform:uppercase}
+    .bank-btn-transfer:hover{background:linear-gradient(135deg,rgba(76,175,80,0.9),rgba(74,207,143,0.9));transform:translateY(-2px)}
+    
+    /* ── CHARACTER SUGGESTIONS ── */
+    .char-suggestions{position:absolute;top:100%;left:0;right:0;background:var(--bg-card-2);border:1px solid var(--border);border-radius:8px;max-height:160px;overflow-y:auto;z-index:100;margin-top:4px}
+    .char-suggestion-item{padding:10px 13px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);font-size:11px;transition:background 0.15s}
+    .char-suggestion-item:hover{background:rgba(76,175,80,0.15)}
+    
+    /* ── TRANSACTIONS ── */
+    .transactions-display-new{background:#121212;border:1px solid var(--border);border-radius:14px;padding:18px}
+    .transactions-list-new{max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:rgba(0,0,0,0.3);padding:12px}
+    .transaction-item{padding:10px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;font-size:11px;transition:background 0.2s}
+    .transaction-item:hover{background:rgba(76,175,80,0.1)}
+    .transaction-item:last-child{border-bottom:none}
+    .transaction-type{display:flex;gap:8px;align-items:center;flex:1}
+    .transaction-meta{color:var(--text-dim);font-size:9px;margin-top:2px}
+    .transaction-amount{font-weight:700;font-family:'Rajdhani',sans-serif;font-size:12px}
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
@@ -843,76 +639,92 @@ body::after {
     <!-- TUS DOCUMENTOS (ID + Pasaporte) -->
     <div id="documents-section"></div>
 
-     <!-- BANCO SECTION - PROFESSIONAL BANKING INTERFACE -->
-     <div class="bank-section">
-       <div class="bank-header">
-         <div>
-           <h3 style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--text-primary);margin:0">Houston City Bank</h3>
-           <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;letter-spacing:0.5px">Secure Banking Portal</div>
-         </div>
-         <div style="text-align:right;font-size:11px;color:var(--accent-green)">● ACTIVE ACCOUNT</div>
-       </div>
+      <!-- BANCO SECTION - PROFESSIONAL BANKING INTERFACE -->
+      <div class="bank-section">
+        <div class="bank-header">
+          <div>
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--text-primary);margin:0">🏦 Houston City Bank</h3>
+            <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;letter-spacing:0.5px">Tu Portal Bancario Seguro</div>
+          </div>
+          <div style="text-align:right;font-size:11px;color:var(--accent-green)">● CUENTA ACTIVA</div>
+        </div>
 
-       <!-- Bank Grid: Card + Balances + Transfers -->
-       <div class="bank-grid">
-         <!-- LEFT: DEBIT CARD -->
-         <div class="bank-card-wrapper">
-           <div class="debit-card-premium">
-             <div class="card-bank-name">HOUSTON CITY BANK</div>
-             <div class="card-chip"></div>
-             <div class="card-number-large" id="card-display-number">4532 •••• •••• 8901</div>
-             <div class="card-info-row">
-               <div>
-                 <div class="card-label-small">CARDHOLDER</div>
-                 <div class="card-value-large" id="card-name-display">YOUR NAME</div>
-               </div>
-               <div style="text-align:right">
-                 <div class="card-label-small">EXPIRES</div>
-                 <div class="card-value-large" id="card-expires-display">02/28</div>
-               </div>
-             </div>
-           </div>
+        <!-- Bank Grid: Card + Balances + Transfers -->
+        <div class="bank-grid-main">
+          <!-- LEFT: DEBIT CARD PREMIUM -->
+          <div class="bank-card-section">
+            <div class="debit-card-premium-new">
+              <!-- Card Logo & Header -->
+              <div class="card-header-top">
+                <img src="images/logo.png" alt="HCRP" class="card-logo">
+                <div class="card-bank-name-new">HOUSTON CITY BANK</div>
+              </div>
 
-           <!-- Balance Under Card -->
-           <div class="card-balance-box">
-             <div class="balance-label-small">CURRENT ACCOUNT BALANCE</div>
-             <div class="balance-big-green" id="card-balance-display">$0</div>
-           </div>
-         </div>
+              <!-- Card Chip -->
+              <div class="card-chip-new"></div>
 
-         <!-- RIGHT: OPERATIONS PANEL -->
-         <div class="bank-operations">
-           <!-- CASH ON HAND -->
-           <div class="cash-display-box">
-             <div class="cash-label">CASH ON HAND</div>
-             <div class="cash-amount" id="cash-display">$0</div>
-             <div style="font-size:10px;color:var(--text-dim);margin-top:4px">Available Cash</div>
-           </div>
+              <!-- Account Number -->
+              <div class="card-number-new" id="card-display-number">4532 •••• •••• 8901</div>
 
-           <!-- QUICK ACTIONS -->
-           <div class="bank-buttons">
-             <button onclick="openCashWithdraw()" class="bank-btn withdraw">💵 WITHDRAW</button>
-             <button onclick="openCashDeposit()" class="bank-btn deposit">💰 DEPOSIT</button>
-           </div>
+              <!-- Balance INSIDE Card -->
+              <div class="card-balance-inside">
+                <div class="balance-label-card">AVAILABLE BALANCE</div>
+                <div class="balance-amount-card" id="card-balance-inside-display">$0</div>
+              </div>
 
-           <!-- TRANSFER ZONE -->
-           <div class="transfer-zone">
-             <div class="zone-title">TRANSFER TO USER</div>
-             <input type="number" id="transfer-amount" placeholder="Amount" min="0" class="bank-input">
-             <input type="text" id="transfer-recipient" placeholder="Username" class="bank-input">
-             <button onclick="processTransfer()" class="bank-btn transfer">SEND TRANSFER</button>
-           </div>
+              <!-- Cardholder Info -->
+              <div class="card-info-row-new">
+                <div>
+                  <div class="card-label-small-new">CARDHOLDER</div>
+                  <div class="card-value-large-new" id="card-name-display">YOUR NAME</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="card-label-small-new">VÁLIDO HASTA</div>
+                  <div class="card-value-large-new" id="card-expires-display">02/28</div>
+                </div>
+              </div>
+            </div>
 
-           <!-- RECENT TRANSACTIONS -->
-           <div class="transactions-display">
-             <div class="zone-title">RECENT ACTIVITY</div>
-             <div id="statement-container" class="transactions-list">
-               <div style="text-align:center;color:var(--text-dim);padding:20px;font-size:11px">No transactions</div>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
+            <!-- CASH ON HAND - Right of Card -->
+            <div class="cash-display-right">
+              <div class="cash-label">EFECTIVO EN BOLSILLO</div>
+              <div class="cash-amount-big" id="cash-display">$0</div>
+              <div style="font-size:10px;color:var(--text-dim);margin-top:4px">Disponible en Efectivo</div>
+            </div>
+          </div>
+
+          <!-- RIGHT: OPERATIONS PANEL -->
+          <div class="bank-operations-panel">
+            <!-- QUICK ACTIONS -->
+            <div class="bank-buttons-row">
+              <button onclick="openCashWithdraw()" class="bank-btn-action withdraw-btn">💵 RETIRAR</button>
+              <button onclick="openCashDeposit()" class="bank-btn-action deposit-btn">💰 DEPOSITAR</button>
+            </div>
+
+            <!-- TRANSFER ZONE -->
+            <div class="transfer-zone-new">
+              <div class="zone-title-new">TRANSFERIR A USUARIO</div>
+              <input type="number" id="transfer-amount" placeholder="Monto" min="0" class="bank-input-new">
+              <div style="position:relative">
+                <input type="text" id="transfer-recipient" placeholder="Username del usuario" class="bank-input-new" autocomplete="off">
+                <div id="character-suggestions" class="char-suggestions" style="display:none"></div>
+              </div>
+              <button onclick="processTransfer()" class="bank-btn-transfer">ENVIAR TRANSFERENCIA</button>
+            </div>
+
+            <!-- RECENT TRANSACTIONS -->
+            <div class="transactions-display-new">
+              <div class="zone-title-new">MOVIMIENTOS RECIENTES</div>
+              <div id="statement-container" class="transactions-list-new">
+                <div style="text-align:center;color:var(--text-dim);padding:12px;font-size:10px">Sin movimientos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPACE BEFORE PANELS -->
+      <div style="margin-top: 36px;"></div>
 
     <!-- MAIN GRID -->
     <div class="gov-grid">
@@ -1452,6 +1264,7 @@ async function loadBalance(){
 
 async function loadPayrollHistory(){
   const container=$('payroll-history-container');
+  if(!container) return; // Container doesn't exist, skip
   try{
     const data=typeof hrpGetPayments==='function' ? await hrpGetPayments(userId) : [];
     if(!data||data.length===0){
@@ -1461,21 +1274,21 @@ async function loadPayrollHistory(){
     container.innerHTML=data.map(p=>{
       const deptLabel=(typeof PAYROLL_DEPARTMENTS!=='undefined'&&PAYROLL_DEPARTMENTS[p.department])||String(p.department||'').toUpperCase();
       return `<div class="arrest-card" style="animation-delay:0s">
-        <div class="arrest-icon" style="background:rgba(59,130,246,.12);color:var(--accent-blue)">🏛️</div>
-        <div class="arrest-info">
-          <div class="top">
-            <strong style="color:var(--accent-blue)">$${Number(p.amount||0).toLocaleString()}</strong>
-            <span style="font-size:11px;color:var(--text-dim)">${deptLabel} · ${esc(p.rank||'')}</span>
-          </div>
-          <div class="meta">Depositado el ${p.created_at?new Date(p.created_at).toLocaleString():'—'}</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:10px;color:var(--text-dim);font-family:JetBrains Mono,monospace">${p.shifts||1} turno(s)</div>
-        </div>
-      </div>`;
-    }).join('');
+         <div class="arrest-icon" style="background:rgba(59,130,246,.12);color:var(--accent-blue)">🏛️</div>
+         <div class="arrest-info">
+           <div class="top">
+             <strong style="color:var(--accent-blue)">$${Number(p.amount||0).toLocaleString()}</strong>
+             <span style="font-size:11px;color:var(--text-dim)">${deptLabel} · ${esc(p.rank||'')}</span>
+           </div>
+           <div class="meta">Depositado el ${p.created_at?new Date(p.created_at).toLocaleString():'—'}</div>
+         </div>
+         <div style="text-align:right">
+           <div style="font-size:10px;color:var(--text-dim);font-family:JetBrains Mono,monospace">${p.shifts||1} turno(s)</div>
+         </div>
+       </div>`;
+     }).join('');
   }catch(_){
-    container.innerHTML='<div class="empty-state" style="color:var(--accent-red)"><p>Error al cargar la nómina</p></div>';
+    if(container) container.innerHTML='<div class="empty-state" style="color:var(--accent-red)"><p>Error al cargar la nómina</p></div>';
   }
 }
 
@@ -1746,69 +1559,86 @@ async function loadPassports(){
 
 // ── BANCO FUNCTIONS ──
 async function loadBankBalance(){
-  // Get or create account number
+  // Generate realistic account number with proper bank routing
   let accountNumber = localStorage.getItem('hrp_account_number_'+userId);
   if(!accountNumber){
-    const num1 = String(Math.floor(Math.random()*10000)).padStart(4,'0');
-    const num2 = String(Math.floor(Math.random()*10000)).padStart(4,'0');
-    const num3 = String(Math.floor(Math.random()*10000)).padStart(4,'0');
-    const num4 = String(Math.floor(Math.random()*10000)).padStart(4,'0');
-    accountNumber = num1 + num2 + num3 + num4;
+    const routingNum = '325070760'; // Houston City Bank routing
+    const accountPart = String(Math.floor(Math.random()*9000000000)+1000000000); // 10 digits
+    accountNumber = routingNum + accountPart;
     localStorage.setItem('hrp_account_number_'+userId, accountNumber);
   }
   
-  // Get or create soft code (issue date)
+  // Get or create soft code (card issue date)
   let softCode = localStorage.getItem('hrp_soft_code_'+userId);
   if(!softCode){
     const year = new Date().getFullYear();
-    const random = String(Math.floor(Math.random()*10000)).padStart(4,'0');
-    softCode = year + '-' + random;
+    const month = String(new Date().getMonth()+1).padStart(2,'0');
+    const day = String(new Date().getDate()).padStart(2,'0');
+    const random = String(Math.floor(Math.random()*1000)).padStart(3,'0');
+    softCode = month + day + year.substring(2) + random;
     localStorage.setItem('hrp_soft_code_'+userId, softCode);
   }
   
-  // Get balances from real economy (Supabase)
+  // Get REAL balance from Supabase
   let cardBalance = 0;
   try {
     if(typeof hrpGetBalance === 'function'){
       const realBalance = await hrpGetBalance(userId);
       cardBalance = realBalance ? parseInt(realBalance) : 0;
-      localStorage.setItem('hrp_card_'+userId, cardBalance.toString());
     }
-  } catch(_){
-    cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '0');
+  } catch(e){
+    console.error('Balance error:', e);
+    cardBalance = 0;
   }
   
-  // Cash balance stays local
+  // Cash balance (local, starting 5000)
   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
   
-  // Update Card Display
-  const cardAccountEl = $('card-account-number');
-  const cardCardholder = $('card-cardholder');
-  const cardValidDate = $('card-valid-date');
-  const cardSoftCode = $('card-soft-code');
+  // Get character name (primary character)
+  let charName = 'CARDHOLDER';
+  try {
+    const chars = await supaSelect('characters','nombres,apellidos',{user_discord:`eq.${userId}`},`created_at.asc,limit.1`);
+    if(Array.isArray(chars) && chars[0]){
+      const first = (chars[0].nombres || '').toUpperCase();
+      const last = (chars[0].apellidos || '').toUpperCase();
+      charName = (first + ' ' + last).trim() || 'CARDHOLDER';
+    }
+  } catch(_){
+    charName = (userName || 'CARDHOLDER').toUpperCase();
+  }
   
-  if(cardAccountEl){
-    const masked = accountNumber.substring(0,4) + ' •••• •••• ' + accountNumber.substring(12);
-    cardAccountEl.textContent = masked;
+  // Update card number (account)
+  const cardNumEl = $('card-display-number');
+  if(cardNumEl){
+    const lastFour = accountNumber.substring(accountNumber.length-4);
+    cardNumEl.textContent = '•••• •••• •••• ' + lastFour;
   }
-  if(cardCardholder && userName){
-    cardCardholder.textContent = userName.toUpperCase();
+  
+  // Update cardholder name
+  const nameEl = $('card-name-display');
+  if(nameEl){
+    nameEl.textContent = charName;
   }
-  if(cardValidDate){
+  
+  // Update expiry date
+  const expiryEl = $('card-expires-display');
+  if(expiryEl){
     const expMonth = String((new Date().getMonth()+1)).padStart(2,'0');
     const expYear = (new Date().getFullYear() + 4).toString().substring(2);
-    cardValidDate.textContent = expMonth + '/' + expYear;
-  }
-  if(cardSoftCode){
-    cardSoftCode.textContent = softCode;
+    expiryEl.textContent = expMonth + '/' + expYear;
   }
   
-  // Update Balance Display
-  const cashDisplay = $('balance-cash-display');
-  const cardDisplay = $('balance-card-display');
+  // Update balance INSIDE card
+  const balanceInsideEl = $('card-balance-inside-display');
+  if(balanceInsideEl){
+    balanceInsideEl.textContent = '$' + cardBalance.toLocaleString();
+  }
   
-  if(cashDisplay) cashDisplay.textContent = '$' + cashBalance.toLocaleString();
-  if(cardDisplay) cardDisplay.textContent = '$' + cardBalance.toLocaleString();
+  // Update cash display
+  const cashDisplayEl = $('cash-display');
+  if(cashDisplayEl){
+    cashDisplayEl.textContent = '$' + cashBalance.toLocaleString();
+  }
 }
 
 async function processTransfer(){
