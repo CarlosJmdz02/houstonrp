@@ -501,7 +501,6 @@ body::after {
   <div class="topbar">
     <div>
       <h1>🏛️ Portal Cívico</h1>
-      <div class="sub">Gobierno Municipal de Houston RP</div>
     </div>
   </div>
   <div class="content">
@@ -513,7 +512,7 @@ body::after {
           <div class="hero-avatar" id="hero-avatar">?</div>
           <div class="hero-text">
             <h2>Bienvenido, <span id="hero-name">Ciudadano</span></h2>
-            <p id="hero-sub">Portal Cívico — Gobierno Municipal de Houston</p>
+             <p id="hero-sub">Tu información cívica y documentos en un solo lugar</p>
           </div>
         </div>
         <div class="hero-badge">
@@ -522,22 +521,18 @@ body::after {
         </div>
       </div>
       <div class="hero-stats">
-        <div class="hero-stat" style="animation-delay:.05s">
-          <div class="val gold" id="stat-fines">0</div>
-          <div class="lbl">Multas Activas</div>
-        </div>
-        <div class="hero-stat" style="animation-delay:.1s">
-          <div class="val red" id="stat-arrests">0</div>
-          <div class="lbl">Arrestos</div>
-        </div>
-        <div class="hero-stat" style="animation-delay:.15s">
-          <div class="val purple" id="stat-pending">$0</div>
-          <div class="lbl">Total Pendiente</div>
-        </div>
-        <div class="hero-stat" style="animation-delay:.2s">
-          <div class="val cyan" id="stat-paid">$0</div>
-          <div class="lbl">Total Pagado</div>
-        </div>
+        <div class="hero-stat" style="animation-delay:.05s; opacity: 0.5;">
+           <div class="lbl">Multas Activas</div>
+         </div>
+         <div class="hero-stat" style="animation-delay:.1s; opacity: 0.5;">
+           <div class="lbl">Arrestos</div>
+         </div>
+         <div class="hero-stat" style="animation-delay:.15s; opacity: 0.5;">
+           <div class="lbl">Total Pendiente</div>
+         </div>
+         <div class="hero-stat" style="animation-delay:.2s; opacity: 0.5;">
+           <div class="lbl">Total Pagado</div>
+         </div>
       </div>
 </div>
 
@@ -550,24 +545,14 @@ body::after {
       <!-- LEFT COLUMN -->
       <div>
 
-        <!-- ANNOUNCEMENTS -->
-        <div class="panel" style="animation-delay:.15s">
-          <div class="panel-header">
-            <div class="panel-title"><span class="ico">📢</span> Avisos del Gobierno</div>
-            <span class="panel-badge info">Oficial</span>
-          </div>
-          <div class="panel-body" id="announcements-container">
-             <div class="loading-spinner"><div class="spinner"></div>Cargando avisos...</div>
-           </div>
-        </div>
-
+        
         <!-- ARRESTS -->
         <div class="panel" style="animation-delay:.25s">
           <div class="panel-header">
             <div class="panel-title"><span class="ico">⛓️</span> Historial de Arrestos</div>
             <span class="panel-badge" style="background:rgba(229,72,80,.12);color:var(--accent-red);border:1px solid rgba(229,72,80,.25);">Récord</span>
           </div>
-          <div class="panel-body" id="arrests-container">
+          <div class="panel-bodydy" id="arrests-container">
              <div class="loading-spinner"><div class="spinner"></div>Cargando arrestos...</div>
            </div>
         </div>
@@ -587,40 +572,25 @@ body::after {
             <input id="alias-input" type="text" placeholder="🔎 Si no ves tus multas, escribí tu usuario de Roblox…" autocomplete="off" spellcheck="false">
             <button class="alias-btn" onclick="saveAlias()">Buscar</button>
           </div>
-          <div class="panel-body" id="fines-container">
+          <div class="panel-bodydy" id="fines-container">
              <div class="loading-spinner"><div class="spinner"></div>Cargando multas...</div>
            </div>
         </div>
 
-        <!-- PAYMENT HISTORY -->
-        <div class="panel" style="animation-delay:.3s">
-          <div class="panel-header">
-            <div class="panel-title"><span class="ico">✅</span> Pagos Realizados</div>
-            <span class="panel-badge success">Historial</span>
-          </div>
-          <div class="panel-body" id="payments-container">
-             <div class="empty-state">
-               <div class="big-icon">💳</div>
-               <p>No hay pagos registrados</p>
-               <div class="sub">Tus pagos aparecerán aquí</div>
-             </div>
+         <!-- BANK TRANSFERS HISTORY -->
+         <div class="panel" style="animation-delay:.3s">
+           <div class="panel-header">
+             <div class="panel-title"><span class="ico">💸</span> Transferencias Anteriores</div>
+             <span class="panel-badge success">Historial</span>
            </div>
-        </div>
-
-        <!-- PAYROLL HISTORY (depósitos del gobierno) -->
-        <div class="panel" style="animation-delay:.35s">
-          <div class="panel-header">
-            <div class="panel-title"><span class="ico">🏛️</span> Historial de Nómina</div>
-            <span class="panel-badge info">Depósitos</span>
-          </div>
-          <div class="panel-body" id="payroll-history-container">
-             <div class="empty-state">
-               <div class="big-icon">💵</div>
-              <p>Sin depósitos de nómina</p>
-              <div class="sub">Tu salario se deposita automáticamente al completar turnos</div>
+           <div class="panel-bodydy" id="payments-container">
+              <div class="empty-state">
+                <div class="big-icon">💳</div>
+                <p>No hay transferencias registradas</p>
+                <div class="sub">Tus transferencias aparecerán aquí</div>
+              </div>
             </div>
-          </div>
-        </div>
+         </div>
 
       </div>
     </div>
@@ -1241,7 +1211,7 @@ async function loadDocuments(){
         <div class="panel-title"><span class="ico">📁</span> Tus Documentos</div>
         <span class="panel-badge info">ID · Pasaporte</span>
       </div>
-      <div class="panel-bo
+      <div class="panel-body
         <div class="empty-state"><div class="big-icon">📁</div>
           <p>Aún no tenés documentos</p>
           <div class="sub">Creá tu personaje para generar tu ID de Texas y tu Pasaporte</div>
@@ -1255,7 +1225,7 @@ async function loadDocuments(){
       <div class="panel-title"><span class="ico">📁</span> Tus Documentos</div>
       <span class="panel-badge ${dlActive?'success':'info'}">${chars.length} Personaje(s) · ID + Pasaporte</span>
     </div>
-    <div class="panel-bo
+    <div class="panel-body
       <div class="doc-duo-grid">${chars.map(function(c,i){
         return `<div class="doc-duo-cell">
           ${txIDCardHTML(c,i,dlLic,dlActive)}
@@ -1323,7 +1293,7 @@ async function loadPassports(){
         <div class="panel-title"><span class="ico">🛂</span> Tu Pasaporte</div>
         <span class="panel-badge info">Documento</span>
       </div>
-      <div class="panel-bo
+      <div class="panel-body
         <div class="empty-state"><div class="big-icon">🛂</div>
           <p>Aún no tenés pasaporte</p>
           <div class="sub">Creá tu personaje para generar tu pasaporte</div>
@@ -1337,7 +1307,7 @@ async function loadPassports(){
       <div class="panel-title"><span class="ico">🛂</span> Tu Pasaporte</div>
       <span class="panel-badge success">${chars.length} Documento(s) · Siempre Válido</span>
     </div>
-    <div class="panel-bo
+    <div class="panel-body
       <div class="passp-grid">${chars.map(passpCardHTML).join('')}</div>
     </div>
   </div>`;
