@@ -887,6 +887,7 @@
     <button class="tab" onclick="switchTab('turnos')">🔴 TURNOS ACTIVOS</button>
     <button class="tab" onclick="switchTab('solicitudes')">📋 SOLICITUDES</button>
     <button class="tab" onclick="switchTab('disciplina')">⚖️ DISCIPLINA</button>
+    <button class="tab" onclick="switchTab('ascensos')">⬆️ ASCENSOS</button>
     <button class="tab" onclick="switchTab('formatos')">📄 FORMATOS</button>
   </div>
 
@@ -1069,6 +1070,19 @@
     <div id="disciplineContainer">
       <div class="empty-state">
         <div class="empty-icon">⚖️</div>
+        <p>Cargando lista de oficiales...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: ASCENSOS -->
+  <div id="ascensos" class="tab-content">
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchAscensosInput" placeholder="🔍 Buscar oficial para ascenso...">
+    </div>
+    <div id="ascensosContainer">
+      <div class="empty-state">
+        <div class="empty-icon">⬆️</div>
         <p>Cargando lista de oficiales...</p>
       </div>
     </div>
@@ -1274,6 +1288,59 @@
   </div>
 </div>
 
+<!-- MODAL ASCENSO -->
+<div id="ascensoModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">⬆️ REGISTRO DE ASCENSO</div>
+    
+    <div style="background: rgba(76,175,80,0.1); border-left: 3px solid var(--accent-green); padding: 12px; margin-bottom: 20px; border-radius: 4px; font-size: 12px; color: var(--text-secondary);">
+      ℹ️ Complete todos los campos para registrar el ascenso del oficial
+    </div>
+    
+    <div class="form-group">
+      <label>Oficial</label>
+      <input type="text" id="ascensoOfficialName" disabled>
+    </div>
+    
+    <div class="form-group">
+      <label>Departamento</label>
+      <input type="text" id="ascensoOfficialDept" disabled>
+    </div>
+    
+    <div class="form-group">
+      <label>Rango Anterior</label>
+      <input type="text" id="ascensoOldRank" disabled>
+    </div>
+    
+    <div class="form-group">
+      <label>Rango Nuevo <span style="color: var(--accent-red);">*</span></label>
+      <select id="ascensoNewRank">
+        <option value="">Seleccionar rango...</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Razón del Ascenso <span style="color: var(--accent-red);">*</span></label>
+      <input type="text" id="ascensoReason" placeholder="Motivo del ascenso">
+    </div>
+    
+    <div class="form-group">
+      <label>Firmado Por <span style="color: var(--accent-red);">*</span></label>
+      <input type="text" id="ascensoSignedBy" placeholder="Nombre de quien autoriza">
+    </div>
+    
+    <div class="form-group">
+      <label>Fecha <span style="color: var(--accent-red);">*</span></label>
+      <input type="date" id="ascensoDate">
+    </div>
+    
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal('ascensoModal')">Cancelar</button>
+      <button class="btn-confirm" style="background: var(--accent-green); border: 2px solid rgba(76,175,80,0.5);" onclick="confirmAscenso()">Registrar Ascenso</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL FORMATOS -->
 <div id="formatoModal" class="modal">
   <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
@@ -1302,6 +1369,13 @@ const WEBHOOKS = {
   HCSO: 'https://discord.com/api/webhooks/1568494729836896376/hoig5Qqxo_oQzvRtCHxRw83lUbZXaPAatKJ03l0leWtZ0vpUGh_hFpUucoGmZo5Bs0OL',
   ICE: 'https://discord.com/api/webhooks/1568494920552157304/UK8MIfssgJ_gxI4j88t96d6WO5IWj71cJVJDANxlxlCKZLCwK9nfmh7hCBz92GgXJZ9M',
   THP: 'https://discord.com/api/webhooks/1568495049975529603/lUvEljJvXBsA47eDgatGeMbDkaNve-KJ8QqLRVu4WFZEdl8hjv1AUXYdW8SWKG0vyvU6'
+};
+
+const WEBHOOKS_ASCENSOS = {
+  HPD: 'https://discord.com/api/webhooks/1569338911178883176/RRBHsfuTuX1m0_4TOEUXfw3Wh1GdAtWqY859d_7mMOPypM48phYYlMK8_PSjDmSf3y8k',
+  HCSO: 'https://discord.com/api/webhooks/1569340467311673434/jBUCWAFl3AJlN2HPAR76Os92nlqcEL6nY9A743872i6azI9hx995Zl153J4gBG8Fa-jD',
+  ICE: 'https://discord.com/api/webhooks/1569340587554119811/AqDBri77_Lmng0199RGTwUNTes3Ylag2NjRAXlwCBrZNPuFTmnGzadv4iTpPxYO7IRa3',
+  THP: 'https://discord.com/api/webhooks/1569340802394755168/LB0Az9RlrACjuwRGe7MiIsLCJLDBqFuFk4uNsJHwIE5lD7GAvNCQyU42jOPTb2WydSLe'
 };
 
 let allOfficers = [];
@@ -1684,11 +1758,12 @@ async function loadOfficers() {
     });
 
     allOfficers.sort((a, b) => b.hours - a.hours);
-    allDisciplineOfficers = allOfficers;
-    
-    updateStats();
-    filterDept({target: document.querySelector('.filter-btn.active')}, 'all');
-    renderDisciplineList();
+     allDisciplineOfficers = allOfficers;
+     
+     updateStats();
+     filterDept({target: document.querySelector('.filter-btn.active')}, 'all');
+     renderDisciplineList();
+     renderAscensosList();
     
   } catch (e) {
     console.error('Error cargando:', e);
@@ -2085,33 +2160,63 @@ function renderRequests(type) {
 }
 
 function renderDisciplineList() {
-  const container = document.getElementById('disciplineContainer');
-  
-  if (allDisciplineOfficers.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚖️</div><p>No hay oficiales</p></div>';
-    return;
-  }
-  
-  container.innerHTML = allDisciplineOfficers.map(o => {
-    const avatarUrl = getAvatarUrl(o.discord_id, o.avatar);
-    return `
-    <div class="discipline-card">
-      <div class="discipline-header">
-        <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
-          <div class="officer-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
-            ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : o.username.charAt(0).toUpperCase()}
-          </div>
-          <div class="discipline-info">
-            <div class="discipline-name">${o.display_name}</div>
-            <div class="discipline-dept">${o.department} • ${o.rank}</div>
-          </div>
-        </div>
-        <div class="discipline-actions">
-          <button class="btn btn-discipline" onclick="openDisciplineModal('${o.discord_id}')">⚖️ Sancionar</button>
-        </div>
-      </div>
-    </div>
-  `}).join('');
+   const container = document.getElementById('disciplineContainer');
+   
+   if (allDisciplineOfficers.length === 0) {
+     container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚖️</div><p>No hay oficiales</p></div>';
+     return;
+   }
+   
+   container.innerHTML = allDisciplineOfficers.map(o => {
+     const avatarUrl = getAvatarUrl(o.discord_id, o.avatar);
+     return `
+     <div class="discipline-card">
+       <div class="discipline-header">
+         <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+           <div class="officer-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
+             ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : o.username.charAt(0).toUpperCase()}
+           </div>
+           <div class="discipline-info">
+             <div class="discipline-name">${o.display_name}</div>
+             <div class="discipline-dept">${o.department} • ${o.rank}</div>
+           </div>
+         </div>
+         <div class="discipline-actions">
+           <button class="btn btn-discipline" onclick="openDisciplineModal('${o.discord_id}')">⚖️ Sancionar</button>
+         </div>
+       </div>
+     </div>
+   `}).join('');
+}
+
+function renderAscensosList() {
+   const container = document.getElementById('ascensosContainer');
+   
+   if (allOfficers.length === 0) {
+     container.innerHTML = '<div class="empty-state"><div class="empty-icon">⬆️</div><p>No hay oficiales</p></div>';
+     return;
+   }
+   
+   container.innerHTML = allOfficers.map(o => {
+     const avatarUrl = getAvatarUrl(o.discord_id, o.avatar);
+     return `
+     <div class="discipline-card">
+       <div class="discipline-header">
+         <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+           <div class="officer-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
+             ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : o.username.charAt(0).toUpperCase()}
+           </div>
+           <div class="discipline-info">
+             <div class="discipline-name">${o.display_name}</div>
+             <div class="discipline-dept">${o.department} • ${o.rank}</div>
+           </div>
+         </div>
+         <div class="discipline-actions">
+           <button class="btn btn-discipline" style="background: var(--accent-green); border: 1px solid rgba(76,175,80,0.3);" onclick="openAscensoModal('${o.discord_id}')">⬆️ Ascender</button>
+         </div>
+       </div>
+     </div>
+   `}).join('');
 }
 
 function filterRequests(event, type) {
@@ -2139,16 +2244,54 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 });
 
 document.getElementById('searchDisciplineInput').addEventListener('input', (e) => {
-  const query = e.target.value.toLowerCase();
-  if (query === '') {
-    allDisciplineOfficers = allOfficers;
-  } else {
-    allDisciplineOfficers = allOfficers.filter(o => 
-      o.character_name.toLowerCase().includes(query) || 
-      o.discord_id.includes(query)
-    );
-  }
-  renderDisciplineList();
+   const query = e.target.value.toLowerCase();
+   if (query === '') {
+     allDisciplineOfficers = allOfficers;
+   } else {
+     allDisciplineOfficers = allOfficers.filter(o => 
+       o.character_name.toLowerCase().includes(query) || 
+       o.discord_id.includes(query)
+     );
+   }
+   renderDisciplineList();
+});
+
+document.getElementById('searchAscensosInput').addEventListener('input', (e) => {
+   const query = e.target.value.toLowerCase();
+   const container = document.getElementById('ascensosContainer');
+   
+   let filtered = allOfficers;
+   if (query !== '') {
+     filtered = allOfficers.filter(o => 
+       o.character_name.toLowerCase().includes(query) || 
+       o.discord_id.includes(query)
+     );
+   }
+   
+   if (filtered.length === 0) {
+     container.innerHTML = '<div class="empty-state"><div class="empty-icon">⬆️</div><p>No hay resultados</p></div>';
+   } else {
+     container.innerHTML = filtered.map(o => {
+       const avatarUrl = getAvatarUrl(o.discord_id, o.avatar);
+       return `
+       <div class="discipline-card">
+         <div class="discipline-header">
+           <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+             <div class="officer-avatar" ${avatarUrl ? `style="background-image: url('${avatarUrl}'); background-size: cover; background-position: center;"` : ''}>
+               ${avatarUrl ? `<img src="${avatarUrl}" alt="">` : o.username.charAt(0).toUpperCase()}
+             </div>
+             <div class="discipline-info">
+               <div class="discipline-name">${o.display_name}</div>
+               <div class="discipline-dept">${o.department} • ${o.rank}</div>
+             </div>
+           </div>
+           <div class="discipline-actions">
+             <button class="btn btn-discipline" style="background: var(--accent-green); border: 1px solid rgba(76,175,80,0.3);" onclick="openAscensoModal('${o.discord_id}')">⬆️ Ascender</button>
+           </div>
+         </div>
+       </div>
+     `}).join('');
+   }
 });
 
 function openEditModal(discordId) {
@@ -2294,6 +2437,41 @@ function openDisciplineModal(discordId) {
   document.getElementById('disciplineDate').value = today;
   
   document.getElementById('disciplineModal').classList.add('active');
+}
+
+function openAscensoModal(discordId) {
+  currentOfficer = allOfficers.find(o => o.discord_id === discordId);
+  if (!currentOfficer) {
+    console.error('Oficial no encontrado:', discordId);
+    return;
+  }
+  
+  document.getElementById('ascensoOfficialName').value = currentOfficer.character_name;
+  document.getElementById('ascensoOfficialDept').value = currentOfficer.department;
+  document.getElementById('ascensoOldRank').value = currentOfficer.rank;
+  document.getElementById('ascensoReason').value = '';
+  document.getElementById('ascensoSignedBy').value = '';
+  document.getElementById('ascensoNewRank').value = '';
+  
+  // Cargar rangos disponibles del departamento
+  const deptLower = currentOfficer.department.toLowerCase();
+  const rankSelect = document.getElementById('ascensoNewRank');
+  rankSelect.innerHTML = '<option value="">Seleccionar rango...</option>';
+  
+  if (ranks[deptLower]) {
+    ranks[deptLower].forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.key;
+      opt.textContent = r.label;
+      rankSelect.appendChild(opt);
+    });
+  }
+  
+  // Establecer fecha de hoy por defecto
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('ascensoDate').value = today;
+  
+  document.getElementById('ascensoModal').classList.add('active');
 }
 
 function toggleSuspensionDays() {
@@ -2552,11 +2730,154 @@ async function confirmFire() {
   }
 }
 
-async function confirmDiscipline() {
+async function confirmAscenso() {
   if (!currentOfficer) {
     alert('❌ Debes seleccionar un oficial');
     return;
   }
+  
+  const newRank = document.getElementById('ascensoNewRank').value;
+  const reason = document.getElementById('ascensoReason').value;
+  const signedBy = document.getElementById('ascensoSignedBy').value;
+  const dateStr = document.getElementById('ascensoDate').value;
+  
+  // Validar campos obligatorios
+  if (!newRank) {
+    alert('❌ Debes seleccionar un rango nuevo');
+    return;
+  }
+  
+  if (!reason || reason.trim() === '') {
+    alert('❌ Debes proporcionar una razón del ascenso');
+    return;
+  }
+  
+  if (!signedBy || signedBy.trim() === '') {
+    alert('❌ Debes especificar quién autoriza el ascenso');
+    return;
+  }
+  
+  if (!dateStr) {
+    alert('❌ Debes seleccionar una fecha');
+    return;
+  }
+  
+  // Obtener el label del rango nuevo
+  const deptLower = currentOfficer.department.toLowerCase();
+  const rankObj = ranks[deptLower]?.find(r => r.key === newRank);
+  const newRankLabel = rankObj?.label || newRank;
+  
+  try {
+    // Actualizar rango en Supabase
+    await supaUpdate('rank_members', 
+      { department: currentOfficer.department, rank_key: newRank },
+      { discord_id: `eq.${currentOfficer.discord_id}` }
+    );
+    
+    const session = hrpGetSession();
+    const adminName = session?.username || 'Admin';
+    const dept = currentOfficer.department;
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    
+    // Crear campos del embed profesional
+    const fields = [
+      {
+        name: '👤 OFICIAL ASCENDIDO',
+        value: `<@${currentOfficer.discord_id}>\n**Nombre:** ${currentOfficer.character_name}\n**Discord ID:** \`${currentOfficer.discord_id}\``,
+        inline: false
+      },
+      {
+        name: '⭐ INFORMACIÓN DEL ASCENSO',
+        value: `**Rango Anterior:** ${currentOfficer.rank}\n**Rango Nuevo:** ${newRankLabel}`,
+        inline: false
+      },
+      {
+        name: '🏢 DEPARTAMENTO',
+        value: `**${dept}**`,
+        inline: true
+      },
+      {
+        name: '📋 RAZÓN DEL ASCENSO',
+        value: `${reason}`,
+        inline: false
+      },
+      {
+        name: '📅 INFORMACIÓN DEL REGISTRO',
+        value: `**Fecha:** ${dateStr}\n**Hora:** ${timeStr}`,
+        inline: false
+      },
+      {
+        name: '✍️ AUTORIZADO POR',
+        value: `**${signedBy}**`,
+        inline: false
+      }
+    ];
+    
+    // Crear embed profesional con tema verde
+    const embed = {
+      title: '⬆️ ASCENSO REGISTRADO',
+      description: `Se ha registrado un ascenso en el sistema.\n\n**Oficial:** ${currentOfficer.character_name}\n**Nuevo Rango:** ${newRankLabel}`,
+      color: 3066993, // Verde
+      fields: fields,
+      footer: { 
+        text: 'Se ha actualizado el rango en el sistema. | Houston RP — Sistema de Ascensos',
+        icon_url: 'https://media.discordapp.net/attachments/1305044064424689684/1461252885554790470/Adobe_Express_-_file_7.png?ex=6aef748c&is=6aee230c&hm=8497fb5cba7e9cb52914c9b70f356d32e46327f4998420acd0478d1e205a36aa&=&format=webp&quality=lossless'
+      },
+      thumbnail: {
+        url: `https://cdn.discordapp.com/avatars/${currentOfficer.discord_id}/${currentOfficer.avatar}.png` || null
+      },
+      timestamp: now.toISOString()
+    };
+    
+    // Enviar webhook al departamento correspondiente
+    const deptKey = dept.toUpperCase();
+    const webhook = WEBHOOKS_ASCENSOS[deptKey];
+    if (!webhook) {
+      console.error('Webhook de ascensos no encontrado para:', deptKey);
+      alert(`❌ No hay webhook de ascensos configurado para ${dept}`);
+      return;
+    }
+    
+    await hrpSendDiscordWebhook(webhook, { embeds: [embed] });
+    
+    // Guardar en base de datos (opcional)
+    try {
+      await supaInsert('officer_ascensos', {
+        discord_id: currentOfficer.discord_id,
+        officer_name: currentOfficer.character_name,
+        old_rank: currentOfficer.rank,
+        old_rank_key: currentOfficer.rank_key,
+        new_rank: newRankLabel,
+        new_rank_key: newRank,
+        department: dept,
+        reason: reason,
+        authorized_by: signedBy,
+        action_date: dateStr,
+        action_time: timeStr,
+        admin_name: adminName,
+        created_at: new Date().toISOString()
+      });
+    } catch (dbError) {
+      console.warn('No se pudo guardar en BD (tabla no existe):', dbError);
+    }
+    
+    alert('✅ Ascenso registrado y enviado a Discord');
+    closeModal('ascensoModal');
+    await loadOfficers(); // Recargar para ver el nuevo rango
+    renderAscensosList();
+    
+  } catch (e) {
+    console.error('Error en ascenso:', e);
+    alert('❌ Error: ' + e.message);
+  }
+}
+
+async function confirmDiscipline() {
+   if (!currentOfficer) {
+     alert('❌ Debes seleccionar un oficial');
+     return;
+   }
   
   const type = document.getElementById('disciplineType').value;
   const reason = document.getElementById('disciplineReason').value;
