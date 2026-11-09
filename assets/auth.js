@@ -1,4 +1,18 @@
 // =============================
+// 🔵 TABLAS OPCIONALES DE SUPABASE
+// =============================
+// Estas tablas pueden no existir sin causar error crítico
+const OPTIONAL_TABLES = new Set([
+  'fired_officers',
+  'officer_badges', 
+  'guild_members',
+  'shifts',
+  'police_shift_sessions',
+  'police_hours_adjustments',
+  'rank_members'
+]);
+
+// =============================
 // 🔵 DISCORD CONFIG
 // =============================
 const discordClientId = "1545692856583454771";
@@ -137,6 +151,39 @@ function supaFetch(method, table, options = {}) {
   };
 
   if (method === "POST" || method === "PATCH") headers["Prefer"] = "return=representation";
+
+  // Si es una tabla opcional y es GET, retornar vacío sin hacer fetch
+  if (method === "GET" && OPTIONAL_TABLES.has(table)) {
+    try {
+      return fetch(url, {
+        method,
+        headers,
+        body: body ? JSON.stringify(body) : undefined,
+      }).then(async res => {
+        if ((res.status === 404 || res.status === 406)) {
+          return single ? null : [];
+        }
+        if (!res.ok) {
+          const text = await res.text();
+          const err = new Error(`Supabase ${method} ${table}: ${res.status} ${text}`);
+          err.code = res.status;
+          err.details = text;
+          throw err;
+        }
+        if (res.status === 204) return null;
+        const text = await res.text();
+        if (!text) return single ? null : [];
+        const data = JSON.parse(text);
+        if (single) {
+          return Array.isArray(data) ? (data[0] || null) : data;
+        }
+        return data;
+      });
+    } catch (e) {
+      // Silenciar errores de tablas opcionales
+      return single ? null : [];
+    }
+  }
 
   return fetch(url, {
     method,

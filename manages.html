@@ -2232,15 +2232,24 @@ async function confirmEdit() {
   }
   
   try {
-    // Actualizar en rank_members
+    // Actualizar en police_members (tabla principal de oficiales)
     const updatePayload = { department: dept, rank_key: rank || '' };
     
-    const response = await supaUpdate('rank_members', 
-      updatePayload, 
-      { discord_id: `eq.${currentOfficer.discord_id}` }
-    );
-    
-    console.log('Rank_members actualizado:', response);
+    // Intentar actualizar en police_members primero
+    try {
+      const response = await supaUpdate('police_members', 
+        updatePayload, 
+        { discord_id: `eq.${currentOfficer.discord_id}` }
+      );
+      console.log('Police_members actualizado:', response);
+    } catch (e) {
+      // Si falla, intentar rank_members
+      const response = await supaUpdate('rank_members', 
+        updatePayload, 
+        { discord_id: `eq.${currentOfficer.discord_id}` }
+      );
+      console.log('Rank_members actualizado:', response);
+    }
     
     // Guardar badge en tabla officer_badges con formato "PLACA | Nombre"
     if (badgeInput) {
@@ -2369,22 +2378,7 @@ async function confirmFire() {
     const session = hrpGetSession();
     await hrpRemoveHours(currentOfficer.discord_id, currentOfficer.username, currentOfficer.hours, 'DESPIDO - Eliminación de horas', session?.id);
     
-    // 2. Eliminar departamento y rango (usar update con valores vacíos o nulos)
-    await supaUpdate('rank_members',
-      { department: null, rank_key: null },
-      { discord_id: `eq.${currentOfficer.discord_id}` }
-    );
-    
-    // 3. Eliminar placa/badge
-    try {
-      await supaDelete('officer_badges',
-        { discord_id: `eq.${currentOfficer.discord_id}` }
-      );
-    } catch (e) {
-      console.warn('Badge no encontrada:', e);
-    }
-    
-    // 4. Terminar turno activo si existe
+    // 2. Terminar turno activo si existe
     try {
       const activeShift = activeShifts.find(s => s.discord_id === currentOfficer.discord_id);
       if (activeShift && activeShift.id) {
@@ -2394,7 +2388,30 @@ async function confirmFire() {
       console.warn('Error terminando turno activo:', e);
     }
     
-    // 5. Marcar como "despedido" agregando a una lista de despedidos (si existe tabla)
+    // 3. ELIMINAR COMPLETAMENTE de police_members (esto es permanente)
+    await supaDelete('police_members',
+      { discord_id: `eq.${currentOfficer.discord_id}` }
+    );
+    
+    // 4. Intentar eliminar departamento y rango de rank_members
+    try {
+      await supaDelete('rank_members',
+        { discord_id: `eq.${currentOfficer.discord_id}` }
+      );
+    } catch (e) {
+      // Tabla opcional - ignorar
+    }
+    
+    // 5. Intentar eliminar placa/badge
+    try {
+      await supaDelete('officer_badges',
+        { discord_id: `eq.${currentOfficer.discord_id}` }
+      );
+    } catch (e) {
+      // Tabla opcional - ignorar
+    }
+    
+    // 6. Intentar agregar a fired_officers como histórico
     try {
       await supaInsert('fired_officers', {
         discord_id: currentOfficer.discord_id,
@@ -2403,10 +2420,10 @@ async function confirmFire() {
         fired_at: new Date().toISOString()
       });
     } catch (e) {
-      console.warn('Tabla fired_officers no existe, continuando:', e);
+      // Tabla opcional - ignorar
     }
     
-    alert('✅ Oficial despedido correctamente. No aparecerá en la lista hasta que sea reclutado nuevamente.');
+    alert('✅ Oficial despedido PERMANENTEMENTE. Se ha eliminado de la base de datos.');
     closeModal('fireModal');
     loadOfficers();
   } catch (e) {
