@@ -2326,40 +2326,54 @@ async function confirmEdit() {
   try {
     let updateSuccess = false;
     
-    // ÚNICA ACTUALIZACIÓN: rank_members (que es donde se guarda dept y rank)
-    showDebug('📤 [1] Actualizando rank_members...');
+    // ESTRATEGIA: DELETE + INSERT para evitar problemas de RLS
+    showDebug('📤 [1] Intentando DELETE + INSERT en rank_members...');
+    
     try {
+      // Primero DELETE el registro viejo
+      showDebug('🗑️ [1a] Eliminando registro anterior...');
+      try {
+        await supaDelete('rank_members', 
+          { discord_id: `eq.${currentOfficer.discord_id}` }
+        );
+        showDebug('✅ [1a] Registro eliminado');
+      } catch (e) {
+        showDebug('⚠️ [1a] No había registro anterior (normal): ' + e.message);
+      }
+      
+      // Luego INSERT el nuevo
+      showDebug('📥 [1b] Insertando nuevo registro...');
       const rankPayload = { 
+        discord_id: currentOfficer.discord_id,
         department: dept, 
         rank_key: rank || null 
       };
       showDebug('    Payload: ' + JSON.stringify(rankPayload));
-      showDebug('    Filtro: discord_id = eq.' + currentOfficer.discord_id);
       
-      const response = await supaUpdate('rank_members', 
-        rankPayload, 
-        { discord_id: `eq.${currentOfficer.discord_id}` }
-      );
-      showDebug('✅ [1] Rank_members actualizado correctamente');
+      const response = await supaInsert('rank_members', rankPayload);
+      showDebug('✅ [1b] Registro creado correctamente');
       updateSuccess = true;
-    } catch (e) {
-      showDebug('❌ [1] Error: ' + e.message);
       
-      // Si falla, el registro no existe - intentar CREAR
-      showDebug('📤 [1b] Registro no existe, intentando crear en rank_members...');
+    } catch (e) {
+      showDebug('❌ [1] Error en DELETE+INSERT: ' + e.message);
+      
+      // Fallback: intentar UPDATE tradicional
+      showDebug('📤 [1c] Fallback: intentando UPDATE tradicional...');
       try {
         const rankPayload = { 
-          discord_id: currentOfficer.discord_id,
           department: dept, 
           rank_key: rank || null 
         };
         showDebug('    Payload: ' + JSON.stringify(rankPayload));
         
-        const response = await supaInsert('rank_members', rankPayload);
-        showDebug('✅ [1b] Registro creado en rank_members');
+        const response = await supaUpdate('rank_members', 
+          rankPayload, 
+          { discord_id: `eq.${currentOfficer.discord_id}` }
+        );
+        showDebug('✅ [1c] UPDATE exitoso');
         updateSuccess = true;
       } catch (e2) {
-        showDebug('❌ [1b] Error al crear: ' + e2.message);
+        showDebug('❌ [1c] UPDATE también falló: ' + e2.message);
       }
     }
     
