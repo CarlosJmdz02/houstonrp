@@ -448,6 +448,82 @@ body::after {
   }
   .alias-btn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(59,130,246,.4)}
   .alias-hint{font-size:11px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;width:100%}
+
+  /* ── DEBIT CARD ── */
+  .debit-card {
+    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #1565c0 100%);
+    border-radius: 12px;
+    padding: 24px;
+    color: white;
+    box-shadow: 0 8px 32px rgba(13,71,161,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .debit-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+    animation: shine 3s infinite;
+  }
+  @keyframes shine {
+    0% { transform: translate(-50%, -50%); }
+    100% { transform: translate(50%, 50%); }
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .card-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    letter-spacing: 4px;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── BALANCE BOX ── */
+  .balance-box {
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .balance-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .balance-amount {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 4px;
+  }
+  .balance-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
@@ -538,6 +614,72 @@ body::after {
 
     <!-- TUS DOCUMENTOS (ID + Pasaporte) -->
     <div id="documents-section"></div>
+
+    <!-- BANCO SECTION -->
+    <div class="panel" style="animation-delay:.2s;margin-top:28px;">
+      <div class="panel-header">
+        <div class="panel-title"><span class="ico">🏦</span> Mi Banco</div>
+        <span class="panel-badge success">Activo</span>
+      </div>
+      <div class="panel-body">
+        <!-- DEBIT CARD -->
+        <div style="margin-bottom: 28px;">
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Tu Tarjeta de Débito</div>
+          <div class="debit-card">
+            <div class="card-header">
+              <span style="font-weight: 700; font-size: 18px;">AMERICAN BANK</span>
+              <span style="font-size: 11px; opacity: 0.7;">💳 DEBIT</span>
+            </div>
+            <div class="card-number">
+              <span id="card-number-display">•••• •••• •••• 4928</span>
+            </div>
+            <div class="card-footer">
+              <div>
+                <div style="font-size: 9px; color: rgba(255,255,255,0.6);">TITULAR</div>
+                <div style="font-weight: 600; font-size: 14px;" id="card-name">Tu Nombre</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 9px; color: rgba(255,255,255,0.6);">VÁLIDA HASTA</div>
+                <div style="font-weight: 600; font-size: 14px;">12/28</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SALDOS -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+          <div class="balance-box">
+            <div class="balance-label">💵 Efectivo</div>
+            <div class="balance-amount" id="balance-cash">$0</div>
+            <div class="balance-sub" id="balance-cash-pct">0 disponible</div>
+          </div>
+          <div class="balance-box">
+            <div class="balance-label">💳 Tarjeta</div>
+            <div class="balance-amount" id="balance-card">$0</div>
+            <div class="balance-sub" id="balance-card-pct">0 disponible</div>
+          </div>
+        </div>
+
+        <!-- TRANSFERENCIAS -->
+        <div style="border-top: 1px solid var(--border); padding-top: 20px;">
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">Transferir Dinero</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+            <input type="number" id="transfer-amount" placeholder="Monto" min="0" style="padding: 10px; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px;">
+            <input type="text" id="transfer-user" placeholder="Usuario receptor" style="padding: 10px; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px;">
+          </div>
+          <button onclick="processTransfer()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s;">💸 Transferir Ahora</button>
+        </div>
+
+        <!-- RETIROS/DEPÓSITOS -->
+        <div style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px;">
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">Operaciones</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <button onclick="openCashWithdraw()" style="padding: 12px; background: rgba(230,168,104,0.15); border: 1px solid rgba(230,168,104,0.3); border-radius: 8px; color: var(--accent-gold); font-weight: 600; cursor: pointer; transition: all 0.2s;">💵 Retirar a Efectivo</button>
+            <button onclick="openCashDeposit()" style="padding: 12px; background: rgba(74,207,143,0.15); border: 1px solid rgba(74,207,143,0.3); border-radius: 8px; color: var(--accent-green); font-weight: 600; cursor: pointer; transition: all 0.2s;">🏧 Depositar Efectivo</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- MAIN GRID -->
     <div class="gov-grid">
@@ -1314,6 +1456,134 @@ async function loadPassports(){
   chars.forEach(function(c,i){ passpLoadPhoto(c,i); });
 }
 
+// ── BANCO FUNCTIONS ──
+function loadBalance(){
+  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
+  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
+  
+  $('balance-cash').textContent = '$' + cashBalance.toLocaleString();
+  $('balance-card').textContent = '$' + cardBalance.toLocaleString();
+  $('balance-cash-pct').textContent = cashBalance.toLocaleString() + ' disponible';
+  $('balance-card-pct').textContent = cardBalance.toLocaleString() + ' disponible';
+  
+  if(userName){
+    $('card-name').textContent = userName.toUpperCase();
+  }
+}
+
+function processTransfer(){
+  const amount = parseInt($('transfer-amount').value || '0');
+  const receiver = ($('transfer-user').value || '').trim();
+  
+  if(amount <= 0){
+    showToast('Ingresa un monto válido', 'error');
+    return;
+  }
+  if(!receiver){
+    showToast('Ingresa el usuario receptor', 'error');
+    return;
+  }
+  
+  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
+  if(amount > cardBalance){
+    showToast('Saldo insuficiente en tu tarjeta', 'error');
+    return;
+  }
+  
+  // Guardar la transferencia
+  const newBalance = cardBalance - amount;
+  localStorage.setItem('hrp_card_'+userId, newBalance.toString());
+  
+  // Guardar en historial
+  const transfers = JSON.parse(localStorage.getItem('hrp_transfers_'+userId) || '[]');
+  transfers.unshift({
+    to: receiver,
+    amount: amount,
+    timestamp: new Date().toISOString()
+  });
+  localStorage.setItem('hrp_transfers_'+userId, JSON.stringify(transfers.slice(0, 50)));
+  
+  $('transfer-amount').value = '';
+  $('transfer-user').value = '';
+  loadBalance();
+  loadTransferHistory();
+  showToast('✅ Transferencia de $' + amount.toLocaleString() + ' a ' + receiver + ' completada', 'success');
+}
+
+function openCashWithdraw(){
+  const amount = prompt('¿Cuánto deseas retirar a efectivo?', '1000');
+  if(!amount || parseInt(amount) <= 0) return;
+  
+  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
+  const withdrawAmount = parseInt(amount);
+  
+  if(withdrawAmount > cardBalance){
+    showToast('Saldo insuficiente en tu tarjeta', 'error');
+    return;
+  }
+  
+  const newCardBalance = cardBalance - withdrawAmount;
+  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
+  const newCashBalance = cashBalance + withdrawAmount;
+  
+  localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
+  localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
+  
+  loadBalance();
+  showToast('✅ Retiraste $' + withdrawAmount.toLocaleString() + ' a efectivo', 'success');
+}
+
+function openCashDeposit(){
+  const amount = prompt('¿Cuánto efectivo deseas depositar?', '1000');
+  if(!amount || parseInt(amount) <= 0) return;
+  
+  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
+  const depositAmount = parseInt(amount);
+  
+  if(depositAmount > cashBalance){
+    showToast('No tienes ese efectivo disponible', 'error');
+    return;
+  }
+  
+  const newCashBalance = cashBalance - depositAmount;
+  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
+  const newCardBalance = cardBalance + depositAmount;
+  
+  localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
+  localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
+  
+  loadBalance();
+  showToast('✅ Depositaste $' + depositAmount.toLocaleString() + ' en tu tarjeta', 'success');
+}
+
+function loadTransferHistory(){
+  const container = $('payments-container');
+  const transfers = JSON.parse(localStorage.getItem('hrp_transfers_'+userId) || '[]');
+  
+  if(!transfers || transfers.length === 0){
+    container.innerHTML = `<div class="empty-state">
+      <div class="big-icon">💸</div>
+      <p>No hay transferencias registradas</p>
+      <div class="sub">Tus transferencias aparecerán aquí</div>
+    </div>`;
+    return;
+  }
+  
+  container.innerHTML = transfers.map(t => {
+    const date = new Date(t.timestamp);
+    const timeStr = date.toLocaleString('es-ES', {
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+    return `<div class="fine-item" style="padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="color: var(--text-primary); font-weight: 600;">Transferencia a ${esc(t.to)}</div>
+        <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">${timeStr}</div>
+      </div>
+      <div style="text-align: right; color: var(--accent-gold); font-weight: 700;">-$${t.amount.toLocaleString()}</div>
+    </div>`;
+  }).join('');
+}
+
 async function init(){
   if(typeof hrpGetSession!=='function'){window.location.href='index.html';return}
   session=hrpGetSession();
@@ -1346,11 +1616,12 @@ async function init(){
   const hs=$('hero-sub');if(hs)hs.textContent='Portal Cívico — ID: '+userId.slice(0,8)+'...';
   const hi=$('hero-id');if(hi)hi.textContent=userId.slice(0,8)+'...';
 
-  loadBalance();
-  loadAllData();
-  loadDocuments();
+   loadBalance();
+   loadAllData();
+   loadDocuments();
+   loadTransferHistory();
 
-  document.querySelectorAll('.nav-item').forEach(a=>{
+   document.querySelectorAll('.nav-item').forEach(a=>{
     if(a.getAttribute('href')===window.location.pathname.split('/').pop())a.classList.add('active')
   });
 }
