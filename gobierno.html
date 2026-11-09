@@ -365,7 +365,7 @@ body::after {
 .doc-duo-cell{display:grid;grid-template-columns:1fr 1.1fr;gap:24px;align-items:center}
 /* ── REALISTIC PASSPORT ── */
 .passport-card{
-   position:relative;width:240px;aspect-ratio:1.4;border-radius:12px;overflow:hidden;
+   position:relative;width:330px;aspect-ratio:0.68;border-radius:12px;overflow:hidden;
    background:linear-gradient(135deg,#3d3d3d,#1a1a1a);
    border:1.5px solid #5a5a5a;
    box-shadow:0 12px 32px rgba(0,0,0,0.7);
@@ -377,60 +377,60 @@ body::after {
 
 .passport-cover{
    background:linear-gradient(180deg,#1f4788,#0a2460);
-   padding:12px 10px;
+   padding:20px 14px;
    display:flex;flex-direction:column;align-items:center;justify-content:center;
-   text-align:center;color:white;flex:0.35;border-bottom:2px solid #c0a000;
-}
-.passport-eagle{font-size:18px;line-height:1}
+   text-align:center;color:white;flex:0.35;border-bottom:3px solid #c0a000;
+ }
+.passport-eagle{font-size:32px;line-height:1}
 .passport-title{
-   font-family:'Rajdhani',sans-serif;font-weight:800;font-size:7px;letter-spacing:1px;
-   line-height:1.2;margin-top:4px;text-transform:uppercase
-}
+   font-family:'Rajdhani',sans-serif;font-weight:800;font-size:11px;letter-spacing:1.5px;
+   line-height:1.3;margin-top:8px;text-transform:uppercase
+ }
 .passport-type{
-   font-family:'Rajdhani',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;
-   color:#daa520;text-shadow:0 0 6px rgba(218,165,32,0.3);margin-top:2px
-}
+   font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;letter-spacing:1.5px;
+   color:#daa520;text-shadow:0 0 8px rgba(218,165,32,0.4);margin-top:4px
+ }
 
 .passport-interior{
-   flex:1;padding:8px;display:flex;flex-direction:column;background:#e8e8e0;color:#000;
-   font-family:'Courier New',monospace;font-size:7px;overflow:hidden
-}
+   flex:1;padding:14px;display:flex;flex-direction:column;background:#e8e8e0;color:#000;
+   font-family:'Courier New',monospace;font-size:9px;overflow:hidden
+ }
 
 .passport-bio-top{
-   display:flex;gap:4px;margin-bottom:6px
-}
+   display:flex;gap:6px;margin-bottom:10px
+ }
 .passport-photo-section{
    flex-shrink:0
-}
+ }
 .passport-photo{
-   width:42px;height:54px;border:2px solid #000;display:flex;align-items:center;justify-content:center;
+   width:56px;height:72px;border:3px solid #000;display:flex;align-items:center;justify-content:center;
    background:linear-gradient(135deg,#666,#333);position:relative
-}
+ }
 .passport-photo img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s}
 .passport-photo img.loaded{opacity:1}
 .passport-initials{
-   font-family:'Rajdhani',sans-serif;font-weight:900;font-size:14px;color:#999;
+   font-family:'Rajdhani',sans-serif;font-weight:900;font-size:20px;color:#999;
    position:absolute;text-shadow:0 2px 4px rgba(0,0,0,0.5)
-}
+ }
 
 .passport-bio-data{
-   flex:1;overflow-y:auto;font-size:6px;line-height:1.3
-}
+   flex:1;overflow-y:auto;font-size:8px;line-height:1.4
+ }
 .bio-line{
-   display:grid;grid-template-columns:1fr 1.5fr;gap:3px;margin-bottom:1px;
-   padding-bottom:1px;border-bottom:0.5px solid #999
-}
+   display:grid;grid-template-columns:0.8fr 1.5fr;gap:4px;margin-bottom:2px;
+   padding-bottom:2px;border-bottom:0.8px solid #999
+ }
 .bio-label{
-   font-weight:bold;text-transform:uppercase;color:#333;font-size:5px
-}
+   font-weight:bold;text-transform:uppercase;color:#333;font-size:7px
+ }
 .bio-value{
    font-weight:500;color:#000
-}
+ }
 
 .passport-mrz{
-   margin-top:auto;background:#000;color:#fff;padding:3px;font-size:7px;
-   line-height:1.2;letter-spacing:0.5px;word-break:break-all
-}
+   margin-top:auto;background:#000;color:#fff;padding:5px;font-size:9px;
+   line-height:1.3;letter-spacing:0.5px;word-break:break-all
+ }
 
 /* ── RESPONSIVE ── */
 @media(max-width:1024px){
@@ -499,9 +499,9 @@ body::after {
     .bank-section{background:#121212;border:1.5px solid var(--border-strong);border-radius:20px;padding:36px;margin-top:36px;box-shadow:0 12px 40px rgba(0,0,0,0.4)}
     .bank-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;padding-bottom:16px;border-bottom:2px solid var(--border-strong)}
     
-    /* ── CARD + CASH LAYOUT ── */
-    .bank-grid-main{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-    .bank-card-section{display:grid;grid-template-columns:1fr 240px;gap:24px;align-items:flex-start}
+     /* ── CARD + CASH LAYOUT ── */
+     .bank-grid-main{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+     .bank-card-section{display:grid;grid-template-columns:1fr 240px;gap:12px;align-items:flex-start}
     
     /* ── DEBIT CARD NEW ── */
     .debit-card-premium-new{position:relative;width:410px;aspect-ratio:1.59;background:linear-gradient(135deg,#0d7d2a 0%,#1a9c3a 50%,#2bb84f 100%);border-radius:20px;padding:28px;color:white;font-family:'JetBrains Mono',monospace;box-shadow:0 24px 72px rgba(13,125,42,0.5),inset 0 1px 0 rgba(255,255,255,0.12);display:flex;flex-direction:column;justify-content:space-between;border:1px solid rgba(255,255,255,0.25);transition:all 0.4s ease}
@@ -559,8 +559,25 @@ body::after {
     .transaction-item:hover{background:rgba(76,175,80,0.1)}
     .transaction-item:last-child{border-bottom:none}
     .transaction-type{display:flex;gap:8px;align-items:center;flex:1}
-    .transaction-meta{color:var(--text-dim);font-size:9px;margin-top:2px}
-    .transaction-amount{font-weight:700;font-family:'Rajdhani',sans-serif;font-size:12px}
+     .transaction-meta{color:var(--text-dim);font-size:9px;margin-top:2px}
+     .transaction-amount{font-weight:700;font-family:'Rajdhani',sans-serif;font-size:12px}
+     
+     /* ── FLIP CARD ── */
+     .card-flip-container{perspective:1000px;position:relative;width:410px;height:calc(410px / 1.59)}
+     .card-flipper{position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d}
+     .card-flipper.flipped{transform:rotateY(180deg)}
+     .card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:space-between}
+     .card-back{transform:rotateY(180deg);background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);border-radius:20px;padding:28px;border:1px solid rgba(255,255,255,0.15)}
+     .cvv-section{text-align:right;padding:20px 28px}
+     .cvv-label{font-size:9px;color:rgba(255,255,255,0.7);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
+     .cvv-code{font-size:28px;font-weight:700;color:white;letter-spacing:6px}
+     .barcode-section{display:flex;justify-content:center;padding:20px 0}
+     .barcode{width:280px;height:60px;background:repeating-linear-gradient(90deg,#333 0,#333 2px,#666 2px,#666 4px,#555 4px,#555 6px);border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,0.5)}
+     .flip-button-small{position:absolute;top:12px;right:12px;z-index:10;width:32px;height:32px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:white;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-family:'Inter',sans-serif}
+     .flip-button-small:hover{background:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.5)}
+     
+     /* ── PANEL BACKGROUNDS ── */
+     .panel{background:#121212 !important;border-color:var(--border) !important}
 </style>
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/hrp-dock.css">
@@ -651,39 +668,60 @@ body::after {
 
         <!-- Bank Grid: Card + Balances + Transfers -->
         <div class="bank-grid-main">
-          <!-- LEFT: DEBIT CARD PREMIUM -->
-          <div class="bank-card-section">
-            <div class="debit-card-premium-new">
-              <!-- Card Logo & Header -->
-              <div class="card-header-top">
-                <img src="images/logo.png" alt="HCRP" class="card-logo">
-                <div class="card-bank-name-new">HOUSTON CITY BANK</div>
-              </div>
+           <!-- LEFT: DEBIT CARD PREMIUM WITH FLIP -->
+           <div class="bank-card-section">
+             <div class="card-flip-container">
+               <div class="card-flipper" id="card-flipper">
+                 <!-- FRONT -->
+                 <div class="card-front">
+                   <div class="debit-card-premium-new" style="width:100%;height:100%;position:relative;margin:0">
+                     <button onclick="document.getElementById('card-flipper').classList.toggle('flipped')" class="flip-button-small">🔄</button>
+                     
+                     <!-- Card Logo & Header -->
+                     <div class="card-header-top">
+                       <img src="images/logo.png" alt="HCRP" class="card-logo">
+                       <div class="card-bank-name-new">HOUSTON CITY BANK</div>
+                     </div>
 
-              <!-- Card Chip -->
-              <div class="card-chip-new"></div>
+                     <!-- Card Chip -->
+                     <div class="card-chip-new"></div>
 
-              <!-- Account Number -->
-              <div class="card-number-new" id="card-display-number">4532 •••• •••• 8901</div>
+                     <!-- Account Number -->
+                     <div class="card-number-new" id="card-display-number">4532 •••• •••• 8901</div>
 
-              <!-- Balance INSIDE Card -->
-              <div class="card-balance-inside">
-                <div class="balance-label-card">AVAILABLE BALANCE</div>
-                <div class="balance-amount-card" id="card-balance-inside-display">$0</div>
-              </div>
+                     <!-- Balance INSIDE Card -->
+                     <div class="card-balance-inside">
+                       <div class="balance-label-card">AVAILABLE BALANCE</div>
+                       <div class="balance-amount-card" id="card-balance-inside-display">$0</div>
+                     </div>
 
-              <!-- Cardholder Info -->
-              <div class="card-info-row-new">
-                <div>
-                  <div class="card-label-small-new">CARDHOLDER</div>
-                  <div class="card-value-large-new" id="card-name-display">YOUR NAME</div>
-                </div>
-                <div style="text-align:right">
-                  <div class="card-label-small-new">VÁLIDO HASTA</div>
-                  <div class="card-value-large-new" id="card-expires-display">02/28</div>
-                </div>
-              </div>
-            </div>
+                     <!-- Cardholder Info -->
+                     <div class="card-info-row-new">
+                       <div>
+                         <div class="card-label-small-new">CARDHOLDER</div>
+                         <div class="card-value-large-new" id="card-name-display">YOUR NAME</div>
+                       </div>
+                       <div style="text-align:right">
+                         <div class="card-label-small-new">VÁLIDO HASTA</div>
+                         <div class="card-value-large-new" id="card-expires-display">02/28</div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+                 
+                 <!-- BACK -->
+                 <div class="card-back">
+                   <button onclick="document.getElementById('card-flipper').classList.toggle('flipped')" class="flip-button-small" style="top:auto;bottom:12px">🔄</button>
+                   <div class="cvv-section">
+                     <div class="cvv-label">CVV</div>
+                     <div class="cvv-code" id="card-cvv-display">000</div>
+                   </div>
+                   <div class="barcode-section">
+                     <div class="barcode" id="card-barcode"></div>
+                   </div>
+                 </div>
+               </div>
+             </div>
 
             <!-- CASH ON HAND - Right of Card -->
             <div class="cash-display-right">
@@ -1591,8 +1629,8 @@ async function loadBankBalance(){
     cardBalance = 0;
   }
   
-  // Cash balance (local, starting 5000)
-  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
+   // Cash balance (local, starting 0)
+  const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '0');
   
   // Get character name (primary character)
   let charName = 'CARDHOLDER';
@@ -1634,11 +1672,29 @@ async function loadBankBalance(){
     balanceInsideEl.textContent = '$' + cardBalance.toLocaleString();
   }
   
-  // Update cash display
-  const cashDisplayEl = $('cash-display');
-  if(cashDisplayEl){
-    cashDisplayEl.textContent = '$' + cashBalance.toLocaleString();
-  }
+   // Update cash display
+   const cashDisplayEl = $('cash-display');
+   if(cashDisplayEl){
+     cashDisplayEl.textContent = '$' + cashBalance.toLocaleString();
+   }
+   
+   // Generate CVV (3 random digits per user/card)
+   let cvvCode = localStorage.getItem('hrp_cvv_'+userId);
+   if(!cvvCode){
+     cvvCode = String(Math.floor(Math.random()*900)+100);
+     localStorage.setItem('hrp_cvv_'+userId, cvvCode);
+   }
+   const cvvEl = $('card-cvv-display');
+   if(cvvEl){
+     cvvEl.textContent = cvvCode;
+   }
+   
+   // Generate barcode pattern (fake barcode for aesthetics)
+   const barcodeEl = $('card-barcode');
+   if(barcodeEl){
+     barcodeEl.style.backgroundImage = 'repeating-linear-gradient(90deg,' + 
+       ['#333','#666','#555','#777','#444','#888','#555','#666'].map(c => c + ' ' + Math.floor(Math.random()*8+2) + 'px').join(',') + ')';
+   }
 }
 
 async function processTransfer(){
@@ -1718,8 +1774,8 @@ async function openCashWithdraw(){
      return;
    }
    
-   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
-   const newCashBalance = cashBalance + withdrawAmount;
+    const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '0');
+    const newCashBalance = cashBalance + withdrawAmount;
     localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
     
     // Save to statement
@@ -1739,8 +1795,8 @@ async function openCashDeposit(){
    const amount = prompt('How much cash do you want to deposit?', '1000');
    if(!amount || parseInt(amount) <= 0) return;
    
-   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
-   const depositAmount = parseInt(amount);
+    const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '0');
+    const depositAmount = parseInt(amount);
    
    if(depositAmount > cashBalance){
      showToast('You do not have that much cash available', 'error');
@@ -1909,7 +1965,53 @@ async function init(){
   });
 }
 
-document.addEventListener('DOMContentLoaded',init);
+// ── CHARACTER AUTOCOMPLETE FOR TRANSFERS ──
+async function initTransferAutocomplete(){
+  const input = $('transfer-recipient');
+  const suggestionsBox = $('character-suggestions');
+  
+  if(!input || !suggestionsBox) return;
+  
+  input.addEventListener('input', async (e) => {
+    const query = (e.target.value || '').trim().toLowerCase();
+    
+    if(query.length < 2){
+      suggestionsBox.style.display = 'none';
+      return;
+    }
+    
+    try {
+      const chars = await supaSelect('characters', 'nombres,apellidos,user_discord', {nombres: `ilike.%${query}%` }, 'limit.10');
+      
+      if(!Array.isArray(chars) || chars.length === 0){
+        suggestionsBox.style.display = 'none';
+        return;
+      }
+      
+      suggestionsBox.innerHTML = chars.map(c => {
+        const fullName = [(c.nombres || ''), (c.apellidos || '')].filter(Boolean).join(' ').trim();
+        return `<div class="char-suggestion-item" onclick="document.getElementById('transfer-recipient').value='${fullName.replace(/'/g,"\\'")}';document.getElementById('character-suggestions').style.display='none'">${fullName}</div>`;
+      }).join('');
+      
+      suggestionsBox.style.display = 'block';
+    } catch(err){
+      console.log('Char search error:', err);
+      suggestionsBox.style.display = 'none';
+    }
+  });
+  
+  // Close suggestions when clicking elsewhere
+  document.addEventListener('click', (e) => {
+    if(e.target !== input){
+      suggestionsBox.style.display = 'none';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await init();
+  setTimeout(() => initTransferAutocomplete(), 500);
+});
 setInterval(tickCountdowns,1000);
 </script>
 <script src="assets/auth.js"></script>
