@@ -1630,7 +1630,7 @@ async function loadPassports(){
 }
 
 // ── BANCO FUNCTIONS ──
-function loadBankBalance(){
+async function loadBankBalance(){
   // Get or create account number
   let accountNumber = localStorage.getItem('hrp_account_number_'+userId);
   if(!accountNumber){
@@ -1646,16 +1646,25 @@ function loadBankBalance(){
   let softCode = localStorage.getItem('hrp_soft_code_'+userId);
   if(!softCode){
     const year = new Date().getFullYear();
-    const month = String(new Date().getMonth()+1).padStart(2,'0');
-    const day = String(new Date().getDate()).padStart(2,'0');
     const random = String(Math.floor(Math.random()*10000)).padStart(4,'0');
     softCode = year + '-' + random;
     localStorage.setItem('hrp_soft_code_'+userId, softCode);
   }
   
-  // Get balances
+  // Get balances from real economy (Supabase)
+  let cardBalance = 0;
+  try {
+    if(typeof hrpGetBalance === 'function'){
+      const realBalance = await hrpGetBalance(userId);
+      cardBalance = realBalance ? parseInt(realBalance) : 0;
+      localStorage.setItem('hrp_card_'+userId, cardBalance.toString());
+    }
+  } catch(_){
+    cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '0');
+  }
+  
+  // Cash balance stays local
   const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
-  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
   
   // Update Card Display
   const cardAccountEl = $('card-account-number');
@@ -1687,50 +1696,61 @@ function loadBankBalance(){
   if(cardDisplay) cardDisplay.textContent = '$' + cardBalance.toLocaleString();
 }
 
-function processTransfer(){
+async function processTransfer(){
   const amount = parseInt($('transfer-amount').value || '0');
   const receiver = ($('transfer-recipient').value || '').trim();
   
   if(amount <= 0){
-    showToast('Ingresa un monto válido', 'error');
+    showToast('Enter a valid amount', 'error');
     return;
   }
   if(!receiver){
-    showToast('Ingresa el usuario receptor', 'error');
+    showToast('Enter recipient username', 'error');
     return;
   }
   
-  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
+  const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '0');
   if(amount > cardBalance){
-    showToast('Saldo insuficiente en tu tarjeta', 'error');
+    showToast('Insufficient balance in account', 'error');
     return;
   }
   
-  // Guardar la transferencia
-  const newBalance = cardBalance - amount;
-  localStorage.setItem('hrp_card_'+userId, newBalance.toString());
+  // Deduct from sender account (real economy)
+  try {
+    if(typeof hrpDeductBalance === 'function'){
+      const success = await hrpDeductBalance(userId, amount);
+      if(!success){
+        showToast('Transfer failed', 'error');
+        return;
+      }
+    }
+  } catch(e){
+    console.error('Transfer error:', e);
+    showToast('Error processing transfer', 'error');
+    return;
+  }
   
-  // Guardar en historial
+  // Save to local transfer history
   const transfers = JSON.parse(localStorage.getItem('hrp_transfers_'+userId) || '[]');
   transfers.unshift({
     to: receiver,
     amount: amount,
     timestamp: new Date().toISOString()
   });
-  localStorage.setItem('hrp_transfers_'+userId, JSON.stringify(transfers.slice(0, 50)));
+  localStorage.setItem('hrp_transfers_'+userId, JSON.stringify(transfers.slice(0, 100)));
   
    $('transfer-amount').value = '';
    $('transfer-recipient').value = '';
-   loadBankBalance();
+   await loadBankBalance();
    loadTransferHistory();
-  showToast('✅ Transferencia de $' + amount.toLocaleString() + ' a ' + receiver + ' completada', 'success');
+  showToast('✅ Transferred $' + amount.toLocaleString() + ' to ' + receiver, 'success');
 }
 
-function openCashWithdraw(){
+async function openCashWithdraw(){
    const amount = prompt('How much cash do you want to withdraw?', '1000');
    if(!amount || parseInt(amount) <= 0) return;
    
-   const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
+   const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '0');
    const withdrawAmount = parseInt(amount);
    
    if(withdrawAmount > cardBalance){
@@ -1738,11 +1758,23 @@ function openCashWithdraw(){
      return;
    }
    
-   const newCardBalance = cardBalance - withdrawAmount;
+   // Deduct from real account
+   try {
+     if(typeof hrpDeductBalance === 'function'){
+       const success = await hrpDeductBalance(userId, withdrawAmount);
+       if(!success){
+         showToast('Withdrawal failed', 'error');
+         return;
+       }
+     }
+   } catch(e){
+     console.error('Withdrawal error:', e);
+     showToast('Error processing withdrawal', 'error');
+     return;
+   }
+   
    const cashBalance = parseInt(localStorage.getItem('hrp_cash_'+userId) || '5000');
    const newCashBalance = cashBalance + withdrawAmount;
-   
-    localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
     localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
     
     // Save to statement
@@ -1753,12 +1785,12 @@ function openCashWithdraw(){
     });
     localStorage.setItem('hrp_withdrawals_'+userId, JSON.stringify(withdrawals.slice(0,100)));
     
-    loadBankBalance();
+    await loadBankBalance();
     loadTransferHistory();
     showToast('✅ Withdrew $' + withdrawAmount.toLocaleString() + ' in cash', 'success');
 }
 
-function openCashDeposit(){
+async function openCashDeposit(){
    const amount = prompt('How much cash do you want to deposit?', '1000');
    if(!amount || parseInt(amount) <= 0) return;
    
@@ -1770,12 +1802,23 @@ function openCashDeposit(){
      return;
    }
    
-   const newCashBalance = cashBalance - depositAmount;
-   const cardBalance = parseInt(localStorage.getItem('hrp_card_'+userId) || '10000');
-   const newCardBalance = cardBalance + depositAmount;
+   // Add to real account
+   try {
+     if(typeof hrpAddBalance === 'function'){
+       const success = await hrpAddBalance(userId, depositAmount);
+       if(!success){
+         showToast('Deposit failed', 'error');
+         return;
+       }
+     }
+   } catch(e){
+     console.error('Deposit error:', e);
+     showToast('Error processing deposit', 'error');
+     return;
+   }
    
+   const newCashBalance = cashBalance - depositAmount;
     localStorage.setItem('hrp_cash_'+userId, newCashBalance.toString());
-    localStorage.setItem('hrp_card_'+userId, newCardBalance.toString());
     
     // Save to statement
     const deposits = JSON.parse(localStorage.getItem('hrp_deposits_'+userId) || '[]');
@@ -1785,7 +1828,7 @@ function openCashDeposit(){
     });
     localStorage.setItem('hrp_deposits_'+userId, JSON.stringify(deposits.slice(0,100)));
     
-    loadBankBalance();
+    await loadBankBalance();
     loadTransferHistory();
     showToast('✅ Deposited $' + depositAmount.toLocaleString() + ' to your account', 'success');
 }
