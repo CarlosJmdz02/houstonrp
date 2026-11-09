@@ -356,37 +356,73 @@ body::after {
 .passp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
 .doc-duo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(720px,1fr));gap:32px;padding:4px}
 .doc-duo-cell{display:grid;grid-template-columns:1fr 1.1fr;gap:24px;align-items:center}
-.passp-card{
-   position:relative;width:100%;height:240px;border-radius:20px;overflow:hidden;
-   display:flex;flex-direction:row;border:1.5px solid rgba(230,168,104,.45);
-   background:
-     radial-gradient(140% 80% at 40% -20%, rgba(230,168,104,.16), transparent 60%),
-     linear-gradient(135deg,#342542,#221634);
-   box-shadow:0 24px 72px rgba(0,0,0,.7),inset 0 0 32px rgba(230,168,104,.08);
-   transition:all .4s cubic-bezier(0.23, 1, 0.320, 1);
- }
-.passp-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 0 40px rgba(230,168,104,.08)}
-.passp-cover{padding:18px 20px;border-right:2px solid rgba(230,168,104,.25);display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:140px;flex-shrink:0;background:linear-gradient(180deg,rgba(230,168,104,.08),transparent)}
-.passp-star{font-size:28px;color:var(--accent-gold);text-shadow:0 0 16px rgba(230,168,104,.7);line-height:1}
-.passp-title{font-family:'Rajdhani',sans-serif;font-weight:800;font-size:14px;letter-spacing:3px;color:#ffd280;margin-top:6px;text-transform:uppercase}
-.passp-country{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;color:#c8a882;margin-top:4px;text-transform:uppercase;text-align:center;line-height:1.4;opacity:.85}
-.passp-body{flex:1;display:flex;gap:14px;padding:16px 18px;min-height:0;align-items:flex-start}
-.passp-photo{width:82px;height:116px;flex-shrink:0;border-radius:8px;overflow:hidden;background:linear-gradient(135deg,#0a0f1a,#14202e);border:2px solid rgba(230,168,104,.3);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 20px rgba(0,0,0,.5)}
-.passp-photo img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
-.passp-photo img.loaded{opacity:1}
-.passp-photo .passp-initials{font-family:'Rajdhani',sans-serif;font-weight:800;font-size:28px;color:#e8b56a;text-shadow:0 2px 8px rgba(0,0,0,.6)}
-.passp-fields{flex:1;display:flex;flex-direction:column;gap:7px;min-width:0}
-.passp-field .lbl{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:1.5px;color:#a8794a;text-transform:uppercase;opacity:.8}
-.passp-field .val{font-size:11px;color:#f0e0d0;margin-top:1px;line-height:1.3;word-wrap:break-word;font-weight:500}
-.passp-field .val.nat{font-size:12px;font-weight:700;color:var(--accent-gold);letter-spacing:.4px}
-.passp-status{
-  position:absolute;bottom:12px;right:12px;display:flex;align-items:center;justify-content:center;gap:5px;
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:10px;letter-spacing:2.5px;
-  padding:5px 10px;border-radius:14px;color:var(--accent-green);
-  background:rgba(74,204,143,.15);border:1px solid rgba(74,204,143,.4);box-shadow:0 0 12px rgba(74,204,143,.2);
+/* ── REALISTIC PASSPORT ── */
+.passport-card{
+   position:relative;width:100%;aspect-ratio:1.4;border-radius:16px;overflow:hidden;
+   background:linear-gradient(135deg,#3d3d3d,#1a1a1a);
+   border:2px solid #5a5a5a;
+   box-shadow:0 16px 48px rgba(0,0,0,0.8),inset 0 0 20px rgba(255,255,255,0.05);
+   transition:all 0.4s ease;
+   display:flex;flex-direction:column;
 }
-.passp-status::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent-green);box-shadow:0 0 10px var(--accent-green);animation:pulseDot 2s ease-out infinite}
-@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(74,204,143,.5)}70%{box-shadow:0 0 0 10px rgba(74,204,143,0)}100%{box-shadow:0 0 0 0 rgba(74,204,143,0)}}
+.passport-card:hover{transform:translateY(-6px);box-shadow:0 24px 64px rgba(0,0,0,0.9)}
+
+.passport-cover{
+   background:linear-gradient(180deg,#1f4788,#0a2460);
+   padding:28px 20px;
+   display:flex;flex-direction:column;align-items:center;justify-content:center;
+   text-align:center;color:white;flex:0.35;border-bottom:3px solid #c0a000;
+}
+.passport-eagle{font-size:32px;margin-bottom:12px}
+.passport-title{
+   font-family:'Rajdhani',sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;
+   line-height:1.4;margin-bottom:8px;text-transform:uppercase
+}
+.passport-type{
+   font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;letter-spacing:2px;
+   color:#daa520;text-shadow:0 0 8px rgba(218,165,32,0.4)
+}
+
+.passport-interior{
+   flex:1;padding:16px;display:flex;flex-direction:column;background:#e8e8e0;color:#000;
+   font-family:'Courier New',monospace;font-size:10px;overflow:hidden
+}
+
+.passport-bio-top{
+   display:flex;gap:8px;margin-bottom:12px
+}
+.passport-photo-section{
+   flex-shrink:0
+}
+.passport-photo{
+   width:68px;height:88px;border:3px solid #000;display:flex;align-items:center;justify-content:center;
+   background:linear-gradient(135deg,#666,#333);position:relative
+}
+.passport-photo img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s}
+.passport-photo img.loaded{opacity:1}
+.passport-initials{
+   font-family:'Rajdhani',sans-serif;font-weight:900;font-size:24px;color:#999;
+   position:absolute;text-shadow:0 2px 4px rgba(0,0,0,0.5)
+}
+
+.passport-bio-data{
+   flex:1;overflow-y:auto;font-size:9px;line-height:1.6
+}
+.bio-line{
+   display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:3px;
+   padding-bottom:2px;border-bottom:0.5px solid #999
+}
+.bio-label{
+   font-weight:bold;text-transform:uppercase;color:#333;font-size:7px
+}
+.bio-value{
+   font-weight:500;color:#000
+}
+
+.passport-mrz{
+   margin-top:auto;background:#000;color:#fff;padding:3px;font-size:7px;
+   line-height:1.2;letter-spacing:0.5px;word-break:break-all
+}
 
 /* ── RESPONSIVE ── */
 @media(max-width:1024px){
@@ -1435,7 +1471,7 @@ async function loadDocuments(){
         <div class="panel-title"><span class="ico">📁</span> Tus Documentos</div>
         <span class="panel-badge info">ID · Pasaporte</span>
       </div>
-      <div class="panel-bodydy
+      <div class="panel-body
         <div class="empty-state"><div class="big-icon">📁</div>
           <p>Aún no tenés documentos</p>
           <div class="sub">Creá tu personaje para generar tu ID de Texas y tu Pasaporte</div>
@@ -1449,7 +1485,7 @@ async function loadDocuments(){
       <div class="panel-title"><span class="ico">📁</span> Tus Documentos</div>
       <span class="panel-badge ${dlActive?'success':'info'}">${chars.length} Personaje(s) · ID + Pasaporte</span>
     </div>
-    <div class="panel-bodydy
+    <div class="panel-body
       <div class="doc-duo-grid">${chars.map(function(c,i){
         return `<div class="doc-duo-cell">
           ${txIDCardHTML(c,i,dlLic,dlActive)}
@@ -1462,31 +1498,86 @@ async function loadDocuments(){
 }
 
 function passpCardHTML(c, idx){
-  const fullName=[c.nombres||'',c.apellidos||''].filter(Boolean).join(' ').trim()||'—';
-  const nat=(c.nacionalidad||'—').toUpperCase();
-  const dob=c.dob||'—';
-  const sex=c.sexo||'—';
-  const origin=[(c.ciudad||''),(c.estado||'')].filter(Boolean).join(', ')||'—';
-  const initials=((c.nombres||'').charAt(0)+(c.apellidos||'').charAt(0)).toUpperCase()||'?';
-  return `<div class="passp-card">
-    <div class="passp-cover">
-      <div class="passp-star">★</div>
-      <div class="passp-title">PASAPORTE</div>
-      <div class="passp-country">Estados Unidos de América</div>
-    </div>
-    <div class=.passp-body
-      <div class="passp-photo"><img id="passp-photo-${idx}" alt="Foto Pasaporte"><span class="passp-initials">${esc(initials)}</span></div>
-      <div class="passp-fields">
-        <div class="passp-field"><div class="lbl">Nombre</div><div class="val">${esc(fullName)}</div></div>
-        <div class="passp-field"><div class="lbl">Nacionalidad</div><div class="val nat">${esc(nat)}</div></div>
-        <div class="passp-field"><div class="lbl">Fecha Nac.</div><div class="val">${esc(dob)}</div></div>
-        <div class="passp-field"><div class="lbl">Sexo</div><div class="val">${esc(sex)}</div></div>
-        <div class="passp-field"><div class="lbl">Origen</div><div class="val">${esc(origin)}</div></div>
-      </div>
-    </div>
-    <div class="passp-status">ACTIVO · VÁLIDO</div>
-  </div>`;
-}
+   const fullName=[c.nombres||'',c.apellidos||''].filter(Boolean).join(' ').trim()||'—';
+   const nat=(c.nacionalidad||'AMERICAN').toUpperCase();
+   const dob=c.dob||'01/01/1990';
+   const sex=c.sexo||'M';
+   const passNumber = String(Math.floor(Math.random()*900000000)+100000000);
+   const initials=((c.nombres||'').charAt(0)+(c.apellidos||'').charAt(0)).toUpperCase()||'?';
+   
+   return `<div class="passport-card">
+     <!-- Passport Cover -->
+     <div class="passport-cover">
+       <div class="passport-eagle">🦅</div>
+       <div class="passport-title">UNITED STATES OF AMERICA</div>
+       <div class="passport-type">PASSPORT</div>
+     </div>
+
+     <!-- Passport Interior -->
+     <div class="passport-interior">
+       <!-- Bio Page with Photo -->
+       <div class="passport-bio-top">
+         <div class="passport-photo-section">
+           <div class="passport-photo">
+             <img id="passp-photo-${idx}" alt="Photo">
+             <span class="passport-initials">${esc(initials)}</span>
+           </div>
+         </div>
+       </div>
+
+       <!-- Bio Data -->
+       <div class="passport-bio-data">
+         <div class="bio-line">
+           <span class="bio-label">SURNAME</span>
+           <span class="bio-value">${esc((c.apellidos||'').toUpperCase())}</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">GIVEN NAMES</span>
+           <span class="bio-value">${esc((c.nombres||'').toUpperCase())}</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">NATIONALITY</span>
+           <span class="bio-value">USA</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">DATE OF BIRTH</span>
+           <span class="bio-value">${esc(dob)}</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">PLACE OF BIRTH</span>
+           <span class="bio-value">${esc((c.ciudad||'HOUSTON').toUpperCase())}</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">SEX</span>
+           <span class="bio-value">${esc(sex.toUpperCase())}</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">PASSPORT NO.</span>
+           <span class="bio-value">${passNumber}</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">AUTHORITY</span>
+           <span class="bio-value">HOUSTON, TX</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">ISSUED</span>
+           <span class="bio-value">01 JAN 2024</span>
+         </div>
+         <div class="bio-line">
+           <span class="bio-label">EXPIRES</span>
+           <span class="bio-value">01 JAN 2034</span>
+         </div>
+       </div>
+
+       <!-- MRZ Zone (Machine Readable) -->
+       <div class="passport-mrz">
+         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;word-break:break-all;color:#000">
+           P&lt;USAHOUS&lt;&lt;&lt;${esc((c.apellidos||'').padEnd(25).substring(0,25))}
+         </div>
+       </div>
+     </div>
+   </div>`;
+ }
 
 function passpLoadPhoto(c, idx){
   if(!c.roblox_id&&!c.roblox)return;
@@ -1517,7 +1608,7 @@ async function loadPassports(){
         <div class="panel-title"><span class="ico">🛂</span> Tu Pasaporte</div>
         <span class="panel-badge info">Documento</span>
       </div>
-      <div class="panel-bodydy
+      <div class="panel-body
         <div class="empty-state"><div class="big-icon">🛂</div>
           <p>Aún no tenés pasaporte</p>
           <div class="sub">Creá tu personaje para generar tu pasaporte</div>
@@ -1531,7 +1622,7 @@ async function loadPassports(){
       <div class="panel-title"><span class="ico">🛂</span> Tu Pasaporte</div>
       <span class="panel-badge success">${chars.length} Documento(s) · Siempre Válido</span>
     </div>
-    <div class="panel-bodydy
+    <div class="panel-body
       <div class="passp-grid">${chars.map(passpCardHTML).join('')}</div>
     </div>
   </div>`;
