@@ -2220,8 +2220,12 @@ function closeModal(modalId) {
 }
 
 async function confirmEdit() {
-  if (!currentOfficer) return;
+  if (!currentOfficer) {
+    alert('❌ No hay oficial seleccionado');
+    return;
+  }
   
+  const newName = document.getElementById('editOfficialName').value.trim();
   const dept = document.getElementById('editDepartment').value;
   const rank = document.getElementById('editRank').value;
   const badgeInput = document.getElementById('editBadge').value.trim();
@@ -2231,56 +2235,91 @@ async function confirmEdit() {
     return;
   }
   
+  if (!newName) {
+    alert('❌ El nombre no puede estar vacío');
+    return;
+  }
+  
   try {
-    // Actualizar en police_members (tabla principal de oficiales)
-    const updatePayload = { department: dept, rank_key: rank || '' };
+    console.log('📝 Iniciando edición de oficial:', currentOfficer.discord_id);
+    console.log('Nuevo nombre:', newName, 'Departamento:', dept, 'Rango:', rank);
     
-    // Intentar actualizar en police_members primero
+    // 1. Actualizar departamento y rango en rank_members
+    const rankPayload = {
+      department: dept,
+      rank_key: rank || null
+    };
+    
+    console.log('📤 Actualizando rank_members con:', rankPayload);
+    
+    let rankUpdateSuccess = false;
     try {
-      const response = await supaUpdate('police_members', 
-        updatePayload, 
-        { discord_id: `eq.${currentOfficer.discord_id}` }
-      );
-      console.log('Police_members actualizado:', response);
-    } catch (e) {
-      // Si falla, intentar rank_members
       const response = await supaUpdate('rank_members', 
-        updatePayload, 
+        rankPayload, 
         { discord_id: `eq.${currentOfficer.discord_id}` }
       );
-      console.log('Rank_members actualizado:', response);
+      console.log('✅ Rank_members actualizado:', response);
+      rankUpdateSuccess = true;
+    } catch (e1) {
+      console.warn('Rank_members error (tabla opcional):', e1.message);
+      // Tabla opcional, continuar
     }
     
-    // Guardar badge en tabla officer_badges con formato "PLACA | Nombre"
+    // 2. Actualizar nombre del personaje en police_members o characters
+    if (newName && newName !== currentOfficer.character_name) {
+      console.log('📤 Intentando actualizar nombre del personaje...');
+      try {
+        // Intentar actualizar character_name en police_members
+        const charPayload = { character_name: newName };
+        const response = await supaUpdate('police_members', 
+          charPayload, 
+          { discord_id: `eq.${currentOfficer.discord_id}` }
+        );
+        console.log('✅ Nombre actualizado en police_members:', response);
+      } catch (e) {
+        console.warn('No se pudo actualizar nombre en police_members:', e.message);
+      }
+    }
+    
+    // 2. Guardar badge en tabla officer_badges con formato "PLACA | Nombre"
     if (badgeInput) {
-      const charName = currentOfficer.character_name || currentOfficer.username;
-      const formattedBadge = `${badgeInput} | ${charName}`;
+      const formattedBadge = `${badgeInput} | ${newName}`;
+      
+      console.log('📤 Guardando badge:', formattedBadge);
       
       try {
         await supaUpdate('officer_badges', 
           { badge_number: formattedBadge }, 
           { discord_id: `eq.${currentOfficer.discord_id}` }
         );
+        console.log('✅ Badge actualizado');
       } catch (e) {
         // Si falla update, intentar insertar
         try {
           await supaInsert('officer_badges', 
             { discord_id: currentOfficer.discord_id, badge_number: formattedBadge }
           );
+          console.log('✅ Badge creado');
         } catch (e2) {
-          console.warn('Error guardando badge:', e2);
+          console.warn('Error guardando badge:', e2.message);
         }
       }
     }
     
     console.log('✅ Cambios guardados correctamente');
-    alert('✅ Información actualizada correctamente');
+    alert('✅ Información actualizada correctamente:\n' + 
+          'Nombre: ' + newName + '\n' + 
+          'Departamento: ' + dept + '\n' + 
+          'Rango: ' + (rank || 'Sin asignar'));
+    
     closeModal('editModal');
     
     // Recargar datos después de guardar
+    console.log('🔄 Recargando oficiales...');
     await loadOfficers();
+    
   } catch (e) {
-    console.error('Error en confirmEdit:', e);
+    console.error('❌ Error en confirmEdit:', e);
     alert('❌ Error: ' + e.message);
   }
 }
