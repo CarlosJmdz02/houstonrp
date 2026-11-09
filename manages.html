@@ -1530,9 +1530,12 @@ async function loadOfficers() {
 
     let rankMembers = [];
     try {
+      showDebug('📥 Cargando rank_members desde Supabase...');
       rankMembers = await supaSelect('rank_members', 'discord_id, rank_key, department', { limit: '10000' });
+      showDebug('✅ rank_members cargado: ' + (rankMembers ? rankMembers.length : 0) + ' registros');
     } catch (e) {
       // Tabla opcional - ignorar silenciosamente
+      showDebug('⚠️ Error cargando rank_members: ' + e.message);
     }
 
     let badgeMembers = [];
@@ -1567,15 +1570,20 @@ async function loadOfficers() {
       }
     }
 
-    const rankMap = {};
-    const deptMap = {};
-    const badgeMap = {};
-    if (rankMembers && Array.isArray(rankMembers)) {
-      for (const rm of rankMembers) {
-        rankMap[rm.discord_id] = rm.rank_key;
-        deptMap[rm.discord_id] = rm.department;
-      }
-    }
+     const rankMap = {};
+     const deptMap = {};
+     const badgeMap = {};
+     if (rankMembers && Array.isArray(rankMembers)) {
+       showDebug('🔍 Procesando ' + rankMembers.length + ' registros de rank_members');
+       for (const rm of rankMembers) {
+         rankMap[rm.discord_id] = rm.rank_key;
+         deptMap[rm.discord_id] = rm.department;
+         // Debug para Andres Lux
+         if (rm.discord_id === '1052306091565928498') {
+           showDebug('📍 Andres Lux en rankMembers: rank=' + rm.rank_key + ', dept=' + rm.department);
+         }
+       }
+     }
     if (badgeMembers && Array.isArray(badgeMembers)) {
       for (const bm of badgeMembers) {
         badgeMap[bm.discord_id] = bm.badge_number;
@@ -1626,17 +1634,25 @@ async function loadOfficers() {
     }
 
     allOfficers = members.map((m, idx) => {
-      const memberRoles = rolesMap[m.discord_id] || [];
-      const dept = getDepartmentFromRoles(m.discord_id, memberRoles, m.department);
-      const badge = badgeMap[m.discord_id] || '';
-      const rankKey = rankMap[m.discord_id] || '';
-      
-      // Determinar etiqueta de rango
-      let rankLabel = '';
-      if (rankKey && ranks[dept]) {
-        const rankObj = ranks[dept].find(r => r.key === rankKey);
-        rankLabel = rankObj ? rankObj.label : rankKey;
-      }
+       const memberRoles = rolesMap[m.discord_id] || [];
+       const dept = getDepartmentFromRoles(m.discord_id, memberRoles, m.department);
+       const badge = badgeMap[m.discord_id] || '';
+       const rankKey = rankMap[m.discord_id] || '';
+       
+       // Debug para Andres Lux
+       if (m.discord_id === '1052306091565928498') {
+         showDebug('🎯 Renderizando Andres Lux: rankKey=' + rankKey + ', dept=' + dept);
+       }
+       
+       // Determinar etiqueta de rango
+       let rankLabel = '';
+       if (rankKey && ranks[dept]) {
+         const rankObj = ranks[dept].find(r => r.key === rankKey);
+         rankLabel = rankObj ? rankObj.label : rankKey;
+         if (m.discord_id === '1052306091565928498') {
+           showDebug('🏅 Rango encontrado: ' + rankLabel);
+         }
+       }
       
       // Nombre con placa
       let displayName = charMap[m.discord_id] || m.username;
