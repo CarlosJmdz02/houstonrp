@@ -1574,12 +1574,13 @@ async function loadOfficers() {
       return;
     }
 
-    let shifts = [];
-    try {
-      shifts = await supaSelect('police_shift_sessions', 'discord_id, total_seconds', { status: 'eq.completed', limit: '10000' });
-    } catch (e) {
-      // Tabla opcional - ignorar silenciosamente
-    }
+     let shifts = [];
+     try {
+       // Obtener TODOS los turnos (no solo 'completed') - incluir active, break y completados
+       shifts = await supaSelect('police_shift_sessions', 'discord_id, total_seconds, status', { limit: '50000' });
+     } catch (e) {
+       // Tabla opcional - ignorar silenciosamente
+     }
 
     let adjustments = [];
     try {
@@ -1682,8 +1683,12 @@ async function loadOfficers() {
     if (shifts && Array.isArray(shifts)) {
       for (const s of shifts) {
         if (s.discord_id) {
-          hoursMap[s.discord_id] = (hoursMap[s.discord_id] || 0) + (s.total_seconds || 0);
-          shiftsMap[s.discord_id] = (shiftsMap[s.discord_id] || 0) + 1;
+          const totalSecs = parseInt(s.total_seconds) || 0;
+          hoursMap[s.discord_id] = (hoursMap[s.discord_id] || 0) + totalSecs;
+          // Solo contar como turno si tiene segundos > 0 o si está completado
+          if (totalSecs > 0 || s.status === 'completed') {
+            shiftsMap[s.discord_id] = (shiftsMap[s.discord_id] || 0) + 1;
+          }
         }
       }
     }
