@@ -2130,6 +2130,81 @@
     }
     if (!ok) nav.style.display = 'none';
   })();
+
+  // ════════════════════════════════════════════════════════════════
+  // AUTOMATIC HOURS WEBHOOK - REPORTS EVERY 24 HOURS
+  // ════════════════════════════════════════════════════════════════
+  
+  const HOURS_WEBHOOK_URL = 'https://discord.com/api/webhooks/1570955929346904134/VZX4lT9YRoyPGb_PyE2CIMJtUT3Sa1ElYux8O2Devet_IIFcA7B7ZxfEEF2-SayWZ0E8';
+
+  async function sendHoursReportToDiscord() {
+    try {
+      const shifts = await supaSelect('police_shift_sessions', 'discord_id, username, total_seconds, status', { status: 'eq.completed' });
+      if (!shifts || shifts.length === 0) return;
+
+      const officerHours = {};
+      shifts.forEach(shift => {
+        if (!officerHours[shift.discord_id]) {
+          officerHours[shift.discord_id] = { username: shift.username, totalSeconds: 0, shifts: 0 };
+        }
+        officerHours[shift.discord_id].totalSeconds += (shift.total_seconds || 0);
+        officerHours[shift.discord_id].shifts += 1;
+      });
+
+      const sortedOfficers = Object.entries(officerHours)
+        .map(([discordId, data]) => ({
+          discordId,
+          username: data.username,
+          totalSeconds: data.totalSeconds,
+          totalHours: (data.totalSeconds / 3600).toFixed(2),
+          shifts: data.shifts
+        }))
+        .sort((a, b) => b.totalSeconds - a.totalSeconds);
+
+      const totalHours = sortedOfficers.reduce((sum, o) => sum + parseFloat(o.totalHours), 0);
+      const fields = sortedOfficers.slice(0, 25).map(officer => ({
+        name: `${officer.username || 'Unknown'}`,
+        value: `**${officer.totalHours}h** (${officer.shifts} turnos)`,
+        inline: true
+      }));
+
+      const embed = {
+        title: '📊 REPORTE DE HORAS - HOUSTON RP',
+        description: `Actualización automática: ${new Date().toLocaleString('es-ES')}`,
+        color: 0x4acf8f,
+        fields: [
+          {
+            name: '📈 ESTADÍSTICAS TOTALES',
+            value: `**Total de Horas:** ${totalHours.toFixed(2)}h\n**Oficiales:** ${sortedOfficers.length}\n**Turnos Totales:** ${shifts.length}`,
+            inline: false
+          },
+          ...fields
+        ],
+        footer: {
+          text: 'HOUSTON RP - Sistema Automático de Horas',
+          icon_url: 'https://cdn.discordapp.com/app-icons/1570955929346904134/default'
+        },
+        timestamp: new Date().toISOString()
+      };
+
+      await fetch(HOURS_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'Houston Hub - Horas',
+          embeds: [embed]
+        })
+      });
+
+      console.log('✅ Hours report sent to Discord');
+    } catch (error) {
+      console.error('❌ Error sending hours report:', error);
+    }
+  }
+
+  // Send report now and schedule for every 24 hours
+  sendHoursReportToDiscord();
+  setInterval(sendHoursReportToDiscord, 86400000); // 24 horas
 </script>
 
 </body>
