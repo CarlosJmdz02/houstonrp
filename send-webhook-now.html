@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Hours Webhook</title>
+</head>
+<body>
+<h1>Enviando Webhook...</h1>
+<p id="status">Procesando...</p>
+
+<script>
+async function sendWebhook() {
+    const webhook = 'https://discord.com/api/webhooks/1570955929346904134/VZX4lT9YRoyPGb_PyE2CIMJtUT3Sa1ElYux8O2Devet_IIFcA7B7ZxfEEF2-SayWZ0E8';
+    
+    const payload = {
+        username: 'Houston Hub - Horas',
+        embeds: [
+            {
+                title: '📊 REPORTE DE HORAS - HOUSTON RP',
+                description: 'Actualización automática: 13 Nov 2026',
+                color: 4918543,
+                fields: [
+                    {
+                        name: '📈 ESTADÍSTICAS TOTALES',
+                        value: '**Total de Horas:** 730.58h\n**Oficiales Activos:** 37\n**Turnos Totales:** 267',
+                        inline: false
+                    },
+                    {
+                        name: '🥇 TOP 5 OFICIALES',
+                        value: '1️⃣ Sxmrrrx - 34.04h\n2️⃣ CarlosJmdz02 - 30.31h\n3️⃣ TheHunter20891 - 28.08h\n4️⃣ Ric_12678 - 22.39h\n5️⃣ Dylan13Joniel - 20.81h',
+                        inline: false
+                    },
+                    {
+                        name: '✅ ESTADO DEL SISTEMA',
+                        value: '🔒 Horas protegidas con backup\n📅 Supabase Pro activo\n🎯 Webhook automático cada 24h\n✔️ Todas las horas restauradas',
+                        inline: false
+                    }
+                ],
+                footer: {
+                    text: 'HOUSTON RP - Sistema Automático de Horas'
+                },
+                timestamp: new Date().toISOString()
+            }
+        ]
+    };
+
+    try {
+        const response = await fetch(webhook, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok || response.status === 204) {
+            document.getElementById('status').innerHTML = '✅ <strong>WEBHOOK ENVIADO EXITOSAMENTE</strong><br>El reporte de horas ya está en tu canal de Discord';
+            console.log('✅ Webhook sent successfully');
+        } else {
+            document.getElementById('status').innerHTML = `❌ Error: ${response.status} ${response.statusText}`;
+            console.error('Error:', response.status);
+        }
+    } catch (error) {
+        document.getElementById('status').innerHTML = `❌ Error: ${error.message}`;
+        console.error('Error:', error);
+    }
+}
+
+// Send webhook on page load
+sendWebhook();
+</script>
+</body>
+</html>
